@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESHA Public Skills Learning - Expert RAC_38</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+        
+        :root {
+            --primary: #0062ff;
+            --bg-main: #f8fafc;
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-main);
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 350px 1fr 450px;
+            grid-template-rows: auto 1fr;
+            height: 100vh;
+            gap: 1px;
+            background-color: #e2e8f0;
+        }
+
+        .panel {
+            background: white;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .viewport-area {
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .canvas-wrapper {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px);
+            background-size: 20px 20px;
+        }
+
+        .nav-card {
+            transition: all 0.2s ease;
+            border: 1px solid #f1f5f9;
+            cursor: pointer;
+            border-radius: 10px;
+            padding: 0.85rem;
+            margin-bottom: 0.5rem;
+            background: #f8fafc;
+        }
+
+        .nav-card:hover { border-color: var(--primary); background: white; }
+        .nav-card.active {
+            border-left: 4px solid var(--primary);
+            background: #eff6ff;
+            box-shadow: 0 2px 8px rgba(0, 98, 255, 0.08);
+        }
+
+        .formula-card {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            margin: 1rem 0;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .section-header {
+            font-size: 10px;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin: 1.5rem 0 0.75rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="col-span-full bg-white border-b border-slate-200 px-8 py-3 flex justify-between items-center z-50">
+            <div class="flex items-center gap-4">
+                <div class="bg-blue-600 p-2 rounded-lg text-white shadow-lg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg leading-tight text-slate-900 tracking-tighter uppercase">ESHA PUBLIC <span class="text-blue-600">SKILLS LEARNING</span></h1>
+                    <p class="text-[9px] uppercase tracking-[0.3em] font-bold text-slate-400">Professional Engineering Visualization</p>
+                </div>
+            </div>
+            <div class="text-right border-l-2 pl-6 border-slate-100">
+                <p class="font-black text-slate-800 text-lg leading-none">Sri Hardono, S.T., M.Sc.</p>
+                <p class="text-[10px] text-blue-600 font-bold uppercase tracking-widest mt-1">Expert Worldskills RAC_38</p>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <aside class="panel border-r border-slate-200">
+            <div class="section-header">I. Area & Titik Utama</div>
+            <div class="nav-card active" onclick="updateView('anatomy', 'dome', this)">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center font-bold text-slate-600">D</div>
+                    <div class="text-sm font-bold text-slate-800">Saturation Dome</div>
+                </div>
+            </div>
+
+            <div class="section-header">II. Parameter Garis</div>
+            <div class="grid grid-cols-1 gap-1">
+                <div class="nav-card" onclick="updateView('anatomy', 'pressure', this)">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-blue-50 flex items-center justify-center font-bold text-blue-600">P</div>
+                        <div class="text-sm font-bold text-slate-800">Pressure (Isobar)</div>
+                    </div>
+                </div>
+                <div class="nav-card" onclick="updateView('anatomy', 'enthalpy', this)">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-orange-50 flex items-center justify-center font-bold text-orange-600">h</div>
+                        <div class="text-sm font-bold text-slate-800">Enthalpy (Isentalp)</div>
+                    </div>
+                </div>
+                <div class="nav-card" onclick="updateView('anatomy', 'temp', this)">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-red-50 flex items-center justify-center font-bold text-red-600">T</div>
+                        <div class="text-sm font-bold text-slate-800">Temperature (Isoterm)</div>
+                    </div>
+                </div>
+                <div class="nav-card" onclick="updateView('anatomy', 'entropy', this)">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-indigo-50 flex items-center justify-center font-bold text-indigo-600">s</div>
+                        <div class="text-sm font-bold text-slate-800">Entropy (Isentrop)</div>
+                    </div>
+                </div>
+                <div class="nav-card" onclick="updateView('anatomy', 'volume', this)">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-green-50 flex items-center justify-center font-bold text-green-600">v</div>
+                        <div class="text-sm font-bold text-slate-800">Spec. Volume (Isohor)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-header">III. Modul Praktikum</div>
+            <button class="w-full text-left p-4 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-black transition-all flex items-center justify-between shadow-lg" onclick="updateView('cycle', 'full', this)">
+                VAPOR COMPRESSION CYCLE
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+        </aside>
+
+        <!-- Center Viewport -->
+        <section class="viewport-area">
+            <div class="bg-white border-b border-slate-200 px-6 py-2 flex justify-between items-center shadow-sm">
+                <p class="text-[10px] font-black text-slate-400 tracking-[0.2em]">DIAGRAM P-H (MOLLIER) - R134A</p>
+                <div class="flex gap-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                </div>
+            </div>
+            <div class="canvas-wrapper" id="cvWrapper">
+                <canvas id="mainCanvas"></canvas>
+            </div>
+        </section>
+
+        <!-- Detailed Panel -->
+        <aside class="panel border-l border-slate-200 bg-slate-50/20">
+            <div id="detailContent">
+                <!-- Data will be injected here -->
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('mainCanvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('cvWrapper');
+        const detailBox = document.getElementById('detailContent');
+
+        let activeType = 'anatomy', activeId = 'dome';
+
+        const contentDB = {
+            dome: {
+                title: "Saturation Dome & Critical Point",
+                badge: "Area Transisi Fase",
+                color: "slate",
+                body: `
+                    <p class="text-sm text-slate-600 leading-relaxed">Kubah saturasi adalah area fundamental yang memisahkan tiga fase refrigeran: Cair Dingin Lanjut (Subcooled), Campuran (Wet Vapor), dan Uap Panas Lanjut (Superheated).</p>
+                    <div class="formula-card">
+                        • Sisi Kiri: Saturated Liquid Line (x=0)<br>
+                        • Sisi Kanan: Saturated Vapor Line (x=1)<br>
+                        • Puncak: Critical Point
+                    </div>
+                    <h4 class="font-bold text-xs text-slate-800 uppercase mt-4">Analisis Teknis:</h4>
+                    <p class="text-xs text-slate-500 mt-2">Pada <b>Titik Kritis</b>, tidak ada perbedaan antara fase cair dan uap. Untuk R134a, ini terjadi di sekitar 101.1°C dan 40.6 bar. Pengoperasian sistem RAC umumnya berada jauh di bawah titik ini untuk menjaga efisiensi perpindahan panas laten.</p>
+                `
+            },
+            pressure: {
+                title: "Tekanan (Pressure)",
+                badge: "Proses Isobarik",
+                color: "blue",
+                body: `
+                    <p class="text-sm text-slate-600 leading-relaxed">Dalam diagram P-h, Garis ini ditarik secara horizontal melintasi diagram dari kiri ke kanan. Dalam sistem refrigerasi nyata, pembacaan pada manifold gauge (setelah dikonversi menjadi tekanan absolut dengan menambah 1,013 bar atau 14,7 psi) menentukan posisi horizontal ini. Di dalam sistem, terdapat dua tekanan utama: tekanan sisi tinggi di kondensor dan tekanan sisi rendah di evaporator..</p>
+                    <div class="formula-card">
+                        P = \text{konstan} \rightarrow \Delta P = 0
+                    </div>
+                    <p class="text-xs text-slate-500">Penting untuk memonitor <i>pressure drop</i> pada pipa aktual. Jika garis tidak benar-benar horizontal, berarti terjadi rugi gesek pada sistem perpipaan RAC.</p>
+                `
+            },
+            enthalpy: {
+                title: "Entalpi (Enthalpy)",
+                badge: "Kandungan Panas",
+                color: "orange",
+                body: `
+                    <p class="text-sm text-slate-600 leading-relaxed">Entalpi (h) Garis ini ditarik secara vertikal dari atas ke bawah. Parameter ini mengukur kandungan energi total refrigeran. Yang perlu ditekankan pada siswa adalah bahwa proses di katup ekspansi terjadi secara isentalpik (vertikal lurus ke bawah), karena tidak ada energi yang ditambah atau dikurangi selama proses penurunan tekanan yang sangat cepat tersebut.</p>
+                    <div class="formula-card">
+                        Q_e = \dot{m} \cdot (h_{out} - h_{in})
+                    </div>
+                    <p class="text-xs text-slate-500 italic">"Semakin lebar jarak antara titik masuk dan keluar evaporator pada sumbu h, semakin besar efek pendinginan yang dihasilkan per kg refrigeran."</p>
+                `
+            },
+            temp: {
+                title: "Suhu (Temperature)",
+                badge: "Garis Isotermal",
+                color: "red",
+                body: `
+                    <p class="text-sm text-slate-600 leading-relaxed">Garis suhu konstan memiliki karakteristik unik: miring tajam ke bawah di area subcooled, horizontal di dalam kubah (suhu saturasi), dan turun melengkung di area superheated.Garis suhu memiliki profil yang paling unik dan seringkali membingungkan pemula. Di wilayah cairan sub-dingin (kiri), garis ini hampir vertikal; di dalam kubah (tengah), garis ini mendatar secara horizontal mengikuti garis tekanan; dan di wilayah uap panas Lanjut (kanan), garis ini melengkung tajam ke bawah. Profil horizontal di dalam kubah membuktikan hukum alam bahwa selama transisi fase (mendidih atau mengembun), suhu zat tetap konstan meskipun terjadi perpindahan panas yang masif (panas laten).</p>
+                    <h4 class="font-bold text-xs text-slate-800 mt-4 uppercase">Konsep Kunci:</h4>
+                    <ul class="text-xs text-slate-500 list-disc ml-4 mt-2 space-y-1">
+                        <li><b>Superheat:</b> Selisih suhu aktual di suction kompresor dengan suhu jenuhnya.</li>
+                        <li><b>Subcooling:</b> Selisih suhu cair di liquid line dengan suhu jenuh kondensasi.</li>
+                    </ul>
+                `
+            },
+            entropy: {
+                title: "Entropi (Entropy)",
+                badge: "Garis Isentropik",
+                color: "indigo",
+                body: `
+                    <p class="text-sm text-slate-600 leading-relaxed">Garis ini menunjukkan proses kompresi adiabatik reversibel (ideal).  Garis entropi muncul sebagai kurva miring yang bergerak ke arah kanan atas di wilayah uap. Entropi adalah ukuran ketidakteraturan molekul. Dalam teori, kompresi ideal terjadi secara isentropik (mengikuti garis ini), di mana kerja mekanis kompresor meningkatkan tekanan dan suhu gas tanpa adanya "kebocoran" energi dalam bentuk panas ke lingkungan.</p>
+                    <div class="formula-card">
+                        W_c = h_2 - h_1 \text{ (Kompresi)}
+                    </div>
+                    <p class="text-xs text-slate-500">Penyimpangan garis kompresi ke arah kanan menunjukkan inefisiensi kompresor (kenaikan entropi).</p>
+                `
+            },
+            volume: {
+                title: "Volume Spesifik (v)",
+                badge: "Garis Isokhorik",
+                color: "green",
+                body: `
+                    <p class="text-sm text-slate-600 leading-relaxed">Menunjukkan volume yang ditempati oleh satu satuan massa refrigeran ($m^3/kg$).</p>
+                    <div class="formula-card">
+                        v = \frac{1}{\rho} \text{ [m}^3\text{/kg]}
+                    </div>
+                    <h4 class="font-bold text-xs text-slate-800 mt-4 uppercase">Kelengkungan:</h4>
+                    <p class="text-xs text-slate-500 mt-2">Garis ini muncul sebagai garis miring putus-putus (seringkali berwarna hijau pada diagram modern). Volume spesifik (v) adalah volume per satuan massa (m^3/kg). Semakin ke kanan atas, volume spesifik semakin kecil karena tekanan yang meningkat memadatkan molekul uap. Parameter ini sangat krusial untuk memahami hubungan antara kepadatan gas dan kapasitas kompresor; gas yang "tipis" (volume spesifik tinggi) pada tekanan rendah mengharuskan kompresor bekerja lebih keras untuk memindahkan massa refrigeran yang sama.</p>
+                `
+            },
+            full: {
+                title: "Analisis Siklus Kompresi Uap",
+                badge: "esha punlic skills learning",
+                color: "slate",
+                body: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-blue-50 border-l-4 border-blue-500 rounded text-[11px]">
+                            <b class="text-blue-700 uppercase">1-2: Kompresi</b><br>Kenaikan tekanan dan suhu gas uap panas lanjut.
+                        </div>
+                        <div class="p-3 bg-orange-50 border-l-4 border-orange-500 rounded text-[11px]">
+                            <b class="text-orange-700 uppercase">2-3: Kondensasi</b><br>Pembuangan panas laten hingga menjadi cair jenuh.
+                        </div>
+                        <div class="p-3 bg-indigo-50 border-l-4 border-indigo-500 rounded text-[11px]">
+                            <b class="text-indigo-700 uppercase">3-4: Ekspansi</b><br>Penurunan tekanan mendadak (Isentalpi).
+                        </div>
+                        <div class="p-3 bg-green-50 border-l-4 border-green-500 rounded text-[11px]">
+                            <b class="text-green-700 uppercase">4-1: Evaporasi</b><br>Penyerapan panas (efek pendinginan).
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            const b = wrapper.getBoundingClientRect();
+            canvas.width = b.width * dpr;
+            canvas.height = b.height * dpr;
+            ctx.scale(dpr, dpr);
+            draw();
+        }
+
+        const mapX = (val, w, pad) => pad + (val / 100) * (w - pad * 2);
+        const mapY = (val, h, pad) => h - pad - (val / 100) * (h - pad * 2);
+
+        function draw() {
+            const w = canvas.width / window.devicePixelRatio;
+            const h = canvas.height / window.devicePixelRatio;
+            const pad = 65;
+            ctx.clearRect(0, 0, w, h);
+
+            // 1. Draw Dome (Saturasi)
+            ctx.beginPath();
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 3;
+            ctx.moveTo(mapX(15, w, pad), mapY(10, h, pad));
+            ctx.bezierCurveTo(mapX(25, w, pad), mapY(80, h, pad), mapX(45, w, pad), mapY(92, h, pad), mapX(50, w, pad), mapY(92, h, pad));
+            ctx.bezierCurveTo(mapX(55, w, pad), mapY(92, h, pad), mapX(75, w, pad), mapY(80, h, pad), mapX(85, w, pad), mapY(10, h, pad));
+            ctx.stroke();
+
+            // Critical Point Marker
+            if(activeId === 'dome') {
+                ctx.beginPath();
+                ctx.fillStyle = '#ef4444';
+                ctx.arc(mapX(50, w, pad), mapY(92, h, pad), 5, 0, Math.PI*2);
+                ctx.fill();
+                ctx.font = 'bold 10px Sans';
+                ctx.fillText('CRITICAL POINT', mapX(50, w, pad) - 40, mapY(92, h, pad) - 15);
+            }
+
+            // 2. Parameters Drawing
+            if(activeType === 'anatomy') {
+                if(activeId === 'pressure') {
+                    ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 3;
+                    [35, 75].forEach(v => {
+                        ctx.beginPath(); ctx.moveTo(mapX(0, w, pad), mapY(v, h, pad)); ctx.lineTo(mapX(100, w, pad), mapY(v, h, pad)); ctx.stroke();
+                    });
+                }
+                if(activeId === 'enthalpy') {
+                    ctx.strokeStyle = '#f97316'; ctx.lineWidth = 3;
+                    [30, 50, 70].forEach(v => {
+                        ctx.beginPath(); ctx.moveTo(mapX(v, w, pad), mapY(0, h, pad)); ctx.lineTo(mapX(v, w, pad), mapY(100, h, pad)); ctx.stroke();
+                    });
+                }
+                if(activeId === 'volume') {
+                    ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 2.5;
+                    // Garis Volume Spesifik (v) - Diagonal Kanan Atas, Cembung Halus
+                    for(let i=0; i<6; i++) {
+                        const startY = 15 + i * 14;
+                        const startX = 15 + (startY/100) * 12; // Start from left dome curve
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(mapX(startX, w, pad), mapY(startY, h, pad));
+                        // Control points adjusted to create a "Cembung Halus" (convex) shape
+                        // instead of "Cekungan" (concave)
+                        ctx.bezierCurveTo(
+                            mapX(startX + 15, w, pad), mapY(startY + 8, h, pad),
+                            mapX(startX + 35, w, pad), mapY(startY + 15, h, pad),
+                            mapX(startX + 55, w, pad), mapY(startY + 22, h, pad)
+                        );
+                        ctx.stroke();
+                    }
+                }
+                if(activeId === 'temp') {
+                    ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1.5;
+                    [30, 60, 85].forEach(t => {
+                        ctx.beginPath();
+                        ctx.moveTo(mapX(10, w, pad), mapY(98, h, pad));
+                        ctx.lineTo(mapX(20, w, pad), mapY(t, h, pad));
+                        ctx.lineTo(mapX(80, w, pad), mapY(t, h, pad));
+                        ctx.quadraticCurveTo(mapX(90, w, pad), mapY(t-10, h, pad), mapX(95, w, pad), mapY(5, h, pad));
+                        ctx.stroke();
+                    });
+                }
+                if(activeId === 'entropy') {
+                    ctx.strokeStyle = '#6366f1'; ctx.lineWidth = 2;
+                    for(let i=0; i<5; i++) {
+                        ctx.beginPath();
+                        ctx.moveTo(mapX(50 + i*8, w, pad), mapY(10, h, pad));
+                        ctx.quadraticCurveTo(mapX(65 + i*8, w, pad), mapY(50, h, pad), mapX(85 + i*8, w, pad), mapY(95, h, pad));
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            if(activeType === 'cycle') {
+                const pts = { 1:{x:82, y:35}, 2:{x:95, y:75}, 3:{x:20, y:75}, 4:{x:20, y:35} };
+                ctx.lineWidth = 5; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+                ctx.beginPath(); ctx.strokeStyle = '#ef4444'; ctx.moveTo(mapX(pts[1].x, w, pad), mapY(pts[1].y, h, pad)); ctx.lineTo(mapX(pts[2].x, w, pad), mapY(pts[2].y, h, pad)); ctx.stroke();
+                ctx.beginPath(); ctx.strokeStyle = '#f97316'; ctx.moveTo(mapX(pts[2].x, w, pad), mapY(pts[2].y, h, pad)); ctx.lineTo(mapX(pts[3].x, w, pad), mapY(pts[3].y, h, pad)); ctx.stroke();
+                ctx.beginPath(); ctx.strokeStyle = '#6366f1'; ctx.moveTo(mapX(pts[3].x, w, pad), mapY(pts[3].y, h, pad)); ctx.lineTo(mapX(pts[4].x, w, pad), mapY(pts[4].y, h, pad)); ctx.stroke();
+                ctx.beginPath(); ctx.strokeStyle = '#22c55e'; ctx.moveTo(mapX(pts[4].x, w, pad), mapY(pts[4].y, h, pad)); ctx.lineTo(mapX(pts[1].x, w, pad), mapY(pts[1].y, h, pad)); ctx.stroke();
+                Object.entries(pts).forEach(([i, p]) => {
+                    ctx.beginPath(); ctx.arc(mapX(p.x, w, pad), mapY(p.y, h, pad), 10, 0, Math.PI*2); ctx.fillStyle='#0f172a'; ctx.fill();
+                    ctx.fillStyle='white'; ctx.font='bold 10px Mono'; ctx.textAlign='center'; ctx.fillText(i, mapX(p.x, w, pad), mapY(p.y, h, pad)+4);
+                });
+            }
+
+            // Axes
+            ctx.fillStyle = '#64748b'; ctx.font = 'bold 11px Sans'; ctx.textAlign = 'center';
+            ctx.fillText('ENTHALPY (h) [kJ/kg] \u2192', w/2, h - 25);
+            ctx.save(); ctx.translate(30, h/2); ctx.rotate(-Math.PI/2); ctx.fillText('PRESSURE (P) [Bar] \u2192', 0, 0); ctx.restore();
+        }
+
+        function updateView(type, id, el) {
+            if(el) {
+                document.querySelectorAll('.nav-card').forEach(c => c.classList.remove('active'));
+                if(el.classList.contains('nav-card')) el.classList.add('active');
+            }
+            activeType = type; activeId = id;
+            const d = contentDB[id];
+            detailBox.innerHTML = `
+                <div class="animate-in fade-in slide-in-from-right-4 duration-300">
+                    <h2 class="text-xl font-extrabold text-slate-800">${d.title}</h2>
+                    <span class="inline-block px-2 py-0.5 bg-${d.color}-100 text-${d.color}-700 text-[9px] font-black rounded uppercase mt-1 border border-${d.color}-200">${d.badge}</span>
+                    <div class="mt-6">${d.body}</div>
+                    <div class="mt-8 p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Expert Note:</p>
+                        <p class="text-xs text-slate-600 italic">"Pemahaman visual terhadap arah dan bentuk kelengkungan garis parametrik adalah kunci kecepatan diagnosa dalam sistem Refrigerasi & Tata Udara."</p>
+                    </div>
+                </div>
+            `;
+            draw();
+        }
+
+        window.addEventListener('resize', resize);
+        window.onload = () => { resize(); updateView('anatomy', 'dome', document.querySelector('.nav-card.active')); };
+    </script>
+</body>
+</html>
