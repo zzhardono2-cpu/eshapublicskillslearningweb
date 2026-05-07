@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analisis Gap & Rencana Intervensi LKS RAC Jateng 2026</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #0F172A; }
+.bg-navy { background-color: #0A192F; }
+.text-navy { color: #0A192F; }
+.bg-vibrant-blue { background-color: #2563EB; }
+.text-vibrant-blue { color: #2563EB; }
+.bg-energetic-orange { background-color: #F97316; }
+.text-energetic-orange { color: #F97316; }
+.chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 350px; max-height: 450px; }
+@media (min-width: 768px) { .chart-container { height: 400px; } }
+.card-hover { transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+</style>
+</head>
+<body class="antialiased">
+
+<nav class="bg-navy text-white sticky top-0 z-50 shadow-lg">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-energetic-orange flex items-center justify-center font-bold text-white">SH</div>
+<span class="font-bold text-lg tracking-wider">WORLDSKILLS EXPERT DASHBOARD</span>
+</div>
+<div class="hidden md:block">
+<div class="ml-10 flex items-baseline space-x-4">
+<a href="#eksekutif" class="hover:bg-vibrant-blue px-3 py-2 rounded-md text-sm font-medium">Ringkasan</a>
+<a href="#analisis-gap" class="hover:bg-vibrant-blue px-3 py-2 rounded-md text-sm font-medium">Analisis Gap</a>
+<a href="#intervensi" class="hover:bg-vibrant-blue px-3 py-2 rounded-md text-sm font-medium">Fokus Intervensi</a>
+<a href="#jadwal" class="hover:bg-vibrant-blue px-3 py-2 rounded-md text-sm font-medium">Jadwal Bootcamp</a>
+</div>
+</div>
+</div>
+</div>
+</nav>
+
+<header class="bg-vibrant-blue text-white py-16 relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Strategi Penguatan & Analisis Kompetitor LKS RAC 2026</h1>
+<p class="text-xl md:text-2xl font-light mb-8 text-blue-100">Disusun oleh: Sri Hardono, S.T., M.Sc. (Expert WorldSkills)</p>
+<div class="flex flex-wrap gap-4">
+<div class="bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+<p class="text-sm uppercase tracking-wide text-blue-200">Peserta Target (Jateng)</p>
+<p class="font-bold text-lg">Tri Wahyu Ramadani (PBL)</p>
+</div>
+<div class="bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+<p class="text-sm uppercase tracking-wide text-blue-200">Peserta Benchmark (Jatim)</p>
+<p class="font-bold text-lg">Ahmad Bagus Nasyrah (LMN1)</p>
+</div>
+<div class="bg-energetic-orange rounded-lg p-4 shadow-lg border border-orange-400">
+<p class="text-sm uppercase tracking-wide text-orange-100">Periode Pelatihan</p>
+<p class="font-bold text-lg">5 - 9 Mei 2026 (45 Jam Efektif)</p>
+</div>
+</div>
+</div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+<section id="eksekutif" class="mb-16">
+<div class="mb-8">
+<h2 class="text-3xl font-bold text-navy border-l-4 border-energetic-orange pl-4">Ringkasan Eksekutif & KPI Target</h2>
+<p class="mt-4 text-gray-600 text-lg leading-relaxed">
+Sebagai <b>Expert WorldSkills</b>, saya telah melakukan audit terhadap <i>Marking Scheme</i> LKS 2026. Data menunjukkan defisit skor kumulatif yang signifikan antara Jawa Tengah dan Jawa Timur. Program bootcamp 5 hari ini dirancang dengan standar WorldSkills untuk menutup celah teknis (gap) dan membangun mental juara melalui simulasi bertekanan tinggi sesuai alokasi waktu MTP.
+</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-gray-400 card-hover">
+<h3 class="text-gray-500 font-semibold uppercase text-sm tracking-wider">Estimasi Skor Saat Ini (Jateng)</h3>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="text-5xl font-extrabold text-gray-800">71.5</span>
+<span class="text-xl font-medium text-gray-500">/ 100</span>
+</div>
+<p class="mt-2 text-sm text-red-500 font-medium">&#9660; 16.5 Poin di bawah benchmark</p>
+</div>
+
+<div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-vibrant-blue card-hover">
+<h3 class="text-gray-500 font-semibold uppercase text-sm tracking-wider">Skor Benchmark (Jatim)</h3>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="text-5xl font-extrabold text-vibrant-blue">88.0</span>
+<span class="text-xl font-medium text-gray-500">/ 100</span>
+</div>
+<p class="mt-2 text-sm text-blue-600 font-medium">&#9733; Memimpin di area Elektrikal & Komisioning</p>
+</div>
+
+<div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-energetic-orange card-hover">
+<h3 class="text-gray-500 font-semibold uppercase text-sm tracking-wider">Target Pasca-Bootcamp</h3>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="text-5xl font-extrabold text-energetic-orange">95.0+</span>
+<span class="text-xl font-medium text-gray-500">/ 100</span>
+</div>
+<p class="mt-2 text-sm text-green-600 font-medium">&#9650; Fokus pada Zero Mistake & Kecepatan</p>
+</div>
+</div>
+</section>
+
+<section id="analisis-gap" class="mb-16">
+<div class="mb-8">
+<h2 class="text-3xl font-bold text-navy border-l-4 border-energetic-orange pl-4">Analisis Komparatif Kriteria (Radar Gap)</h2>
+<p class="mt-4 text-gray-600 text-lg leading-relaxed">
+Pemetaan berikut menggunakan metodologi penilaian WorldSkills untuk membandingkan Tri Wahyu Ramadani (Jateng) dengan Ahmad Bagus Nasyrah (Jatim). Area defisit paling kritis berada pada <b>Kriteria C (Elektrikal)</b> dan <b>Kriteria E (Fault Finding)</b>, di mana presisi dan logika sistematis menjadi kunci perbedaan poin.
+</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+<div class="bg-white rounded-xl shadow-md p-6">
+<h3 class="text-xl font-bold text-navy mb-4 text-center">Peta Kompetensi Sub-Kriteria Standar WorldSkills</h3>
+<div class="chart-container">
+<canvas id="radarChart"></canvas>
+</div>
+</div>
+<div class="space-y-6">
+<div class="bg-blue-50 p-6 rounded-lg border border-blue-100">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded-full bg-vibrant-blue text-white flex items-center justify-center font-bold">A</div>
+<h4 class="text-lg font-bold text-navy">Fabrication & Brazing</h4>
+</div>
+<p class="text-gray-700">Skor Jateng stabil, namun perlu peningkatan presisi dimensi &plusmn; 2mm untuk mengamankan poin maksimal sesuai standar inspeksi WorldSkills.</p>
+</div>
+
+<div class="bg-orange-50 p-6 rounded-lg border border-orange-100">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded-full bg-energetic-orange text-white flex items-center justify-center font-bold">C</div>
+<h4 class="text-lg font-bold text-navy">Electrical Control Board</h4>
+</div>
+<p class="text-gray-700">Terdapat selisih signifikan. Berdasarkan audit form, penempatan komponen Jateng sering mengalami deviasi toleransi 0mm pada mistar baja.</p>
+</div>
+
+<div class="bg-red-50 p-6 rounded-lg border border-red-100">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold">E</div>
+<h4 class="text-lg font-bold text-navy">Fault Finding (High Intensity)</h4>
+</div>
+<p class="text-gray-700">Metodologi pelacakan masalah masih memakan waktu lama. Kita akan menerapkan teknik bypass analisa logika standar kompetisi internasional.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="intervensi" class="mb-16">
+<div class="mb-8">
+<h2 class="text-3xl font-bold text-navy border-l-4 border-energetic-orange pl-4">Rincian Defisit Poin & Prioritas Intervensi</h2>
+<p class="mt-4 text-gray-600 text-lg leading-relaxed">
+Sebagai Expert WorldSkills, saya menetapkan prioritas alokasi waktu pada bootcamp berbanding lurus dengan besarnya "Poin Hilang" pada masing-masing tugas. Intervensi tidak hanya pada hasil akhir (<i>measurement</i>), tapi juga pada proses (<i>judgement</i>).
+</p>
+</div>
+
+<div class="bg-white rounded-xl shadow-md p-6 mb-8">
+<div class="chart-container" style="height: 400px; max-height: 500px;">
+<canvas id="barChart"></canvas>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-navy">
+<h4 class="text-xl font-bold text-navy mb-4 flex items-center gap-2"><span class="text-energetic-orange text-2xl">&#9888;</span> Safety Practices (H4)</h4>
+<p class="text-gray-700 mb-4">Dalam WorldSkills, safety adalah harga mati. Teguran APD (Aspek M1) dan Housekeeping (Aspek M2) adalah poin gratis yang tidak boleh hilang lagi.</p>
+<ul class="list-none space-y-2">
+<li class="flex items-start gap-2"><span class="text-vibrant-blue font-bold">&#10003;</span> <span>Disiplin Kacamata Las dan Sarung Tangan Anti Listrik.</span></li>
+<li class="flex items-start gap-2"><span class="text-vibrant-blue font-bold">&#10003;</span> <span>Penataan tools 5R pada meja kerja secara kontinu.</span></li>
+</ul>
+</div>
+
+<div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-navy">
+<h4 class="text-xl font-bold text-navy mb-4 flex items-center gap-2"><span class="text-energetic-orange text-2xl">&#9874;</span> Commissioning & Data Logging (D)</h4>
+<p class="text-gray-700 mb-4">Pengambilan data performa sistem pendingin harus presisi. Kita akan melatih akurasi pembacaan instrumen dan kalibrasi alat sebelum digunakan.</p>
+<ul class="list-none space-y-2">
+<li class="flex items-start gap-2"><span class="text-vibrant-blue font-bold">&#10003;</span> <span>SOP pembacaan manifold digital dan clamp meter.</span></li>
+<li class="flex items-start gap-2"><span class="text-vibrant-blue font-bold">&#10003;</span> <span>Pengisian refrigerant berdasarkan berat aktual (timbangan presisi).</span></li>
+</ul>
+</div>
+</div>
+</section>
+
+<section id="jadwal" class="mb-16">
+<div class="mb-8">
+<h2 class="text-3xl font-bold text-navy border-l-4 border-energetic-orange pl-4">Master Schedule Bootcamp (Standar WorldSkills)</h2>
+<p class="mt-4 text-gray-600 text-lg leading-relaxed">
+Jadwal ini disusun oleh Expert WorldSkills untuk menciptakan simulasi atmosfer kompetisi yang nyata. Dimulai dari koreksi teknik mikro hingga dua hari penuh <b>Full Simulation (MTP Jateng Time Allocation)</b> untuk melatih manajemen waktu dan daya tahan mental.
+</p>
+</div>
+
+<div class="overflow-x-auto bg-white rounded-xl shadow-md border border-gray-200">
+<div class="min-w-[800px]">
+<div class="grid grid-cols-12 bg-navy text-white text-sm font-bold uppercase tracking-wide">
+<div class="col-span-2 p-4 border-b border-gray-700 border-r text-center">Tanggal / Waktu</div>
+<div class="col-span-4 p-4 border-b border-gray-700 border-r">Fokus Materi Utama</div>
+<div class="col-span-4 p-4 border-b border-gray-700 border-r">Target Kompetensi (KPI Expert)</div>
+<div class="col-span-2 p-4 border-b border-gray-700 text-center">Status</div>
+</div>
+
+<div class="grid grid-cols-12 border-b border-gray-200 hover:bg-gray-50 transition-colors">
+<div class="col-span-2 p-4 border-r border-gray-200 flex flex-col justify-center items-center bg-gray-100 font-semibold text-navy">
+<span>5 Mei</span>
+<span class="text-xs text-gray-500">13:00 - 18:00</span>
+<span class="bg-vibrant-blue text-white text-[10px] px-2 py-1 rounded mt-1">5 Jam</span>
+</div>
+<div class="col-span-4 p-4 border-r border-gray-200">
+<p class="font-bold text-navy mb-1">Expert Blueprint Review</p>
+<ul class="text-sm text-gray-700 list-disc pl-4 space-y-1">
+<li>Review Gap Analysis Jateng vs Jatim.</li>
+<li>Bedah MTP LKS 2026 secara mendalam.</li>
+<li>Drill Kriteria A: Presisi Brazing Pipa Tembaga.</li>
+</ul>
+</div>
+<div class="col-span-4 p-4 border-r border-gray-200 flex flex-col justify-center">
+<p class="text-sm text-gray-700">Toleransi dimensi &plusmn; 2mm. Permukaan brazing bebas oksidasi (Nitrogen purging).</p>
+</div>
+<div class="col-span-2 p-4 flex items-center justify-center">
+<span class="bg-orange-100 text-energetic-orange border border-orange-200 px-3 py-1 rounded-full text-xs font-bold uppercase">Persiapan</span>
+</div>
+</div>
+
+<div class="grid grid-cols-12 border-b border-gray-200 hover:bg-gray-50 transition-colors">
+<div class="col-span-2 p-4 border-r border-gray-200 flex flex-col justify-center items-center bg-gray-100 font-semibold text-navy">
+<span>6 Mei</span>
+<span class="text-xs text-gray-500">08:00 - 18:00</span>
+<span class="bg-vibrant-blue text-white text-[10px] px-2 py-1 rounded mt-1">10 Jam</span>
+</div>
+<div class="col-span-4 p-4 border-r border-gray-200">
+<p class="font-bold text-navy mb-1">Electrical & Fault Finding Mastery</p>
+<ul class="text-sm text-gray-700 list-disc pl-4 space-y-1">
+<li>Drill Kriteria C: Perakitan Control Board R.0010.</li>
+<li>Pelatihan kecepatan wiring & estetika kabel.</li>
+<li>Metodologi logis Troubleshooting standar WSC.</li>
+</ul>
+</div>
+<div class="col-span-4 p-4 border-r border-gray-200 flex flex-col justify-center">
+<p class="text-sm text-gray-700">Waktu wiring berkurang 20%. Penemuan 5 fault di bawah 45 menit dengan metodologi logic tree.</p>
+</div>
+<div class="col-span-2 p-4 flex items-center justify-center">
+<span class="bg-blue-100 text-vibrant-blue border border-blue-200 px-3 py-1 rounded-full text-xs font-bold uppercase">Technical Drill</span>
+</div>
+</div>
+
+<div class="grid grid-cols-12 border-b border-orange-200 hover:bg-orange-50 transition-colors bg-orange-50/30">
+<div class="col-span-2 p-4 border-r border-gray-200 flex flex-col justify-center items-center bg-orange-100 font-semibold text-navy">
+<span>7 Mei</span>
+<span class="text-xs text-gray-500">08:00 - 18:00</span>
+<span class="bg-energetic-orange text-white text-[10px] px-2 py-1 rounded mt-1">10 Jam</span>
+</div>
+<div class="col-span-4 p-4 border-r border-gray-200">
+<p class="font-bold text-navy mb-1 flex items-center gap-2">MTP FULL SIMULATION - DAY 1</p>
+<ul class="text-sm text-gray-700 list-disc pl-4 space-y-1">
+<li>Kondisi LKS sesungguhnya (Waktu MTP Jateng).</li>
+<li>Task A: Component Fabrication (Pagi).</li>
+<li>Task B: System Installation (Siang).</li>
+<li>Task C: Electrical Control Board (Sore).</li>
+</ul>
+</div>
+<div class="col-span-4 p-4 border-r border-gray-200 flex flex-col justify-center">
+<p class="text-sm text-gray-700">Live Marking oleh Expert WorldSkills. Evaluasi ketat pada safety dan housekeeping.</p>
+</div>
+<div class="col-span-2 p-4 flex items-center justify-center">
+<span class="bg-red-100 text-red-600 border border-red-200 px-3 py-1 rounded-full text-xs font-bold uppercase">Simulation</span>
+</div>
+</div>
+
+<div class="grid grid-cols-12 border-b border-orange-200 hover:bg-orange-50 transition-colors bg-orange-50/30">
+<div class="col-span-2 p-4 border-r border-gray-200 flex flex-col justify-center items-center bg-orange-100 font-semibold text-navy">
+<span>8 Mei</span>
+<span class="text-xs text-gray-500">08:00 - 18:00</span>
+<span class="bg-energetic-orange text-white text-[10px] px-2 py-1 rounded mt-1">10 Jam</span>
+</div>
+<div class="col-span-4 p-4 border-r border-gray-200">
+<p class="font-bold text-navy mb-1 flex items-center gap-2">MTP FULL SIMULATION - DAY 2</p>
+<ul class="text-sm text-gray-700 list-disc pl-4 space-y-1">
+<li>Lanjutan Task D: Commissioning & Testing.</li>
+<li>Task E: Troubleshooting.</li>
+<li>Evaluasi Komprehensif MTP Simulator vs Benchmark Jatim.</li>
+</ul>
+</div>
+<div class="col-span-4 p-4 border-r border-gray-200 flex flex-col justify-center">
+<p class="text-sm text-gray-700">Pencapaian parameter performa mesin pendingin optimal. Evaluasi poin total akhir.</p>
+</div>
+<div class="col-span-2 p-4 flex items-center justify-center">
+<span class="bg-red-100 text-red-600 border border-red-200 px-3 py-1 rounded-full text-xs font-bold uppercase">Simulation</span>
+</div>
+</div>
+
+<div class="grid grid-cols-12 hover:bg-green-50 transition-colors">
+<div class="col-span-2 p-4 border-r border-gray-200 flex flex-col justify-center items-center bg-green-100 font-semibold text-navy">
+<span>9 Mei</span>
+<span class="text-xs text-gray-500">08:00 - 18:00</span>
+<span class="bg-green-600 text-white text-[10px] px-2 py-1 rounded mt-1">10 Jam</span>
+</div>
+<div class="col-span-4 p-4 border-r border-gray-200">
+<p class="font-bold text-navy mb-1">Final Tuning & Expert Mentality</p>
+<ul class="text-sm text-gray-700 list-disc pl-4 space-y-1">
+<li>Remedial untuk titik lemah dari simulasi.</li>
+<li>Speed run drill untuk efisiensi gerakan kerja.</li>
+<li>Pembersihan alat dan mental conditioning final.</li>
+</ul>
+</div>
+<div class="col-span-4 p-4 border-r border-gray-200 flex flex-col justify-center">
+<p class="text-sm text-gray-700">Mental juara terbentuk. Zero doubt. Target akurasi 100% pada semua instrumen.</p>
+</div>
+<div class="col-span-2 p-4 flex items-center justify-center">
+<span class="bg-green-100 text-green-700 border border-green-200 px-3 py-1 rounded-full text-xs font-bold uppercase">Finalisasi</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer class="bg-navy text-white py-10 mt-12 border-t-4 border-energetic-orange">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<div>
+<p class="font-bold text-xl tracking-wider mb-2">Sri Hardono, S.T., M.Sc.</p>
+<p class="text-gray-400 text-sm">Expert WorldSkills Bidang Refrigeration and Air Conditioning</p>
+<p class="text-gray-400 text-sm">Dokumen Strategis Penguatan Tim LKS Jateng 2026</p>
+</div>
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full border-2 border-vibrant-blue flex items-center justify-center font-bold text-vibrant-blue">RAC</div>
+<div class="w-12 h-12 rounded-full border-2 border-energetic-orange flex items-center justify-center font-bold text-energetic-orange">38</div>
+</div>
+</div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    function wrapText(text, maxChars) {
+        if (text.length <= maxChars) return text;
+        const words = text.split(' ');
+        const lines = [];
+        let currentLine = '';
+        
+        words.forEach(word => {
+            if ((currentLine + word).length > maxChars) {
+                if (currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine = word + ' ';
+            } else {
+                currentLine += word + ' ';
+            }
+        });
+        if (currentLine.trim().length > 0) lines.push(currentLine.trim());
+        return lines;
+    }
+
+    const commonTooltipConfig = {
+        callbacks: {
+            title: function(tooltipItems) {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                return Array.isArray(label) ? label.join(' ') : label;
+            }
+        }
+    };
+
+    const radarLabelsRaw = [
+        "A - Fabrication & Brazing",
+        "B - System Installation",
+        "C - Electrical Control",
+        "D - Commissioning",
+        "E - Fault Finding",
+        "F-H - Safety & Recovery"
+    ];
+    
+    const radarLabels = radarLabelsRaw.map(label => wrapText(label, 16));
+
+    const ctxRadar = document.getElementById('radarChart').getContext('2d');
+    new Chart(ctxRadar, {
+        type: 'radar',
+        data: {
+            labels: radarLabels,
+            datasets: [
+                {
+                    label: 'Skor Maksimal',
+                    data: [15, 20, 15, 20, 15, 15],
+                    backgroundColor: 'rgba(10, 25, 47, 0.1)',
+                    borderColor: 'rgba(10, 25, 47, 0.3)',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                },
+                {
+                    label: 'Ahmad Bagus (Jatim Benchmark)',
+                    data: [14, 18, 14, 18, 12, 12],
+                    backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    pointBackgroundColor: 'rgba(37, 99, 235, 1)',
+                    borderWidth: 2
+                },
+                {
+                    label: 'Tri Wahyu (Jateng Existing)',
+                    data: [10, 16, 10, 14, 8, 13.5],
+                    backgroundColor: 'rgba(249, 115, 22, 0.4)',
+                    borderColor: 'rgba(249, 115, 22, 1)',
+                    pointBackgroundColor: 'rgba(249, 115, 22, 1)',
+                    borderWidth: 3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                    grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                    pointLabels: {
+                        font: { family: 'Inter', size: 11, weight: '600' },
+                        color: '#0A192F'
+                    },
+                    ticks: { display: false }
+                }
+            },
+            plugins: {
+                legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } },
+                tooltip: commonTooltipConfig
+            }
+        }
+    });
+
+    const barLabelsRaw = [
+        "A - Fabrication",
+        "B - Installation",
+        "C - Electrical",
+        "D - Commissioning",
+        "E - Fault Finding",
+        "Safety & Recovery"
+    ];
+    
+    const barLabels = barLabelsRaw.map(label => wrapText(label, 16));
+    const maxScores = [15, 20, 15, 20, 15, 15];
+    const jatengScores = [10, 16, 10, 14, 8, 13.5];
+    const pointsLost = maxScores.map((max, index) => max - jatengScores[index]);
+
+    const ctxBar = document.getElementById('barChart').getContext('2d');
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: barLabels,
+            datasets: [
+                {
+                    label: 'Skor yang Diraih Jateng',
+                    data: jatengScores,
+                    backgroundColor: 'rgba(37, 99, 235, 0.8)',
+                    borderRadius: 4
+                },
+                {
+                    label: 'Poin Defisit (Fokus Latihan)',
+                    data: pointsLost,
+                    backgroundColor: 'rgba(239, 68, 68, 0.8)', 
+                    borderRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { stacked: true },
+                y: { stacked: true, beginAtZero: true, max: 25 }
+            },
+            plugins: {
+                legend: { position: 'top', labels: { usePointStyle: true } },
+                tooltip: commonTooltipConfig
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
