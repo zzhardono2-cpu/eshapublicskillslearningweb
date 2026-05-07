@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformasi Sistem TVET Nasional - Sri Hardono, S.T., M.Sc.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Lexend:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
+        h1, h2, h3, h4 { font-family: 'Lexend', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .nav-active { background-color: #1e40af; color: white; border-left: 4px solid #60a5fa; }
+        .roadmap-container::before { content: ''; position: absolute; left: 1.5rem; top: 0; bottom: 0; width: 2px; background: #e5e7eb; }
+    </style>
+</head>
+<body class="text-slate-900">
+
+<div class="flex flex-col lg:flex-row min-h-screen">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="lg:w-96 bg-slate-900 text-slate-300 flex-shrink-0 flex flex-col">
+        <div class="p-8 border-b border-slate-800 bg-slate-950">
+            <div class="mb-4">
+                <span class="px-3 py-1 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full">Executive Proposal</span>
+            </div>
+            <h1 class="text-white text-lg font-extrabold leading-snug">
+                Transformasi Sistem TVET Nasional Melalui Program Coaching Guru dan Instruktur Berbasis Standar WorldSkills dan Siklus Continuous Improvement
+            </h1>
+        </div>
+        
+        <nav class="flex-grow p-4 space-y-1 overflow-y-auto">
+            <button onclick="switchTab('tab-ringkasan')" id="btn-tab-ringkasan" class="tab-btn w-full text-left p-4 rounded-xl flex items-center gap-3 nav-active transition-all">
+                <span class="text-xl">📊</span> <span class="text-sm font-bold">Ringkasan Eksekutif</span>
+            </button>
+            <button onclick="switchTab('tab-bab1')" id="btn-tab-bab1" class="tab-btn w-full text-left p-4 rounded-xl flex items-center gap-3 hover:bg-slate-800 transition-all">
+                <span class="text-xl">🔍</span> <span class="text-sm font-bold">Bab I: Latar Belakang</span>
+            </button>
+            <button onclick="switchTab('tab-bab2')" id="btn-tab-bab2" class="tab-btn w-full text-left p-4 rounded-xl flex items-center gap-3 hover:bg-slate-800 transition-all">
+                <span class="text-xl">⚙️</span> <span class="text-sm font-bold">Bab II: Deskripsi Program</span>
+            </button>
+            <button onclick="switchTab('tab-bab3')" id="btn-tab-bab3" class="tab-btn w-full text-left p-4 rounded-xl flex items-center gap-3 hover:bg-slate-800 transition-all">
+                <span class="text-xl">💎</span> <span class="text-sm font-bold">Bab III: Analisis Manfaat</span>
+            </button>
+            <button onclick="switchTab('tab-bab45')" id="btn-tab-bab45" class="tab-btn w-full text-left p-4 rounded-xl flex items-center gap-3 hover:bg-slate-800 transition-all">
+                <span class="text-xl">🛡️</span> <span class="text-sm font-bold">Bab IV & V: Strategi & Mitigasi</span>
+            </button>
+            <button onclick="switchTab('tab-bab6')" id="btn-tab-bab6" class="tab-btn w-full text-left p-4 rounded-xl flex items-center gap-3 hover:bg-slate-800 transition-all">
+                <span class="text-xl">🚀</span> <span class="text-sm font-bold">Bab VI: Roadmap & Penutup</span>
+            </button>
+        </nav>
+
+        <!-- Profil Section -->
+        <div class="p-6 bg-slate-950 border-t border-slate-800">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-blue-700 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-inner">SH</div>
+                <div>
+                    <p class="text-sm font-black text-white">Sri Hardono, S.T., M.Sc.</p>
+                    <p class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">WorldSkills Expert Since 2012</p>
+                </div>
+            </div>
+            <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                <p class="text-[10px] text-slate-400 leading-relaxed">
+                    <span class="text-slate-300 font-bold">Alumni:</span><br>
+                    Korea University of Technology and Education<br>
+                    (Global TVET Management)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Content Area -->
+    <main class="flex-grow p-6 lg:p-12 overflow-y-auto">
+        
+        <!-- Tab: Ringkasan -->
+        <div id="tab-ringkasan" class="tab-content active">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-black text-slate-900 mb-6 uppercase">Ringkasan Eksekutif</h2>
+                <div class="prose prose-slate max-w-none space-y-6 text-slate-700">
+                    <p class="text-lg leading-relaxed">
+                        Program Pembinaan Guru/ Instruktur TVET Nasional merupakan inisiatif strategis untuk meningkatkan mutu pendidikan vokasi Indonesia. Program ini selaras dengan tujuan <strong>Visi Indonesia Emas 2045</strong> dan agenda <strong>Making Indonesia 4.0</strong>, yang menekankan pentingnya sumber daya manusia terampil (Revitalisasi SMK, Perpres No.68/2022).
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                        <div class="p-8 bg-blue-50 border-l-4 border-blue-600 rounded-r-2xl">
+                            <h4 class="font-bold text-blue-900 mb-2">Standardisasi Global</h4>
+                            <p class="text-sm">Menggunakan skema penilaian dan standar WorldSkills sebagai tolok ukur kualitas pembelajaran praktik di Indonesia.</p>
+                        </div>
+                        <div class="p-8 bg-emerald-50 border-l-4 border-emerald-600 rounded-r-2xl">
+                            <h4 class="font-bold text-emerald-900 mb-2">Transformasi Peran</h4>
+                            <p class="text-sm">Mengubah guru dari sekadar pengajar menjadi aktor utama transformasi melalui sistem Coaching intensif.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Bab I -->
+        <div id="tab-bab1" class="tab-content">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-black text-slate-900 mb-6 uppercase">Bab I: Latar Belakang & Tantangan</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="space-y-4">
+                        <p class="text-slate-600">Sesuai Perpres No.68/2022, revitalisasi pendidikan vokasi menuntut keselarasan mendalam dengan industri. Namun, tantangan berikut masih mendominasi:</p>
+                        <div class="space-y-3">
+                            <div class="p-4 bg-white border border-slate-200 rounded-xl shadow-sm flex gap-4">
+                                <span class="font-black text-red-500">A</span>
+                                <p class="text-sm">Kesenjangan kompetensi lulusan terhadap standar presisi industri global.</p>
+                            </div>
+                            <div class="p-4 bg-white border border-slate-200 rounded-xl shadow-sm flex gap-4">
+                                <span class="font-black text-red-500">B</span>
+                                <p class="text-sm">Kurikulum praktik yang belum sepenuhnya sinkron dengan Industri 4.0.</p>
+                            </div>
+                            <div class="p-4 bg-white border border-slate-200 rounded-xl shadow-sm flex gap-4">
+                                <span class="font-black text-red-500">C</span>
+                                <p class="text-sm">Metode asesmen yang masih subjektif dan tidak terstandar secara internasional.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-xl">
+                        <h4 class="text-center text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Analisis Kesenjangan Kompetensi</h4>
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Bab II -->
+        <div id="tab-bab2" class="tab-content">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-black text-slate-900 mb-6 uppercase">Bab II: Deskripsi Program Coaching</h2>
+                <div class="bg-slate-900 text-white p-10 rounded-[2rem] mb-8 relative overflow-hidden shadow-2xl">
+                    <div class="relative z-10">
+                        <h3 class="text-blue-400 font-bold mb-4 italic">"Menciptakan Mentor Vokasi Berkelas Dunia"</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="p-5 border border-slate-800 bg-slate-800/50 rounded-2xl">
+                                <h5 class="font-black text-sm mb-2 uppercase">WSOS Mastery</h5>
+                                <p class="text-[11px] text-slate-400">Penguasaan standar kompetensi okupasi WorldSkills di berbagai keahlian.</p>
+                            </div>
+                            <div class="p-5 border border-slate-800 bg-slate-800/50 rounded-2xl">
+                                <h5 class="font-black text-sm mb-2 uppercase">Objective Assessment</h5>
+                                <p class="text-[11px] text-slate-400">Implementasi sistem penilaian berbasis Measurement (Ukuran) & Judgment.</p>
+                            </div>
+                            <div class="p-5 border border-slate-800 bg-slate-800/50 rounded-2xl">
+                                <h5 class="font-black text-sm mb-2 uppercase">Lean Workshop</h5>
+                                <p class="text-[11px] text-slate-400">Manajemen area kerja yang efisien, aman, dan berstandar industri tinggi.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="font-bold text-slate-800 uppercase text-xs tracking-widest">Detail Modul Pelatihan:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-6 bg-white border border-slate-200 rounded-2xl">
+                            <p class="font-bold text-sm mb-2">Modul 1: Bedah Test Project</p>
+                            <p class="text-xs text-slate-500">Menganalisis soal-soal kompetisi dunia untuk diterapkan sebagai materi praktik harian siswa.</p>
+                        </div>
+                        <div class="p-6 bg-white border border-slate-200 rounded-2xl">
+                            <p class="font-bold text-sm mb-2">Modul 2: Implementasi CIS</p>
+                            <p class="text-xs text-slate-500">Pelatihan penggunaan Competition Information System untuk entri data nilai secara real-time.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Bab III -->
+        <div id="tab-bab3" class="tab-content">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-black text-slate-900 mb-6 uppercase">Bab III: Analisis Manfaat Konkrit</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="space-y-4">
+                        <div class="flex gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold">01</div>
+                            <div>
+                                <h5 class="font-bold text-sm text-slate-900">Penguatan Reputasi Institusi</h5>
+                                <p class="text-xs text-slate-500">Lembaga akan diakui sebagai Center of Excellence berstandar global.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center font-bold">02</div>
+                            <div>
+                                <h5 class="font-bold text-sm text-slate-900">Peningkatan Daya Saing Lulusan</h5>
+                                <p class="text-xs text-slate-500">Lulusan memiliki portofolio yang divalidasi oleh standar industri dunia.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                            <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center font-bold">03</div>
+                            <div>
+                                <h5 class="font-bold text-sm text-slate-900">Efisiensi Sumber Daya</h5>
+                                <p class="text-xs text-slate-500">Teknik kerja presisi mengurangi pemborosan material (waste) di lab.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-xl flex flex-col items-center justify-center">
+                        <h4 class="text-center text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Proyeksi Peningkatan Kualitas</h4>
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Bab IV & V -->
+        <div id="tab-bab45" class="tab-content">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-black text-slate-900 mb-6 uppercase">Bab IV & V: Strategi & Penanganan Keberatan</h2>
+                <div class="space-y-4">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6">
+                        <h4 class="font-bold text-blue-800 text-sm mb-4">Strategi Komunikasi Persuasif</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed italic">"Kita tidak hanya mengajar, kita sedang menyiapkan masa depan ekonomi Indonesia melalui tangan-tangan terampil siswa kita."</p>
+                    </div>
+                    <div class="space-y-4 mt-8">
+                        <h4 class="font-bold text-slate-900 text-sm uppercase">Mitigasi Keberatan Institusi:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                                <p class="font-bold text-xs text-slate-800 mb-2">Masalah: "Biaya Alat Mahal"</p>
+                                <p class="text-xs text-slate-500 leading-relaxed"><strong>Solusi:</strong> Standar WorldSkills adalah soal metode dan presisi. Kita mengoptimalkan alat yang ada melalui modifikasi metode kerja terlebih dahulu.</p>
+                            </div>
+                            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                                <p class="font-bold text-xs text-slate-800 mb-2">Masalah: "Resistensi Guru Senior"</p>
+                                <p class="text-xs text-slate-500 leading-relaxed"><strong>Solusi:</strong> Guru senior dilibatkan sebagai mentor strategis yang dibekali instrumen penilaian objektif, bukan sekadar dipaksa belajar hal baru.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Bab VI -->
+        <div id="tab-bab6" class="tab-content">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-black text-slate-900 mb-6 uppercase">Bab VI: Peta Jalan 2025-2026 & Penutup</h2>
+                
+                <div class="roadmap-container relative pl-12 space-y-12 mb-16">
+                    <div class="relative">
+                        <div class="absolute -left-[2.2rem] top-0 w-6 h-6 bg-blue-600 border-4 border-white rounded-full"></div>
+                        <h4 class="font-bold text-blue-600 text-xs uppercase mb-1">Tahap 1: Persiapan (Awal 2025)</h4>
+                        <p class="font-bold text-slate-900 text-lg mb-2">Inisiasi & Pilot Project</p>
+                        <p class="text-sm text-slate-500">Pelatihan Coach inti (Training of Coaches) dan pemilihan 5 lembaga percontohan nasional.</p>
+                    </div>
+
+                    <div class="relative p-8 bg-blue-50 border border-blue-100 rounded-3xl shadow-sm">
+                        <div class="absolute -left-[2.2rem] top-8 w-6 h-6 bg-amber-500 border-4 border-white rounded-full"></div>
+                        <h4 class="font-bold text-amber-600 text-xs uppercase mb-1">Tahap 2: Ekspansi (2025 - 2026)</h4>
+                        <p class="font-bold text-slate-900 text-lg mb-2">Ekosistem Vokasi & Harmonisasi Wilayah</p>
+                        <p class="text-sm text-slate-700 leading-relaxed font-semibold">
+                            Melakukan ekspansi ke sekolah-sekolah di bawah koordinasi Dinas Pendidikan untuk membangun ekosistem vokasi wilayah yang kuat. Fokus pada harmonisasi kurikulum praktik dan sistem penilaian WorldSkills di seluruh jaringan sekolah yang bergabung.
+                        </p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[2.2rem] top-0 w-6 h-6 bg-emerald-600 border-4 border-white rounded-full"></div>
+                        <h4 class="font-bold text-emerald-600 text-xs uppercase mb-1">Tahap 3: Sustain (2026+)</h4>
+                        <p class="font-bold text-slate-900 text-lg mb-2">Siklus Continuous Improvement</p>
+                        <p class="text-sm text-slate-500">Pelembagaan audit mutu internal harian di bengkel sekolah agar standar kualitas tetap terjaga dan terus berkembang.</p>
+                    </div>
+                </div>
+
+                <!-- Penutup -->
+                <div class="bg-slate-900 text-center p-12 rounded-[3rem] text-white shadow-2xl shadow-blue-900/20">
+                    <h3 class="text-2xl font-black mb-4 italic">"Bersama Wujudkan SDM Unggul Indonesia Emas 2045"</h3>
+                    <p class="text-slate-400 mb-8 max-w-xl mx-auto text-sm">
+                        Jangan biarkan potensi siswa Anda terhambat oleh metode lama. Mari beralih ke standar kualitas dunia hari ini.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button class="bg-blue-600 hover:bg-blue-500 px-8 py-4 rounded-2xl font-bold transition shadow-lg shadow-blue-900/50" onclick="alert('Permintaan kolaborasi dikirim. Tim Sri Hardono akan segera menghubungi Anda.')">Mulai Transformasi Sekarang</button>
+                        <button class="bg-slate-800 hover:bg-slate-700 px-8 py-4 rounded-2xl font-bold transition">Unduh Proposal Lengkap (PDF)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    // Tab switching logic
+    function switchTab(tabId) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        // Deactivate all buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('nav-active'));
+        
+        // Show selected tab
+        document.getElementById(tabId).classList.add('active');
+        // Activate selected button
+        document.getElementById('btn-' + tabId).classList.add('nav-active');
+
+        // Init charts if specific tabs are opened
+        if (tabId === 'tab-bab1') initRadar();
+        if (tabId === 'tab-bab3') initBar();
+    }
+
+    // Charting Logic
+    let radarChart, barChart;
+
+    function initRadar() {
+        if (radarChart) radarChart.destroy();
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Teknis Presisi', 'Metode Asesmen', 'Budaya Lean', 'Skill Industri 4.0', 'Continuous Imp.'],
+                datasets: [{
+                    label: 'Kondisi Saat Ini',
+                    data: [55, 40, 45, 50, 30],
+                    borderColor: '#94a3b8',
+                    backgroundColor: 'rgba(148, 163, 184, 0.2)',
+                    pointBackgroundColor: '#94a3b8'
+                }, {
+                    label: 'Target Program',
+                    data: [95, 95, 90, 95, 100],
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                    pointBackgroundColor: '#2563eb'
+                }]
+            },
+            options: {
+                scales: { r: { beginAtZero: true, max: 100 } },
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    }
+
+    function initBar() {
+        if (barChart) barChart.destroy();
+        const ctx = document.getElementById('barChart').getContext('2d');
+        barChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Mutu Lulusan', 'Keterserapan DUDI', 'Efisiensi Praktik', 'Prestasi Siswa'],
+                datasets: [{
+                    label: 'Proyeksi Kenaikan (%)',
+                    data: [40, 65, 35, 80],
+                    backgroundColor: ['#2563eb', '#10b981', '#f59e0b', '#8b5cf6'],
+                    borderRadius: 12
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
