@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografis Interaktif: Prosedur Setting Dual Pressure Control</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- 
+    <!-- Chosen Palette: Industrial Blue & Status Indicator (Slate, Blue, Red, Emerald) -->
+    <!-- Application Structure Plan: 
+         - Header: Context and Author information.
+         - Section 1 (Preparation): Static grid highlighting the unsupervised setup phase.
+         - Section 2 (Interactive Simulation - Core): A tabbed interface dividing the 3 main procedures (HP Cut-Out, LP Cut-In, LP Cut-Out). Each tab contains an interactive dashboard simulating the physical tools (Manifold Gauge via Chart.js, Ohm meter, and Contact Switch via CSS). This structure allows students to visualize the exact sequence of events required for reporting.
+         - Section 3 (Crucial Tips & Jury Rules): Emphasized cards for competition specific warnings.
+         Reasoning: Procedural text is hard to memorize. A step-by-step visual simulator helps students internalize the sequence of physical actions and tool responses required for the competition.
+    -->
+    <!-- Visualization & Content Choices: 
+         - Goal: Understand procedural steps -> Presentation: Tabbed list with highlighted active steps -> Interaction: Auto-stepping "Simulate" button -> Library: Vanilla JS.
+         - Goal: Visualize Pressure Change -> Presentation: Half-doughnut Gauge Chart -> Interaction: Dynamic update during simulation -> Library: Chart.js (Canvas).
+         - Goal: Visualize Tool States (Ohm meter/Switch) -> Presentation: HTML/CSS digital displays and toggles -> Interaction: Color/Text changes triggered by JS state -> Library: Tailwind/Vanilla JS.
+         - (Confirming NO SVG/Mermaid used).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    -->
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        industrial: {
+                            100: '#f1f5f9',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #f8fafc; }
+        
+        /* Chart Container Constraint */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 250px;
+            margin: 0 auto;
+            height: 150px;
+        }
+
+        /* Custom Switch CSS using pure HTML/CSS */
+        .switch-contact {
+            width: 60px;
+            height: 4px;
+            background-color: #94a3b8;
+            position: relative;
+            transition: all 0.3s;
+        }
+        .switch-contact::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 4px;
+            background-color: #cbd5e1;
+            right: -32px;
+            top: 0;
+            transition: all 0.3s transform;
+            transform-origin: left;
+        }
+        .switch-open::after {
+            transform: rotate(-30deg);
+            background-color: #ef4444; /* red */
+        }
+        .switch-closed::after {
+            transform: rotate(0deg);
+            background-color: #10b981; /* emerald */
+        }
+
+        /* Step Highlight Animation */
+        .step-active {
+            background-color: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            transform: translateX(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .pulse-sound {
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased font-sans">
+
+    <!-- Header Section -->
+    <header class="bg-industrial-900 text-white pt-12 pb-8 px-6 rounded-b-3xl shadow-lg relative overflow-hidden">
+        <div class="max-w-5xl mx-auto relative z-10">
+            <div class="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4">
+                Modul : Prosedur Pengaturan Dual Pressure Controller
+            </div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">Prosedur Pelaporan Setting<br><span class="text-blue-400">Dual Pressure Control</span></h1>
+            <p class="text-slate-300 max-w-2xl text-lg mb-6">Infografis interaktif ini dirancang untuk memandu Peserta Pelatihan BBPVP, peserta Lomba Keterampilan Siswa (LKS) dalam mendemonstrasikan dan melaporkan pengaturan proteksi tekanan secara presisi kepada juri.</p>
+	<p class="text-slate-300 max-w-2xl text-lg mb-6">atau sebagai panduan bagi para calon teknisi dalam dalam melakukan pengaturan proteksi tekanan secara presisi dan akurat.</p>
+            
+            <div class="flex items-center space-x-4 border-t border-slate-700 pt-4 mt-6">
+                <div class="bg-slate-800 p-2 rounded-full">
+                    <span class="text-2xl">👨‍🏫</span>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-400">Sumber Materi Oleh:</p>
+                    <p class="font-semibold text-white">Sri Hardono, S.T., M.Sc.</p>
+                    <p class="text-xs text-slate-400">Instruktur Madya Kemnaker RI | RAC_38 WorldSkills Expert</p>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative background elements -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-10">
+
+        <!-- Phase 1: Preparation -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-2 flex items-center"><span class="text-3xl mr-3">⚙️</span> Fase 1: Setting Mandiri (Tanpa Juri)</h2>
+            <p class="text-slate-600 mb-6">Sebelum pelaporan, peserta melakukan pengaturan respon Dual Pressure Controller secara mandiri sesuai spesifikasi teknis Proyek Uji.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start">
+                    <div class="bg-red-100 text-red-600 p-3 rounded-lg mr-4 text-xl">📈</div>
+                    <div>
+                        <h3 class="font-bold text-slate-800">Proteksi Tekanan Tinggi</h3>
+                        <p class="text-sm text-slate-600 mt-1">Atur respon kontak <strong>Cut-Out</strong> sesuai modul ujian.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start">
+                    <div class="bg-emerald-100 text-emerald-600 p-3 rounded-lg mr-4 text-xl">📉</div>
+                    <div>
+                        <h3 class="font-bold text-slate-800">Proteksi Tekanan Rendah</h3>
+                        <p class="text-sm text-slate-600 mt-1">Atur respon kontak <strong>Cut-In</strong> dan <strong>Cut-Out</strong> sesuai modul ujian.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-blue-50 border border-blue-200 text-blue-800 text-sm p-4 rounded-lg mt-4 flex items-center">
+                <span class="mr-2 text-xl">⏱️</span> <strong>Catatan:</strong> Waktu setting pada Modul B bersifat opsional (bebas sesuai kenyamanan peserta).
+            </div>
+        </section>
+
+        <!-- Phase 2: Interactive Simulation -->
+        <section class="mb-12">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold mb-2 flex items-center"><span class="text-3xl mr-3">🖥️</span> Fase 2: Prosedur Demonstrasi & Pelaporan</h2>
+                <p class="text-slate-600">Pilih tab di bawah ini dan klik <strong>"Simulasikan"</strong> untuk melihat bagaimana prosedur fisik harus dilakukan di hadapan juri. Perhatikan interaksi antara Manifold Gauge, Ohm Meter, dan Kontak.</p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+                <!-- Tabs Navigation -->
+                <div class="flex border-b border-slate-200 bg-slate-50">
+                    <button onclick="switchTab('hp-cutout')" id="tab-hp-cutout" class="flex-1 py-4 px-6 text-sm md:text-base font-bold text-blue-600 border-b-2 border-blue-600 bg-white transition-colors">
+                        🔴 Tekanan Tinggi<br><span class="font-normal text-xs text-slate-500">Demonstrasi Cut-Out</span>
+                    </button>
+                    <button onclick="switchTab('lp-cutin')" id="tab-lp-cutin" class="flex-1 py-4 px-6 text-sm md:text-base font-bold text-slate-500 border-b-2 border-transparent hover:bg-slate-100 transition-colors">
+                        🟢 Tekanan Rendah<br><span class="font-normal text-xs text-slate-500">Demonstrasi Cut-In</span>
+                    </button>
+                    <button onclick="switchTab('lp-cutout')" id="tab-lp-cutout" class="flex-1 py-4 px-6 text-sm md:text-base font-bold text-slate-500 border-b-2 border-transparent hover:bg-slate-100 transition-colors">
+                        🟡 Tekanan Rendah<br><span class="font-normal text-xs text-slate-500">Demonstrasi Cut-Out</span>
+                    </button>
+                </div>
+
+                <!-- Simulation Content Area -->
+                <div class="flex flex-col md:flex-row h-auto md:h-[500px]">
+                    
+                    <!-- Left: Procedural Steps -->
+                    <div class="w-full md:w-1/2 p-6 md:p-8 bg-white border-r border-slate-100 flex flex-col">
+                        <h3 id="panel-title" class="text-xl font-bold mb-4 text-slate-800">Langkah Pelaporan: Tekanan Tinggi</h3>
+                        
+                        <div class="flex-1 overflow-y-auto pr-2 space-y-2" id="steps-container">
+                            <!-- Steps will be injected via JS -->
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-200 flex space-x-3">
+                            <button id="btn-simulate" onclick="runSimulation()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-all flex justify-center items-center">
+                                <span class="mr-2">▶️</span> Simulasikan Proses
+                            </button>
+                            <button id="btn-reset" onclick="resetSimulation()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 px-4 rounded-lg transition-all hidden">
+                                ↺ Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Visual Dashboard -->
+                    <div class="w-full md:w-1/2 bg-slate-900 p-6 md:p-8 flex flex-col justify-between relative">
+                        <!-- Decorative bg -->
+                        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-400 via-slate-900 to-slate-900"></div>
+
+                        <div class="relative z-10 text-center mb-6">
+                            <h4 class="text-slate-400 font-mono text-sm tracking-widest uppercase mb-1">Panel Indikator Alat</h4>
+                            <div class="h-px w-16 bg-slate-700 mx-auto"></div>
+                        </div>
+
+                        <!-- Dashboard Grid -->
+                        <div class="relative z-10 grid grid-cols-2 gap-4 flex-1">
+                            
+                            <!-- Manifold Gauge Simulator -->
+                            <div class="col-span-2 bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-inner flex flex-col items-center justify-center">
+                                <div class="text-slate-400 text-xs font-bold uppercase mb-2">Manifold Gauge (Nitrogen)</div>
+                                <div class="chart-container">
+                                    <canvas id="gaugeChart"></canvas>
+                                </div>
+                                <div class="mt-2 text-white font-mono text-2xl font-bold" id="gauge-value">0 <span class="text-sm text-slate-400">psi</span></div>
+                            </div>
+
+                            <!-- Ohm Meter Simulator -->
+                            <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-inner flex flex-col items-center justify-center">
+                                <div class="text-slate-400 text-xs font-bold uppercase mb-3">Ohm Meter (Indikator Suara)</div>
+                                <div id="ohm-display" class="bg-green-900 text-green-400 font-mono text-xl py-2 px-4 rounded border border-green-700 mb-3 shadow-[0_0_10px_rgba(34,197,94,0.3)]">
+                                    0.00 Ω
+                                </div>
+                                <div class="flex items-center justify-center h-8 w-8 rounded-full bg-slate-700 relative">
+                                    <div id="ohm-sound-wave" class="absolute inset-0 rounded-full bg-green-500 opacity-20 pulse-sound hidden"></div>
+                                    <span id="ohm-icon" class="text-lg relative z-10 text-slate-500">🔇</span>
+                                </div>
+                            </div>
+
+                            <!-- Contact Switch Simulator -->
+                            <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-inner flex flex-col items-center justify-center">
+                                <div class="text-slate-400 text-xs font-bold uppercase mb-6">Status Kontak Proteksi</div>
+                                <div class="flex items-center w-full justify-center pl-8 mb-4">
+                                    <!-- Pure CSS Switch Graphic -->
+                                    <div id="contact-switch" class="switch-contact switch-closed"></div>
+                                    <div class="w-3 h-3 rounded-full bg-slate-400 ml-8"></div>
+                                </div>
+                                <div id="contact-status" class="text-emerald-400 font-bold text-sm bg-slate-900 px-3 py-1 rounded-full border border-slate-700">TERHUBUNG (NC)</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 3: Tips & Notes -->
+        <section>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-r-lg shadow-sm">
+                    <div class="flex items-center mb-2">
+                        <span class="text-2xl mr-2">👁️</span>
+                        <h3 class="font-bold text-yellow-800 text-lg">Pengawasan Juri (Sangat Penting)</h3>
+                    </div>
+                    <p class="text-sm text-yellow-700">Juri akan mengawasi pembacaan alat ukur manifold gauge dan ohm meter secara langsung. <strong>Pastikan Anda menuliskan nilai tekanan pada lembar dokumen pelaporan sesuai dengan respon aktual yang terbaca saat itu juga</strong>, BUKAN berdasarkan nilai hafalan dari sesi setting mandiri.</p>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg shadow-sm">
+                    <div class="flex items-center mb-2">
+                        <span class="text-2xl mr-2">💡</span>
+                        <h3 class="font-bold text-blue-800 text-lg">Tips:</h3>
+                    </div>
+                    <p class="text-sm text-blue-700">Saat memutar katup untuk menaikkan atau menurunkan tekanan Nitrogen, <strong>lakukan pengaturan sehalus (seperlahan) mungkin</strong>. Penyesuaian tekanan yang drastis akan membuat pembacaan titik <em>Cut-in / Cut-out</em> menjadi tidak akurat dan terlewat dari pengamatan juri.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-6 text-center text-sm mt-12">
+        <p>Aplikasi Simulasi Prosedur berdasarkan dokumen panduan LKS RAC_38</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Data Structure for Procedures
+        const procedures = {
+            'hp-cutout': {
+                title: 'Langkah Pelaporan: Tekanan Tinggi (Cut-Out)',
+                steps: [
+                    "Hubungkan alat ukur. Ohm meter pada pengaturan indikator suara aktif.",
+                    "Naikkan tekanan Nitrogen secara perlahan pada sisi port tekanan tinggi.",
+                    "Amati hingga kontak berreaksi (terbuka) dan suara ohm meter mati.",
+                    "Segera tutup akses Nitrogen menuju port tekanan tinggi.",
+                    "Tuliskan nilai tekanan di manifold gauge pada lembar pelaporan."
+                ],
+                sim: {
+                    startPressure: 50,
+                    targetPressure: 350,
+                    pressureDirection: 'up',
+                    startSwitch: 'closed', // Starts connected
+                    endSwitch: 'open',    // Breaks connection on high pressure
+                    color: '#ef4444' // Red theme
+                }
+            },
+            'lp-cutin': {
+                title: 'Langkah Pelaporan: Tekanan Rendah (Cut-In)',
+                steps: [
+                    "Hubungkan alat ukur. Ohm meter pada pengaturan indikator suara aktif.",
+                    "Naikkan tekanan Nitrogen secara perlahan pada sisi port tekanan rendah.",
+                    "Amati hingga kontak berreaksi (tertutup/terhubung) dan ohm meter berbunyi.",
+                    "Segera tutup akses Nitrogen menuju port tekanan rendah.",
+                    "Tuliskan nilai tekanan di manifold gauge pada lembar pelaporan."
+                ],
+                sim: {
+                    startPressure: 10,
+                    targetPressure: 60,
+                    pressureDirection: 'up',
+                    startSwitch: 'open',   // Starts open (low pressure state)
+                    endSwitch: 'closed',   // Connects when pressure reaches safe level
+                    color: '#10b981' // Emerald theme
+                }
+            },
+            'lp-cutout': {
+                title: 'Langkah Pelaporan: Tekanan Rendah (Cut-Out)',
+                steps: [
+                    "Hubungkan alat ukur. Ohm meter pada pengaturan indikator suara aktif.",
+                    "Turunkan tekanan Nitrogen secara perlahan pada sisi port tekanan rendah.",
+                    "Amati hingga kontak berreaksi (terbuka/terputus) dan suara ohm meter mati.",
+                    "Segera tutup akses Nitrogen menuju port tekanan rendah.",
+                    "Tuliskan nilai tekanan di manifold gauge pada lembar pelaporan."
+                ],
+                sim: {
+                    startPressure: 70,
+                    targetPressure: 20,
+                    pressureDirection: 'down',
+                    startSwitch: 'closed', // Starts connected (normal operating pressure)
+                    endSwitch: 'open',     // Breaks when pressure drops too low
+                    color: '#f59e0b' // Amber theme
+                }
+            }
+        };
+
+        // State Management
+        let currentTab = 'hp-cutout';
+        let gaugeChart = null;
+        let simulationInterval = null;
+        let isSimulating = false;
+
+        // DOM Elements
+        const stepsContainer = document.getElementById('steps-container');
+        const panelTitle = document.getElementById('panel-title');
+        const btnSimulate = document.getElementById('btn-simulate');
+        const btnReset = document.getElementById('btn-reset');
+        
+        const gaugeValueTxt = document.getElementById('gauge-value');
+        const switchGraphic = document.getElementById('contact-switch');
+        const contactStatusTxt = document.getElementById('contact-status');
+        const ohmDisplay = document.getElementById('ohm-display');
+        const ohmIcon = document.getElementById('ohm-icon');
+        const ohmWave = document.getElementById('ohm-sound-wave');
+
+        // Initialization
+        window.onload = () => {
+            initChart();
+            renderContent(currentTab);
+        };
+
+        // Initialize Chart.js Gauge
+        function initChart() {
+            const ctx = document.getElementById('gaugeChart').getContext('2d');
+            gaugeChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pressure', 'Remaining'],
+                    datasets: [{
+                        data: [50, 450], // Initial dummy values
+                        backgroundColor: ['#3b82f6', '#1e293b'],
+                        borderWidth: 0,
+                        circumference: 180,
+                        rotation: 270,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '80%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    animation: {
+                        duration: 0 // Disable native animation for manual smooth control via interval
+                    }
+                }
+            });
+        }
+
+        // Switch Tabs Logic
+        function switchTab(tabId) {
+            if (isSimulating) return; // Prevent switching while simulating
+            
+            currentTab = tabId;
+            
+            // Update Tab UI
+            const tabs = ['hp-cutout', 'lp-cutin', 'lp-cutout'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tabId) {
+                    btn.className = `flex-1 py-4 px-6 text-sm md:text-base font-bold text-blue-600 border-b-2 border-blue-600 bg-white transition-colors`;
+                } else {
+                    btn.className = `flex-1 py-4 px-6 text-sm md:text-base font-bold text-slate-500 border-b-2 border-transparent hover:bg-slate-100 transition-colors`;
+                }
+            });
+
+            renderContent(tabId);
+            resetSimulationVisuals();
+        }
+
+        // Render Text Content based on Tab
+        function renderContent(tabId) {
+            const data = procedures[tabId];
+            panelTitle.textContent = data.title;
+            
+            stepsContainer.innerHTML = '';
+            data.steps.forEach((step, index) => {
+                const div = document.createElement('div');
+                div.id = `step-${index}`;
+                div.className = 'p-3 rounded-lg text-slate-600 text-sm md:text-base flex items-start border border-transparent transition-all';
+                div.innerHTML = `<span class="bg-slate-200 text-slate-700 font-bold rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 text-xs">${index + 1}</span><p>${step}</p>`;
+                stepsContainer.appendChild(div);
+            });
+        }
+
+        // Highlight specific step
+        function highlightStep(stepIndex) {
+            const data = procedures[currentTab];
+            for (let i = 0; i < data.steps.length; i++) {
+                const el = document.getElementById(`step-${i}`);
+                if (i === stepIndex) {
+                    el.classList.add('step-active');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    el.classList.remove('step-active');
+                }
+            }
+        }
+
+        // Visual Updates for Dashboard
+        function updateGauge(val, color, maxVal = 500) {
+            gaugeValueTxt.innerHTML = `${Math.round(val)} <span class="text-sm text-slate-400">psi</span>`;
+            gaugeChart.data.datasets[0].data = [val, maxVal - val];
+            gaugeChart.data.datasets[0].backgroundColor[0] = color;
+            gaugeChart.update();
+        }
+
+        function setToolState(state) {
+            if (state === 'closed') {
+                // Switch Closed, Ohm Beeping
+                switchGraphic.className = 'switch-contact switch-closed';
+                contactStatusTxt.textContent = "TERHUBUNG (NC)";
+                contactStatusTxt.className = "text-emerald-400 font-bold text-sm bg-slate-900 px-3 py-1 rounded-full border border-slate-700";
+                
+                ohmDisplay.textContent = "0.00 Ω";
+                ohmDisplay.className = "bg-green-900 text-green-400 font-mono text-xl py-2 px-4 rounded border border-green-700 mb-3 shadow-[0_0_15px_rgba(34,197,94,0.4)]";
+                ohmIcon.textContent = "🔊";
+                ohmIcon.className = "text-lg relative z-10 text-green-400";
+                ohmWave.classList.remove('hidden');
+            } else {
+                // Switch Open, Ohm Silent
+                switchGraphic.className = 'switch-contact switch-open';
+                contactStatusTxt.textContent = "TERPUTUS (NO)";
+                contactStatusTxt.className = "text-red-400 font-bold text-sm bg-slate-900 px-3 py-1 rounded-full border border-slate-700";
+                
+                ohmDisplay.textContent = "O.L.";
+                ohmDisplay.className = "bg-slate-800 text-slate-500 font-mono text-xl py-2 px-4 rounded border border-slate-700 mb-3";
+                ohmIcon.textContent = "🔇";
+                ohmIcon.className = "text-lg relative z-10 text-slate-500";
+                ohmWave.classList.add('hidden');
+            }
+        }
+
+        function resetSimulationVisuals() {
+            const simData = procedures[currentTab].sim;
+            updateGauge(simData.startPressure, '#3b82f6');
+            setToolState(simData.startSwitch);
+            
+            // Clear step highlights
+            const data = procedures[currentTab];
+            for (let i = 0; i < data.steps.length; i++) {
+                const el = document.getElementById(`step-${i}`);
+                if(el) el.classList.remove('step-active');
+            }
+
+            btnSimulate.innerHTML = '<span class="mr-2">▶️</span> Simulasikan Proses';
+            btnSimulate.classList.remove('hidden');
+            btnReset.classList.add('hidden');
+            btnSimulate.disabled = false;
+        }
+
+        // Core Simulation Engine
+        function runSimulation() {
+            if (isSimulating) return;
+            isSimulating = true;
+            btnSimulate.disabled = true;
+            btnSimulate.innerHTML = '<span class="mr-2 animate-spin">⏳</span> Menyimulasikan...';
+            
+            const simData = procedures[currentTab].sim;
+            let currentPressure = simData.startPressure;
+            const stepValue = simData.pressureDirection === 'up' ? 2 : -2;
+            const target = simData.targetPressure;
+            
+            resetSimulationVisuals();
+
+            // Step 0: Connect tools (Immediate)
+            highlightStep(0);
+
+            // Wait a bit, then start pressure change
+            setTimeout(() => {
+                // Step 1: Change pressure
+                highlightStep(1);
+                
+                simulationInterval = setInterval(() => {
+                    currentPressure += stepValue;
+                    updateGauge(currentPressure, '#3b82f6');
+
+                    // Check condition
+                    let conditionMet = false;
+                    if (simData.pressureDirection === 'up' && currentPressure >= target) conditionMet = true;
+                    if (simData.pressureDirection === 'down' && currentPressure <= target) conditionMet = true;
+
+                    if (conditionMet) {
+                        clearInterval(simulationInterval);
+                        currentPressure = target; // Clamp value
+                        
+                        // Step 2: Reaction occurs! (Gauge turns action color, switch changes)
+                        updateGauge(currentPressure, simData.color);
+                        setToolState(simData.endSwitch);
+                        highlightStep(2);
+
+                        // Proceed to closing valve and writing value
+                        setTimeout(() => {
+                            highlightStep(3); // Close Nitrogen
+                            
+                            setTimeout(() => {
+                                highlightStep(4); // Write Value
+                                // Flash gauge to indicate writing
+                                gaugeValueTxt.classList.add('bg-yellow-200', 'text-slate-900', 'px-2', 'rounded');
+                                setTimeout(() => {
+                                    gaugeValueTxt.classList.remove('bg-yellow-200', 'text-slate-900', 'px-2', 'rounded');
+                                    finishSimulation();
+                                }, 1500);
+                            }, 1500);
+                        }, 2000);
+                    }
+                }, 40); // speed of pressure change
+            }, 1500);
+        }
+
+        function finishSimulation() {
+            isSimulating = false;
+            btnSimulate.classList.add('hidden');
+            btnReset.classList.remove('hidden');
+        }
+
+        function resetSimulation() {
+            if(isSimulating) clearInterval(simulationInterval);
+            isSimulating = false;
+            resetSimulationVisuals();
+        }
+
+    </script>
+</body>
+</html>
