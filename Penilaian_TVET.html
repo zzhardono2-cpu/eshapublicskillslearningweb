@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diktat Interaktif: Penilaian Vokasi Berbasis CIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFC; /* Slate 50 */
+            color: #0F172A; /* Slate 900 */
+            overflow: hidden; /* Prevent body scroll, manage in main content */
+        }
+
+        /* STRICT CHART CONTAINER REQUIREMENTS */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 280px;
+                max-height: 300px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        /* Animations & Utilities */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-item.active {
+            background-color: #EFF6FF; /* Blue 50 */
+            color: #1D4ED8; /* Blue 700 */
+            border-right: 4px solid #2563EB; /* Blue 600 */
+            font-weight: 700;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+        }
+
+        /* NO SVG Icons - CSS Shapes */
+        .circle-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 40px;
+            bottom: 0;
+            width: 2px;
+            background-color: #E2E8F0;
+            z-index: 0;
+        }
+        @media (min-width: 640px) {
+            .timeline-line {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body class="flex h-screen w-full bg-slate-50">
+
+    <!-- Chosen Palette: Trust & Academic (Slate-50 background, Navy Blue primary, Emerald Green for success/valid data, Rose for alerts/disputes). -->
+    <!-- Application Structure Plan: A module-based SPA with a persistent left sidebar for navigation and author credentials. The main right area dynamically loads content sections based on user selection. This structure is chosen to break down the dense "Source Report" into digestible, interactive chunks (Modules 1-5), allowing the user to explore the methodology linearly or jump to specific interactive tools (like the CIS Simulator). -->
+    <!-- Visualization & Content Choices: 
+         - Beranda: HTML text/cards -> Goal: Establish context & authority -> Justification: Clear onboarding.
+         - Paradigma: Chart.js Bar Chart -> Goal: Compare scoring variance -> Interaction: Tooltips -> Justification: Visually proves the urgency of adopting CIS over conventional methods.
+         - WSOS: Chart.js Doughnut Chart & HTML Hierarchy -> Goal: Explain standard structure & weighting -> Interaction: Toggle list -> Justification: Shows how a 100% curriculum is divided interactively.
+         - Instrumen: Side-by-side UI Cards -> Goal: Contrast objective (Measurement) vs subjective (Judgment) metrics.
+         - Logika CIS: Vanilla JS Logic Calculator -> Goal: Teach CIS dispute resolution -> Interaction: Dropdowns & Calculate Button -> Justification: Active learning of the algorithm is far more effective than static text.
+         - Diseminasi: HTML flexbox timeline -> Goal: Show implementation roadmap (Kirkpatrick model).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Mobile Header -->
+    <header class="md:hidden fixed top-0 left-0 w-full h-16 bg-white border-b border-slate-200 z-50 flex items-center justify-between px-4 shadow-sm">
+        <div class="font-extrabold text-slate-800 flex items-center text-lg tracking-tight">
+            <span class="text-blue-600 mr-2 text-xl">&#128218;</span> CIS Vokasi
+        </div>
+        <button id="mobile-menu-btn" class="text-2xl text-slate-600 focus:outline-none p-2">&#9776;</button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="fixed md:static top-16 md:top-0 left-0 w-72 h-[calc(100vh-4rem)] md:h-screen bg-white border-r border-slate-200 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl md:shadow-none">
+        <div class="p-6 border-b border-slate-100 hidden md:block">
+            <h1 class="text-xl font-extrabold text-slate-900 leading-tight tracking-tight">Diktat Penilaian Vokasi</h1>
+            <p class="text-xs font-bold text-blue-600 uppercase tracking-widest mt-1">Berbasis WorldSkills CIS</p>
+        </div>
+
+        <div class="p-4 bg-slate-50 mx-4 mt-4 mb-2 rounded-xl border border-slate-100">
+            <p class="text-[10px] uppercase font-bold text-slate-400 mb-1 tracking-wider">Digagas Oleh:</p>
+            <h2 class="text-sm font-bold text-slate-800">Sri Hardono, S.T., M.Sc.</h2>
+            <p class="text-[11px] text-slate-500 mt-0.5 mb-2 font-medium">Instruktur Madya Kemnaker R.I</p>
+            <div class="flex flex-col gap-1.5">
+                <span class="text-[10px] bg-white border border-slate-200 text-slate-600 px-2 py-1 rounded font-semibold flex items-center"><span class="mr-1">&#127760;</span> Expert WorldSkills RAC</span>
+                <span class="text-[10px] bg-white border border-slate-200 text-slate-600 px-2 py-1 rounded font-semibold flex items-center"><span class="mr-1">&#127891;</span> M.Sc Global TVET KOREATECH</span>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-3 py-2 space-y-1 overflow-y-auto custom-scroll" id="nav-container">
+            <button class="w-full text-left px-4 py-3 rounded-lg text-sm transition-colors mb-1 flex items-center nav-item active" data-target="sec-beranda">
+                <span class="text-lg mr-3 w-5 text-center">&#127968;</span> <span class="font-semibold">Beranda & Visi</span>
+            </button>
+            <button class="w-full text-left px-4 py-3 rounded-lg text-sm transition-colors mb-1 flex items-center nav-item text-slate-600 hover:bg-slate-100" data-target="sec-paradigma">
+                <span class="text-lg mr-3 w-5 text-center">&#128200;</span> <span class="font-semibold">1. Paradigma Penilaian</span>
+            </button>
+            <button class="w-full text-left px-4 py-3 rounded-lg text-sm transition-colors mb-1 flex items-center nav-item text-slate-600 hover:bg-slate-100" data-target="sec-wsos">
+                <span class="text-lg mr-3 w-5 text-center">&#128209;</span> <span class="font-semibold">2. Struktur WSOS</span>
+            </button>
+            <button class="w-full text-left px-4 py-3 rounded-lg text-sm transition-colors mb-1 flex items-center nav-item text-slate-600 hover:bg-slate-100" data-target="sec-instrumen">
+                <span class="text-lg mr-3 w-5 text-center">&#128203;</span> <span class="font-semibold">3. Anatomi Instrumen</span>
+            </button>
+            <button class="w-full text-left px-4 py-3 rounded-lg text-sm transition-colors mb-1 flex items-center nav-item text-slate-600 hover:bg-slate-100" data-target="sec-logika">
+                <span class="text-lg mr-3 w-5 text-center">&#128187;</span> <span class="font-semibold">4. Simulator Logika CIS</span>
+            </button>
+            <button class="w-full text-left px-4 py-3 rounded-lg text-sm transition-colors mb-1 flex items-center nav-item text-slate-600 hover:bg-slate-100" data-target="sec-diseminasi">
+                <span class="text-lg mr-3 w-5 text-center">&#128226;</span> <span class="font-semibold">5. Strategi Diseminasi</span>
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-slate-100 text-center bg-slate-50">
+            <span class="inline-block bg-blue-100/50 border border-blue-200 text-blue-800 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+                &#10024; Visi Indonesia Emas 2045
+            </span>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main id="main-content" class="flex-1 h-screen overflow-y-auto pt-16 md:pt-0 relative w-full custom-scroll">
+        <div class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-10 pb-24 relative">
+
+            <!-- SECTION: BERANDA -->
+            <div id="sec-beranda" class="content-section block fade-in">
+                <div class="mb-10">
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">Arsitektur Strategis Diseminasi Kurikulum Vokasi</h2>
+                    <p class="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-3xl">Dinamika pendidikan vokasi global saat ini berada pada titik balik fundamental. Kualitas lulusan tidak lagi diukur dari ijazah, melainkan dari penguasaan kompetensi presisi yang selaras dengan industri. Diktat interaktif ini merumuskan transformasi tersebut.</p>
+                </div>
+                
+                <div class="grid sm:grid-cols-2 gap-6 mb-10">
+                    <div class="glass-card p-8 rounded-3xl">
+                        <div class="text-4xl text-blue-600 mb-4">&#128640;</div>
+                        <h3 class="font-bold text-slate-800 text-xl mb-3">Misi Utama</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">Mengharmonisasikan kurikulum praktik SMK dan BLK di Indonesia dengan standar evaluasi global (WorldSkills), memastikan setiap jam praktik berdampak langsung pada kesiapan kerja nyata.</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-3xl border-l-4 border-l-blue-600">
+                        <div class="text-4xl text-blue-600 mb-4">&#128187;</div>
+                        <h3 class="font-bold text-slate-800 text-xl mb-3">Solusi Sistemik</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">Implementasi logika <strong class="text-slate-800">Competition Information System (CIS)</strong>. Sebuah metode penilaian berbasis data presisi untuk mengeliminasi bias subjektivitas instruktur/asesor yang konvensional.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-3xl p-8 sm:p-10 text-white relative overflow-hidden shadow-2xl">
+                    <div class="absolute -right-10 -bottom-10 text-[12rem] opacity-5 font-sans">&#127758;</div>
+                    <div class="relative z-10">
+                        <h3 class="text-xs uppercase tracking-widest font-bold mb-4 text-blue-400">Pesan Penggagas</h3>
+                        <blockquote class="text-lg sm:text-xl text-slate-200 leading-relaxed italic border-l-4 border-blue-500 pl-6 font-light">
+                            "Sistem penilaian yang baik bukan hanya tentang memberi angka, tetapi tentang menjamin bahwa setiap lulusan vokasi Indonesia memiliki kompetensi nyata yang diakui oleh dunia industri global. Ini adalah langkah konkret menyongsong Indonesia Emas 2045."
+                        </blockquote>
+                        <p class="mt-6 text-sm font-bold text-white">— Sri Hardono, S.T., M.Sc.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: PARADIGMA -->
+            <div id="sec-paradigma" class="content-section hidden fade-in">
+                <div class="mb-10">
+                    <span class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-3 block">Modul 1</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">Urgensi Transformasi Penilaian</h2>
+                    <p class="text-slate-600 leading-relaxed max-w-3xl text-lg">Bagian ini mengilustrasikan akar masalah pada vokasi konvensional. Penilaian berbasis ijazah seringkali bias. Modul ini membuktikan secara visual mengapa logika CIS diperlukan untuk standardisasi penilaian antar asesor.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-10">
+                    <div class="bg-rose-50 border border-rose-100 p-8 rounded-3xl">
+                        <h3 class="font-bold text-rose-800 text-xl mb-4 flex items-center"><span class="mr-3 text-2xl">&#10060;</span> Sistem Konvensional</h3>
+                        <ul class="space-y-4 text-sm text-rose-900 font-medium">
+                            <li class="flex items-start"><span class="mr-3 font-bold text-rose-500">&#8226;</span> Sangat rentan terhadap bias subjektivitas asesor (mood/persepsi personal).</li>
+                            <li class="flex items-start"><span class="mr-3 font-bold text-rose-500">&#8226;</span> Kriteria penilaian sering abu-abu dan multi-tafsir (misal: "Cukup Rapi", "Sangat Baik").</li>
+                            <li class="flex items-start"><span class="mr-3 font-bold text-rose-500">&#8226;</span> Fokus pada produk akhir semata, mengabaikan proses kerja (SOP) dan aspek keselamatan (Safety).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-emerald-50 border border-emerald-100 p-8 rounded-3xl">
+                        <h3 class="font-bold text-emerald-800 text-xl mb-4 flex items-center"><span class="mr-3 text-2xl">&#9989;</span> Logika CIS (WorldSkills)</h3>
+                        <ul class="space-y-4 text-sm text-emerald-900 font-medium">
+                            <li class="flex items-start"><span class="mr-3 font-bold text-emerald-500">&#8226;</span> Objektivitas mutlak melalui pemecahan satu kompetensi besar menjadi ratusan kriteria mikro.</li>
+                            <li class="flex items-start"><span class="mr-3 font-bold text-emerald-500">&#8226;</span> Transparansi tinggi; siswa mengetahui secara persis di titik mana mereka gagal/berhasil.</li>
+                            <li class="flex items-start"><span class="mr-3 font-bold text-emerald-500">&#8226;</span> Memaksa kalibrasi standar antar asesor melalui sistem perangkat lunak.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl">
+                    <div class="mb-6 text-center">
+                        <h3 class="font-bold text-slate-800 text-xl">Visualisasi Masalah: Variansi Penilaian 5 Asesor</h3>
+                        <p class="text-sm text-slate-500 mt-2 max-w-2xl mx-auto">Grafik di bawah mensimulasikan penilaian 5 asesor berbeda pada 1 objek kerja siswa yang sama. Sistem CIS menekan rentang penyimpangan (deviasi) secara signifikan.</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chartParadigm"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: WSOS -->
+            <div id="sec-wsos" class="content-section hidden fade-in">
+                <div class="mb-10">
+                    <span class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-3 block">Modul 2</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">WorldSkills Occupational Standards (WSOS)</h2>
+                    <p class="text-slate-600 leading-relaxed max-w-3xl text-lg">WSOS adalah "kompas" dalam penyusunan kurikulum vokasi. Dokumen ini mendeskripsikan praktik terbaik internasional. Eksplorasi hierarki standar dan sistem pembobotannya (Weighting) di bawah ini.</p>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-8 mb-10">
+                    <!-- Hierarchy Interactivity -->
+                    <div class="flex-1 glass-card p-8 rounded-3xl">
+                        <h3 class="font-bold text-slate-800 text-xl mb-6 border-b border-slate-100 pb-3">Hierarki Standar Kompetensi</h3>
+                        <p class="text-sm text-slate-500 mb-6">Klik pada masing-masing level untuk memahami detail arsitekturnya.</p>
+                        
+                        <div class="space-y-4 relative">
+                            <!-- Visual line connecting dots -->
+                            <div class="absolute left-6 top-6 bottom-6 w-0.5 bg-slate-200 z-0"></div>
+                            
+                            <!-- Level 1 -->
+                            <div class="relative z-10">
+                                <button onclick="toggleAccordion('wsos-1', this)" class="w-full flex items-center text-left bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-slate-400 transition-colors focus:outline-none group">
+                                    <span class="circle-number w-12 h-12 bg-slate-800 text-white shadow-sm mr-5 text-lg shrink-0">1</span>
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-slate-800 text-lg">Section</h4>
+                                    </div>
+                                    <span class="text-2xl text-slate-400 group-hover:text-slate-600 transition-transform duration-300" id="icon-wsos-1">&#43;</span>
+                                </button>
+                                <div id="content-wsos-1" class="hidden mt-2 ml-20 mr-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                                    Area besar pekerjaan dalam suatu profesi. Contoh dalam bidang Refrigeration: "Organisasi dan Manajemen Kerja" atau "Keterampilan Instalasi". Setiap Section memiliki bobot persentase dari total 100%.
+                                </div>
+                            </div>
+
+                            <!-- Level 2 -->
+                            <div class="relative z-10 pl-6">
+                                <button onclick="toggleAccordion('wsos-2', this)" class="w-full flex items-center text-left bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-blue-400 transition-colors focus:outline-none group">
+                                    <span class="circle-number w-12 h-12 bg-blue-100 text-blue-800 shadow-sm mr-5 text-lg shrink-0">A</span>
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-slate-800 text-lg">Competency</h4>
+                                    </div>
+                                    <span class="text-2xl text-slate-400 group-hover:text-slate-600 transition-transform duration-300" id="icon-wsos-2">&#43;</span>
+                                </button>
+                                <div id="content-wsos-2" class="hidden mt-2 ml-20 mr-4 text-sm text-slate-600 bg-blue-50/50 p-4 rounded-lg border border-blue-100">
+                                    Mendeskripsikan apa yang harus diketahui (Knowledge) dan dipahami (Understanding) oleh individu. Biasanya diawali dengan frasa: <em>"The individual needs to know and understand..."</em>
+                                </div>
+                            </div>
+
+                            <!-- Level 3 -->
+                            <div class="relative z-10 pl-12">
+                                <button onclick="toggleAccordion('wsos-3', this)" class="w-full flex items-center text-left bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm hover:border-blue-500 transition-colors focus:outline-none group">
+                                    <span class="circle-number w-12 h-12 bg-blue-600 text-white shadow-sm mr-5 text-xl shrink-0">&#10148;</span>
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-blue-900 text-lg">Performance Indicator</h4>
+                                    </div>
+                                    <span class="text-2xl text-blue-400 group-hover:text-blue-600 transition-transform duration-300 transform rotate-45" id="icon-wsos-3">&#10005;</span>
+                                </button>
+                                <div id="content-wsos-3" class="block mt-2 ml-20 mr-4 text-sm text-blue-800 bg-white p-4 rounded-lg border border-blue-100 shadow-inner">
+                                    <strong>Paling Krusial:</strong> Tindakan spesifik yang terukur. Menguraikan "Apa yang mampu dilakukan oleh individu". Inilah yang menjadi dasar mutlak penyusunan kriteria penilaian (Marking Scheme) pada Test Project.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doughnut Chart Weighting -->
+                    <div class="w-full lg:w-5/12 glass-card p-8 rounded-3xl flex flex-col justify-center bg-slate-800 text-white border-slate-700">
+                        <div class="text-center mb-6">
+                            <h3 class="font-bold text-white text-xl">Sistem Pembobotan (%)</h3>
+                            <p class="text-xs text-slate-400 mt-2">Kurikulum harus proporsional merefleksikan industri. Total Test Project wajib 100%.</p>
+                        </div>
+                        <div class="chart-container" style="height: 280px;">
+                            <canvas id="chartWsos"></canvas>
+                        </div>
+                        <div class="mt-6 space-y-2">
+                            <div class="flex justify-between text-sm border-b border-slate-700 pb-1">
+                                <span class="text-slate-300">Organisasi & Safety</span>
+                                <span class="font-bold text-emerald-400">15%</span>
+                            </div>
+                            <div class="flex justify-between text-sm border-b border-slate-700 pb-1">
+                                <span class="text-slate-300">Komunikasi Industri</span>
+                                <span class="font-bold text-emerald-400">10%</span>
+                            </div>
+                            <div class="flex justify-between text-sm border-b border-slate-700 pb-1">
+                                <span class="text-white font-bold">Keterampilan Teknis Inti</span>
+                                <span class="font-bold text-emerald-400">75%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: INSTRUMEN -->
+            <div id="sec-instrumen" class="content-section hidden fade-in">
+                <div class="mb-10">
+                    <span class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-3 block">Modul 3</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">Anatomi Marking Scheme</h2>
+                    <p class="text-slate-600 leading-relaxed max-w-3xl text-lg">Test Project dipecah menjadi kriteria yang sangat rinci. CIS membedakan dengan tegas antara aspek yang dinilai melalui alat ukur mutlak (Measurement) dan aspek yang dinilai melalui kalibrasi ahli (Judgment).</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Measurement Card -->
+                    <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl hover:border-blue-400 transition-all group flex flex-col">
+                        <div class="bg-blue-600 p-6 flex justify-between items-center text-white">
+                            <div>
+                                <h3 class="text-2xl font-black tracking-wide">Measurement (M)</h3>
+                                <p class="text-blue-200 text-xs mt-1 uppercase tracking-widest font-bold">Pengukuran Objektif</p>
+                            </div>
+                            <span class="text-4xl opacity-80">&#128207;</span>
+                        </div>
+                        <div class="p-8 flex-1 flex flex-col">
+                            <p class="text-sm text-slate-600 mb-6 leading-relaxed flex-1">Penilaian absolut berdasarkan data fisik, alat ukur presisi, atau fakta fungsional operasional yang tidak dapat diperdebatkan oleh siapapun.</p>
+                            
+                            <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl mb-6 relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                                <span class="block text-[10px] font-bold uppercase mb-2 text-slate-400 tracking-wider">Metode Skoring (Biner)</span>
+                                <div class="flex items-center justify-center font-black text-2xl gap-4">
+                                    <span class="text-blue-700 bg-blue-100 px-4 py-2 rounded-lg">Ya (Max Poin)</span>
+                                    <span class="text-slate-300 text-sm">ATAU</span>
+                                    <span class="text-slate-500 bg-slate-200 px-4 py-2 rounded-lg">Tidak (0)</span>
+                                </div>
+                                <p class="text-center text-xs text-slate-500 mt-3 italic">Tidak ada nilai setengah atau abu-abu.</p>
+                            </div>
+
+                            <h4 class="text-xs font-bold text-slate-800 uppercase mb-3 border-b border-slate-100 pb-2">Contoh Kriteria (M):</h4>
+                            <ul class="text-sm text-slate-600 space-y-3">
+                                <li class="flex items-start"><span class="text-blue-600 font-bold mr-3">&#10003;</span> <span>Toleransi dimensi plat besi +/- 0.5mm (Diukur dengan Caliper).</span></li>
+                                <li class="flex items-start"><span class="text-blue-600 font-bold mr-3">&#10003;</span> <span>Suhu ruangan mencapai tepat -5&deg;C dalam waktu 10 menit.</span></li>
+                                <li class="flex items-start"><span class="text-blue-600 font-bold mr-3">&#10003;</span> <span>Motor berputar searah jarum jam saat saklar ditekan.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Judgment Card -->
+                    <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl hover:border-amber-400 transition-all group flex flex-col">
+                        <div class="bg-amber-500 p-6 flex justify-between items-center text-white">
+                            <div>
+                                <h3 class="text-2xl font-black tracking-wide">Judgment (J)</h3>
+                                <p class="text-amber-100 text-xs mt-1 uppercase tracking-widest font-bold">Penilaian Persepsi Ahli</p>
+                            </div>
+                            <span class="text-4xl opacity-80">&#128065;</span>
+                        </div>
+                        <div class="p-8 flex-1 flex flex-col">
+                            <p class="text-sm text-slate-600 mb-6 leading-relaxed flex-1">Penilaian kualitatif pada aspek abstrak (estetika, harmoni, teknik) yang mengandalkan persepsi kalibrasi dari kelompok ahli (biasanya 3 Asesor independen).</p>
+                            
+                            <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl mb-6 relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
+                                <span class="block text-[10px] font-bold uppercase mb-2 text-slate-400 tracking-wider">Skala Industri (0 - 3)</span>
+                                <div class="flex justify-between items-end border-b border-slate-200 pb-2">
+                                    <div class="text-center w-1/4"><span class="block font-black text-2xl text-rose-500">0</span><span class="text-[9px] font-bold uppercase text-slate-500 mt-1">Gagal</span></div>
+                                    <div class="text-center w-1/4"><span class="block font-black text-2xl text-amber-600">1</span><span class="text-[9px] font-bold uppercase text-slate-500 mt-1">Kurang</span></div>
+                                    <div class="text-center w-1/4"><span class="block font-black text-2xl text-emerald-500">2</span><span class="text-[9px] font-bold uppercase text-slate-500 mt-1">Standar</span></div>
+                                    <div class="text-center w-1/4"><span class="block font-black text-2xl text-blue-600">3</span><span class="text-[9px] font-bold uppercase text-slate-500 mt-1">Sempurna</span></div>
+                                </div>
+                                <p class="text-center text-xs text-slate-500 mt-3 italic">Diperlukan minimal 3 asesor untuk resolusi bias.</p>
+                            </div>
+
+                            <h4 class="text-xs font-bold text-slate-800 uppercase mb-3 border-b border-slate-100 pb-2">Contoh Kriteria (J):</h4>
+                            <ul class="text-sm text-slate-600 space-y-3">
+                                <li class="flex items-start"><span class="text-amber-500 font-bold mr-3">&#10003;</span> <span>Kerapian dan estetika penyusunan kabel di dalam panel distribusi.</span></li>
+                                <li class="flex items-start"><span class="text-amber-500 font-bold mr-3">&#10003;</span> <span>Kehalusan transisi warna pada desain grafis poster.</span></li>
+                                <li class="flex items-start"><span class="text-amber-500 font-bold mr-3">&#10003;</span> <span>Harmoni tekstur dan rasa pada plating masakan.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: LOGIKA CIS (SIMULATOR) -->
+            <div id="sec-logika" class="content-section hidden fade-in">
+                <div class="mb-10">
+                    <span class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-3 block">Modul 4 : Interaktif</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">Simulator Resolusi Dispute CIS</h2>
+                    <p class="text-slate-600 leading-relaxed max-w-3xl text-lg">Inti algoritma CIS adalah <strong>menolak disparitas nilai Judgment</strong>. Saat 3 asesor melakukan blind judging (skala 0-3), sistem mengecek selisih nilai ekstrem. Jika selisih > 1, sistem mengunci skor dan memaksa kalibrasi ulang. <strong class="text-slate-800">Simulasikan prosesnya di bawah ini.</strong></p>
+                </div>
+
+                <div class="bg-slate-800 rounded-3xl p-6 sm:p-12 shadow-2xl border border-slate-700 relative overflow-hidden max-w-4xl mx-auto">
+                    <div class="absolute -left-10 top-20 text-[15rem] opacity-5 font-sans">&#9878;</div>
+                    
+                    <div class="relative z-10">
+                        <div class="text-center mb-8">
+                            <h3 class="text-white font-bold text-2xl mb-2">Input Skoring Judgment</h3>
+                            <p class="text-slate-400 text-sm">Masukan nilai dari 3 asesor berbeda untuk satu objek kerja yang sama.</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-4 sm:gap-8 mb-10">
+                            <!-- Asesor 1 -->
+                            <div class="bg-slate-900 p-4 sm:p-6 rounded-2xl border border-slate-700 shadow-inner">
+                                <label class="block text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 text-center">Asesor 1</label>
+                                <select id="sim-a1" class="w-full bg-slate-800 text-white text-3xl font-black text-center p-4 rounded-xl border-2 border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none appearance-none cursor-pointer transition-colors">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2" selected>2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                            <!-- Asesor 2 -->
+                            <div class="bg-slate-900 p-4 sm:p-6 rounded-2xl border border-slate-700 shadow-inner">
+                                <label class="block text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 text-center">Asesor 2</label>
+                                <select id="sim-a2" class="w-full bg-slate-800 text-white text-3xl font-black text-center p-4 rounded-xl border-2 border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none appearance-none cursor-pointer transition-colors">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2" selected>2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                            <!-- Asesor 3 -->
+                            <div class="bg-slate-900 p-4 sm:p-6 rounded-2xl border border-slate-700 shadow-inner">
+                                <label class="block text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 text-center">Asesor 3</label>
+                                <select id="sim-a3" class="w-full bg-slate-800 text-white text-3xl font-black text-center p-4 rounded-xl border-2 border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none appearance-none cursor-pointer transition-colors">
+                                    <option value="0">0</option>
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="text-center mb-10">
+                            <button onclick="runSimulator()" class="bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-lg py-4 px-10 rounded-full shadow-[0_0_15px_rgba(37,99,235,0.5)] transition-all transform hover:scale-105 active:scale-95 w-full sm:w-auto">
+                                Proses Algoritma CIS &nbsp;&#10148;
+                            </button>
+                        </div>
+
+                        <!-- Result Box -->
+                        <div id="sim-result" class="rounded-2xl p-6 sm:p-8 border-2 transition-all duration-300 transform">
+                            <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                                <div class="text-center sm:text-left">
+                                    <p class="text-xs uppercase font-bold tracking-widest opacity-80 mb-1" id="sim-status-label">Status Verifikasi Sistem</p>
+                                    <h4 class="text-3xl sm:text-4xl font-black" id="sim-status-text">SIAP</h4>
+                                </div>
+                                <div class="bg-black/30 p-5 rounded-xl w-full sm:w-1/2">
+                                    <div class="flex justify-between border-b border-white/20 pb-3 mb-3 items-center">
+                                        <span class="text-sm opacity-90 font-medium">Kalkulasi Selisih (Max - Min):</span>
+                                        <span class="font-black text-2xl font-mono bg-white/10 px-3 py-1 rounded" id="sim-diff">-</span>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-xs opacity-70 font-bold uppercase tracking-wider">Tindakan Sistem:</span>
+                                        <span class="font-bold text-sm leading-snug" id="sim-action">Silakan klik tombol proses.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: DISEMINASI -->
+            <div id="sec-diseminasi" class="content-section hidden fade-in">
+                <div class="mb-12">
+                    <span class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-3 block">Modul 5</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">Peta Jalan Diseminasi (Model Kirkpatrick)</h2>
+                    <p class="text-slate-600 leading-relaxed max-w-3xl text-lg">Implementasi paradigma CIS memerlukan tahapan yang terukur. Strategi peluncuran pengetahuan kurikulum kepada instruktur vokasi ini disusun dan dievaluasi menggunakan 4 Level Evaluasi Kirkpatrick.</p>
+                </div>
+
+                <div class="glass-card p-6 sm:p-12 rounded-3xl relative">
+                    <!-- Central Vertical Line -->
+                    <div class="timeline-line hidden sm:block"></div>
+                    
+                    <div class="space-y-12 sm:space-y-20 relative z-10">
+                        
+                        <!-- Level 1 -->
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center w-full group">
+                            <div class="sm:w-1/2 sm:text-right sm:pr-10 pl-14 sm:pl-0 order-2 sm:order-1 mt-4 sm:mt-0">
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">1. Reaction (Reaksi Awal)</h3>
+                                <p class="text-sm text-slate-600 leading-relaxed">Fase sosialisasi. Mengukur penerimaan dan pemahaman fundamental instruktur terhadap paradigma baru berbasis CIS melalui workshop introduksi.</p>
+                            </div>
+                            <div class="absolute left-0 sm:left-1/2 w-12 h-12 rounded-full bg-slate-800 text-white font-black text-xl flex items-center justify-center border-4 border-white shadow-lg sm:-ml-6 order-1 sm:order-2 z-10 group-hover:scale-110 transition-transform">1</div>
+                            <div class="sm:w-1/2 hidden sm:block order-3"></div>
+                        </div>
+                        
+                        <!-- Level 2 -->
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center w-full group">
+                            <div class="sm:w-1/2 hidden sm:block order-1"></div>
+                            <div class="absolute left-0 sm:left-1/2 w-12 h-12 rounded-full bg-blue-600 text-white font-black text-xl flex items-center justify-center border-4 border-white shadow-lg sm:-ml-6 order-1 sm:order-2 z-10 group-hover:scale-110 transition-transform">2</div>
+                            <div class="sm:w-1/2 sm:pl-10 pl-14 sm:pl-10 order-2 sm:order-3 mt-4 sm:mt-0">
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">2. Learning (Pembelajaran Teknis)</h3>
+                                <p class="text-sm text-slate-600 leading-relaxed">Program Upskilling/Reskilling. Instruktur menyerap pengetahuan teknis pembuatan Marking Scheme, pemisahan M/J, dan operasional simulasi perangkat lunak CIS.</p>
+                            </div>
+                        </div>
+
+                        <!-- Level 3 -->
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center w-full group">
+                            <div class="sm:w-1/2 sm:text-right sm:pr-10 pl-14 sm:pl-0 order-2 sm:order-1 mt-4 sm:mt-0">
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">3. Behavior (Perilaku Aktual)</h3>
+                                <p class="text-sm text-slate-600 leading-relaxed">Aktivasi di institusi via forum MGMP. Guru mulai mempraktikkan penyusunan kriteria Test Project dan skoring objektif M/J di bengkel sekolah/BLK secara konsisten.</p>
+                            </div>
+                            <div class="absolute left-0 sm:left-1/2 w-12 h-12 rounded-full bg-amber-500 text-white font-black text-xl flex items-center justify-center border-4 border-white shadow-lg sm:-ml-6 order-1 sm:order-2 z-10 group-hover:scale-110 transition-transform">3</div>
+                            <div class="sm:w-1/2 hidden sm:block order-3"></div>
+                        </div>
+
+                        <!-- Level 4 -->
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center w-full group">
+                            <div class="sm:w-1/2 hidden sm:block order-1"></div>
+                            <div class="absolute left-0 sm:left-1/2 w-12 h-12 rounded-full bg-emerald-500 text-white font-black text-xl flex items-center justify-center border-4 border-white shadow-lg sm:-ml-6 order-1 sm:order-2 z-10 group-hover:scale-110 transition-transform">4</div>
+                            <div class="sm:w-1/2 sm:pl-10 pl-14 sm:pl-10 order-2 sm:order-3 mt-4 sm:mt-0">
+                                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 inline-block">
+                                    <h3 class="text-xl font-bold text-emerald-800 mb-2">4. Results (Hasil Akhir Makro)</h3>
+                                    <p class="text-sm text-emerald-700 leading-relaxed">Peningkatan mutu lulusan vokasi yang terbukti kompeten objektif, terserap industri, mendukung tercapainya visi Indonesia Emas 2045.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // === CORE STATE & NAVIGATION LOGIC ===
+        let currentChart1 = null;
+        let currentChart2 = null;
+        
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('.content-section');
+        const sidebar = document.getElementById('sidebar');
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mainContent = document.getElementById('main-content');
+
+        // Handle Navigation Click
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const targetId = item.getAttribute('data-target');
+                
+                // Update Nav UI
+                navItems.forEach(nav => {
+                    nav.classList.remove('active', 'text-slate-600', 'hover:bg-slate-100');
+                    if(nav === item) {
+                        nav.classList.add('active');
+                    } else {
+                        nav.classList.add('text-slate-600', 'hover:bg-slate-100');
+                    }
+                });
+
+                // Update Content Sections
+                sections.forEach(sec => {
+                    if(sec.id === targetId) {
+                        sec.classList.remove('hidden');
+                        sec.classList.add('block');
+                        
+                        // Re-trigger fade-in animation
+                        sec.classList.remove('fade-in');
+                        void sec.offsetWidth; // trigger reflow
+                        sec.classList.add('fade-in');
+
+                    } else {
+                        sec.classList.remove('block');
+                        sec.classList.add('hidden');
+                    }
+                });
+
+                // Reset Scroll
+                mainContent.scrollTop = 0;
+
+                // Close mobile menu
+                if(window.innerWidth < 768) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+
+                // Render specific charts based on active section
+                if(targetId === 'sec-paradigma') renderParadigmChart();
+                if(targetId === 'sec-wsos') renderWsosChart();
+            });
+        });
+
+        // Mobile Menu Toggle
+        mobileBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // === CHART.JS IMPLEMENTATIONS ===
+
+        function renderParadigmChart() {
+            const ctx = document.getElementById('chartParadigm');
+            if(!ctx) return;
+            if(currentChart1) currentChart1.destroy();
+
+            Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+            
+            currentChart1 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Asesor 1', 'Asesor 2', 'Asesor 3', 'Asesor 4', 'Asesor 5'],
+                    datasets: [
+                        {
+                            label: 'Skor Konvensional (Subjektif)',
+                            data: [65, 90, 70, 85, 75],
+                            backgroundColor: 'rgba(244, 63, 94, 0.75)', // Rose
+                            borderColor: 'rgb(225, 29, 72)',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Skor CIS (Objektif Berbasis Kriteria)',
+                            data: [82, 84, 83, 85, 82],
+                            backgroundColor: 'rgba(16, 185, 129, 0.85)', // Emerald
+                            borderColor: 'rgb(5, 150, 105)',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + ' Poin';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            min: 50, max: 100,
+                            grid: { color: 'rgba(226, 232, 240, 0.5)' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function renderWsosChart() {
+            const ctx = document.getElementById('chartWsos');
+            if(!ctx) return;
+            if(currentChart2) currentChart2.destroy();
+
+            currentChart2 = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Organisasi Kerja & Safety', 'Komunikasi', 'Teknis Inti (Hard Skills)'],
+                    datasets: [{
+                        data: [15, 10, 75],
+                        backgroundColor: ['#64748B', '#94A3B8', '#34D399'], // Slate 500, Slate 400, Emerald 400
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.parsed + '% Bobot';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // === UI INTERACTIONS ===
+
+        // WSOS Accordion Toggle
+        window.toggleAccordion = function(id, btnElement) {
+            const content = document.getElementById('content-' + id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if(content.classList.contains('hidden')) {
+                // Open
+                content.classList.remove('hidden');
+                content.classList.add('block');
+                
+                if(id === 'wsos-3') {
+                    // special handling for the arrow icon
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    icon.innerHTML = '&#8722;'; // minus
+                }
+                btnElement.classList.add('border-slate-400');
+            } else {
+                // Close
+                content.classList.remove('block');
+                content.classList.add('hidden');
+                
+                if(id === 'wsos-3') {
+                    icon.style.transform = 'rotate(45deg)';
+                } else {
+                    icon.innerHTML = '&#43;'; // plus
+                }
+                btnElement.classList.remove('border-slate-400');
+            }
+        };
+
+        // CIS Logic Simulator
+        window.runSimulator = function() {
+            const v1 = parseInt(document.getElementById('sim-a1').value);
+            const v2 = parseInt(document.getElementById('sim-a2').value);
+            const v3 = parseInt(document.getElementById('sim-a3').value);
+            
+            const max = Math.max(v1, v2, v3);
+            const min = Math.min(v1, v2, v3);
+            const diff = max - min;
+            
+            const resBox = document.getElementById('sim-result');
+            const statusTxt = document.getElementById('sim-status-text');
+            const diffTxt = document.getElementById('sim-diff');
+            const actTxt = document.getElementById('sim-action');
+            
+            // Reset classes
+            resBox.classList.remove('bg-emerald-500', 'border-emerald-400', 'bg-rose-600', 'border-rose-500', 'bg-slate-700', 'border-slate-600', 'text-white', 'text-slate-300');
+            
+            // Animation bump
+            resBox.style.transform = 'scale(0.98)';
+            setTimeout(() => { resBox.style.transform = 'scale(1)'; }, 150);
+
+            diffTxt.innerText = diff;
+            
+            if(diff <= 1) {
+                // SUCCESS
+                resBox.classList.add('bg-emerald-500', 'border-emerald-400', 'text-white');
+                statusTxt.innerText = 'DITERIMA (VALID)';
+                const avg = ((v1+v2+v3)/3).toFixed(2);
+                const pct = ((avg/3)*100).toFixed(0);
+                actTxt.innerHTML = `Disparitas wajar. Skor sah diinput ke sistem.<br/><span class="text-emerald-100 font-normal">Kalkulasi Akhir: ${pct}% (Poin Rata-rata: ${avg}/3)</span>`;
+            } else {
+                // DISPUTE
+                resBox.classList.add('bg-rose-600', 'border-rose-500', 'text-white');
+                statusTxt.innerText = 'DISPUTE (DITOLAK)';
+                actTxt.innerHTML = `Disparitas terlalu tinggi! Sistem Mengunci Skor.<br/><span class="text-rose-200 font-normal">Ketiga asesor wajib melihat kembali objek kerja dan berdebat hingga sepakat pada selisih max 1.</span>`;
+            }
+        };
+
+        // Initial setup for Simulator UI state
+        document.getElementById('sim-result').classList.add('bg-slate-700', 'border-slate-600', 'text-slate-300');
+
+    </script>
+</body>
+</html>
