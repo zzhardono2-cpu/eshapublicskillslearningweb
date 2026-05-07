@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Interaktif: Transfer Panas (Konduksi, Konveksi, Radiasi)</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Warm Neutrals & Thermal Accents (Slate, Orange, Red, Blue) -->
+    <!-- Application Structure Plan: A tabbed dashboard layout. This structure was chosen because educational content is best digested in focused, logical chunks. The user flow moves from a general introduction to specific mechanisms (Conduction, Convection, Radiation), ending with a comparative interactive simulation. This prevents cognitive overload while mirroring the sequential teaching style of the original presentation. -->
+    <!-- Visualization & Content Choices: 
+         1. Intro: Text & concept cards -> Inform -> Grid layout -> To provide a high-level overview. 
+         2. Conduction: Horizontal Bar Chart (Chart.js) -> Compare -> To show the massive difference in thermal conductivity between materials (Copper, Iron, Wood) supporting the PPT's specific example of why iron feels colder. 
+         3. Conduction Simulation: HTML/CSS progress bars -> Inform/Engage -> To visualize "speed of heat transfer" (Kecepatan rambat panas).
+         4. Convection & Radiation: CSS keyframe animations -> Inform -> To visualize particle flow and electromagnetic waves without relying on SVGs. 
+         Library/Method: Tailwind for layout, Chart.js for data visualization, Vanilla JS for interactivity and animation triggers. No SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        /* Custom Styles & Overrides */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #1e293b; /* slate-800 */
+        }
+
+        /* Chart Container Requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 50vh;
+            max-height: 400px;
+        }
+
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 300px;
+                max-height: 300px;
+            }
+        }
+
+        /* Animations */
+        @keyframes vibrate {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        .animate-vibrate {
+            animation: vibrate 0.3s infinite;
+        }
+
+        @keyframes flowUp {
+            0% { transform: translateY(100px) scale(0.8); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-20px) scale(1.2); opacity: 0; }
+        }
+        .particle-red {
+            animation: flowUp 3s infinite ease-in;
+            background-color: #ef4444; /* red-500 */
+        }
+        
+        @keyframes flowDown {
+            0% { transform: translateY(-20px) scale(1.2); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100px) scale(0.8); opacity: 0; }
+        }
+        .particle-blue {
+            animation: flowDown 3s infinite ease-in;
+            background-color: #3b82f6; /* blue-500 */
+        }
+
+        @keyframes radiate {
+            0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.7); }
+            70% { box-shadow: 0 0 0 30px rgba(249, 115, 22, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+        }
+        .animate-radiate {
+            animation: radiate 2s infinite;
+        }
+
+        /* Custom Scrollbar for clean UI */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="antialiased h-screen flex flex-col md:flex-row overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <nav class="w-full md:w-64 bg-slate-900 text-slate-100 flex-shrink-0 flex flex-col shadow-xl z-20">
+        <div class="p-6 bg-slate-950 border-b border-slate-800">
+            <h1 class="text-2xl font-bold text-orange-500 tracking-tight">eSHa Learning</h1>
+            <p class="text-xs text-slate-400 mt-1">Modul Transfer Panas (Unit 1)</p>
+        </div>
+        <div class="flex-1 overflow-y-auto py-4 flex flex-col gap-2 px-3">
+            <button onclick="nav('intro')" id="btn-intro" class="nav-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors bg-orange-600 text-white">
+                &#127968; Pengantar
+            </button>
+            <button onclick="nav('konduksi')" id="btn-konduksi" class="nav-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors hover:bg-slate-800 text-slate-300">
+                &#128295; Konduksi
+            </button>
+            <button onclick="nav('konveksi')" id="btn-konveksi" class="nav-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors hover:bg-slate-800 text-slate-300">
+                &#127754; Konveksi
+            </button>
+            <button onclick="nav('radiasi')" id="btn-radiasi" class="nav-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors hover:bg-slate-800 text-slate-300">
+                &#127774; Radiasi
+            </button>
+            <button onclick="nav('simulasi')" id="btn-simulasi" class="nav-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors hover:bg-slate-800 text-slate-300 mt-auto border border-slate-700">
+                &#127918; Simulasi Lab
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 bg-slate-50 overflow-y-auto relative p-4 md:p-8">
+        <div class="max-w-5xl mx-auto pb-20">
+
+            <!-- SECTION: INTRO -->
+            <section id="sec-intro" class="section-content animate-fade-in block">
+                <header class="mb-8">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Mengenal Perpindahan Panas</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed border-l-4 border-orange-500 pl-4 bg-orange-50 p-4 rounded-r-lg">
+                        Bagian ini memberikan gambaran umum tentang konsep dasar termodinamika. Panas (kalor) adalah bentuk energi yang selalu mengalir dari benda bersuhu lebih tinggi ke benda bersuhu lebih rendah. Mari kita pelajari tiga metode utamanya.
+                    </p>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer" onclick="nav('konduksi')">
+                        <div class="text-4xl mb-4 text-orange-500">&#128295;</div>
+                        <h3 class="text-xl font-bold mb-2">Konduksi</h3>
+                        <p class="text-slate-600 text-sm">Merambat melalui benda padat. Energi bergerak dari satu molekul ke molekul lainnya tanpa partikel ikut berpindah.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer" onclick="nav('konveksi')">
+                        <div class="text-4xl mb-4 text-blue-500">&#127754;</div>
+                        <h3 class="text-xl font-bold mb-2">Konveksi</h3>
+                        <p class="text-slate-600 text-sm">Merambat melalui fluida (cair/gas). Disertai dengan perpindahan partikel zat itu sendiri karena perbedaan massa jenis.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer" onclick="nav('radiasi')">
+                        <div class="text-4xl mb-4 text-yellow-500">&#127774;</div>
+                        <h3 class="text-xl font-bold mb-2">Radiasi</h3>
+                        <p class="text-slate-600 text-sm">Pancaran energi tanpa memerlukan medium perantara. Berpindah dalam wujud gelombang elektromagnetik.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: KONDUKSI -->
+            <section id="sec-konduksi" class="section-content animate-fade-in hidden">
+                <header class="mb-8">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Konduksi: Getaran Molekul</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        Di bagian ini, Anda akan melihat bagaimana panas merambat melalui zat padat. Seperti yang dijelaskan dalam laporan, energi bergerak dari satu molekul ke molekul lainnya. Kecepatan rambat panas (Konduktivitas) tidak sama pada setiap benda.
+                    </p>
+                </header>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Penjelasan & Kasus -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h3 class="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                &#128269; Studi Kasus: Besi vs Kayu
+                            </h3>
+                            <p class="text-slate-700 text-sm leading-relaxed mb-4">
+                                Pernahkah Anda menyentuh besi dan kayu yang berada di ruangan yang sama? Bahan dari besi akan terasa <strong>lebih dingin</strong>. 
+                            </p>
+                            <div class="bg-slate-100 p-4 rounded-lg border border-slate-300">
+                                <p class="text-sm font-semibold text-slate-800 text-center">Apakah suhu besi benar-benar lebih rendah?</p>
+                                <p class="text-sm text-slate-600 text-center mt-2">
+                                    <span class="text-red-500 font-bold">TIDAK!</span> Temperatur keduanya sama.<br>
+                                    Besi terasa dingin karena besi merupakan konduktor yang baik. Ia <strong>lebih cepat menyerap panas dari tangan kita</strong> dibandingkan kayu (isolator).
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Mini Interaksi Konduksi -->
+                        <div class="bg-slate-800 text-white p-6 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-4">Visualisasi Molekuler</h4>
+                            <div class="flex items-center justify-between p-4 bg-slate-900 rounded-lg relative overflow-hidden">
+                                <div class="text-4xl">&#128293;</div> <!-- Api -->
+                                <div class="flex-1 flex justify-around px-4" id="molecule-container">
+                                    <div class="w-6 h-6 rounded-full bg-slate-500 mol" style="transition: background 0.5s;"></div>
+                                    <div class="w-6 h-6 rounded-full bg-slate-500 mol" style="transition: background 0.5s;"></div>
+                                    <div class="w-6 h-6 rounded-full bg-slate-500 mol" style="transition: background 0.5s;"></div>
+                                    <div class="w-6 h-6 rounded-full bg-slate-500 mol" style="transition: background 0.5s;"></div>
+                                    <div class="w-6 h-6 rounded-full bg-slate-500 mol" style="transition: background 0.5s;"></div>
+                                </div>
+                                <div class="text-2xl">&#129302;</div> <!-- Tangan -->
+                            </div>
+                            <button onclick="startConduction()" class="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition-colors">
+                                Panaskan Batang Logam
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Visualisasi Data: Chart Konduktivitas -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col">
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Perbandingan Konduktivitas Termal</h3>
+                        <p class="text-sm text-slate-500 mb-6">Makin tinggi nilainya, makin cepat mengalirkan panas (W/m·K).</p>
+                        
+                        <!-- CHART CONTAINER -->
+                        <div class="chart-container flex-1">
+                            <canvas id="conductivityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: KONVEKSI -->
+            <section id="sec-konveksi" class="section-content animate-fade-in hidden">
+                <header class="mb-8">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Konveksi: Aliran Partikel</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        Bagian ini mengeksplorasi perpindahan panas pada fluida (cair dan gas). Berbeda dengan konduksi, di sini materi itu sendiri ikut bergerak membawa energi panas.
+                    </p>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-800 mb-4">Mekanisme Pemanasan Air</h3>
+                        <ul class="space-y-4 text-slate-700">
+                            <li class="flex gap-3">
+                                <span class="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold flex-shrink-0">1</span>
+                                <div>Bagian bawah fluida dipanaskan, volumenya memuai (massa jenis turun).</div>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold flex-shrink-0">2</span>
+                                <div>Fluida panas yang lebih ringan bergerak naik ke atas.</div>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">3</span>
+                                <div>Fluida dingin di atas yang lebih padat (massa jenis tinggi) turun menggantikannya.</div>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold flex-shrink-0">4</span>
+                                <div>Terciptalah arus konveksi yang terus berputar berkesinambungan.</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Visualisasi Konveksi murni HTML/CSS -->
+                    <div class="bg-slate-100 p-6 rounded-xl border border-slate-200 flex flex-col items-center justify-center min-h-[300px] relative overflow-hidden">
+                        <div class="w-48 h-48 border-4 border-slate-400 border-t-0 rounded-b-3xl relative bg-blue-50/50 flex items-center justify-center">
+                            <!-- Air level -->
+                            <div class="absolute top-0 w-full h-2 border-b-2 border-slate-300 border-dashed"></div>
+                            
+                            <!-- Particles -->
+                            <div class="absolute w-4 h-4 rounded-full particle-red" style="left: 30%; animation-delay: 0s;"></div>
+                            <div class="absolute w-4 h-4 rounded-full particle-red" style="left: 70%; animation-delay: 1s;"></div>
+                            <div class="absolute w-4 h-4 rounded-full particle-blue" style="left: 50%; top: 20px; animation-delay: 0.5s;"></div>
+                            <div class="absolute w-4 h-4 rounded-full particle-blue" style="left: 20%; top: 20px; animation-delay: 1.5s;"></div>
+                            <div class="absolute w-4 h-4 rounded-full particle-red" style="left: 50%; animation-delay: 2s;"></div>
+                        </div>
+                        <!-- Api -->
+                        <div class="text-4xl mt-2 animate-vibrate">&#128293;</div>
+                        <div class="mt-4 text-sm font-semibold text-slate-600 text-center">Simulasi Arus Konveksi (Panci Air)</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: RADIASI -->
+            <section id="sec-radiasi" class="section-content animate-fade-in hidden">
+                <header class="mb-8">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Radiasi: Pancaran Gelombang</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        Di ruang angkasa yang hampa udara, molekul sangat jarang. Konduksi dan konveksi tidak bisa terjadi. Radiasi adalah satu-satunya cara panas matahari mencapai bumi melalui gelombang elektromagnetik.
+                    </p>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Animasi Radiasi -->
+                    <div class="bg-slate-900 p-8 rounded-xl flex flex-col items-center justify-center min-h-[350px]">
+                        <div class="w-24 h-24 bg-yellow-400 rounded-full animate-radiate flex items-center justify-center text-4xl shadow-[0_0_50px_rgba(250,204,21,0.6)]">
+                            &#127774;
+                        </div>
+                        <div class="mt-16 text-slate-300 text-center max-w-xs text-sm">
+                            Energi dipancarkan ke segala arah tanpa membutuhkan medium. Kecepatan rambatnya sama dengan kecepatan cahaya.
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-yellow-400 shadow-sm">
+                            <h4 class="font-bold text-slate-800 flex items-center gap-2">&#127957; Contoh 1: Api Unggun</h4>
+                            <p class="text-slate-600 text-sm mt-2">Tubuh Anda terasa hangat saat duduk di dekat api unggun, meskipun udara di antara Anda dan api tersebut dingin.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-yellow-400 shadow-sm">
+                            <h4 class="font-bold text-slate-800 flex items-center gap-2">&#128085; Contoh 2: Warna Pakaian</h4>
+                            <p class="text-slate-600 text-sm mt-2">Pakaian berwarna hitam menyerap radiasi panas lebih banyak daripada pakaian putih. Itulah sebabnya baju hitam terasa lebih panas di siang hari.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-yellow-400 shadow-sm">
+                            <h4 class="font-bold text-slate-800 flex items-center gap-2">&#127758; Contoh 3: Efek Rumah Kaca</h4>
+                            <p class="text-slate-600 text-sm mt-2">Radiasi matahari menembus atmosfer dan diserap bumi, namun radiasi pantulan dari bumi terperangkap oleh gas-gas rumah kaca.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: SIMULASI / LAB -->
+            <section id="sec-simulasi" class="section-content animate-fade-in hidden">
+                <header class="mb-8">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Laboratorium Interaktif</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        Mari gabungkan pemahaman Anda. Uji kecepatan rambat panas berbagai material (Konduksi) secara real-time.
+                    </p>
+                </header>
+
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-6 border-b pb-4">Uji Material: Kecepatan Konduksi</h3>
+                    
+                    <div class="space-y-6" id="race-track">
+                        <!-- Tracks dynamically generated by JS -->
+                    </div>
+
+                    <div class="mt-8 flex gap-4 justify-center">
+                        <button onclick="startRace()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">
+                            &#128293; Mulai Pemanasan
+                        </button>
+                        <button onclick="resetRace()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-8 rounded-full transition-colors">
+                            &#128259; Reset
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // --- 1. NAVIGATION LOGIC ---
+        function nav(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            // Show target section
+            const target = document.getElementById(`sec-${sectionId}`);
+            if(target) {
+                target.classList.remove('hidden');
+                target.classList.add('block');
+            }
+
+            // Update Nav Button Styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-orange-600', 'text-white');
+                btn.classList.add('hover:bg-slate-800', 'text-slate-300');
+            });
+            const activeBtn = document.getElementById(`btn-${sectionId}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('hover:bg-slate-800', 'text-slate-300');
+                activeBtn.classList.add('bg-orange-600', 'text-white');
+            }
+
+            // Re-render chart if navigating to konduksi to ensure proper sizing
+            if(sectionId === 'konduksi' && !chartInitialized) {
+                initChart();
+                chartInitialized = true;
+            }
+        }
+
+        // --- 2. CHART.JS IMPLEMENTATION (Konduksi) ---
+        let chartInitialized = false;
+        function initChart() {
+            const ctx = document.getElementById('conductivityChart').getContext('2d');
+            
+            // Data based on standard thermal conductivity (W/m.K)
+            const data = {
+                labels: ['Perak', 'Tembaga', 'Emas', 'Aluminium', 'Besi', 'Kaca', 'Kayu'],
+                datasets: [{
+                    label: 'Konduktivitas Termal (W/m·K)',
+                    data: [429, 401, 318, 237, 80, 1.05, 0.15], // Kaca and kayu are very low
+                    backgroundColor: [
+                        '#94a3b8', // Perak
+                        '#f97316', // Tembaga (highlight)
+                        '#fbbf24', // Emas
+                        '#cbd5e1', // Aluminium
+                        '#64748b', // Besi
+                        '#bae6fd', // Kaca
+                        '#854d0e'  // Kayu
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 4
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'bar', // Using vertical bar, but configured to be responsive
+                data: data,
+                options: {
+                    indexAxis: 'y', // Makes it horizontal bar chart
+                    responsive: true,
+                    maintainAspectRatio: false, // CRITICAL for chart-container control
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.x + ' W/m·K';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'logarithmic', // Log scale shows the massive difference better
+                            title: {
+                                display: true,
+                                text: 'W/m·K (Log Scale)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    // 16-char wrapping logic as requested
+                                    let label = this.getLabelForValue(value);
+                                    if (label.length > 16) {
+                                        return label.substr(0, 16) + '...';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- 3. MOLECULAR CONDUCTION SIMULATION ---
+        function startConduction() {
+            const mols = document.querySelectorAll('.mol');
+            // Reset
+            mols.forEach(m => {
+                m.classList.remove('animate-vibrate');
+                m.style.backgroundColor = '#64748b'; // slate-500
+            });
+
+            // Sequence animation
+            mols.forEach((m, index) => {
+                setTimeout(() => {
+                    m.classList.add('animate-vibrate');
+                    m.style.backgroundColor = '#ef4444'; // red-500 (hot)
+                    
+                    setTimeout(() => {
+                        m.classList.remove('animate-vibrate');
+                        m.style.backgroundColor = '#f97316'; // orange-500 (warm)
+                    }, 1000); // stop vibrating after 1s
+
+                }, index * 400); // 400ms delay between each molecule
+            });
+        }
+
+        // --- 4. INTERACTIVE LAB SIMULATION (Progress Bars) ---
+        const labMaterials = [
+            { name: 'Tembaga', k: 401, color: 'bg-orange-500' },
+            { name: 'Besi', k: 80, color: 'bg-slate-600' },
+            { name: 'Kaca', k: 1, color: 'bg-sky-200 text-slate-800' },
+            { name: 'Kayu', k: 0.1, color: 'bg-yellow-800' }
+        ];
+
+        function initLab() {
+            const container = document.getElementById('race-track');
+            container.innerHTML = ''; // clear
+            
+            labMaterials.forEach((mat, idx) => {
+                const html = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-24 font-bold text-sm text-slate-700">${mat.name}</div>
+                        <div class="flex-1 bg-slate-100 h-8 rounded-full overflow-hidden border border-slate-200 relative">
+                            <div id="track-${idx}" class="h-full w-0 ${mat.color} transition-all ease-linear" style="transition-duration: 0ms;"></div>
+                        </div>
+                        <div class="w-10 text-center text-xl" id="emoji-${idx}">&#129482;</div> <!-- Cold initially -->
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function startRace() {
+            labMaterials.forEach((mat, idx) => {
+                const track = document.getElementById(`track-${idx}`);
+                const emoji = document.getElementById(`emoji-${idx}`);
+                
+                // Calculate duration based on conductivity (higher K = lower duration)
+                // Using a non-linear scale for visual effect. 
+                // Tembaga (401) ~ 1s, Kayu (0.1) ~ 15s
+                let durationMs;
+                if(mat.k > 300) durationMs = 1000;
+                else if (mat.k > 50) durationMs = 3000;
+                else if (mat.k >= 1) durationMs = 8000;
+                else durationMs = 15000;
+
+                track.style.transitionDuration = `${durationMs}ms`;
+                
+                // Trigger reflow to ensure transition applies
+                void track.offsetWidth; 
+                
+                track.style.width = '100%';
+
+                // Change emoji when done
+                setTimeout(() => {
+                    if(track.style.width === '100%') {
+                        emoji.innerHTML = '&#129324;'; // Hot face
+                    }
+                }, durationMs);
+            });
+        }
+
+        function resetRace() {
+            labMaterials.forEach((mat, idx) => {
+                const track = document.getElementById(`track-${idx}`);
+                const emoji = document.getElementById(`emoji-${idx}`);
+                
+                track.style.transitionDuration = '0ms'; // Snap back instantly
+                track.style.width = '0%';
+                emoji.innerHTML = '&#129482;';
+            });
+        }
+
+        // Initialize things on load
+        window.onload = () => {
+            initLab();
+        };
+
+    </script>
+</body>
+</html>
