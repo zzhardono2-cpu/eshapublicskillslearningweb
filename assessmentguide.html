@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Master Asesmen LKS 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .nav-active { background-color: #1e293b; color: #38bdf8; border-left: 4px solid #38bdf8; }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        @media print { .no-print { display: none; } .print-area { display: block !important; } }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-80 bg-slate-900 text-slate-300 flex flex-col shrink-0 no-print shadow-2xl">
+        <div class="p-6 bg-slate-950 border-b border-slate-800 flex items-center gap-3">
+            <div class="w-8 h-8 bg-sky-500 rounded flex items-center justify-center font-black text-white text-xs">LKS</div>
+            <div>
+                <h1 class="font-bold text-white tracking-widest uppercase text-[10px]">Database Auditor</h1>
+                <p class="text-[8px] text-slate-500 font-mono italic">Verified Revision 2.0</p>
+            </div>
+        </div>
+        <nav class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-4" id="sidebar-nav"></nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-w-0 bg-white">
+        <header class="h-20 border-b border-slate-200 px-8 flex items-center justify-between no-print shrink-0">
+            <div>
+                <p id="header-task" class="text-[9px] font-black text-sky-600 uppercase tracking-[0.2em] mb-0.5"></p>
+                <div class="flex items-center gap-3">
+                    <span id="header-id" class="text-2xl font-black text-slate-200 italic tracking-tighter">--</span>
+                    <h2 id="header-title" class="text-lg font-extrabold text-slate-800 uppercase leading-tight tracking-tight">Pilih Kriteria</h2>
+                </div>
+            </div>
+            <button onclick="window.print()" class="bg-slate-900 text-white px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-800 transition-all shadow-xl active:scale-95">
+                CETAK HALAMAN
+            </button>
+        </header>
+
+        <div id="content-area" class="flex-1 overflow-y-auto p-6 lg:p-10 custom-scrollbar bg-slate-50">
+            <div id="welcome" class="text-center py-32">
+                <div class="text-6xl mb-6 grayscale opacity-20">📊</div>
+                <h3 class="text-slate-400 font-bold uppercase tracking-widest text-xs italic">Sistem Informasi Database Kriteria</h3>
+                <p class="text-slate-300 text-[10px] mt-2 max-w-sm mx-auto leading-relaxed uppercase">Seluruh Sub-Kriteria (A-H) telah diperbarui sesuai audit terbaru.</p>
+            </div>
+            <div id="aspects-list" class="max-w-6xl mx-auto space-y-4 hidden"></div>
+        </div>
+    </main>
+
+    <script>
+        const DATABASE = {
+            // TASK A (LENGKAP 1-9)
+            "A1": { task: "TASK A", name: "ELECTRICAL COMPONENTS", aspects: [
+                { t: "M", aspect: "Control board Position", desc: "Sejajar frame ± 0mm.", tool: "Mistar Baja." },
+                { t: "M", aspect: "Mounting Bolts Solidity", desc: "Baut kencang & lengkap.", tool: "Fisik." },
+                { t: "M", aspect: "Board Cleanliness", desc: "Bebas noda & debu.", tool: "Visual." },
+                { t: "M", aspect: "Isolator Switch", desc: "Handle kokoh & sejajar.", tool: "Visual." },
+                { t: "M", aspect: "MCB 1P & 3P", desc: "Terkunci pada DIN rail.", tool: "Fisik." },
+                { t: "M", aspect: "Fuse Holder", desc: "Pemasangan rapi.", tool: "Fisik." },
+                { t: "M", aspect: "Relay Base", desc: "Terkunci kuat.", tool: "Fisik." },
+                { t: "M", aspect: "Timer Base", desc: "Duduk sempurna.", tool: "Fisik." },
+                { t: "J", aspect: "Internal Management", desc: "Kabel tidak terjepit.", tool: "Judgement." }
+            ]},
+            "A2": { task: "TASK A", name: "CABLE DUCTING", aspects: [
+                { t: "M", aspect: "Horizontal Alignment", desc: "Toleransi ± 1mm.", tool: "Waterpass." },
+                { t: "M", aspect: "Vertical Alignment", desc: "Toleransi ± 1mm.", tool: "Waterpass." },
+                { t: "J", aspect: "Cover Integrity", desc: "Tutup rapat & potongan rapi.", tool: "Visual." }
+            ]},
+            "A3": { task: "TASK A", name: "PIPING BENDING", aspects: [
+                { t: "M", aspect: "Suction 90°", desc: "Toleransi ± 1°.", tool: "Busur." },
+                { t: "M", aspect: "Liquid 90°", desc: "Toleransi ± 1°.", tool: "Busur." },
+                { t: "M", aspect: "Oil Return Line", desc: "Sesuai Dimensi Drawing.", tool: "Mistar." }
+            ]},
+            "A4": { task: "TASK A", name: "MECHANICAL SUPPORT", aspects: [
+                { t: "M", aspect: "CU Bracket Leveling", desc: "Posisi 0° Horisontal.", tool: "Waterpass." },
+                { t: "M", aspect: "CU Spacing", desc: "Sesuai kaki unit.", tool: "Meteran." },
+                { t: "M", aspect: "Evap Leveling", desc: "Posisi 0° Horisontal.", tool: "Waterpass." },
+                { t: "M", aspect: "Evap Height", desc: "± 5mm dari referensi.", tool: "Meteran." },
+                { t: "M", aspect: "CU Bolts", desc: "Lengkap & kencang.", tool: "Kunci Pas." },
+                { t: "M", aspect: "Evap Bolts", desc: "Lengkap & kencang.", tool: "Kunci Pas." },
+                { t: "M", aspect: "Surface Quality", desc: "Tidak ada goresan tajam.", tool: "Visual." },
+                { t: "M", aspect: "Pipe Support", desc: "Kokoh & stabil.", tool: "Fisik." },
+                { t: "M", aspect: "Vibration Dampener", desc: "Rubber terpasang tepat.", tool: "Visual." }
+            ]},
+            "A5": { task: "TASK A", name: "TRAY & CONDUIT", aspects: [
+                { t: "M", aspect: "Tray Deburring", desc: "Halus, tidak tajam.", tool: "Fisik." },
+                { t: "M", aspect: "Conduit Clamping", desc: "Lurus & kuat.", tool: "Visual." }
+            ]},
+            "A6": { task: "TASK A", name: "LABELING", aspects: [
+                { t: "J", aspect: "Label Aesthetics", desc: "Simetris & lurus.", tool: "Visual." },
+                { t: "J", aspect: "Label Data Accuracy", desc: "Sesuai Electrical Diagram.", tool: "Visual." },
+                { t: "J", aspect: "Label Position", desc: "Posisi konsisten di seluruh titik.", tool: "Visual." }
+            ]},
+            "A7": { task: "TASK A", name: "INTERNAL WIRING", aspects: [
+                { t: "J", aspect: "Wiring Tidiness", desc: "Kabel tertata dalam ducting.", tool: "Visual." },
+                { t: "J", aspect: "Ferrule Usage", desc: "Semua ujung kabel pakai ferrule.", tool: "Fisik." },
+                { t: "J", aspect: "Cable Color Coding", desc: "L, N, PE sesuai standar.", tool: "Visual." },
+                { t: "J", aspect: "Termination Tightness", desc: "Tidak ada serabut keluar.", tool: "Fisik." },
+                { t: "J", aspect: "Cable Ties", desc: "Jarak ikat seragam.", tool: "Visual." },
+                { t: "J", aspect: "Component Labeling", desc: "ID komponen jelas.", tool: "Visual." },
+                { t: "J", aspect: "Ducting Space", desc: "Kabel tidak melebihi 70% duct.", tool: "Visual." },
+                { t: "J", aspect: "Earth Connectivity", desc: "Semua metal ke ground.", tool: "Tester." },
+                { t: "J", aspect: "Door Grounding", desc: "Kabel fleksibel ke pintu.", tool: "Visual." }
+            ]},
+            "A8": { task: "TASK A", name: "PRE-FAB JOINTS", aspects: [
+                { t: "M", aspect: "Swaging Quality", desc: "Pas & tidak goyang.", tool: "Caliper." },
+                { t: "M", aspect: "Flare Surface", desc: "Mengkilap, tidak retak.", tool: "Visual." },
+                { t: "M", aspect: "Brazing Prep", desc: "Bebas oksida di area las.", tool: "Visual." },
+                { t: "M", aspect: "Overall Alignment", desc: "Sambungan lurus.", tool: "Visual." }
+            ]},
+            "A9": { task: "TASK A", name: "CLEANING", aspects: [
+                { t: "J", aspect: "Workshop Cleaning", desc: "Lantai bersih dari sisa kabel/pipa.", tool: "Visual." },
+                { t: "J", aspect: "Unit Appearance", desc: "Unit bebas debu & sidik jari.", tool: "Visual." }
+            ]},
+
+            // TASK B
+            "B1": { task: "TASK B", name: "UNIT PLACING", aspects: [
+                { t: "M", aspect: "CU Distance from Wall", desc: "Sesuai gambar ± 2mm.", tool: "Meteran." }
+            ]},
+            "B2": { task: "TASK B", name: "EVAP INSTALL", aspects: [
+                { t: "M", aspect: "Leveling 0°", desc: "Harus rata air.", tool: "Waterpass." },
+                { t: "M", aspect: "Mounting Solidity", desc: "Sangat kokoh saat disentuh.", tool: "Fisik." }
+            ]},
+            "B3": { task: "TASK B", name: "PIPING INSTALL", aspects: [
+                { t: "M", aspect: "Clamping Position", desc: "Jarak klem merata.", tool: "Meteran." },
+                { t: "M", aspect: "Alignment Horizontal/Vertical", desc: "Lurus 90°.", tool: "Waterpass." }
+            ]},
+            "B4": { task: "TASK B", name: "DRAINAGE", aspects: [
+                { t: "M", aspect: "Drainage Slope", desc: "Miring ke arah pembuangan.", tool: "Waterpass." }
+            ]},
+
+            // TASK C (COMMISSIONING)
+            "C1": { task: "TASK C", name: "PRESSURE TEST", aspects: [
+                { t: "M", aspect: "Pressure Holding", desc: "25-30 bar, stabil 30 menit.", tool: "Manifold." },
+                { t: "M", aspect: "Leak Search", desc: "Gunakan leak detector/sabun.", tool: "Leak Detector." }
+            ]},
+            "C2": { task: "TASK C", name: "EVACUATION", aspects: [
+                { t: "M", aspect: "Vacuum Level", desc: "Mencapai < 500 micron.", tool: "Micron Gauge." },
+                { t: "M", aspect: "Vacuum Holding", desc: "Tidak naik signifikan.", tool: "Micron Gauge." }
+            ]},
+
+            // TASK D (CONTROL CIRCUIT)
+            "D1": { task: "TASK D", name: "ELECTRICAL TEST", aspects: [
+                { t: "M", aspect: "Circuit Logic", desc: "Sesuai urutan kerja simulasi.", tool: "Multimeter." },
+                { t: "M", aspect: "Safety Interlock", desc: "HP/LP Switch berfungsi.", tool: "Fisik." }
+            ]},
+
+            // TASK G & H (DISINGKAT)
+            "G1": { task: "TASK G", name: "PERFORMANCE", aspects: [
+                { t: "M", aspect: "Current Draw", desc: "Normal RLA.", tool: "Clamp Meter." },
+                { t: "M", aspect: "Superheat", desc: "Range 5-8K.", tool: "Thermocouple." }
+            ]},
+            "H1": { task: "TASK H", name: "SAFETY", aspects: [
+                { t: "M", aspect: "PPE", desc: "Lengkap & benar.", tool: "Visual." },
+                { t: "J", aspect: "Environment", desc: "Bersih & rapi.", tool: "Visual." }
+            ]}
+        };
+
+        function init() {
+            const nav = document.getElementById('sidebar-nav');
+            const sections = [
+                { label: "TASK A: FABRICATION", ids: ["A1","A2","A3","A4","A5","A6","A7","A8","A9"] },
+                { label: "TASK B: INSTALLATION", ids: ["B1","B2","B3","B4"] },
+                { label: "TASK C: COMMISSIONING", ids: ["C1","C2"] },
+                { label: "TASK D: CONTROL", ids: ["D1"] },
+                { label: "TASK G: PERFORMANCE", ids: ["G1"] },
+                { label: "TASK H: SAFETY", ids: ["H1"] }
+            ];
+
+            sections.forEach(sec => {
+                const head = document.createElement('div');
+                head.className = "text-[9px] font-black text-slate-500 uppercase tracking-widest mt-6 mb-2 px-3 border-l-2 border-slate-700 ml-1";
+                head.innerText = sec.label;
+                nav.appendChild(head);
+
+                sec.ids.forEach(id => {
+                    const btn = document.createElement('button');
+                    btn.className = "nav-link w-full text-left px-4 py-2 rounded-lg text-[10px] font-bold transition-all flex items-center gap-3 hover:bg-slate-800 mb-0.5 no-print";
+                    btn.id = `btn-${id}`;
+                    btn.onclick = () => load(id);
+                    btn.innerHTML = `<span class="mono text-[9px] opacity-40">${id}</span> <span class="truncate">${DATABASE[id].name}</span>`;
+                    nav.appendChild(btn);
+                });
+            });
+        }
+
+        function load(id) {
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('nav-active'));
+            document.getElementById(`btn-${id}`).classList.add('nav-active');
+
+            const data = DATABASE[id];
+            document.getElementById('header-task').innerText = data.task;
+            document.getElementById('header-id').innerText = id;
+            document.getElementById('header-title').innerText = data.name;
+
+            document.getElementById('welcome').classList.add('hidden');
+            const list = document.getElementById('aspects-list');
+            list.classList.remove('hidden');
+            list.innerHTML = '';
+
+            data.aspects.forEach((a, i) => {
+                const card = document.createElement('div');
+                card.className = "bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col md:flex-row transform transition-all hover:border-sky-300";
+                card.innerHTML = `
+                    <div class="w-10 bg-slate-50 flex items-center justify-center font-black text-slate-300 border-r border-slate-100 shrink-0 text-xs">${i+1}</div>
+                    <div class="flex-1 p-5 border-r border-slate-100">
+                        <span class="text-[7px] font-black px-1.5 py-0.5 rounded-full ${a.t === 'M' ? 'bg-sky-100 text-sky-700' : 'bg-amber-100 text-amber-700'} mb-2 inline-block uppercase">
+                            ${a.t === 'M' ? 'Measurement' : 'Judgement'}
+                        </span>
+                        <h4 class="text-[11px] font-extrabold text-slate-800 uppercase tracking-tight">${a.aspect}</h4>
+                    </div>
+                    <div class="flex-[1.5] p-5 border-r border-slate-100">
+                        <p class="text-[7px] font-black text-slate-400 uppercase tracking-widest mb-1 font-bold italic">Requirement</p>
+                        <p class="text-xs text-slate-600 font-medium leading-relaxed">${a.desc}</p>
+                    </div>
+                    <div class="flex-1 p-5 bg-slate-50/30">
+                        <p class="text-[7px] font-black text-slate-400 uppercase tracking-widest mb-1 font-bold italic">Testing Method</p>
+                        <p class="text-[9px] text-sky-800 font-bold italic uppercase tracking-tighter">${a.tool}</p>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+            document.getElementById('content-area').scrollTop = 0;
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
