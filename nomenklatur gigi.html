@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Interaktif: Nomenklatur Gigi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral & Teal (Clinical yet friendly) -->
+    <!-- Application Structure Plan: SPA divided into 4 main views managed by JS: 1) Teori (Foundational knowledge), 2) Simulasi (Interactive HTML/CSS Odontogram to explore notations visually), 3) Latihan (Dynamic quiz engine), 4) Laporan (Dashboard with Chart.js to review performance). This structure follows a logical pedagogical flow: Learn -> Explore -> Apply -> Review. -->
+    <!-- Visualization & Content Choices: Odontogram -> Goal: Explore tooth positions -> Viz: HTML/CSS Flexbox grid representing dental arches (NO SVG used) -> Interaction: Click to view details in all 3 systems. Report -> Goal: Summarize learning -> Viz: Doughnut chart -> Library: Chart.js inside strictly constrained div. Palmer Notation -> Goal: Visual representation -> Viz: Custom CSS borders simulating the quadrant brackets. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+        
+        /* Palmer Notation CSS Simulation (No SVG) */
+        .palmer-box { display: inline-flex; align-items: center; justify-content: center; min-width: 1.5rem; height: 1.5rem; font-weight: 600; font-size: 1.125rem; line-height: 1; }
+        .p-ur { border-bottom: 2px solid #0f172a; border-right: 2px solid #0f172a; padding-right: 4px; padding-bottom: 2px; margin-right: 2px;}
+        .p-ul { border-bottom: 2px solid #0f172a; border-left: 2px solid #0f172a; padding-left: 4px; padding-bottom: 2px; margin-left: 2px;}
+        .p-lr { border-top: 2px solid #0f172a; border-right: 2px solid #0f172a; padding-right: 4px; padding-top: 2px; margin-right: 2px;}
+        .p-ll { border-top: 2px solid #0f172a; border-left: 2px solid #0f172a; padding-left: 4px; padding-top: 2px; margin-left: 2px;}
+
+        /* Odontogram Tooth Base Styles */
+        .tooth { 
+            width: 2.5rem; height: 3.5rem; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background-color: white; border: 1px solid #cbd5e1;
+            cursor: pointer; transition: all 0.2s ease-in-out;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .tooth:hover { background-color: #e0f2fe; border-color: #0ea5e9; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .tooth.active { background-color: #0ea5e9; color: white; border-color: #0284c7; }
+        
+        /* Shape differentiation */
+        .tooth-upper { border-radius: 4px 4px 12px 12px; }
+        .tooth-lower { border-radius: 12px 12px 4px 4px; }
+        
+        /* Chart Container Requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+
+        .nav-link { cursor: pointer; border-bottom: 2px solid transparent; padding-bottom: 0.5rem; transition: all 0.2s; font-weight: 500; }
+        .nav-link:hover { color: #0f766e; }
+        .nav-link.active { border-bottom-color: #0f766e; color: #0f766e; }
+        
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="antialiased h-screen flex flex-col">
+
+    <!-- Top Navigation -->
+    <header class="bg-white shadow-sm z-10 sticky top-0">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center text-white font-bold text-xl mr-3">
+                        &#x2637; <!-- Unicode medical/dental related symbol proxy -->
+                    </div>
+                    <span class="font-bold text-xl text-slate-800">EduGigi<span class="text-teal-600">.</span></span>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a onclick="navigate('teori')" id="nav-teori" class="nav-link active text-slate-500">Materi Teori</a>
+                    <a onclick="navigate('simulasi')" id="nav-simulasi" class="nav-link text-slate-500">Simulasi Odontogram</a>
+                    <a onclick="navigate('latihan')" id="nav-latihan" class="nav-link text-slate-500">Latihan Soal</a>
+                    <a onclick="navigate('laporan')" id="nav-laporan" class="nav-link text-slate-500 hidden">Laporan Belajar</a>
+                </nav>
+                <!-- Mobile Menu Button (simplified for brevity, navigation handled via visible links for now) -->
+                <div class="md:hidden flex items-center text-sm space-x-4">
+                    <a onclick="navigate('teori')" class="font-medium text-teal-600">Teori</a>
+                    <a onclick="navigate('simulasi')" class="font-medium text-slate-600">Simulasi</a>
+                    <a onclick="navigate('latihan')" class="font-medium text-slate-600">Latihan</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow overflow-y-auto p-4 md:p-8">
+        <div class="max-w-6xl mx-auto">
+
+            <!-- SECTION: TEORI -->
+            <div id="sec-teori" class="fade-in space-y-8">
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
+                    <h1 class="text-3xl font-bold text-slate-800 mb-4">Dasar Nomenklatur Gigi</h1>
+                    <p class="text-slate-600 leading-relaxed text-lg mb-6">
+                        Selamat datang, sejawat mahasiswa. Nomenklatur gigi adalah sistem standarisasi untuk menamai dan merujuk pada gigi tertentu. Pemahaman yang kuat tentang sistem ini mutlak diperlukan dalam rekam medis kedokteran gigi, komunikasi antar sejawat, dan identifikasi forensik. Modul ini membahas tiga sistem utama yang diakui global.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                        <!-- Card FDI -->
+                        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 hover:border-teal-300 transition-colors">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-lg mr-3">1</div>
+                                <h2 class="text-xl font-bold text-slate-800">Sistem FDI</h2>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-3">(Federation Dentaire Internationale) / Sistem Dua Angka.</p>
+                            <ul class="text-sm text-slate-700 space-y-2 mb-4 list-disc pl-5">
+                                <li><strong>Angka Pertama:</strong> Kuadran (1-4 Tetap, 5-8 Susu).</li>
+                                <li><strong>Angka Kedua:</strong> Posisi gigi dari garis tengah (1-8 Tetap, 1-5 Susu).</li>
+                            </ul>
+                            <div class="bg-white p-3 rounded-lg text-center font-mono text-lg border border-slate-200">
+                                Contoh: <span class="font-bold text-teal-600">46</span> <br>
+                                <span class="text-xs text-slate-500">(Molar 1 Kanan Bawah Tetap)</span>
+                            </div>
+                        </div>
+
+                        <!-- Card Universal -->
+                        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 hover:border-blue-300 transition-colors">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-lg mr-3">2</div>
+                                <h2 class="text-xl font-bold text-slate-800">Sistem Universal</h2>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-3">Sering digunakan di Amerika Serikat.</p>
+                            <ul class="text-sm text-slate-700 space-y-2 mb-4 list-disc pl-5">
+                                <li><strong>Gigi Tetap:</strong> Angka 1-32, dimulai dari Molar 3 Kanan Atas, memutar ke Kiri Atas, turun ke Kiri Bawah, berakhir di Kanan Bawah.</li>
+                                <li><strong>Gigi Susu:</strong> Huruf A-T dengan pola memutar yang sama.</li>
+                            </ul>
+                            <div class="bg-white p-3 rounded-lg text-center font-mono text-lg border border-slate-200">
+                                Contoh: <span class="font-bold text-blue-600">30</span> <br>
+                                <span class="text-xs text-slate-500">(Molar 1 Kanan Bawah Tetap)</span>
+                            </div>
+                        </div>
+
+                        <!-- Card Palmer -->
+                        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 hover:border-purple-300 transition-colors">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-lg mr-3">3</div>
+                                <h2 class="text-xl font-bold text-slate-800">Sistem Palmer</h2>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-3">Sering disebut sistem Zsigmondy. Visual berdasarkan kuadran.</p>
+                            <ul class="text-sm text-slate-700 space-y-2 mb-4 list-disc pl-5">
+                                <li>Menggunakan simbol garis bersudut (L) untuk mewakili kuadran.</li>
+                                <li><strong>Tetap:</strong> Angka 1-8 dari tengah.</li>
+                                <li><strong>Susu:</strong> Huruf A-E dari tengah.</li>
+                            </ul>
+                            <div class="bg-white p-3 rounded-lg text-center font-mono text-lg border border-slate-200 flex flex-col items-center">
+                                <span class="text-sm mb-1">Contoh:</span>
+                                <div>
+                                    <span class="palmer-box p-lr text-purple-700">6</span>
+                                </div>
+                                <span class="text-xs text-slate-500 mt-1">(Molar 1 Kanan Bawah Tetap)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-6">
+                    <button onclick="navigate('simulasi')" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:-translate-y-1">
+                        Mulai Eksplorasi Odontogram &rarr;
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECTION: SIMULASI -->
+            <div id="sec-simulasi" class="hidden fade-in">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Eksplorasi Odontogram Interaktif</h2>
+                    <p class="text-slate-600 mb-6">Pilih jenis gigi, lalu klik pada representasi gigi di lengkung rahang untuk melihat detail nomenklaturnya secara komprehensif.</p>
+                    
+                    <!-- Controls -->
+                    <div class="flex justify-center mb-8">
+                        <div class="bg-slate-100 p-1 rounded-lg inline-flex">
+                            <button id="btn-type-tetap" onclick="setOdontoType('tetap')" class="px-6 py-2 rounded-md font-medium text-sm transition-colors bg-white shadow-sm text-teal-700">Gigi Tetap (Dewasa)</button>
+                            <button id="btn-type-susu" onclick="setOdontoType('susu')" class="px-6 py-2 rounded-md font-medium text-sm transition-colors text-slate-500 hover:text-slate-700">Gigi Susu (Anak)</button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col lg:flex-row gap-8">
+                        <!-- Odontogram Grid (Left) -->
+                        <div class="flex-grow flex flex-col items-center justify-center bg-slate-50 p-6 rounded-xl border border-slate-200 relative">
+                            <!-- Garis Tengah -->
+                            <div class="absolute h-full w-px bg-slate-300 left-1/2 transform -translate-x-1/2 z-0"></div>
+                            <div class="absolute w-full h-px bg-slate-300 top-1/2 transform -translate-y-1/2 z-0"></div>
+
+                            <!-- Rahang Atas -->
+                            <div class="flex gap-1 md:gap-2 mb-8 z-10 w-full justify-center" id="odontogram-upper">
+                                <!-- Generated by JS -->
+                            </div>
+                            
+                            <!-- Rahang Bawah -->
+                            <div class="flex gap-1 md:gap-2 mt-8 z-10 w-full justify-center" id="odontogram-lower">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Detail Panel (Right) -->
+                        <div class="lg:w-80 flex-shrink-0 bg-white border-2 border-teal-100 rounded-xl p-6 shadow-md flex flex-col">
+                            <h3 class="text-lg font-bold text-slate-800 border-b pb-2 mb-4">Detail Gigi</h3>
+                            <div id="detail-empty" class="text-slate-400 text-center italic py-10 flex-grow flex items-center justify-center">
+                                Klik gigi pada bagan untuk melihat detail.
+                            </div>
+                            <div id="detail-content" class="hidden flex-col h-full">
+                                <div class="mb-4 text-center">
+                                    <h4 id="dtl-name" class="font-bold text-lg text-teal-700 leading-tight">Nama Gigi</h4>
+                                    <p id="dtl-pos" class="text-xs text-slate-500 uppercase tracking-wider mt-1">Rahang Kanan Atas</p>
+                                </div>
+                                
+                                <div class="space-y-4 mt-auto border-t pt-4">
+                                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded-lg">
+                                        <span class="text-sm font-semibold text-slate-600">FDI (Dua Angka)</span>
+                                        <span id="dtl-fdi" class="font-mono font-bold text-xl text-slate-800">--</span>
+                                    </div>
+                                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded-lg">
+                                        <span class="text-sm font-semibold text-slate-600">Universal</span>
+                                        <span id="dtl-uni" class="font-mono font-bold text-xl text-slate-800">--</span>
+                                    </div>
+                                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded-lg">
+                                        <span class="text-sm font-semibold text-slate-600">Palmer</span>
+                                        <div id="dtl-palmer-container" class="flex items-center text-xl text-slate-800">
+                                            <!-- Dynamic Palmer CSS Box -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: LATIHAN SOAL -->
+            <div id="sec-latihan" class="hidden fade-in max-w-3xl mx-auto">
+                <div class="bg-white p-8 rounded-2xl shadow-md border border-slate-200">
+                    <div id="quiz-intro" class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">&#x270D;</div>
+                        <h2 class="text-2xl font-bold text-slate-800 mb-4">Evaluasi Pemahaman</h2>
+                        <p class="text-slate-600 mb-8">Uji pengetahuan Anda tentang ketiga sistem nomenklatur. Latihan ini berisi 10 pertanyaan acak. Akurasi sangat penting dalam praktik klinis.</p>
+                        <button onclick="startQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-full shadow-lg transition-transform transform hover:-translate-y-1">Mulai Ujian</button>
+                    </div>
+
+                    <div id="quiz-area" class="hidden">
+                        <div class="flex justify-between items-center mb-6 text-sm font-medium text-slate-500">
+                            <span>Soal <span id="q-current" class="text-blue-600 font-bold text-lg">1</span> / 10</span>
+                            <span class="bg-slate-100 px-3 py-1 rounded-full">Skor: <span id="q-score" class="text-teal-600">0</span></span>
+                        </div>
+                        
+                        <div class="min-h-[120px] flex items-center justify-center mb-8 bg-slate-50 rounded-xl p-6 border border-slate-200">
+                            <h3 id="q-text" class="text-xl font-semibold text-slate-800 text-center leading-relaxed">
+                                Pertanyaan muncul di sini...
+                            </h3>
+                        </div>
+
+                        <div id="q-options" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Options generated by JS -->
+                        </div>
+
+                        <div id="q-feedback" class="mt-6 p-4 rounded-lg hidden text-center font-medium"></div>
+
+                        <div class="mt-8 text-right">
+                            <button id="btn-next" onclick="nextQuestion()" class="hidden bg-slate-800 hover:bg-slate-900 text-white py-2 px-6 rounded-lg font-medium transition-colors">Selanjutnya &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: LAPORAN -->
+            <div id="sec-laporan" class="hidden fade-in max-w-4xl mx-auto">
+                <div class="bg-white p-8 rounded-2xl shadow-md border border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6 text-center border-b pb-4">Laporan Hasil Belajar</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                        <!-- Score Summary -->
+                        <div class="col-span-1 text-center bg-slate-50 p-6 rounded-xl border border-slate-200 h-full flex flex-col justify-center">
+                            <p class="text-slate-500 font-medium mb-2">Nilai Akhir</p>
+                            <div id="rep-score-display" class="text-6xl font-bold text-teal-600 mb-2">--</div>
+                            <p id="rep-grade" class="text-lg font-semibold text-slate-700">Skala 0-100</p>
+                            <p id="rep-msg" class="mt-4 text-sm text-slate-600 italic">Selesaikan latihan untuk melihat hasil.</p>
+                        </div>
+
+                        <!-- Chart Container -->
+                        <div class="col-span-1 md:col-span-2">
+                            <div class="chart-container">
+                                <canvas id="resultChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-10 text-center space-x-4">
+                        <button onclick="navigate('latihan'); startQuiz();" class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-2 px-6 rounded-lg transition-colors">Ulangi Latihan</button>
+                        <button onclick="navigate('simulasi')" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium py-2 px-6 rounded-lg transition-colors">Kembali ke Simulasi</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // --- DATA STRUCTURE GENERATION ---
+        // Generates the tooth data programmatically to keep the code clean and structured.
+        
+        const toothNamesTetap = ['Insisivus Sentral', 'Insisivus Lateral', 'Kanus (Taring)', 'Premolar 1', 'Premolar 2', 'Molar 1', 'Molar 2', 'Molar 3'];
+        const toothNamesSusu = ['Insisivus Sentral', 'Insisivus Lateral', 'Kanus (Taring)', 'Molar 1', 'Molar 2'];
+        const quadNames = { 1: 'Kanan Atas', 2: 'Kiri Atas', 3: 'Kiri Bawah', 4: 'Kanan Bawah' };
+
+        // Database
+        const db = { tetap: { 1:[], 2:[], 3:[], 4:[] }, susu: { 5:[], 6:[], 7:[], 8:[] } };
+
+        // Generate Permanent (Tetap)
+        for(let q=1; q<=4; q++){
+            let isUpper = q === 1 || q === 2;
+            let isRight = q === 1 || q === 4;
+            
+            for(let i=1; i<=8; i++){
+                // Universal logic
+                let uni = 0;
+                if(q===1) uni = 9 - i;      // UR: 8,7,6..1 (Start from M3 to I1) -> Wait, visual order is I1 to M3. Universal standard: UR8=1, UR1=8.
+                if(q===2) uni = 8 + i;      // UL: 9,10..16
+                if(q===3) uni = 25 - i;     // LL: 24,23..17
+                if(q===4) uni = 24 + i;     // LR: 25,26..32
+
+                // Palmer class logic
+                let pClass = q===1 ? 'p-ur' : q===2 ? 'p-ul' : q===3 ? 'p-ll' : 'p-lr';
+
+                db.tetap[q].push({
+                    id: `T${q}${i}`,
+                    type: 'tetap',
+                    quadrant: q,
+                    position: i,
+                    fdi: `${q}${i}`,
+                    universal: uni.toString(),
+                    palmer: i.toString(),
+                    palmerClass: pClass,
+                    name: `${toothNamesTetap[i-1]} ${quadNames[q]}`,
+                    isUpper: isUpper,
+                    isRight: isRight
+                });
+            }
+        }
+
+        // Generate Deciduous (Susu)
+        const alphaSusu = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T'];
+        for(let q=5; q<=8; q++){
+            let isUpper = q === 5 || q === 6;
+            let isRight = q === 5 || q === 8;
+            
+            for(let i=1; i<=5; i++){
+                // Universal logic for Susu (A-T)
+                let uniIndex = 0; // 0-19
+                if(q===5) uniIndex = 5 - i;      // UR: E,D,C,B,A (A is UR5? No, Universal starts UR Molar 2 = A, UR I1 = E) -> Correct: E(M2),D,C,B,A(I1) -> from midline it's A,B,C,D,E
+                if(q===6) uniIndex = 4 + i;      // UL: F,G,H,I,J
+                if(q===7) uniIndex = 15 - i;     // LL: K,L,M,N,O -> wait, LL M2 is K. So from midline (i=1) it's O,N,M,L,K.
+                if(q===8) uniIndex = 14 + i;     // LR: P,Q,R,S,T -> wait, LR I1 is P. P,Q,R,S,T.
+
+                // Let's standardise Universal Susu mapping from midline (i=1 to 5)
+                let uChar = '';
+                if(q===5) uChar = String.fromCharCode(69 - (i-1)); // E, D, C, B, A (i=1 is E -> 69. wait. UR I1 is E. M2 is A. i=1->E, i=5->A)
+                if(q===6) uChar = String.fromCharCode(70 + (i-1)); // F, G, H, I, J (i=1->F, i=5->J)
+                if(q===7) uChar = String.fromCharCode(79 - (i-1)); // O, N, M, L, K (i=1->O, i=5->K)
+                if(q===8) uChar = String.fromCharCode(80 + (i-1)); // P, Q, R, S, T (i=1->P, i=5->T)
+
+                let pClass = q===5 ? 'p-ur' : q===6 ? 'p-ul' : q===7 ? 'p-ll' : 'p-lr';
+                let pChar = String.fromCharCode(65 + (i-1)); // A, B, C, D, E
+
+                db.susu[q].push({
+                    id: `S${q}${i}`,
+                    type: 'susu',
+                    quadrant: q,
+                    position: i,
+                    fdi: `${q}${i}`,
+                    universal: uChar,
+                    palmer: pChar,
+                    palmerClass: pClass,
+                    name: `${toothNamesSusu[i-1]} ${quadNames[q-4]} Susu`,
+                    isUpper: isUpper,
+                    isRight: isRight
+                });
+            }
+        }
+
+        // --- STATE MANAGEMENT ---
+        let currentState = {
+            view: 'teori',
+            odontoType: 'tetap',
+            selectedTooth: null,
+            quiz: {
+                active: false,
+                questions: [],
+                currentIndex: 0,
+                score: 0
+            }
+        };
+
+        // --- NAVIGATION LOGIC ---
+        function navigate(viewId) {
+            // Update nav UI
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active', 'text-teal-600'));
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.add('text-slate-500'));
+            document.getElementById(`nav-${viewId}`).classList.add('active', 'text-teal-600');
+            document.getElementById(`nav-${viewId}`).classList.remove('text-slate-500');
+
+            // Hide all sections, show target
+            ['teori', 'simulasi', 'latihan', 'laporan'].forEach(id => {
+                document.getElementById(`sec-${id}`).classList.add('hidden');
+            });
+            document.getElementById(`sec-${viewId}`).classList.remove('hidden');
+            
+            currentState.view = viewId;
+
+            // Trigger specific actions on view load
+            if (viewId === 'simulasi' && !document.getElementById('odontogram-upper').innerHTML) {
+                renderOdontogram('tetap');
+            }
+        }
+
+        // --- ODONTOGRAM LOGIC ---
+        function setOdontoType(type) {
+            currentState.odontoType = type;
+            
+            // UI Toggle updates
+            const btnTetap = document.getElementById('btn-type-tetap');
+            const btnSusu = document.getElementById('btn-type-susu');
+            
+            if (type === 'tetap') {
+                btnTetap.className = "px-6 py-2 rounded-md font-medium text-sm transition-colors bg-white shadow-sm text-teal-700";
+                btnSusu.className = "px-6 py-2 rounded-md font-medium text-sm transition-colors text-slate-500 hover:text-slate-700";
+            } else {
+                btnSusu.className = "px-6 py-2 rounded-md font-medium text-sm transition-colors bg-white shadow-sm text-teal-700";
+                btnTetap.className = "px-6 py-2 rounded-md font-medium text-sm transition-colors text-slate-500 hover:text-slate-700";
+            }
+
+            renderOdontogram(type);
+            clearDetail();
+        }
+
+        function renderOdontogram(type) {
+            const upperContainer = document.getElementById('odontogram-upper');
+            const lowerContainer = document.getElementById('odontogram-lower');
+            upperContainer.innerHTML = '';
+            lowerContainer.innerHTML = '';
+
+            const qSet = type === 'tetap' ? [1,2,3,4] : [5,6,7,8];
+            const dataSet = db[type];
+
+            // Render Upper (Right 1, Left 2 or Right 5, Left 6)
+            // Visual order from left to right on screen: UR8...UR1 | UL1...UL8
+            let upperHTML = '';
+            // Right quadrant (render reverse)
+            let rightQuad = dataSet[qSet[0]].slice().reverse();
+            rightQuad.forEach(t => upperHTML += createToothHTML(t));
+            // Gap for midline
+            upperHTML += '<div class="w-2 md:w-4"></div>';
+            // Left quadrant
+            dataSet[qSet[1]].forEach(t => upperHTML += createToothHTML(t));
+            upperContainer.innerHTML = upperHTML;
+
+            // Render Lower (Right 4, Left 3 or Right 8, Left 7)
+            let lowerHTML = '';
+            // Right quadrant (render reverse)
+            let rightLowerQuad = dataSet[qSet[3]].slice().reverse();
+            rightLowerQuad.forEach(t => lowerHTML += createToothHTML(t));
+            // Gap for midline
+            lowerHTML += '<div class="w-2 md:w-4"></div>';
+            // Left quadrant
+            dataSet[qSet[2]].forEach(t => lowerHTML += createToothHTML(t));
+            lowerContainer.innerHTML = lowerHTML;
+        }
+
+        function createToothHTML(tooth) {
+            const shapeClass = tooth.isUpper ? 'tooth-upper' : 'tooth-lower';
+            // Add position number inside for easy ID during simulation
+            return `<div id="tooth-${tooth.id}" class="tooth ${shapeClass}" onclick="selectTooth('${tooth.id}', '${tooth.type}', ${tooth.quadrant}, ${tooth.position-1})">
+                        <span class="text-xs text-slate-400 font-medium">${tooth.position}</span>
+                    </div>`;
+        }
+
+        function selectTooth(id, type, quad, index) {
+            // UI Selection
+            document.querySelectorAll('.tooth').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tooth-${id}`).classList.add('active');
+
+            // Data fetch
+            // Find correct quadrant array, since we reversed some for display, we need original data
+            let toothData;
+            if(type === 'tetap'){
+                 toothData = db.tetap[quad].find(t => t.id === id);
+            } else {
+                 toothData = db.susu[quad].find(t => t.id === id);
+            }
+
+            // Update Detail Panel
+            document.getElementById('detail-empty').classList.add('hidden');
+            const content = document.getElementById('detail-content');
+            content.classList.remove('hidden');
+            content.classList.add('fade-in');
+            
+            // Re-trigger animation
+            content.style.animation = 'none';
+            content.offsetHeight; /* trigger reflow */
+            content.style.animation = null; 
+
+            document.getElementById('dtl-name').innerText = toothData.name;
+            document.getElementById('dtl-pos').innerText = `Gigi ${type === 'tetap' ? 'Dewasa' : 'Anak'}`;
+            document.getElementById('dtl-fdi').innerText = toothData.fdi;
+            document.getElementById('dtl-uni').innerText = toothData.universal;
+            
+            const palmerContainer = document.getElementById('dtl-palmer-container');
+            palmerContainer.innerHTML = `<span class="palmer-box ${toothData.palmerClass}">${toothData.palmer}</span>`;
+        }
+
+        function clearDetail() {
+            document.querySelectorAll('.tooth').forEach(el => el.classList.remove('active'));
+            document.getElementById('detail-empty').classList.remove('hidden');
+            document.getElementById('detail-content').classList.add('hidden');
+        }
+
+
+        // --- QUIZ LOGIC ---
+        function generateQuestions() {
+            let questions = [];
+            const allTeeth = [...db.tetap[1], ...db.tetap[2], ...db.tetap[3], ...db.tetap[4], 
+                              ...db.susu[5], ...db.susu[6], ...db.susu[7], ...db.susu[8]];
+
+            // Generate 10 random questions
+            for(let i=0; i<10; i++) {
+                let targetTooth = allTeeth[Math.floor(Math.random() * allTeeth.length)];
+                let qType = Math.floor(Math.random() * 3); // 0: FDI to Name, 1: Name to Universal, 2: Name to Palmer
+                
+                let qText, correctAnswer, optionsData;
+
+                if(qType === 0) {
+                    qText = `Gigi mana yang direpresentasikan oleh nomor FDI <span class="font-bold text-teal-600 text-2xl px-1">${targetTooth.fdi}</span>?`;
+                    correctAnswer = targetTooth.name;
+                    optionsData = allTeeth.filter(t => t.id !== targetTooth.id).sort(() => 0.5 - Math.random()).slice(0,3).map(t => t.name);
+                } else if (qType === 1) {
+                    qText = `Berapakah nomor <span class="font-bold text-blue-600">Sistem Universal</span> untuk gigi: <br/><span class="italic font-normal">${targetTooth.name}</span>?`;
+                    correctAnswer = targetTooth.universal;
+                    optionsData = allTeeth.filter(t => t.type === targetTooth.type && t.id !== targetTooth.id).sort(() => 0.5 - Math.random()).slice(0,3).map(t => t.universal);
+                } else {
+                    // Palmer is tricky due to CSS formatting needed in buttons. Let's do FDI from Name instead to keep UI clean in buttons.
+                    qText = `Berapakah nomor <span class="font-bold text-purple-600">Sistem FDI (Dua Angka)</span> untuk gigi: <br/><span class="italic font-normal">${targetTooth.name}</span>?`;
+                    correctAnswer = targetTooth.fdi;
+                    optionsData = allTeeth.filter(t => t.type === targetTooth.type && t.id !== targetTooth.id).sort(() => 0.5 - Math.random()).slice(0,3).map(t => t.fdi);
+                }
+
+                // Assemble options and shuffle
+                optionsData.push(correctAnswer);
+                optionsData.sort(() => 0.5 - Math.random());
+
+                questions.push({
+                    text: qText,
+                    options: optionsData,
+                    answer: correctAnswer
+                });
+            }
+            return questions;
+        }
+
+        function startQuiz() {
+            document.getElementById('quiz-intro').classList.add('hidden');
+            document.getElementById('quiz-area').classList.remove('hidden');
+            
+            currentState.quiz.questions = generateQuestions();
+            currentState.quiz.currentIndex = 0;
+            currentState.quiz.score = 0;
+            currentState.quiz.active = true;
+            
+            updateScoreUI();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = currentState.quiz.questions[currentState.quiz.currentIndex];
+            document.getElementById('q-current').innerText = currentState.quiz.currentIndex + 1;
+            document.getElementById('q-text').innerHTML = q.text;
+            
+            const optsContainer = document.getElementById('q-options');
+            optsContainer.innerHTML = '';
+            
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-blue-400 hover:bg-blue-50 font-medium text-slate-700 transition-all bg-white";
+                btn.innerHTML = opt;
+                btn.onclick = () => checkAnswer(btn, opt, q.answer);
+                optsContainer.appendChild(btn);
+            });
+
+            document.getElementById('q-feedback').classList.add('hidden');
+            document.getElementById('btn-next').classList.add('hidden');
+        }
+
+        function checkAnswer(btnElement, selected, correct) {
+            // Disable all buttons
+            const buttons = document.getElementById('q-options').querySelectorAll('button');
+            buttons.forEach(b => { b.disabled = true; b.classList.remove('hover:border-blue-400', 'hover:bg-blue-50'); });
+
+            const feedback = document.getElementById('q-feedback');
+            feedback.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+            if(selected === correct) {
+                btnElement.classList.add('border-green-500', 'bg-green-50', 'text-green-800');
+                feedback.classList.add('bg-green-100', 'text-green-800');
+                feedback.innerText = "Benar! Jawaban akurat.";
+                currentState.quiz.score += 10;
+                updateScoreUI();
+            } else {
+                btnElement.classList.add('border-red-500', 'bg-red-50', 'text-red-800');
+                // Highlight correct
+                buttons.forEach(b => {
+                    if(b.innerHTML === correct) b.classList.add('border-green-500', 'bg-green-50');
+                });
+                feedback.classList.add('bg-red-100', 'text-red-800');
+                feedback.innerHTML = `Kurang tepat. Jawaban yang benar adalah: <strong>${correct}</strong>`;
+            }
+
+            document.getElementById('btn-next').classList.remove('hidden');
+        }
+
+        function updateScoreUI() {
+            document.getElementById('q-score').innerText = currentState.quiz.score;
+        }
+
+        function nextQuestion() {
+            currentState.quiz.currentIndex++;
+            if (currentState.quiz.currentIndex < currentState.quiz.questions.length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            // Unhide report nav link
+            document.getElementById('nav-laporan').classList.remove('hidden');
+            generateReport();
+            navigate('laporan');
+        }
+
+        // --- REPORT LOGIC (Chart.js) ---
+        let reportChartInstance = null;
+
+        function generateReport() {
+            const finalScore = currentState.quiz.score;
+            document.getElementById('rep-score-display').innerText = finalScore;
+            
+            let msg = "";
+            let color = "";
+            if(finalScore >= 80) { msg = "Luar biasa! Pemahaman Anda sangat klinis."; color = "#0d9488"; } // teal-600
+            else if(finalScore >= 60) { msg = "Cukup baik. Perlu sedikit review ulang."; color = "#eab308"; } // yellow-500
+            else { msg = "Terus semangat belajar! Mari tinjau materi teori lagi."; color = "#ef4444"; } // red-500
+            
+            const msgEl = document.getElementById('rep-msg');
+            msgEl.innerText = msg;
+            msgEl.style.color = color;
+            document.getElementById('rep-score-display').style.color = color;
+
+            renderChart(finalScore);
+        }
+
+        function renderChart(score) {
+            const ctx = document.getElementById('resultChart').getContext('2d');
+            
+            if (reportChartInstance) {
+                reportChartInstance.destroy();
+            }
+
+            const correct = score / 10;
+            const incorrect = 10 - correct;
+
+            reportChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Benar', 'Salah'],
+                    datasets: [{
+                        data: [correct, incorrect],
+                        backgroundColor: ['#14b8a6', '#f1f5f9'], // teal-500, slate-100
+                        hoverBackgroundColor: ['#0d9488', '#e2e8f0'],
+                        borderWidth: 0,
+                        cutout: '75%'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Important for responsive container
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "'Inter', sans-serif" } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.label}: ${context.raw} Soal`;
+                                }
+                            }
+                        }
+                    },
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup base layout but wait for user interaction to build DOM-heavy stuff
+        });
+
+    </script>
+</body>
+</html>
