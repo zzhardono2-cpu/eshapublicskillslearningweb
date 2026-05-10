@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediktor 4D: Mainan Analisis Statistik</title by Horas Sutarto>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Slate & Indigo Minimalist -->
+    <!-- Application Structure Plan: Dashboard layout with a split view. The left panel is for data entry (History and Predictions) following a chronological workflow. The right panel is dynamic, showing the 'system calculation' state, the final result, statistical visualization (Chart.js), and the requested appreciation/feedback score. This ensures users see their input directly influencing the output and the statistical chart. -->
+    <!-- Visualization & Content Choices: 
+         1. Form Inputs -> User Interaction -> Standard input fields with digit validation.
+         2. Digit Frequency -> Data Visualization -> Bar Chart (Chart.js) -> Shows the statistical basis of the generated number from the history.
+         3. Feedback/Appreciation -> Status Display -> Dynamic text and color-coded cards based on prediction accuracy (matching digits and exact matches).
+         4. NO SVG/Mermaid used. HTML/CSS entities used for visual cues.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #1e293b; /* slate-800 */
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        /* Chart Container Styling Requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 30vh;
+            max-height: 300px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-height: 350px;
+            }
+        }
+        .digit-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-radius: 0.375rem;
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            margin: 0 0.2rem;
+        }
+        .digit-match { background-color: #dcfce7; border-color: #86efac; color: #166534; }
+        .digit-miss { background-color: #ffe4e6; border-color: #fda4af; color: #9f1239; }
+        
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4f46e5;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8 text-center md:text-left">
+            <h1 class="text-3xl md:text-4xl font-bold text-indigo-900 mb-2">Horas Sutarto: Mainan Statistik</h1>
+            <p class="text-slate-600 max-w-2xl">
+                Masukkan 5 data historis terakhir, buat tebakan Anda, dan biarkan sistem melakukan analisis statistik frekuensi kemunculan angka untuk menghasilkan keluaran putaran ini. Buktikan insting Anda!
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- LEFT PANEL: INPUTS -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- Section 1: History -->
+                <section class="glass-panel rounded-xl p-6">
+                    <div class="mb-4">
+                        <h2 class="text-xl font-semibold text-slate-800 border-b pb-2">1. Data Historis</h2>
+                        <p class="text-sm text-slate-500 mt-1">Masukkan 5 hasil angka 4 digit sebelumnya.</p>
+                    </div>
+                    <div class="space-y-3" id="history-inputs">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-sm font-medium text-slate-400 w-6">#1</span>
+                            <input type="text" maxlength="4" class="hist-input w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-center tracking-[0.5em] font-semibold text-lg" placeholder="0000" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-sm font-medium text-slate-400 w-6">#2</span>
+                            <input type="text" maxlength="4" class="hist-input w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-center tracking-[0.5em] font-semibold text-lg" placeholder="0000" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-sm font-medium text-slate-400 w-6">#3</span>
+                            <input type="text" maxlength="4" class="hist-input w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-center tracking-[0.5em] font-semibold text-lg" placeholder="0000" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-sm font-medium text-slate-400 w-6">#4</span>
+                            <input type="text" maxlength="4" class="hist-input w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-center tracking-[0.5em] font-semibold text-lg" placeholder="0000" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-sm font-medium text-slate-400 w-6">#5</span>
+                            <input type="text" maxlength="4" class="hist-input w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-center tracking-[0.5em] font-semibold text-lg" placeholder="0000" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        </div>
+                    </div>
+                    <button onclick="fillRandomHistory()" class="mt-4 text-xs text-indigo-600 hover:text-indigo-800 font-medium">&#x21BB; Isi Acak (Demo)</button>
+                </section>
+
+                <!-- Section 2: Predictions -->
+                <section class="glass-panel rounded-xl p-6 border-t-4 border-indigo-500">
+                    <div class="mb-4">
+                        <h2 class="text-xl font-semibold text-slate-800 border-b pb-2">2. Tebakan Anda</h2>
+                        <p class="text-sm text-slate-500 mt-1">Masukkan prediksi 4 digit angka Anda untuk putaran ini.</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-emerald-700 mb-1">&#x2714; Angka yang AKAN keluar</label>
+                            <input type="text" id="pred-will-appear" maxlength="4" class="w-full px-4 py-3 border border-emerald-300 bg-emerald-50 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-center tracking-[0.5em] font-bold text-xl text-emerald-900" placeholder="XXXX" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-rose-700 mb-1">&#x2716; Angka yang TIDAK AKAN keluar</label>
+                            <input type="text" id="pred-wont-appear" maxlength="4" class="w-full px-4 py-3 border border-rose-300 bg-rose-50 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none text-center tracking-[0.5em] font-bold text-xl text-rose-900" placeholder="XXXX" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        </div>
+                    </div>
+                    <button id="btn-start" onclick="startRound()" class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition-all transform hover:scale-[1.02] active:scale-95">
+                        &#x25B6; Mulai Putaran Analisis
+                    </button>
+                    <p id="error-msg" class="text-rose-500 text-sm mt-2 text-center hidden">Mohon isi semua kolom dengan 4 digit angka.</p>
+                </section>
+
+            </div>
+
+            <!-- RIGHT PANEL: RESULTS & STATS -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Waiting State -->
+                <div id="state-waiting" class="glass-panel rounded-xl p-12 flex flex-col items-center justify-center h-full text-center min-h-[400px]">
+                    <div class="text-6xl text-slate-200 mb-4">&#x1F52E;</div>
+                    <h3 class="text-2xl font-bold text-slate-400">Menunggu Data...</h3>
+                    <p class="text-slate-500 mt-2">Isi riwayat dan tebakan Anda, lalu klik "Mulai Putaran".</p>
+                </div>
+
+                <!-- Processing State -->
+                <div id="state-processing" class="glass-panel rounded-xl p-12 flex flex-col items-center justify-center h-full text-center hidden min-h-[400px]">
+                    <div class="loader mb-6"></div>
+                    <h3 class="text-xl font-bold text-indigo-600">Sistem Sedang Menganalisis...</h3>
+                    <p class="text-slate-500 mt-2 text-sm">Menghitung probabilitas berdasarkan frekuensi data historis.</p>
+                </div>
+
+                <!-- Result State -->
+                <div id="state-result" class="hidden space-y-6">
+                    
+                    <!-- Section 3: Final Output -->
+                    <section class="glass-panel rounded-xl p-6 text-center bg-gradient-to-br from-indigo-50 to-white">
+                        <h2 class="text-lg font-semibold text-slate-600 mb-2">Hasil Analisis Sistem (Putaran <span id="round-number">1</span>)</h2>
+                        <div class="flex justify-center items-center my-4" id="final-result-display">
+                            <!-- Digits injected here via JS -->
+                        </div>
+                        <p class="text-xs text-slate-400">*Dihasilkan berdasarkan bobot frekuensi angka pada history.</p>
+                    </section>
+
+                    <!-- Section 4: Appreciation & Evaluation -->
+                    <section class="glass-panel rounded-xl p-6">
+                        <h2 class="text-xl font-semibold text-slate-800 border-b pb-2 mb-4">Apresiasi & Hasil Tebakan</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <!-- Eval: Will Appear -->
+                            <div class="p-4 rounded-lg border bg-slate-50">
+                                <h4 class="text-sm font-medium text-slate-500 mb-2">Tebakan AKAN Keluar: <span id="display-pred-will" class="font-bold text-slate-800"></span></h4>
+                                <div id="eval-will-display" class="flex justify-center mb-2"></div>
+                                <p id="eval-will-text" class="text-sm font-medium text-center mt-2"></p>
+                            </div>
+                            
+                            <!-- Eval: Won't Appear -->
+                            <div class="p-4 rounded-lg border bg-slate-50">
+                                <h4 class="text-sm font-medium text-slate-500 mb-2">Tebakan TIDAK Keluar: <span id="display-pred-wont" class="font-bold text-slate-800"></span></h4>
+                                <div id="eval-wont-display" class="flex justify-center mb-2"></div>
+                                <p id="eval-wont-text" class="text-sm font-medium text-center mt-2"></p>
+                            </div>
+                        </div>
+
+                        <!-- Grand Appreciation Message -->
+                        <div id="appreciation-box" class="p-4 rounded-xl text-center border-2 transition-all">
+                            <h3 id="appreciation-title" class="text-lg font-bold mb-1"></h3>
+                            <p id="appreciation-desc" class="text-sm"></p>
+                            <div class="mt-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Skor Anda: <span id="total-score" class="text-indigo-600 text-lg">0</span></div>
+                        </div>
+                    </section>
+
+                    <!-- Stats Visualization -->
+                    <section class="glass-panel rounded-xl p-6">
+                        <h2 class="text-xl font-semibold text-slate-800 mb-4">Frekuensi Angka Historis</h2>
+                        <p class="text-sm text-slate-600 mb-4">Sistem kami menghitung angka mana yang paling sering muncul dari 5 input Anda untuk meningkatkan peluang angka tersebut terpilih kembali.</p>
+                        <div class="chart-container">
+                            <canvas id="statsChart"></canvas>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- State Management ---
+        let currentRound = 0;
+        let totalScore = 0;
+        let chartInstance = null;
+
+        // --- Core Logic ---
+
+        function fillRandomHistory() {
+            const inputs = document.querySelectorAll('.hist-input');
+            inputs.forEach(input => {
+                let randomNum = Math.floor(1000 + Math.random() * 9000).toString(); // Generate 4 digit string
+                input.value = randomNum;
+            });
+        }
+
+        function validateInputs() {
+            const histInputs = Array.from(document.querySelectorAll('.hist-input')).map(input => input.value);
+            const predWill = document.getElementById('pred-will-appear').value;
+            const predWont = document.getElementById('pred-wont-appear').value;
+
+            // Check if all are 4 digits
+            const isValid = [...histInputs, predWill, predWont].every(val => val.length === 4 && /^\d+$/.test(val));
+            
+            const errorMsg = document.getElementById('error-msg');
+            if (!isValid) {
+                errorMsg.classList.remove('hidden');
+                return null;
+            }
+            errorMsg.classList.add('hidden');
+
+            return { history: histInputs, will: predWill, wont: predWont };
+        }
+
+        // The "Statistical" Mock Engine
+        function generateStatisticalResult(history) {
+            // We analyze digit frequency per position (0 to 3)
+            let columns = [[], [], [], []];
+            history.forEach(numStr => {
+                for(let i=0; i<4; i++) {
+                    columns[i].push(numStr[i]);
+                }
+            });
+
+            let result = "";
+            // To make it slightly random but based on history, we pick a random digit from the historical column array.
+            // This means numbers that appeared more often in a position have a higher chance of appearing again.
+            for(let i=0; i<4; i++) {
+                let randomIndex = Math.floor(Math.random() * columns[i].length);
+                result += columns[i][randomIndex];
+            }
+            return result;
+        }
+
+        function evaluateDigitMatch(prediction, result) {
+            let correctDigits = 0;
+            let displayHTML = '';
+            for(let i=0; i<4; i++) {
+                if(prediction[i] === result[i]) {
+                    correctDigits++;
+                    displayHTML += `<span class="digit-box digit-match">${prediction[i]}</span>`;
+                } else {
+                    displayHTML += `<span class="digit-box digit-miss">${prediction[i]}</span>`;
+                }
+            }
+            return { correctDigits, displayHTML };
+        }
+
+        function updateChart(history) {
+            // Calculate total digit frequency (0-9) across all history
+            let frequencies = Array(10).fill(0);
+            history.forEach(numStr => {
+                for(let i=0; i<4; i++) {
+                    frequencies[parseInt(numStr[i])]++;
+                }
+            });
+
+            const ctx = document.getElementById('statsChart').getContext('2d');
+            
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+                    datasets: [{
+                        label: 'Frekuensi Kemunculan',
+                        data: frequencies,
+                        backgroundColor: 'rgba(79, 70, 229, 0.6)',
+                        borderColor: 'rgb(79, 70, 229)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` Muncul ${context.raw} kali`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- UI Updates & Interaction Flow ---
+
+        function startRound() {
+            const data = validateInputs();
+            if (!data) return;
+
+            // UI Transitions
+            document.getElementById('state-waiting').classList.add('hidden');
+            document.getElementById('state-result').classList.add('hidden');
+            document.getElementById('state-processing').classList.remove('hidden');
+            document.getElementById('btn-start').disabled = true;
+            document.getElementById('btn-start').classList.add('opacity-50', 'cursor-not-allowed');
+
+            // Simulate calculation time for effect
+            setTimeout(() => {
+                processRound(data);
+            }, 1500);
+        }
+
+        function processRound(data) {
+            currentRound++;
+            document.getElementById('round-number').innerText = currentRound;
+
+            const result = generateStatisticalResult(data.history);
+            
+            // Render Result Digits
+            const resultDisplay = document.getElementById('final-result-display');
+            resultDisplay.innerHTML = '';
+            for(let i=0; i<4; i++) {
+                resultDisplay.innerHTML += `<span class="digit-box bg-indigo-600 text-white border-indigo-700">${result[i]}</span>`;
+            }
+
+            // Evaluate "Will Appear"
+            document.getElementById('display-pred-will').innerText = data.will;
+            const evalWill = evaluateDigitMatch(data.will, result);
+            document.getElementById('eval-will-display').innerHTML = evalWill.displayHTML;
+            
+            let willScore = evalWill.correctDigits * 25; // 25 pts per correct digit
+            let willText = '';
+            if(evalWill.correctDigits === 4) { willText = "Sempurna! 4 Digit Tepat. (+100)"; }
+            else if(evalWill.correctDigits > 0) { willText = `Lumayan, ${evalWill.correctDigits} digit tepat posisinya. (+${willScore})`; }
+            else { willText = "Meleset sama sekali. (0)"; }
+            document.getElementById('eval-will-text').innerText = willText;
+            document.getElementById('eval-will-text').className = `text-sm font-medium text-center mt-2 ${evalWill.correctDigits > 0 ? 'text-emerald-600' : 'text-slate-500'}`;
+
+            // Evaluate "Won't Appear"
+            document.getElementById('display-pred-wont').innerText = data.wont;
+            const evalWont = evaluateDigitMatch(data.wont, result);
+            document.getElementById('eval-wont-display').innerHTML = evalWont.displayHTML;
+            
+            let wontScore = 0;
+            let wontText = '';
+            if(evalWont.correctDigits === 0) { 
+                wontScore = 50; 
+                wontText = "Berhasil! Angka tersebut benar-benar tidak keluar. (+50)"; 
+                document.getElementById('eval-wont-text').className = "text-sm font-medium text-center mt-2 text-emerald-600";
+            } else { 
+                wontScore = -25 * evalWont.correctDigits; // Penalty!
+                wontText = `Oops! ${evalWont.correctDigits} digit yang Anda hindari malah keluar! (${wontScore})`; 
+                document.getElementById('eval-wont-text').className = "text-sm font-medium text-center mt-2 text-rose-600";
+            }
+            document.getElementById('eval-wont-text').innerText = wontText;
+
+            // Calculate Total Round Score & Overall
+            let roundScore = willScore + wontScore;
+            totalScore += roundScore;
+            document.getElementById('total-score').innerText = totalScore;
+
+            // Appreciation Logic based on requested prompt constraint
+            const appBox = document.getElementById('appreciation-box');
+            const appTitle = document.getElementById('appreciation-title');
+            const appDesc = document.getElementById('appreciation-desc');
+
+            // Reset classes
+            appBox.className = "p-4 rounded-xl text-center border-2 transition-all mt-4";
+
+            if (evalWill.correctDigits > 0) {
+                // If they got at least one digit right on the 'Will appear' guess
+                if (evalWill.correctDigits === 4) {
+                    appBox.classList.add('bg-emerald-50', 'border-emerald-400', 'text-emerald-900');
+                    appTitle.innerText = "🌟 SANGAT JAGO! INSTING DEWA!";
+                    appDesc.innerText = "Tebakan Anda sempurna. Anda membaca statistik dengan akurat!";
+                } else {
+                    appBox.classList.add('bg-indigo-50', 'border-indigo-300', 'text-indigo-900');
+                    appTitle.innerText = "👍 Boleh Juga, Semakin Jago!";
+                    appDesc.innerText = `Ada ${evalWill.correctDigits} angka tebakan Anda yang muncul. Semakin banyak yang muncul, semakin jago!`;
+                }
+            } else {
+                // Completely missed the 'Will appear' guess
+                appBox.classList.add('bg-rose-50', 'border-rose-300', 'text-rose-900');
+                appTitle.innerText = "😅 Anda Kurang Jago.";
+                appDesc.innerText = "Sama sekali tidak ada angka tebakan yang muncul. Sistem terlalu acak atau analisis Anda perlu diasah lagi.";
+            }
+
+            // Update Visualization
+            updateChart(data.history);
+
+            // Show Results
+            document.getElementById('state-processing').classList.add('hidden');
+            document.getElementById('state-result').classList.remove('hidden');
+            document.getElementById('btn-start').disabled = false;
+            document.getElementById('btn-start').classList.remove('opacity-50', 'cursor-not-allowed');
+            document.getElementById('btn-start').innerHTML = "&#x21BB; Mulai Putaran Selanjutnya";
+        }
+    </script>
+</body>
+</html>
