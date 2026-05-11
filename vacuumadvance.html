@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vakum dalam RAC | eshapublicskillslearning</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Nunito:wght@300;400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #050c1a;
+  --bg-mid: #0a1628;
+  --bg-card: #0d1f3c;
+  --bg-card2: #071426;
+  --accent-cyan: #00e5ff;
+  --accent-amber: #ffb300;
+  --accent-green: #00e676;
+  --accent-red: #ff4757;
+  --accent-purple: #7c4dff;
+  --text-primary: #e8f4fd;
+  --text-secondary: #8ab4d4;
+  --text-muted: #4a6fa5;
+  --border-glow: rgba(0,229,255,0.25);
+  --border-dim: rgba(0,229,255,0.08);
+  --font-head: 'Rajdhani', sans-serif;
+  --font-body: 'Nunito', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== BACKGROUND GRID ===== */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events:none;
+}
+
+/* ===== HEADER ===== */
+header {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background: rgba(5,12,26,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-glow);
+  padding: 0 24px;
+  height: 64px;
+  display: flex; align-items:center; justify-content:space-between;
+}
+.brand { display:flex; align-items:center; gap:10px; }
+.brand-logo {
+  width:38px; height:38px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-family: var(--font-head); font-weight:700; font-size:18px;
+  color:#fff;
+}
+.brand-text { font-family:var(--font-head); font-size:13px; line-height:1.2; }
+.brand-text .main { color: var(--accent-cyan); font-size:15px; font-weight:700; letter-spacing:1px; }
+.brand-text .sub { color: var(--text-secondary); font-size:11px; }
+.instructor-badge {
+  font-size:11px; color:var(--accent-amber);
+  background: rgba(255,179,0,0.1);
+  border:1px solid rgba(255,179,0,0.3);
+  border-radius:20px;
+  padding: 4px 12px;
+  font-family: var(--font-head);
+  letter-spacing:0.5px;
+}
+
+/* ===== NAV TABS ===== */
+.nav-container {
+  position:fixed; top:64px; left:0; right:0; z-index:99;
+  background: rgba(7,20,38,0.95);
+  border-bottom: 1px solid var(--border-dim);
+  display:flex; overflow-x:auto;
+  scrollbar-width:none;
+}
+.nav-container::-webkit-scrollbar { display:none; }
+.nav-tab {
+  flex-shrink:0;
+  padding: 14px 20px;
+  font-family: var(--font-head);
+  font-size:13px; font-weight:600;
+  letter-spacing:0.8px;
+  color: var(--text-muted);
+  cursor:pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.25s;
+  white-space:nowrap;
+  display:flex; align-items:center; gap:6px;
+  text-transform:uppercase;
+}
+.nav-tab:hover { color:var(--text-secondary); }
+.nav-tab.active { color:var(--accent-cyan); border-bottom-color:var(--accent-cyan); }
+.nav-tab .tab-num {
+  width:20px; height:20px;
+  background: rgba(0,229,255,0.1);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px;
+}
+.nav-tab.active .tab-num { background: var(--accent-cyan); color: var(--bg-deep); }
+
+/* ===== MAIN CONTENT ===== */
+main {
+  padding-top: 130px;
+  min-height:100vh;
+  position:relative; z-index:1;
+}
+
+.section {
+  display:none;
+  padding: 32px 24px 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease;
+}
+.section.active { display:block; }
+
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(16px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+/* ===== HERO SECTION ===== */
+.hero-banner {
+  background: linear-gradient(135deg, rgba(0,229,255,0.08) 0%, rgba(124,77,255,0.08) 100%);
+  border: 1px solid var(--border-glow);
+  border-radius:16px;
+  padding: 40px 36px;
+  margin-bottom: 32px;
+  position:relative; overflow:hidden;
+}
+.hero-banner::before {
+  content:'';
+  position:absolute; top:-50px; right:-50px;
+  width:200px; height:200px;
+  background: radial-gradient(circle, rgba(0,229,255,0.12) 0%, transparent 70%);
+  border-radius:50%;
+}
+.hero-title {
+  font-family: var(--font-head);
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight:700;
+  line-height:1.1;
+  margin-bottom:12px;
+}
+.hero-title span { color: var(--accent-cyan); }
+.hero-sub {
+  font-size:15px;
+  color: var(--text-secondary);
+  line-height:1.7;
+  max-width:600px;
+  margin-bottom:24px;
+}
+.hero-meta { display:flex; gap:16px; flex-wrap:wrap; }
+.meta-chip {
+  display:flex; align-items:center; gap:6px;
+  font-size:12px; font-family:var(--font-head);
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px; padding:6px 14px;
+  color: var(--text-secondary);
+  letter-spacing:0.5px;
+}
+.meta-chip .dot { width:7px; height:7px; border-radius:50%; }
+
+/* ===== SECTION TITLE ===== */
+.sec-title {
+  font-family:var(--font-head);
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight:700;
+  color: var(--accent-cyan);
+  margin-bottom: 8px;
+  letter-spacing:1px;
+  display:flex; align-items:center; gap:12px;
+}
+.sec-title::after {
+  content:'';
+  flex:1; height:1px;
+  background: linear-gradient(90deg, var(--accent-cyan), transparent);
+  opacity:0.4;
+}
+.sec-subtitle {
+  color: var(--text-secondary);
+  font-size:14px;
+  margin-bottom: 28px;
+  line-height:1.6;
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  transition: border-color 0.25s;
+}
+.card:hover { border-color: var(--border-glow); }
+.card-title {
+  font-family:var(--font-head);
+  font-size:18px; font-weight:700;
+  color: var(--accent-amber);
+  margin-bottom:12px;
+  display:flex; align-items:center; gap:8px;
+}
+.card p {
+  font-size:14px; line-height:1.85;
+  color: var(--text-secondary);
+  margin-bottom:10px;
+}
+.card p:last-child { margin-bottom:0; }
+.highlight-box {
+  background: rgba(0,229,255,0.06);
+  border-left: 3px solid var(--accent-cyan);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size:14px;
+  color: var(--text-primary);
+  line-height:1.7;
+}
+.warning-box {
+  background: rgba(255,179,0,0.06);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size:14px;
+  color: var(--text-primary);
+  line-height:1.7;
+}
+.success-box {
+  background: rgba(0,230,118,0.06);
+  border-left: 3px solid var(--accent-green);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size:14px;
+  color: var(--text-primary);
+  line-height:1.7;
+}
+
+/* ===== TUJUAN PEMBELAJARAN ===== */
+.objective-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:16px; margin-bottom:24px; }
+.objective-item {
+  background: var(--bg-card2);
+  border: 1px solid var(--border-dim);
+  border-radius:10px;
+  padding:20px;
+  display:flex; gap:14px; align-items:flex-start;
+  transition: all 0.25s;
+}
+.objective-item:hover {
+  border-color: rgba(0,229,255,0.3);
+  transform: translateY(-2px);
+}
+.obj-num {
+  width:36px; height:36px; flex-shrink:0;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-mono); font-size:14px; font-weight:700;
+  color: var(--bg-deep);
+}
+.obj-text { font-size:13.5px; line-height:1.6; color:var(--text-secondary); }
+
+/* ===== SATUAN TABLE ===== */
+.unit-table { width:100%; border-collapse:collapse; font-size:13.5px; margin:16px 0; }
+.unit-table th {
+  background: rgba(0,229,255,0.1);
+  color: var(--accent-cyan);
+  font-family:var(--font-head);
+  font-weight:600;
+  padding:12px 16px;
+  text-align:left;
+  border-bottom: 1px solid var(--border-glow);
+  letter-spacing:0.5px;
+}
+.unit-table td {
+  padding:11px 16px;
+  border-bottom: 1px solid var(--border-dim);
+  color: var(--text-secondary);
+  line-height:1.5;
+}
+.unit-table tr:hover td { background:rgba(0,229,255,0.03); }
+.unit-table .val { font-family:var(--font-mono); color:var(--accent-amber); }
+
+/* ===== FORMULA BOX ===== */
+.formula-box {
+  background: var(--bg-card2);
+  border: 1px solid rgba(255,179,0,0.3);
+  border-radius:10px;
+  padding:20px 24px;
+  text-align:center;
+  margin: 18px 0;
+}
+.formula {
+  font-family:var(--font-mono);
+  font-size: clamp(16px, 3vw, 22px);
+  color: var(--accent-amber);
+  letter-spacing:1px;
+  margin-bottom:8px;
+}
+.formula-note {
+  font-size:12px;
+  color: var(--text-muted);
+  font-style:italic;
+}
+
+/* ===== SIMULATION ===== */
+.sim-container {
+  background: var(--bg-card2);
+  border: 1px solid var(--border-glow);
+  border-radius:14px;
+  padding:28px;
+  margin:20px 0;
+}
+.sim-title {
+  font-family:var(--font-head); font-size:18px; font-weight:700;
+  color: var(--accent-green);
+  margin-bottom:6px;
+  display:flex; align-items:center; gap:8px;
+}
+.sim-desc { font-size:13px; color:var(--text-muted); margin-bottom:24px; line-height:1.6; }
+
+/* Barometer SVG area */
+.baro-wrapper {
+  display:flex; flex-wrap:wrap; gap:32px; justify-content:center; align-items:flex-end;
+}
+.baro-svg-area { display:flex; flex-direction:column; align-items:center; gap:12px; }
+.baro-label { font-family:var(--font-head); font-size:13px; color:var(--accent-cyan); letter-spacing:0.5px; }
+
+/* Controls */
+.sim-controls { margin-top:24px; }
+.ctrl-label {
+  font-size:13px; color:var(--text-secondary);
+  margin-bottom:8px;
+  display:flex; justify-content:space-between;
+}
+.ctrl-label span { color:var(--accent-amber); font-family:var(--font-mono); font-size:14px; }
+input[type=range] {
+  width:100%; accent-color: var(--accent-cyan);
+  height:6px; cursor:pointer;
+}
+.readout-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(170px,1fr)); gap:12px; margin-top:20px; }
+.readout-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  border-radius:8px;
+  padding:14px 16px;
+  text-align:center;
+}
+.readout-unit { font-size:11px; color:var(--text-muted); font-family:var(--font-head); letter-spacing:0.5px; margin-bottom:4px; }
+.readout-val { font-size:22px; font-family:var(--font-mono); font-weight:700; color:var(--accent-cyan); }
+.readout-box.amber .readout-val { color:var(--accent-amber); }
+.readout-box.green .readout-val { color:var(--accent-green); }
+.readout-box.purple .readout-val { color:var(--accent-purple); }
+
+/* Vacuum gauge animation */
+.gauge-ring {
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+/* ===== ANEROID SIM ===== */
+.aneroid-panel {
+  background: rgba(124,77,255,0.06);
+  border:1px solid rgba(124,77,255,0.2);
+  border-radius:12px;
+  padding:24px;
+  margin-top:20px;
+}
+
+/* ===== WHY LENGTH UNIT ===== */
+.why-steps { display:flex; flex-direction:column; gap:0; margin:20px 0; }
+.why-step {
+  display:flex; gap:16px;
+  padding-bottom:24px;
+  position:relative;
+}
+.why-step:not(:last-child)::after {
+  content:'';
+  position:absolute;
+  left:19px; top:40px; bottom:0;
+  width:2px;
+  background: linear-gradient(to bottom, var(--accent-cyan), transparent);
+  opacity:0.3;
+}
+.step-icon {
+  width:40px; height:40px; flex-shrink:0;
+  background: rgba(0,229,255,0.1);
+  border: 1px solid rgba(0,229,255,0.3);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px;
+}
+.step-content {}
+.step-content h4 { font-family:var(--font-head); font-size:15px; color:var(--accent-cyan); margin-bottom:6px; font-weight:700; }
+.step-content p { font-size:13.5px; color:var(--text-secondary); line-height:1.7; }
+
+/* ===== QUIZ ===== */
+.quiz-header {
+  background: linear-gradient(135deg, rgba(0,230,118,0.08), rgba(0,229,255,0.08));
+  border:1px solid rgba(0,230,118,0.2);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:24px;
+  display:flex; gap:16px; align-items:center;
+}
+.quiz-icon { font-size:40px; }
+.quiz-header h2 { font-family:var(--font-head); font-size:22px; color:var(--accent-green); font-weight:700; }
+.quiz-header p { font-size:13px; color:var(--text-secondary); margin-top:4px; }
+.q-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:16px;
+}
+.q-num { font-family:var(--font-mono); font-size:12px; color:var(--accent-cyan); margin-bottom:8px; }
+.q-text { font-size:15px; font-weight:600; line-height:1.6; margin-bottom:18px; }
+.options { display:flex; flex-direction:column; gap:10px; }
+.opt-btn {
+  background: var(--bg-card2);
+  border: 1px solid var(--border-dim);
+  border-radius:8px;
+  padding:12px 16px;
+  font-family:var(--font-body);
+  font-size:13.5px;
+  color:var(--text-secondary);
+  cursor:pointer;
+  text-align:left;
+  transition: all 0.2s;
+  display:flex; gap:10px; align-items:center;
+}
+.opt-btn:hover:not(:disabled) {
+  border-color: rgba(0,229,255,0.4);
+  color:var(--text-primary);
+  background: rgba(0,229,255,0.04);
+}
+.opt-btn.correct { border-color:var(--accent-green)!important; background:rgba(0,230,118,0.1)!important; color:var(--accent-green)!important; }
+.opt-btn.wrong { border-color:var(--accent-red)!important; background:rgba(255,71,87,0.1)!important; color:var(--accent-red)!important; }
+.opt-letter {
+  width:28px; height:28px; flex-shrink:0;
+  background:rgba(255,255,255,0.06);
+  border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-mono); font-size:12px; font-weight:700;
+}
+.q-feedback {
+  display:none;
+  padding:12px 16px;
+  border-radius:8px;
+  font-size:13px;
+  line-height:1.6;
+  margin-top:10px;
+}
+.q-feedback.show { display:block; }
+.q-feedback.correct-fb { background:rgba(0,230,118,0.08); border:1px solid rgba(0,230,118,0.3); color:var(--accent-green); }
+.q-feedback.wrong-fb { background:rgba(255,71,87,0.08); border:1px solid rgba(255,71,87,0.3); color:var(--accent-red); }
+
+/* Submit & Result */
+.quiz-submit-btn {
+  display:block; width:100%;
+  padding:16px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  border:none; border-radius:10px;
+  font-family:var(--font-head); font-size:18px; font-weight:700;
+  color:#fff; letter-spacing:1px;
+  cursor:pointer;
+  margin-top:24px;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.quiz-submit-btn:hover { opacity:0.9; transform:translateY(-1px); }
+.quiz-submit-btn:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+
+.result-panel {
+  display:none;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glow);
+  border-radius:16px;
+  padding:36px;
+  text-align:center;
+  margin-top:24px;
+}
+.result-panel.show { display:block; animation: fadeIn 0.5s ease; }
+.score-circle {
+  width:120px; height:120px;
+  border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  margin: 0 auto 20px;
+  font-family:var(--font-mono);
+}
+.score-num { font-size:36px; font-weight:700; line-height:1; }
+.score-max { font-size:14px; opacity:0.7; }
+.result-title { font-family:var(--font-head); font-size:26px; font-weight:700; margin-bottom:10px; }
+.result-msg { font-size:14px; color:var(--text-secondary); line-height:1.7; max-width:500px; margin:0 auto 24px; }
+.retake-btn {
+  background:transparent;
+  border:1px solid var(--accent-cyan);
+  color:var(--accent-cyan);
+  padding:12px 32px;
+  border-radius:8px;
+  font-family:var(--font-head); font-size:15px; font-weight:600;
+  cursor:pointer;
+  transition: all 0.2s;
+}
+.retake-btn:hover { background:rgba(0,229,255,0.1); }
+
+/* ===== CONCLUSION ===== */
+.conclusion-point {
+  display:flex; gap:14px; align-items:flex-start;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-dim);
+}
+.conclusion-point:last-child { border-bottom:none; }
+.con-icon { font-size:22px; flex-shrink:0; margin-top:2px; }
+.con-body h4 { font-family:var(--font-head); font-size:15px; color:var(--accent-amber); margin-bottom:6px; font-weight:700; }
+.con-body p { font-size:13.5px; color:var(--text-secondary); line-height:1.7; }
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--bg-card2);
+  border-top: 1px solid var(--border-dim);
+  padding:24px;
+  text-align:center;
+  font-size:12px;
+  color:var(--text-muted);
+  position:relative; z-index:1;
+}
+footer strong { color:var(--accent-cyan); }
+
+/* ===== UTILS ===== */
+.badge {
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:20px;
+  font-size:11px;
+  font-family:var(--font-head);
+  letter-spacing:0.5px;
+  font-weight:600;
+}
+.badge-cyan { background:rgba(0,229,255,0.12); color:var(--accent-cyan); border:1px solid rgba(0,229,255,0.25); }
+.badge-amber { background:rgba(255,179,0,0.12); color:var(--accent-amber); border:1px solid rgba(255,179,0,0.25); }
+.badge-green { background:rgba(0,230,118,0.12); color:var(--accent-green); border:1px solid rgba(0,230,118,0.25); }
+
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media(max-width:640px){ .two-col { grid-template-columns:1fr; } }
+
+/* animated pulse */
+@keyframes pulse-ring {
+  0% { transform:scale(1); opacity:0.6; }
+  50% { transform:scale(1.05); opacity:1; }
+  100% { transform:scale(1); opacity:0.6; }
+}
+.pulse { animation: pulse-ring 2s infinite; }
+
+/* scrollbar */
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:var(--bg-deep); }
+::-webkit-scrollbar-thumb { background:var(--text-muted); border-radius:3px; }
+
+/* Step button nav */
+.step-nav { display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; }
+.step-btn {
+  padding:11px 22px;
+  border-radius:8px;
+  font-family:var(--font-head); font-size:14px; font-weight:600;
+  cursor:pointer; transition:all 0.2s; letter-spacing:0.5px;
+  border:1px solid;
+}
+.step-btn.primary { background:var(--accent-cyan); color:var(--bg-deep); border-color:var(--accent-cyan); }
+.step-btn.primary:hover { opacity:0.85; }
+.step-btn.secondary { background:transparent; color:var(--text-secondary); border-color:var(--border-glow); }
+.step-btn.secondary:hover { color:var(--accent-cyan); border-color:var(--accent-cyan); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="brand">
+    <div class="brand-logo">e</div>
+    <div class="brand-text">
+      <div class="main">eshapublicskillslearning</div>
+      <div class="sub">Platform Pembelajaran Vokasi &amp; Kompetensi</div>
+    </div>
+  </div>
+  <div class="instructor-badge">Sri Hardono, S.T., M.Sc — Instruktur Madya Kemnaker RI</div>
+</header>
+
+<!-- NAV TABS -->
+<nav class="nav-container">
+  <div class="nav-tab active" onclick="showSection('tujuan',this)"><span class="tab-num">1</span>Tujuan</div>
+  <div class="nav-tab" onclick="showSection('konsep',this)"><span class="tab-num">2</span>Konsep Vakum</div>
+  <div class="nav-tab" onclick="showSection('barometer',this)"><span class="tab-num">3</span>Barometer</div>
+  <div class="nav-tab" onclick="showSection('satuan',this)"><span class="tab-num">4</span>Satuan Vakum</div>
+  <div class="nav-tab" onclick="showSection('simulasi',this)"><span class="tab-num">5</span>Simulasi</div>
+  <div class="nav-tab" onclick="showSection('kesimpulan',this)"><span class="tab-num">6</span>Kesimpulan</div>
+  <div class="nav-tab" onclick="showSection('kuis',this)"><span class="tab-num">7</span>Kuis</div>
+</nav>
+
+<main>
+
+<!-- ===== 1. TUJUAN ===== -->
+<section class="section active" id="tujuan">
+  <div class="hero-banner">
+    <div class="hero-title">Kondisi Vakum &amp; <span>Pengukurannya</span><br>dalam Sistem RAC</div>
+    <div class="hero-sub">Media pembelajaran interaktif tentang dasar-dasar kondisi vakum, barometer, dan sistem satuan pengukuran vakum yang digunakan dalam industri Refrigerant Air Conditioning (RAC).</div>
+    <div class="hero-meta">
+      <div class="meta-chip"><span class="dot" style="background:var(--accent-green)"></span>WorldSkills RAC Expert</div>
+      <div class="meta-chip"><span class="dot" style="background:var(--accent-cyan)"></span>Kemnaker RI — Instruktur Madya</div>
+      <div class="meta-chip"><span class="dot" style="background:var(--accent-amber)"></span>Level: Dasar–Menengah</div>
+    </div>
+  </div>
+
+  <div class="sec-title">🎯 Tujuan Pembelajaran</div>
+  <div class="sec-subtitle">Setelah mempelajari materi ini, peserta diharapkan mampu memahami dan menjelaskan konsep berikut:</div>
+
+  <div class="objective-grid">
+    <div class="objective-item"><div class="obj-num">01</div><div class="obj-text">Menjelaskan pengertian dan konsep dasar kondisi vakum dalam sistem RAC secara fisika.</div></div>
+    <div class="objective-item"><div class="obj-num">02</div><div class="obj-text">Membedakan kondisi vakum partial dan vakum absolut serta implikasinya pada sistem RAC.</div></div>
+    <div class="objective-item"><div class="obj-num">03</div><div class="obj-text">Menjelaskan prinsip kerja barometer air raksa (mercury barometer) dan cara membaca skala.</div></div>
+    <div class="objective-item"><div class="obj-num">04</div><div class="obj-text">Menjelaskan prinsip kerja barometer aneroid (tanpa cairan) dan mekanisme kapsul logamnya.</div></div>
+    <div class="objective-item"><div class="obj-num">05</div><div class="obj-text">Memahami alasan historis dan ilmiah mengapa satuan vakum menggunakan satuan panjang (inHg, cmHg, mmHg, Micron Hg).</div></div>
+    <div class="objective-item"><div class="obj-num">06</div><div class="obj-text">Mengkonversi nilai tekanan antara berbagai satuan: inHg, cmHg, mmHg, Micron, Pa, dan psi.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💡 Mengapa Vakum Sangat Penting dalam RAC?</div>
+    <p>Dalam sistem Refrigerant Air Conditioning (RAC), proses <strong style="color:var(--accent-cyan)">vakuming (vacuuming)</strong> atau <em>evacuation</em> adalah salah satu tahap paling kritis sebelum sistem diisi refrigeran. Tujuan utama vakuming adalah:</p>
+    <div class="highlight-box">📌 <strong>1. Membuang udara dan gas non-kondensat</strong> — Nitrogen (N₂), oksigen (O₂), dan gas lain di dalam sistem dapat menyebabkan tekanan berlebih, korosi internal, dan menurunkan efisiensi pendinginan secara drastis.</div>
+    <div class="highlight-box">📌 <strong>2. Membuang uap air (moisture)</strong> — Air di dalam sistem RAC dapat membeku di katup ekspansi (Ice block), bereaksi dengan refrigeran membentuk asam hidrofluorat (HF) yang merusak kompressor dan komponen logam.</div>
+    <div class="highlight-box">📌 <strong>3. Memverifikasi kebocoran sistem</strong> — Sistem yang divakum dan dipertahankan tekanan vakumnya menunjukkan tidak adanya kebkebocoran refrigeran.</div>
+    <p>Untuk mengukur kondisi vakum ini, teknisi RAC memerlukan pemahaman mendalam tentang <strong style="color:var(--accent-amber)">satuan tekanan vakum</strong> yang unik dan berbeda dari satuan tekanan positif biasa.</p>
+  </div>
+
+  <div class="step-nav">
+    <button class="step-btn primary" onclick="showSection('konsep', document.querySelectorAll('.nav-tab')[1])">Lanjut: Konsep Vakum →</button>
+  </div>
+</section>
+
+<!-- ===== 2. KONSEP VAKUM ===== -->
+<section class="section" id="konsep">
+  <div class="sec-title">🌌 Konsep Dasar Kondisi Vakum</div>
+  <div class="sec-subtitle">Memahami vakum dari perspektif fisika tekanan — fondasi mutlak sebelum memahami sistem RAC.</div>
+
+  <div class="card">
+    <div class="card-title">⚛️ Apa Itu Tekanan Atmosfer?</div>
+    <p>Bumi dikelilingi lapisan udara (atmosfer) yang memiliki massa. Gaya gravitasi menarik massa udara ini ke bawah, sehingga udara memberikan <strong style="color:var(--accent-cyan)">tekanan ke segala arah</strong> terhadap permukaan benda. Inilah yang disebut <strong>tekanan atmosfer</strong>.</p>
+    <div class="formula-box">
+      <div class="formula">P_atm = 101.325 kPa = 14.696 psi = 760 mmHg = 29.921 inHg</div>
+      <div class="formula-note">Tekanan atmosfer standar pada permukaan laut (sea level), suhu 0°C</div>
+    </div>
+    <p>Bayangkan Anda berada di dasar kolam udara yang sangat dalam. Berat udara di atas Anda menekan ke seluruh permukaan tubuh dengan gaya sekitar <strong style="color:var(--accent-amber)">10.332 kg per meter persegi</strong> atau kira-kira <strong style="color:var(--accent-amber)">1 kg/cm²</strong>. Itulah tekanan atmosfer yang kita rasakan setiap saat tanpa menyadarinya.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔵 Definisi Vakum</div>
+    <p><strong style="color:var(--accent-cyan)">Vakum</strong> (dari bahasa Latin: <em>vacuus</em> = kosong) adalah kondisi di mana tekanan gas dalam suatu ruang <strong>lebih rendah dari tekanan atmosfer sekitarnya</strong>. Secara teknis, vakum adalah kondisi dimana kepadatan (densitas) molekul gas lebih rendah dari kepadatan normal di atmosfer standar.</p>
+
+    <div class="two-col" style="margin-top:16px">
+      <div class="highlight-box" style="margin:0">
+        <strong style="color:var(--accent-cyan)">Vakum Partial (Parsial)</strong><br><br>
+        Tekanan lebih rendah dari 1 atmosfer (101.325 kPa) namun masih lebih besar dari nol absolut. Inilah kondisi yang kita ciptakan dalam sistem RAC saat proses vakuming. Contoh: tekanan sistem 500 micron Hg.
+      </div>
+      <div class="warning-box" style="margin:0">
+        <strong style="color:var(--accent-amber)">Vakum Absolut (Perfect Vacuum)</strong><br><br>
+        Kondisi teoritis di mana tekanan = 0 Pa secara absolut. Tidak ada molekul gas sama sekali. Dalam praktik RAC, target vakum adalah 200–500 micron Hg, bukan nol absolut.
+      </div>
+    </div>
+
+    <div class="success-box" style="margin-top:16px">
+      <strong>🔬 Skala Tekanan RAC:</strong><br>
+      Atmosfer (101.325 kPa) → Tekanan Kerja Sistem → Tekanan Atmosfer → Vakum Partial → Vakum Lebih Dalam → Vakum Absolut (0 Pa)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Skala Tekanan: Gauge vs Absolut vs Vakum</div>
+    <p>Dalam dunia RAC, terdapat tiga referensi tekanan yang harus dipahami dengan baik:</p>
+
+    <table class="unit-table">
+      <tr><th>Jenis Tekanan</th><th>Referensi Nol</th><th>Contoh Penggunaan di RAC</th></tr>
+      <tr><td><strong>Tekanan Absolut (Pabs)</strong></td><td class="val">0 Pa (vakum sempurna)</td><td>Perhitungan termodinamika refrigeran, tabel properties</td></tr>
+      <tr><td><strong>Tekanan Gauge (Pgauge)</strong></td><td class="val">101.325 kPa (1 atm)</td><td>Manometer, manifold gauge (sisi tekanan tinggi/rendah)</td></tr>
+      <tr><td><strong>Tekanan Vakum (Pvacuum)</strong></td><td class="val">101.325 kPa (1 atm)</td><td>Micron gauge, thermistor gauge saat proses evakuasi</td></tr>
+    </table>
+
+    <div class="formula-box">
+      <div class="formula">P_abs = P_atm + P_gauge</div>
+      <div class="formula-note">Berlaku saat gauge positif (tekanan di atas atmosfer)</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula">P_abs = P_atm − P_vacuum</div>
+      <div class="formula-note">Berlaku saat kondisi vakum (tekanan di bawah atmosfer)</div>
+    </div>
+
+    <p>Contoh: Jika vakum gauge menunjukkan 29 inHg vacuum, maka:<br>
+    Pabs = 29.921 inHg − 29 inHg = <strong style="color:var(--accent-amber)">0.921 inHg absolut ≈ 23.4 mmHg absolut ≈ 23.400 micron Hg</strong></p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🌡️ Hubungan Vakum dengan Titik Didih Air</div>
+    <p>Salah satu prinsip fisika terpenting dalam vakuming RAC adalah: <strong style="color:var(--accent-cyan)">semakin dalam vakum, semakin rendah titik didih air</strong>. Ini adalah dasar mengapa vakuming efektif membuang moisture (uap air) dari sistem:</p>
+
+    <table class="unit-table">
+      <tr><th>Tekanan (mmHg Absolut)</th><th>Tekanan (Micron Hg)</th><th>Titik Didih Air (°C)</th></tr>
+      <tr><td>760 mmHg</td><td class="val">760.000 micron</td><td>100°C (normal)</td></tr>
+      <tr><td>100 mmHg</td><td class="val">100.000 micron</td><td>51.7°C</td></tr>
+      <tr><td>10 mmHg</td><td class="val">10.000 micron</td><td>11.8°C</td></tr>
+      <tr><td>4.6 mmHg</td><td class="val">4.600 micron</td><td>0°C (triple point air)</td></tr>
+      <tr><td>1 mmHg</td><td class="val">1.000 micron</td><td>-17.5°C</td></tr>
+      <tr><td>0.5 mmHg</td><td class="val">500 micron</td><td>-26.8°C</td></tr>
+      <tr><td>0.2 mmHg</td><td class="val">200 micron</td><td>-38.8°C</td></tr>
+    </table>
+
+    <div class="success-box">
+      ✅ <strong>Implikasi untuk RAC:</strong> Target vakum 500 micron Hg membuat titik didih air menjadi sekitar -26.8°C. Karena suhu ruangan adalah 25–30°C, semua sisa moisture dalam sistem akan mendidih dan terhisap pompa vakum. Inilah fisika di balik proses evakuasi!
+    </div>
+  </div>
+
+  <div class="step-nav">
+    <button class="step-btn secondary" onclick="showSection('tujuan', document.querySelectorAll('.nav-tab')[0])">← Kembali</button>
+    <button class="step-btn primary" onclick="showSection('barometer', document.querySelectorAll('.nav-tab')[2])">Lanjut: Barometer →</button>
+  </div>
+</section>
+
+<!-- ===== 3. BAROMETER ===== -->
+<section class="section" id="barometer">
+  <div class="sec-title">🌡️ Barometer: Pengukur Tekanan Atmosfer</div>
+  <div class="sec-subtitle">Sejarah dan prinsip kerja dua jenis barometer — kunci memahami asal-usul satuan vakum.</div>
+
+  <div class="card">
+    <div class="card-title">🏺 Barometer Air Raksa (Mercury Barometer)</div>
+    <p>Barometer air raksa ditemukan oleh <strong style="color:var(--accent-cyan)">Evangelista Torricelli</strong> pada tahun <strong>1643</strong>, ilmuwan Italia murid Galileo Galilei. Penemuannya merevolusi pemahaman manusia tentang tekanan atmosfer dan meletakkan dasar pengukuran vakum hingga hari ini.</p>
+
+    <div class="two-col">
+      <div>
+        <div class="highlight-box">
+          <strong>🔬 Eksperimen Torricelli:</strong><br><br>
+          Torricelli mengisi sebuah tabung kaca panjang (~1 meter) dengan air raksa (Hg), lalu menutup ujung atasnya. Tabung kemudian dibalik dan ujung terbukanya dicelupkan ke dalam wadah berisi air raksa.<br><br>
+          Hasilnya: Air raksa dalam tabung <em>turun</em> namun tidak habis, dan berhenti pada ketinggian tertentu — sekitar <strong style="color:var(--accent-amber)">760 mm</strong> di atas permukaan air raksa di wadah.
+        </div>
+        <div class="success-box">
+          <strong>💡 Kesimpulan Torricelli:</strong><br>
+          Kolom air raksa setinggi 760 mm <em>diangkat dan ditahan</em> oleh tekanan atmosfer yang mendorong permukaan air raksa di wadah. Di atas kolom air raksa dalam tabung (antara puncak Hg dan tutup tabung) terbentuk <strong>ruang vakum</strong> — inilah yang kemudian dikenal sebagai "Ruang Torricelli" atau vakum Torricellian.
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:12px">
+        <!-- SVG Barometer Hg -->
+        <svg viewBox="0 0 200 340" width="200" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+          <!-- Background wadah -->
+          <rect x="50" y="270" width="100" height="55" rx="6" fill="rgba(0,229,255,0.06)" stroke="rgba(0,229,255,0.3)" stroke-width="1.5"/>
+          <!-- Air raksa dalam wadah -->
+          <ellipse cx="100" cy="305" rx="44" ry="10" fill="rgba(200,200,220,0.5)"/>
+          <rect x="56" y="295" width="88" height="22" fill="rgba(180,190,210,0.45)"/>
+          <!-- Tabung kaca -->
+          <rect x="88" y="30" width="24" height="270" rx="4" fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.4)" stroke-width="1.5"/>
+          <!-- Kolom Hg dalam tabung -->
+          <rect x="90" y="115" width="20" height="180" fill="rgba(180,190,210,0.7)" rx="2"/>
+          <!-- Ruang vakum Torricelli -->
+          <rect x="90" y="36" width="20" height="79" fill="rgba(124,77,255,0.15)" rx="2"/>
+          <text x="100" y="52" text-anchor="middle" font-size="8" fill="rgba(124,77,255,0.9)" font-family="Rajdhani">VAKUM</text>
+          <text x="100" y="63" text-anchor="middle" font-size="8" fill="rgba(124,77,255,0.9)" font-family="Rajdhani">Torricelli</text>
+          <!-- Arrow dan label 760mm -->
+          <line x1="118" y1="115" x2="118" y2="295" stroke="rgba(255,179,0,0.8)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="138" y="155" font-size="9" fill="rgba(255,179,0,0.9)" font-family="Share Tech Mono">760 mm</text>
+          <text x="138" y="167" font-size="9" fill="rgba(255,179,0,0.9)" font-family="Share Tech Mono">Hg</text>
+          <!-- Arrow tekanan atmosfer -->
+          <text x="18" y="285" font-size="8" fill="rgba(0,230,118,0.8)" font-family="Rajdhani">P atm</text>
+          <path d="M42 295 L56 295" stroke="rgba(0,230,118,0.8)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <!-- Penutup tabung -->
+          <rect x="88" y="28" width="24" height="8" rx="4" fill="rgba(0,229,255,0.4)"/>
+          <!-- Define arrow marker -->
+          <defs>
+            <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="rgba(0,230,118,0.8)"/>
+            </marker>
+          </defs>
+          <text x="100" y="23" text-anchor="middle" font-size="9" fill="rgba(0,229,255,0.8)" font-family="Rajdhani,sans-serif">Tabung Hg</text>
+        </svg>
+        <div class="badge badge-amber">Evangelista Torricelli, 1643</div>
+      </div>
+    </div>
+
+    <div class="card" style="background:var(--bg-card2); margin-top:16px; margin-bottom:0">
+      <div class="card-title" style="font-size:15px">⚙️ Prinsip Fisika Barometer Air Raksa</div>
+      <p>Keseimbangan tekanan dalam barometer air raksa dinyatakan dengan persamaan:</p>
+      <div class="formula-box">
+        <div class="formula">P_atm = ρ × g × h</div>
+        <div class="formula-note">P_atm = tekanan atmosfer | ρ = densitas Hg (13.600 kg/m³) | g = gravitasi (9.81 m/s²) | h = tinggi kolom Hg (m)</div>
+      </div>
+      <p>Mengapa air raksa? Karena densitas Hg sangat tinggi (13.600 kg/m³), sehingga kolom hanya setinggi ~76 cm saja. Jika menggunakan air biasa (1.000 kg/m³), tabung harus setinggi <strong style="color:var(--accent-red)">10.332 meter</strong> — tidak praktis!</p>
+      <p>Kalkulasi: P = 13.600 × 9.81 × 0.760 = <strong style="color:var(--accent-cyan)">101.325 Pa ≈ 101.3 kPa</strong> ✓</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔧 Barometer Aneroid (Tanpa Cairan)</div>
+    <p>Barometer aneroid (dari bahasa Yunani: <em>aneros</em> = tanpa cairan) ditemukan oleh <strong style="color:var(--accent-cyan)">Lucien Vidi</strong> pada tahun <strong>1844</strong>. Barometer ini tidak menggunakan cairan sama sekali, melainkan mengandalkan deformasi mekanis dari <strong>kapsul logam tipis bergelombang (corrugated capsule)</strong> yang divakumkan sebagian di dalamnya.</p>
+
+    <div class="two-col">
+      <div>
+        <div class="highlight-box">
+          <strong>🔩 Komponen Utama Barometer Aneroid:</strong><br><br>
+          <strong>1. Kapsul Aneroid (Aneroid Cell/Capsule)</strong> — Kotak logam tipis berbentuk cakram yang terbuat dari paduan beryllium-copper atau phosphor bronze. Di dalamnya ada vakum parsial. Dinding kapsul bergelombang agar lebih sensitif terhadap perubahan tekanan.<br><br>
+          <strong>2. Pegas (Spring)</strong> — Mencegah kapsul kolaps total akibat tekanan atmosfer dan memberikan gaya restorasi.<br><br>
+          <strong>3. Sistem Lever &amp; Gear</strong> — Mengkonversi gerakan infra-kecil kapsul (0.1–0.5 mm) menjadi gerakan jarum yang dapat dibaca.<br><br>
+          <strong>4. Jarum Penunjuk &amp; Skala</strong> — Menampilkan nilai tekanan dalam mbar, inHg, atau mmHg.
+        </div>
+      </div>
+      <div>
+        <div class="warning-box">
+          <strong>🔄 Cara Kerja:</strong><br><br>
+          ⬆️ <strong>Tekanan Naik</strong> → Atmosfer menekan kapsul → Kapsul mengempis → Lever bergerak → Jarum bergerak ke nilai tinggi<br><br>
+          ⬇️ <strong>Tekanan Turun</strong> → Kapsul mengembang → Lever bergerak → Jarum bergerak ke nilai rendah<br><br>
+          📐 <strong>Sensitivitas</strong>: Kapsul bergerak hanya 0.1–0.5 mm per 1 hPa perubahan tekanan, namun sistem lever/gear mengamplifikasi hingga beberapa derajat putaran jarum.
+        </div>
+        <div class="success-box" style="margin-top:12px">
+          <strong>✅ Keunggulan vs Barometer Hg:</strong><br>
+          Ringkas, portabel, tidak pecah, tidak mengandung merkuri beracun, dapat dipasang di mana saja (kapal, pesawat, altimeter, stasiun cuaca). Kekurangan: akurasi lebih rendah, perlu kalibrasi periodik.
+        </div>
+      </div>
+    </div>
+
+    <!-- SVG Aneroid -->
+    <div style="display:flex; justify-content:center; margin-top:20px;">
+      <svg viewBox="0 0 380 200" width="380" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer case -->
+        <circle cx="190" cy="100" r="88" fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.3)" stroke-width="1.5"/>
+        <!-- Scale arc -->
+        <path d="M 115 155 A 80 80 0 0 1 265 155" fill="none" stroke="rgba(0,229,255,0.2)" stroke-width="12"/>
+        <!-- Scale ticks -->
+        <g stroke="rgba(0,229,255,0.6)" stroke-width="1.5">
+          <line x1="111" y1="100" x2="121" y2="100"/><line x1="113" y1="76" x2="122" y2="80"/>
+          <line x1="121" y1="55" x2="128" y2="61"/><line x1="137" y1="38" x2="141" y2="46"/>
+          <line x1="159" y1="28" x2="161" y2="36"/><line x1="190" y1="24" x2="190" y2="32"/>
+          <line x1="221" y1="28" x2="219" y2="36"/><line x1="243" y1="38" x2="239" y2="46"/>
+          <line x1="259" y1="55" x2="252" y2="61"/><line x1="267" y1="76" x2="258" y2="80"/>
+          <line x1="269" y1="100" x2="259" y2="100"/>
+        </g>
+        <!-- Labels -->
+        <text x="105" y="103" font-size="9" fill="rgba(0,229,255,0.7)" font-family="Share Tech Mono" text-anchor="middle">940</text>
+        <text x="190" y="22" font-size="9" fill="rgba(0,229,255,0.7)" font-family="Share Tech Mono" text-anchor="middle">1013</text>
+        <text x="275" y="103" font-size="9" fill="rgba(0,229,255,0.7)" font-family="Share Tech Mono" text-anchor="middle">1050</text>
+        <!-- Kapsul Aneroid (center) -->
+        <ellipse cx="190" cy="130" rx="32" ry="14" fill="rgba(255,179,0,0.15)" stroke="rgba(255,179,0,0.6)" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <!-- Corrugated lines on capsule -->
+        <ellipse cx="190" cy="130" rx="24" ry="10" fill="none" stroke="rgba(255,179,0,0.4)" stroke-width="1"/>
+        <ellipse cx="190" cy="130" rx="16" ry="7" fill="none" stroke="rgba(255,179,0,0.3)" stroke-width="1"/>
+        <text x="190" y="145" text-anchor="middle" font-size="8" fill="rgba(255,179,0,0.8)" font-family="Rajdhani">Kapsul Aneroid</text>
+        <!-- Needle -->
+        <line x1="190" y1="100" x2="150" y2="65" stroke="rgba(255,71,87,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="190" cy="100" r="5" fill="rgba(255,71,87,0.8)"/>
+        <!-- Lever arm -->
+        <line x1="190" y1="116" x2="190" y2="100" stroke="rgba(255,179,0,0.5)" stroke-width="1.5" stroke-dasharray="2,2"/>
+        <!-- Labels -->
+        <text x="190" y="175" text-anchor="middle" font-size="10" fill="rgba(0,229,255,0.6)" font-family="Rajdhani,sans-serif" font-weight="700">BAROMETER ANEROID</text>
+        <text x="190" y="187" text-anchor="middle" font-size="9" fill="rgba(0,229,255,0.4)" font-family="Rajdhani,sans-serif">1013 mbar / 29.92 inHg</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔬 Micron Gauge / Electronic Vacuum Gauge dalam RAC</div>
+    <p>Dalam teknologi RAC modern, pengukuran vakum dilakukan dengan <strong style="color:var(--accent-cyan)">Electronic Vacuum Gauge (Micron Gauge)</strong> — alat ukur elektronik presisi tinggi yang mampu mengukur tekanan sangat rendah hingga skala <strong>micron Hg (µmHg)</strong>.</p>
+    <p>Prinsip kerjanya menggunakan sensor <strong>thermistor Pirani</strong> atau <strong>thermistor vakum</strong>: molekul gas yang lebih sedikit (vakum lebih dalam) akan mengkonduksikan panas lebih sedikit dari kawat sensor panas, sehingga perubahan konduktansi termal dikonversi menjadi nilai tekanan digital.</p>
+    <div class="highlight-box">
+      📏 <strong>Mengapa Technician RAC Harus Paham Satuan Micron?</strong><br>
+      Manifold gauge konvensional tidak dapat membaca vakum di bawah -30 inHg (≈ 25.400 micron) dengan akurat. Electronic micron gauge membaca hingga 1 micron. Target vakuming profesional RAC adalah <strong style="color:var(--accent-amber)">200–500 micron Hg</strong> — angka yang sama sekali tidak terbaca di manifold biasa!
+    </div>
+  </div>
+
+  <div class="step-nav">
+    <button class="step-btn secondary" onclick="showSection('konsep', document.querySelectorAll('.nav-tab')[1])">← Kembali</button>
+    <button class="step-btn primary" onclick="showSection('satuan', document.querySelectorAll('.nav-tab')[3])">Lanjut: Satuan Vakum →</button>
+  </div>
+</section>
+
+<!-- ===== 4. SATUAN VAKUM ===== -->
+<section class="section" id="satuan">
+  <div class="sec-title">📏 Mengapa Satuan Vakum = Satuan Panjang?</div>
+  <div class="sec-subtitle">Memahami akar historis dan ilmiah di balik inHg, cmHg, mmHg, dan Micron Hg.</div>
+
+  <div class="card">
+    <div class="card-title">🕰️ Sejarah: Torricelli dan Awal Mula Satuan Kolom</div>
+    <p>Ketika Torricelli melakukan eksperimennya pada 1643, tidak ada alat ukur tekanan dalam satuan Pa atau bar. Satu-satunya cara untuk <em>mengekspresikan</em> besarnya tekanan atmosfer adalah dengan <strong>mengamati dan mengukur seberapa tinggi kolom air raksa yang mampu diangkat</strong>.</p>
+
+    <div class="why-steps">
+      <div class="why-step">
+        <div class="step-icon">🧪</div>
+        <div class="step-content">
+          <h4>Langkah 1: Observasi Fisik</h4>
+          <p>Torricelli mengamati bahwa tekanan atmosfer selalu mengangkat kolom air raksa setinggi ~760 mm di Roma, Italia (pada permukaan laut). Karena alat ukur tekanan (manometer) belum ada, satu-satunya ukuran yang tersedia adalah penggaris — ukuran panjang kolom Hg.</p>
+        </div>
+      </div>
+      <div class="why-step">
+        <div class="step-icon">📐</div>
+        <div class="step-content">
+          <h4>Langkah 2: Panjang Kolom sebagai "Bahasa" Tekanan</h4>
+          <p>Karena ketinggian kolom Hg secara langsung proporsional dengan tekanan (P = ρgh), maka <strong>panjang kolom = representasi tekanan</strong>. Komunitas ilmuwan di seluruh Eropa mulai menggunakan satuan ini: tekanan sebanding dengan "sekian milimeter air raksa" — lahirlah satuan <strong style="color:var(--accent-amber)">mmHg</strong>.</p>
+        </div>
+      </div>
+      <div class="why-step">
+        <div class="step-icon">🌍</div>
+        <div class="step-content">
+          <h4>Langkah 3: Standarisasi Internasional</h4>
+          <p>Negara-negara berbeda menggunakan sistem pengukuran berbeda. Inggris dan Amerika Serikat menggunakan satuan inci, sehingga tekanan atmosfer dinyatakan sebagai <strong style="color:var(--accent-cyan)">29.921 inHg</strong>. Eropa menggunakan sistem metrik: <strong style="color:var(--accent-cyan)">76 cmHg</strong> atau <strong style="color:var(--accent-cyan)">760 mmHg</strong>.</p>
+        </div>
+      </div>
+      <div class="why-step">
+        <div class="step-icon">⚗️</div>
+        <div class="step-content">
+          <h4>Langkah 4: Torr — Penghormatan kepada Torricelli</h4>
+          <p>Pada abad ke-20, komunitas ilmiah memberikan penghormatan dengan menamakan 1 mmHg = <strong style="color:var(--accent-purple)">1 Torr</strong> (dari Torricelli). Satuan Torr banyak digunakan dalam fisika vakum dan kedokteran (tekanan darah).</p>
+        </div>
+      </div>
+      <div class="why-step">
+        <div class="step-icon">🔬</div>
+        <div class="step-content">
+          <h4>Langkah 5: Micron Hg — Resolusi untuk Vakum Dalam</h4>
+          <p>Saat teknologi membutuhkan pengukuran vakum yang sangat dalam (untuk industri semikonduktor, penelitian, dan RAC presisi), satuan mmHg terlalu besar. Solusinya: <strong style="color:var(--accent-amber)">Micron Hg = 1/1000 mmHg = 0.001 mmHg</strong>. Tekanan atmosfer = 760.000 micron, sedangkan target vakum RAC = 200–500 micron.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="success-box">
+      🎯 <strong>Kesimpulan Historis:</strong> Satuan vakum menggunakan satuan panjang (inHg, cmHg, mmHg, Micron) bukan karena "salah" secara fisika, melainkan karena <em>warisan historis alat ukur Torricelli</em>: panjang kolom air raksa adalah cara paling langsung, akurat, dan reprodusibel untuk mengekspresikan tekanan di abad ke-17, dan konvensi ini berlanjut hingga kini karena keunggulan praktisnya.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔄 Tabel Konversi Lengkap Satuan Vakum</div>
+    <p>Berikut tabel konversi antara semua satuan tekanan yang relevan dengan sistem RAC dan vakum:</p>
+
+    <table class="unit-table">
+      <tr><th>Satuan</th><th>inHg</th><th>cmHg</th><th>mmHg / Torr</th><th>Micron Hg</th><th>Pa (kPa)</th><th>psi</th></tr>
+      <tr>
+        <td><strong>1 atm (std)</strong></td>
+        <td class="val">29.921</td><td class="val">76.000</td><td class="val">760.000</td>
+        <td class="val">760.000</td><td class="val">101.325</td><td class="val">14.696</td>
+      </tr>
+      <tr>
+        <td><strong>1 inHg</strong></td>
+        <td class="val">1.000</td><td class="val">2.540</td><td class="val">25.400</td>
+        <td class="val">25.400</td><td class="val">3.386</td><td class="val">0.4912</td>
+      </tr>
+      <tr>
+        <td><strong>1 cmHg</strong></td>
+        <td class="val">0.3937</td><td class="val">1.000</td><td class="val">10.000</td>
+        <td class="val">10.000</td><td class="val">1.333</td><td class="val">0.1934</td>
+      </tr>
+      <tr>
+        <td><strong>1 mmHg / 1 Torr</strong></td>
+        <td class="val">0.03937</td><td class="val">0.1000</td><td class="val">1.000</td>
+        <td class="val">1.000</td><td class="val">0.1333</td><td class="val">0.01934</td>
+      </tr>
+      <tr>
+        <td><strong>1 Micron Hg</strong></td>
+        <td class="val">0.0000394</td><td class="val">0.0001</td><td class="val">0.001</td>
+        <td class="val">1.000</td><td class="val">0.1333 Pa</td><td class="val">0.0000193</td>
+      </tr>
+      <tr>
+        <td><strong>500 Micron</strong></td>
+        <td class="val">0.01969</td><td class="val">0.0500</td><td class="val">0.500</td>
+        <td class="val">500</td><td class="val">66.66 Pa</td><td class="val">0.009669</td>
+      </tr>
+    </table>
+
+    <div class="formula-box" style="margin-top:16px">
+      <div class="formula">1 Micron Hg = 1 µmHg = 10⁻³ mmHg = 10⁻³ Torr = 0.133322 Pa</div>
+      <div class="formula-note">Satuan terkecil yang digunakan dalam pengukuran vakum RAC profesional</div>
+    </div>
+
+    <div class="two-col" style="margin-top:16px">
+      <div class="highlight-box" style="margin:0">
+        <strong>📌 Target Vakum RAC Standar:</strong><br>
+        • Minimum: <strong>500 micron Hg</strong> (ACCA/RSES Standard)<br>
+        • Profesional: <strong>200–300 micron Hg</strong><br>
+        • High-Performance: <strong>&lt;100 micron Hg</strong><br>
+        • Setara dengan: 0.5–0.03 mmHg absolut
+      </div>
+      <div class="warning-box" style="margin:0">
+        <strong>⚠️ Mengapa Bukan Pascal?</strong><br>
+        Pascal (SI unit) memang lebih ilmiah, namun di industri RAC, inHg dan micron sudah menjadi <em>standard de facto</em> internasional, terutama di negara pengguna sistem imperial (AS). Semua micron gauge, manifold gauge, dan tool RAC di-label dalam satuan ini.
+      </div>
+    </div>
+  </div>
+
+  <div class="step-nav">
+    <button class="step-btn secondary" onclick="showSection('barometer', document.querySelectorAll('.nav-tab')[2])">← Kembali</button>
+    <button class="step-btn primary" onclick="showSection('simulasi', document.querySelectorAll('.nav-tab')[4])">Lanjut: Simulasi →</button>
+  </div>
+</section>
+
+<!-- ===== 5. SIMULASI ===== -->
+<section class="section" id="simulasi">
+  <div class="sec-title">⚡ Simulasi Interaktif</div>
+  <div class="sec-subtitle">Eksplorasi konsep vakum dan barometer secara visual dan dinamis.</div>
+
+  <!-- SIM 1: Barometer Hg -->
+  <div class="sim-container">
+    <div class="sim-title">🧪 Simulasi 1: Barometer Air Raksa & Konversi Tekanan</div>
+    <div class="sim-desc">Geser slider untuk mengubah kondisi tekanan atmosfer (misalnya di ketinggian berbeda) dan amati bagaimana tinggi kolom air raksa, serta nilai di berbagai satuan berubah secara real-time.</div>
+
+    <div class="baro-wrapper">
+      <!-- Mercury Barometer SVG -->
+      <div class="baro-svg-area">
+        <div class="baro-label">Barometer Air Raksa</div>
+        <svg id="hgBaroSvg" viewBox="0 0 160 320" width="160" xmlns="http://www.w3.org/2000/svg">
+          <!-- Wadah -->
+          <rect x="30" y="265" width="100" height="44" rx="5" fill="rgba(0,229,255,0.06)" stroke="rgba(0,229,255,0.35)" stroke-width="1.5"/>
+          <!-- Hg dalam wadah -->
+          <rect x="32" y="280" width="96" height="27" fill="rgba(180,190,215,0.45)" rx="2"/>
+          <!-- Tabung -->
+          <rect x="71" y="25" width="18" height="250" rx="4" fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.4)" stroke-width="1.5"/>
+          <!-- Kolom Hg (dinamis) -->
+          <rect id="hgCol" x="73" y="120" width="14" height="160" fill="rgba(180,190,215,0.75)" rx="2"/>
+          <!-- Vakum area (dinamis) -->
+          <rect id="vacSpace" x="73" y="30" width="14" height="90" fill="rgba(124,77,255,0.18)" rx="2"/>
+          <text id="vacLabel" x="80" y="46" text-anchor="middle" font-size="7" fill="rgba(124,77,255,0.85)" font-family="Rajdhani">VAKUM</text>
+          <!-- Skala -->
+          <g stroke="rgba(0,229,255,0.4)" stroke-width="1">
+            <line x1="94" y1="120" x2="100" y2="120"/><text x="103" y="123" font-size="8" fill="rgba(0,229,255,0.5)" font-family="Share Tech Mono">800</text>
+            <line x1="94" y1="140" x2="100" y2="140"/><text x="103" y="143" font-size="8" fill="rgba(0,229,255,0.5)" font-family="Share Tech Mono">760</text>
+            <line x1="94" y1="160" x2="100" y2="160"/><text x="103" y="163" font-size="8" fill="rgba(0,229,255,0.5)" font-family="Share Tech Mono">720</text>
+            <line x1="94" y1="200" x2="100" y2="200"/><text x="103" y="203" font-size="8" fill="rgba(0,229,255,0.5)" font-family="Share Tech Mono">640</text>
+            <line x1="94" y1="240" x2="100" y2="240"/><text x="103" y="243" font-size="8" fill="rgba(0,229,255,0.5)" font-family="Share Tech Mono">560</text>
+          </g>
+          <!-- Height arrow -->
+          <line id="heightLine" x1="63" y1="120" x2="63" y2="280" stroke="rgba(255,179,0,0.7)" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text id="hLabel" x="20" y="210" font-size="8" fill="rgba(255,179,0,0.9)" font-family="Share Tech Mono">760mm</text>
+          <!-- Tutup -->
+          <rect x="71" y="20" width="18" height="7" rx="3" fill="rgba(0,229,255,0.5)"/>
+          <!-- P atm arrow -->
+          <text x="10" y="275" font-size="7" fill="rgba(0,230,118,0.8)" font-family="Rajdhani">P_atm</text>
+          <line x1="29" y1="282" x2="31" y2="282" stroke="rgba(0,230,118,0.8)" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <!-- Vacuum Gauge SVG -->
+      <div class="baro-svg-area">
+        <div class="baro-label">Vakum Gauge (Manifold)</div>
+        <svg id="vacGaugeSvg" viewBox="0 0 180 180" width="180" xmlns="http://www.w3.org/2000/svg">
+          <!-- Gauge body -->
+          <circle cx="90" cy="90" r="80" fill="rgba(5,12,26,0.9)" stroke="rgba(0,229,255,0.4)" stroke-width="2"/>
+          <circle cx="90" cy="90" r="70" fill="none" stroke="rgba(0,229,255,0.1)" stroke-width="1"/>
+          <!-- Colored arc: vakum zone -->
+          <path id="vacArc" d="M 27 131 A 70 70 0 0 1 153 131" fill="none" stroke="rgba(0,229,255,0.3)" stroke-width="8" stroke-linecap="round"/>
+          <!-- Tick marks & labels -->
+          <g fill="rgba(0,229,255,0.6)" font-family="Share Tech Mono" font-size="8">
+            <line x1="22" y1="90" x2="32" y2="90" stroke="rgba(0,229,255,0.6)" stroke-width="1.5"/>
+            <text x="14" y="93">30</text>
+            <line x1="28" y1="60" x2="37" y2="65" stroke="rgba(0,229,255,0.6)" stroke-width="1.5"/>
+            <text x="10" y="58">25</text>
+            <line x1="47" y1="38" x2="53" y2="45" stroke="rgba(0,229,255,0.6)" stroke-width="1.5"/>
+            <text x="37" y="36">20</text>
+            <line x1="76" y1="25" x2="78" y2="33" stroke="rgba(0,229,255,0.6)" stroke-width="1.5"/>
+            <text x="67" y="23">15</text>
+            <line x1="90" y1="21" x2="90" y2="30" stroke="rgba(0,229,255,0.6)" stroke-width="1.5"/>
+            <text x="82" y="19">10</text>
+            <line x1="115" y1="27" x2="112" y2="35" stroke="rgba(0,229,255,0.6)" stroke-width="1.5"/>
+            <text x="108" y="24">5</text>
+            <line x1="143" y1="38" x2="137" y2="45" stroke="rgba(0,229,255,0.6)" stroke-width="1.5"/>
+            <text x="138" y="37">0</text>
+            <text x="158" y="93">inHg</text>
+          </g>
+          <!-- Needle -->
+          <line id="vacNeedle" x1="90" y1="90" x2="28" y2="90" stroke="rgba(255,71,87,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="90" cy="90" r="6" fill="rgba(255,71,87,0.9)"/>
+          <text id="vacReadInHg" x="90" y="130" text-anchor="middle" font-size="11" fill="rgba(255,179,0,0.9)" font-family="Share Tech Mono">29.92 inHg</text>
+          <text x="90" y="145" text-anchor="middle" font-size="9" fill="rgba(0,229,255,0.5)" font-family="Rajdhani">VACUUM GAUGE</text>
+        </svg>
+      </div>
+
+      <!-- Micron Gauge Display -->
+      <div class="baro-svg-area">
+        <div class="baro-label">Micron Gauge (Digital)</div>
+        <svg viewBox="0 0 160 200" width="160" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="20" width="140" height="160" rx="10" fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.35)" stroke-width="1.5"/>
+          <rect x="20" y="35" width="120" height="60" rx="6" fill="rgba(0,0,20,0.8)" stroke="rgba(0,229,255,0.2)" stroke-width="1"/>
+          <text id="micronDisp" x="80" y="75" text-anchor="middle" font-size="26" fill="rgba(0,229,255,1)" font-family="Share Tech Mono">760000</text>
+          <text x="80" y="88" text-anchor="middle" font-size="9" fill="rgba(0,229,255,0.4)" font-family="Rajdhani">micron Hg</text>
+          <!-- Status bar -->
+          <rect x="20" y="110" width="120" height="12" rx="6" fill="rgba(0,229,255,0.1)" stroke="rgba(0,229,255,0.2)"/>
+          <rect id="statusBar" x="20" y="110" width="120" height="12" rx="6" fill="rgba(0,229,255,0.5)"/>
+          <text id="statusText" x="80" y="138" text-anchor="middle" font-size="9" fill="rgba(255,179,0,0.9)" font-family="Rajdhani">ATMOSFER NORMAL</text>
+          <text id="mmHgDisp" x="80" y="155" text-anchor="middle" font-size="13" fill="rgba(255,179,0,0.8)" font-family="Share Tech Mono">760.0 mmHg</text>
+          <text id="paDisp" x="80" y="170" text-anchor="middle" font-size="11" fill="rgba(0,230,118,0.7)" font-family="Share Tech Mono">101325 Pa</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="sim-controls">
+      <div class="ctrl-label">
+        <span>Tekanan Absolut Sistem</span>
+        <span id="sliderVal">760.0 mmHg abs</span>
+      </div>
+      <input type="range" id="pressSlider" min="1" max="760" value="760" step="1" oninput="updateBaroSim(this.value)">
+
+      <div class="readout-grid" style="margin-top:16px">
+        <div class="readout-box"><div class="readout-unit">TEKANAN (mmHg)</div><div class="readout-val" id="ro_mmhg">760.0</div></div>
+        <div class="readout-box amber"><div class="readout-unit">TEKANAN (inHg)</div><div class="readout-val" id="ro_inhg">29.92</div></div>
+        <div class="readout-box green"><div class="readout-unit">TEKANAN (micron)</div><div class="readout-val" id="ro_micron">760000</div></div>
+        <div class="readout-box purple"><div class="readout-unit">TEKANAN (Pa)</div><div class="readout-val" id="ro_pa">101325</div></div>
+      </div>
+
+      <div id="vacInfo" style="margin-top:16px; padding:14px 18px; border-radius:8px; font-size:13px; line-height:1.7; background:rgba(0,229,255,0.05); border:1px solid rgba(0,229,255,0.15);">
+        <strong style="color:var(--accent-cyan)">Status:</strong> <span id="vacStatusText" style="color:var(--text-secondary)">Tekanan atmosfer normal. Belum ada kondisi vakum.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIM 2: Aneroid Capsule -->
+  <div class="sim-container" style="margin-top:24px">
+    <div class="sim-title">🔧 Simulasi 2: Kapsul Barometer Aneroid</div>
+    <div class="sim-desc">Amati bagaimana kapsul logam aneroid berdeformasi sesuai perubahan tekanan eksternal. Drag slider untuk mensimulasikan tekanan tinggi (dataran rendah) vs tekanan rendah (ketinggian/vakum).</div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:28px; align-items:center; justify-content:center">
+      <svg id="aneroidSvg" viewBox="0 0 280 160" width="280" xmlns="http://www.w3.org/2000/svg">
+        <!-- Spring kiri -->
+        <line x1="10" y1="80" x2="40" y2="80" stroke="rgba(0,229,255,0.5)" stroke-width="2"/>
+        <polyline id="springL" points="40,80 46,68 52,92 58,68 64,92 70,68 76,92 80,80" fill="none" stroke="rgba(0,229,255,0.8)" stroke-width="2"/>
+        <!-- Spring kanan -->
+        <line x1="200" y1="80" x2="270" y2="80" stroke="rgba(0,229,255,0.5)" stroke-width="2"/>
+        <polyline id="springR" points="200,80 206,68 212,92 218,68 224,92 230,68 236,92 240,80" fill="none" stroke="rgba(0,229,255,0.8)" stroke-width="2"/>
+        <!-- Kapsul aneroid (dinamis) -->
+        <ellipse id="aneroidCap" cx="140" cy="80" rx="60" ry="28" fill="rgba(255,179,0,0.12)" stroke="rgba(255,179,0,0.7)" stroke-width="2"/>
+        <!-- Corrugations -->
+        <ellipse id="aneroidC1" cx="140" cy="80" rx="46" ry="21" fill="none" stroke="rgba(255,179,0,0.4)" stroke-width="1.5"/>
+        <ellipse id="aneroidC2" cx="140" cy="80" rx="32" ry="14" fill="none" stroke="rgba(255,179,0,0.3)" stroke-width="1"/>
+        <ellipse id="aneroidC3" cx="140" cy="80" rx="18" ry="8" fill="none" stroke="rgba(255,179,0,0.2)" stroke-width="1"/>
+        <!-- Vakum label inside -->
+        <text x="140" y="83" text-anchor="middle" font-size="9" fill="rgba(255,179,0,0.7)" font-family="Rajdhani">VAKUM PARSIAL</text>
+        <!-- Tekanan arrows -->
+        <text id="ptextL" x="8" y="72" font-size="7" fill="rgba(0,230,118,0.8)" font-family="Rajdhani">P_atm</text>
+        <text id="ptextR" x="212" y="72" font-size="7" fill="rgba(0,230,118,0.8)" font-family="Rajdhani">P_atm</text>
+      </svg>
+
+      <div style="flex:1; min-width:200px">
+        <div class="ctrl-label"><span>Tekanan Eksternal</span><span id="aneroidPVal">1013 mbar</span></div>
+        <input type="range" id="aneroidSlider" min="500" max="1050" value="1013" step="5" oninput="updateAneroid(this.value)">
+        <div id="aneroidInfo" style="margin-top:14px; font-size:13px; color:var(--text-secondary); line-height:1.7;">
+          <strong style="color:var(--accent-amber)">Kondisi:</strong> <span id="aneroidStatus">Tekanan normal (sea level). Kapsul dalam kondisi setimbang.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIM 3: Moisture Boiling Point -->
+  <div class="sim-container" style="margin-top:24px">
+    <div class="sim-title">💧 Simulasi 3: Titik Didih Air vs Vakum</div>
+    <div class="sim-desc">Simulasikan proses vakuming sistem RAC. Geser slider vakum dan lihat bagaimana titik didih air turun — ini menjelaskan mengapa vakuming efektif membuang moisture dari sistem.</div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:28px; align-items:flex-start">
+      <div style="flex:1; min-width:220px">
+        <div class="ctrl-label"><span>Level Vakum (Micron Hg absolut)</span><span id="micronVal">760000 µm</span></div>
+        <input type="range" id="micronSlider" min="100" max="760000" value="760000" step="100" oninput="updateMoistSim(this.value)">
+
+        <div class="readout-grid" style="margin-top:14px; grid-template-columns:1fr 1fr;">
+          <div class="readout-box"><div class="readout-unit">MICRON Hg</div><div class="readout-val" id="moist_micron" style="font-size:16px">760,000</div></div>
+          <div class="readout-box amber"><div class="readout-unit">mmHg (Abs)</div><div class="readout-val" id="moist_mmhg">760.0</div></div>
+          <div class="readout-box green"><div class="readout-unit">TITIK DIDIH AIR</div><div class="readout-val" id="moist_bp" style="font-size:18px">100°C</div></div>
+          <div class="readout-box purple"><div class="readout-unit">STATUS RAC</div><div class="readout-val" id="moist_status" style="font-size:13px; line-height:1.2;">Belum Vakum</div></div>
+        </div>
+      </div>
+
+      <!-- Visual thermometer -->
+      <svg id="thermSvg" viewBox="0 0 100 220" width="100">
+        <rect x="42" y="20" width="16" height="150" rx="8" fill="rgba(0,229,255,0.05)" stroke="rgba(0,229,255,0.3)" stroke-width="1.5"/>
+        <rect id="thermFill" x="44" y="80" width="12" height="90" rx="6" fill="rgba(255,71,87,0.7)"/>
+        <circle cx="50" cy="178" r="16" fill="rgba(255,71,87,0.6)" stroke="rgba(255,71,87,0.9)" stroke-width="2"/>
+        <g stroke="rgba(0,229,255,0.4)" stroke-width="1">
+          <line x1="59" y1="30" x2="65" y2="30"/><text x="67" y="33" font-size="8" fill="rgba(0,229,255,0.5)" font-family="Share Tech Mono">100°</text>
+          <line x1="59" y1="80" x2="65" y2="80"/><text x="67" y="83" font-size="8" fill="rgba(0,229,255,0.5)" font-family="Share Tech Mono">51°</text>
+          <line x1="59" y1="120" x2="65" y2="120"/><text x="67" y="123" font-size="8" fill="rgba(0,229,255,0.5)" font-family="Share Tech Mono">12°</text>
+          <line x1="59" y1="145" x2="65" y2="145"/><text x="67" y="148" font-size="8" fill="rgba(0,229,255,0.5)" font-family="Share Tech Mono">0°</text>
+          <line x1="59" y1="160" x2="65" y2="160"/><text x="67" y="163" font-size="8" fill="rgba(0,229,255,0.5)" font-family="Share Tech Mono">-17°</text>
+        </g>
+        <text x="50" y="210" text-anchor="middle" font-size="8" fill="rgba(0,229,255,0.5)" font-family="Rajdhani">TITIK DIDIH</text>
+      </svg>
+    </div>
+
+    <div id="moistInfo" style="margin-top:14px; padding:14px 18px; border-radius:8px; font-size:13px; line-height:1.7; background:rgba(0,229,255,0.04); border:1px solid rgba(0,229,255,0.12);">
+      <span id="moistInfoText">Pada tekanan atmosfer, air mendidih pada 100°C. Belum ada efek vakum.</span>
+    </div>
+  </div>
+
+  <div class="step-nav">
+    <button class="step-btn secondary" onclick="showSection('satuan', document.querySelectorAll('.nav-tab')[3])">← Kembali</button>
+    <button class="step-btn primary" onclick="showSection('kesimpulan', document.querySelectorAll('.nav-tab')[5])">Lanjut: Kesimpulan →</button>
+  </div>
+</section>
+
+<!-- ===== 6. KESIMPULAN ===== -->
+<section class="section" id="kesimpulan">
+  <div class="sec-title">📋 Kesimpulan</div>
+  <div class="sec-subtitle">Rangkuman komprehensif seluruh materi kondisi vakum dalam sistem RAC.</div>
+
+  <div class="card">
+    <div class="conclusion-point">
+      <div class="con-icon">🌌</div>
+      <div class="con-body">
+        <h4>1. Definisi Vakum</h4>
+        <p>Vakum adalah kondisi di mana tekanan gas dalam suatu ruang lebih rendah dari tekanan atmosfer standar (101.325 kPa). Dalam konteks RAC, vakum partial (bukan vakum absolut) diciptakan untuk proses evakuasi sistem sebelum pengisian refrigeran. Semakin dalam vakum (nilai micron lebih kecil), semakin sedikit molekul gas yang tersisa dalam sistem.</p>
+      </div>
+    </div>
+    <div class="conclusion-point">
+      <div class="con-icon">🧪</div>
+      <div class="con-body">
+        <h4>2. Barometer Air Raksa (Torricelli)</h4>
+        <p>Ditemukan Evangelista Torricelli (1643), barometer air raksa mengukur tekanan atmosfer dengan mengamati tinggi kolom merkuri (Hg) yang diangkat oleh tekanan udara. Pada kondisi standar, tekanan 1 atmosfer mengangkat kolom Hg setinggi tepat 760 mm (atau 29.921 inci). Di atas kolom Hg terbentuk ruang vakum Torricellian — kontribusi terbesar dalam sejarah fisika vakum.</p>
+      </div>
+    </div>
+    <div class="conclusion-point">
+      <div class="con-icon">🔩</div>
+      <div class="con-body">
+        <h4>3. Barometer Aneroid (Vidi, 1844)</h4>
+        <p>Barometer aneroid tidak menggunakan cairan, melainkan kapsul logam tipis bergelombang yang divakumkan sebagian. Perubahan tekanan atmosfer mengubah dimensi kapsul (mengempis atau mengembang), dan gerakan infra-kecil ini diperbesar oleh sistem lever-gear untuk menggerakkan jarum penunjuk. Portable, aman (tidak beracun), dan andal — menjadi basis altimeter, barometer stasiun cuaca, dan banyak instrumen modern.</p>
+      </div>
+    </div>
+    <div class="conclusion-point">
+      <div class="con-icon">📏</div>
+      <div class="con-body">
+        <h4>4. Mengapa Satuan Vakum = Satuan Panjang?</h4>
+        <p>Asal-usulnya historis: ketika Torricelli menemukan barometer, alat ukur tekanan belum ada. Satu-satunya cara mengekspresikan tekanan adalah dengan mengukur tinggi kolom Hg menggunakan penggaris. Karena tinggi kolom Hg (satuan panjang) berbanding langsung dengan tekanan (P = ρgh), maka panjang kolom menjadi representasi tekanan. Konvensi ini (mmHg, inHg, cmHg) terus digunakan hingga kini karena kepraktisan dan standar industri yang sudah mengakar.</p>
+      </div>
+    </div>
+    <div class="conclusion-point">
+      <div class="con-icon">🔬</div>
+      <div class="con-body">
+        <h4>5. Hierarki Satuan Vakum RAC</h4>
+        <p><strong>1 atm = 760 mmHg = 29.921 inHg = 76 cmHg = 760.000 micron Hg = 101.325 kPa</strong><br>
+        Untuk teknisi RAC: 1 micron Hg = 1 µmHg = 0.001 mmHg. Target vakuming profesional adalah 200–500 micron Hg absolut — nilai yang hanya dapat diukur akurat dengan electronic micron gauge, bukan manifold gauge konvensional.</p>
+      </div>
+    </div>
+    <div class="conclusion-point">
+      <div class="con-icon">💧</div>
+      <div class="con-body">
+        <h4>6. Vakum dan Penghilangan Moisture</h4>
+        <p>Pada vakum 500 micron Hg, titik didih air turun menjadi sekitar -26.8°C. Karena suhu lingkungan jauh lebih tinggi, semua sisa uap air (moisture) dalam sistem RAC akan menguap dan terhisap oleh pompa vakum. Inilah mengapa vakuming dalam (deep vacuum) efektif mengeliminasi moisture yang dapat menyebabkan korosi asam (acid formation) dan pembekuan di katup ekspansi.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="background:linear-gradient(135deg, rgba(0,229,255,0.06), rgba(124,77,255,0.06))">
+    <div class="card-title">🏆 Pesan dari Instruktur</div>
+    <p style="font-style:italic; font-size:15px; line-height:1.85; color:var(--text-primary)">"Memahami konsep vakum bukan hanya tentang angka di layar micron gauge. Ini tentang memahami fisika tekanan yang sesungguhnya — warisan ilmu dari Torricelli di abad ke-17 yang hari ini menjadi fondasi pekerjaan kita sebagai teknisi RAC profesional. Setiap kali Anda menghubungkan pompa vakum dan menunggu angka micron turun, Anda sedang melakukan eksperimen fisika yang sama dengan yang dilakukan Torricelli hampir 400 tahun lalu."</p>
+    <p style="margin-top:14px; font-size:13px; color:var(--accent-cyan); font-family:var(--font-head); font-weight:600;">— Sri Hardono, S.T., M.Sc | Instruktur Madya Kemnaker RI | WorldSkills Expert RAC</p>
+  </div>
+
+  <div class="step-nav">
+    <button class="step-btn secondary" onclick="showSection('simulasi', document.querySelectorAll('.nav-tab')[4])">← Kembali</button>
+    <button class="step-btn primary" onclick="showSection('kuis', document.querySelectorAll('.nav-tab')[6])">Lanjut: Kuis →</button>
+  </div>
+</section>
+
+<!-- ===== 7. KUIS ===== -->
+<section class="section" id="kuis">
+  <div class="quiz-header">
+    <div class="quiz-icon">🎯</div>
+    <div>
+      <h2>Kuis Pemahaman</h2>
+      <p>10 soal pilihan ganda | Jawab semua soal lalu klik "Lihat Hasil" | Feedback langsung tersedia</p>
+    </div>
+  </div>
+
+  <div id="quizQuestions">
+    <!-- Q1 -->
+    <div class="q-card">
+      <div class="q-num">SOAL 01 / 10</div>
+      <div class="q-text">Siapakah ilmuwan yang pertama kali menemukan barometer air raksa dan membuktikan adanya tekanan atmosfer serta ruang vakum?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answerQ(1,'A','C')"><span class="opt-letter">A</span>Galileo Galilei</button>
+        <button class="opt-btn" onclick="answerQ(1,'B','C')"><span class="opt-letter">B</span>Isaac Newton</button>
+        <button class="opt-btn" onclick="answerQ(1,'C','C')"><span class="opt-letter">C</span>Evangelista Torricelli</button>
+        <button class="opt-btn" onclick="answerQ(1,'D','C')"><span class="opt-letter">D</span>Blaise Pascal</button>
+      </div>
+      <div class="q-feedback" id="fb1">✅ <strong>Benar!</strong> Evangelista Torricelli (1643) adalah penemu barometer air raksa. Ia adalah murid Galileo Galilei. Blaise Pascal kemudian mengembangkan teori tekanan lebih lanjut (Hukum Pascal), dan satuan tekanan SI dinamai dari namanya.</div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card">
+      <div class="q-num">SOAL 02 / 10</div>
+      <div class="q-text">Pada kondisi standar (sea level), tekanan 1 atmosfer mengangkat kolom air raksa setinggi berapa dalam barometer Torricelli?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answerQ(2,'A','B')"><span class="opt-letter">A</span>1000 mm Hg</button>
+        <button class="opt-btn" onclick="answerQ(2,'B','B')"><span class="opt-letter">B</span>760 mm Hg</button>
+        <button class="opt-btn" onclick="answerQ(2,'C','B')"><span class="opt-letter">C</span>700 mm Hg</button>
+        <button class="opt-btn" onclick="answerQ(2,'D','B')"><span class="opt-letter">D</span>29.92 mm Hg</button>
+      </div>
+      <div class="q-feedback" id="fb2">✅ <strong>Benar!</strong> 760 mmHg = tekanan 1 atmosfer standar. Ingat: 29.92 adalah dalam satuan INCH (inHg), bukan mm. Ini sering tertukar!</div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <div class="q-num">SOAL 03 / 10</div>
+      <div class="q-text">Mengapa satuan vakum menggunakan satuan panjang (mmHg, inHg) dan bukan satuan tekanan langsung seperti Pascal?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answerQ(3,'A','B')"><span class="opt-letter">A</span>Karena Pascal tidak cocok untuk tekanan rendah</button>
+        <button class="opt-btn" onclick="answerQ(3,'B','B')"><span class="opt-letter">B</span>Karena tekanan diekspresikan melalui tinggi kolom Hg yang diukur dengan penggaris (warisan historis Torricelli)</button>
+        <button class="opt-btn" onclick="answerQ(3,'C','B')"><span class="opt-letter">C</span>Karena tekanan vakum selalu sama dengan panjang tabung</button>
+        <button class="opt-btn" onclick="answerQ(3,'D','B')"><span class="opt-letter">D</span>Karena air raksa memiliki panjang molekul yang unik</button>
+      </div>
+      <div class="q-feedback" id="fb3">✅ <strong>Benar!</strong> Asal-usulnya historis: pada 1643 tidak ada manometer tekanan. Satu-satunya cara mengekspresikan tekanan adalah mengukur tinggi kolom Hg. Karena P = ρgh, panjang kolom berbanding langsung dengan tekanan. Tradisi ini bertahan hingga kini.</div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <div class="q-num">SOAL 04 / 10</div>
+      <div class="q-text">Berapa nilai tekanan 1 atmosfer dalam satuan Micron Hg?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answerQ(4,'A','C')"><span class="opt-letter">A</span>760 Micron Hg</button>
+        <button class="opt-btn" onclick="answerQ(4,'B','C')"><span class="opt-letter">B</span>76.000 Micron Hg</button>
+        <button class="opt-btn" onclick="answerQ(4,'C','C')"><span class="opt-letter">C</span>760.000 Micron Hg</button>
+        <button class="opt-btn" onclick="answerQ(4,'D','C')"><span class="opt-letter">D</span>7.600.000 Micron Hg</button>
+      </div>
+      <div class="q-feedback" id="fb4">✅ <strong>Benar!</strong> 1 Micron Hg = 0.001 mmHg, sehingga 1 atm = 760 mmHg = 760.000 Micron Hg. Saat divakum ke 500 Micron, artinya tekanan hanya 500/760.000 = 0.00066 kali tekanan atmosfer!</div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <div class="q-num">SOAL 05 / 10</div>
+      <div class="q-text">Prinsip kerja barometer aneroid adalah...</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answerQ(5,'A','B')"><span class="opt-letter">A</span>Mengukur berat kolom air raksa dalam tabung kaca tertutup</button>
+        <button class="opt-btn" onclick="answerQ(5,'B','B')"><span class="opt-letter">B</span>Deformasi mekanis kapsul logam bergelombang yang divakumkan sebagian akibat perubahan tekanan atmosfer</button>
+        <button class="opt-btn" onclick="answerQ(5,'C','B')"><span class="opt-letter">C</span>Pengukuran perubahan hambatan listrik akibat tekanan</button>
+        <button class="opt-btn" onclick="answerQ(5,'D','B')"><span class="opt-letter">D</span>Mengukur tekanan melalui tegangan permukaan cairan</button>
+      </div>
+      <div class="q-feedback" id="fb5">✅ <strong>Benar!</strong> Kapsul aneroid (corrugated metal capsule) berisi vakum parsial. Tekanan atmosfer mengempis atau mengembangkan kapsul, gerakan diperbesar lever-gear, dan dibaca jarum penunjuk. Tidak ada cairan sama sekali — itulah arti "aneroid".</div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <div class="q-num">SOAL 06 / 10</div>
+      <div class="q-text">Target vakum profesional dalam sistem RAC sebelum pengisian refrigeran adalah...</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answerQ(6,'A','B')"><span class="opt-letter">A</span>29.92 inHg gauge (nol absolut)</button>
+        <button class="opt-btn" onclick="answerQ(6,'B','B')"><span class="opt-letter">B</span>200–500 Micron Hg absolut</button>
+        <button class="opt-btn" onclick="answerQ(6,'C','B')"><span class="opt-letter">C</span>0 Pa absolut (vakum sempurna)</button>
+        <button class="opt-btn" onclick="answerQ(6,'D','B')"><span class="opt-letter">D</span>760 mmHg absolut</button>
+      </div>
+      <div class="q-feedback" id="fb6">✅ <strong>Benar!</strong> Standar ACCA/RSES menetapkan minimum 500 micron, profesional 200–300 micron. Vakum sempurna (0 Pa) tidak diperlukan dan tidak dapat dicapai dengan pompa vakum RAC biasa. 760 mmHg adalah tekanan ATMOSFER, bukan vakum!</div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card">
+      <div class="q-num">SOAL 07 / 10</div>
+      <div class="q-text">Berapa titik didih air pada vakum 500 Micron Hg (absolut)? Ini adalah dasar fisika mengapa vakuming menghilangkan moisture dari sistem RAC.</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answerQ(7,'A','C')"><span class="opt-letter">A</span>0°C</button>
+        <button class="opt-btn" onclick="answerQ(7,'B','C')"><span class="opt-letter">B</span>-17.5°C</button>
+        <button class="opt-btn" onclick="answerQ(7,'C','C')"><span class="opt-letter">C</span>Sekitar -26.8°C</button>
+        <button class="opt-btn" onclick="answerQ(7,'D','C')"><span class="opt-letter">D</span>+51.7°C</button>
+      </div>
+      <div class="q-feedback" id="fb7">✅ <strong>Benar!</strong> Pada 500 micron Hg (≈ 0.5 mmHg), titik didih air ≈ -26.8°C. Karena suhu ruangan ~25°C jauh lebih tinggi, moisture dalam sistem mendidih dan berubah jadi uap, kemudian terhisap pompa vakum. Itulah mekanisme dehumidifikasi vakum!</div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card">
+      <div class="q-num">SOAL 08 / 10</div>
+      <div class="q-text">Konversi: 1 inHg = berapa mmHg?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answerQ(8,'A','C')"><span class="opt-letter">A</span>10 mmHg</button>
+        <button class="opt-btn" onclick="answerQ(8,'B','C')"><span class="opt-letter">B</span>2.54 mmHg</button>
+        <button class="opt-btn" onclick="answerQ(8,'C','C')"><span class="opt-letter">C</span>25.4 mmHg</button>
+        <button class="opt-btn" onclick="answerQ(8,'D','C')"><span class="opt-letter">D</span>100 mmHg</button>
+      </div>
+      <div class="q-feedback" id="fb8">✅ <strong>Benar!</strong> 1 inci = 25.4 mm, maka 1 inHg = 25.4 mmHg. Sehingga 29.921 inHg = 29.921 × 25.4 = 760 mmHg. Logis dan konsisten dengan konversi panjang standar!</div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="q-card">
+      <div class="q-num">SOAL 09 / 10</div>
+      <div class="q-text">Apa bahaya utama moisture (uap air) yang tidak dihilangkan dari sistem RAC?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answerQ(9,'A','D')"><span class="opt-letter">A</span>Menurunkan efisiensi kapasitor</button>
+        <button class="opt-btn" onclick="answerQ(9,'B','D')"><span class="opt-letter">B</span>Mengurangi efisiensi kompresor sementara</button>
+        <button class="opt-btn" onclick="answerQ(9,'C','D')"><span class="opt-letter">C</span>Menyebabkan kebisingan kompresor</button>
+        <button class="opt-btn" onclick="answerQ(9,'D','D')"><span class="opt-letter">D</span>Membeku di katup ekspansi (ice block), bereaksi dengan refrigeran membentuk asam (HF), dan merusak komponen</button>
+      </div>
+      <div class="q-feedback" id="fb9">✅ <strong>Benar!</strong> Air bereaksi dengan HFC refrigerant: H₂O + HFC → HF (hydrofluoric acid) — asam yang sangat korosif merusak kompressor, katup, dan pipa tembaga. Selain itu, air dapat membeku di orifice katup ekspansi (ice block) → sistem tidak dingin.</div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="q-card">
+      <div class="q-num">SOAL 10 / 10</div>
+      <div class="q-text">Satuan "Torr" dalam fisika vakum dinamai dari ilmuwan siapa, dan berapa nilainya dalam mmHg?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answerQ(10,'A','C')"><span class="opt-letter">A</span>Dari Thomas Torrance; 1 Torr = 10 mmHg</button>
+        <button class="opt-btn" onclick="answerQ(10,'B','C')"><span class="opt-letter">B</span>Dari Torquato Tasso; 1 Torr = 0.1 mmHg</button>
+        <button class="opt-btn" onclick="answerQ(10,'C','C')"><span class="opt-letter">C</span>Dari Evangelista Torricelli; 1 Torr = 1 mmHg</button>
+        <button class="opt-btn" onclick="answerQ(10,'D','C')"><span class="opt-letter">D</span>Dari Nicola Torri; 1 Torr = 100 Pa</button>
+      </div>
+      <div class="q-feedback" id="fb10">✅ <strong>Benar!</strong> Satuan Torr (T) = 1 mmHg, dinamai dari Evangelista Torricelli sebagai penghormatan atas kontribusinya. Digunakan luas dalam fisika vakum, astronomi, dan kedokteran (tekanan darah). 1 atm = 760 Torr = 760 mmHg.</div>
+    </div>
+  </div>
+
+  <button class="quiz-submit-btn" id="submitBtn" onclick="submitQuiz()" disabled>Lihat Hasil Kuis</button>
+
+  <!-- Result Panel -->
+  <div class="result-panel" id="resultPanel">
+    <div class="score-circle" id="scoreCircle">
+      <div class="score-num" id="scoreNum">0</div>
+      <div class="score-max">dari 10</div>
+    </div>
+    <div class="result-title" id="resultTitle">—</div>
+    <div class="result-msg" id="resultMsg">—</div>
+    <div id="scoreBreakdown" style="margin-bottom:20px; font-size:13px; color:var(--text-secondary);"></div>
+    <button class="retake-btn" onclick="resetQuiz()">🔄 Ulangi Kuis</button>
+  </div>
+
+  <div class="step-nav">
+    <button class="step-btn secondary" onclick="showSection('kesimpulan', document.querySelectorAll('.nav-tab')[5])">← Kembali ke Kesimpulan</button>
+    <button class="step-btn primary" onclick="showSection('tujuan', document.querySelectorAll('.nav-tab')[0])">🏠 Mulai dari Awal</button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <strong>eshapublicskillslearning</strong> | Dikembangkan oleh <strong>Sri Hardono, S.T., M.Sc</strong> — Instruktur Madya Kemnaker RI | WorldSkills Expert RAC<br>
+  <span style="margin-top:4px; display:block">Media Pembelajaran Interaktif: Kondisi Vakum & Pengukurannya dalam Sistem RAC | © 2024</span>
+</footer>
+
+<script>
+// ===== NAV =====
+function showSection(id, tabEl) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(tabEl) tabEl.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ===== SIM 1: BAROMETER Hg =====
+function updateBaroSim(val) {
+  val = parseInt(val);
+  const mmhg = val;
+  const inhg = (mmhg / 25.4).toFixed(3);
+  const micron = mmhg * 1000;
+  const pa = Math.round(mmhg * 133.322);
+
+  document.getElementById('sliderVal').textContent = mmhg.toFixed(1) + ' mmHg abs';
+  document.getElementById('ro_mmhg').textContent = mmhg.toFixed(1);
+  document.getElementById('ro_inhg').textContent = parseFloat(inhg).toFixed(3);
+  document.getElementById('ro_micron').textContent = micron.toLocaleString();
+  document.getElementById('ro_pa').textContent = pa.toLocaleString();
+
+  // Update barometer SVG
+  // col height: max 760mmHg = y:120 (top), min 1mmHg = y:279
+  const colTop = 120 + (760 - val) * (160/759);
+  const colH = 280 - colTop;
+  const hgCol = document.getElementById('hgCol');
+  hgCol.setAttribute('y', colTop.toFixed(1));
+  hgCol.setAttribute('height', Math.max(0,colH).toFixed(1));
+
+  const vacH = colTop - 30;
+  document.getElementById('vacSpace').setAttribute('height', Math.max(0,vacH).toFixed(1));
+  document.getElementById('heightLine').setAttribute('y1', colTop.toFixed(1));
+  document.getElementById('hLabel').textContent = mmhg + 'mm';
+
+  // Needle: 0 inHg → left, 29.92 inHg → right(-ish)
+  const angle = -180 + (parseFloat(inhg) / 29.92) * 150;
+  const rad = (angle * Math.PI) / 180;
+  const nx = 90 + 68 * Math.cos(rad);
+  const ny = 90 + 68 * Math.sin(rad);
+  document.getElementById('vacNeedle').setAttribute('x2', nx.toFixed(1));
+  document.getElementById('vacNeedle').setAttribute('y2', ny.toFixed(1));
+  document.getElementById('vacReadInHg').textContent = parseFloat(inhg).toFixed(3) + ' inHg';
+
+  // Micron display
+  document.getElementById('micronDisp').textContent = micron.toLocaleString();
+  document.getElementById('mmHgDisp').textContent = mmhg.toFixed(1) + ' mmHg';
+  document.getElementById('paDisp').textContent = pa.toLocaleString() + ' Pa';
+
+  // Status bar width
+  const barW = 120 * (val / 760);
+  document.getElementById('statusBar').setAttribute('width', barW.toFixed(0));
+
+  // Status text
+  let statusText = '';
+  let barColor = 'rgba(0,229,255,0.5)';
+  if (val >= 700) {
+    statusText = 'ATMOSFER NORMAL'; barColor = 'rgba(0,230,118,0.7)';
+  } else if (val >= 400) {
+    statusText = 'VAKUM RINGAN'; barColor = 'rgba(0,229,255,0.7)';
+  } else if (val >= 50) {
+    statusText = 'VAKUM SEDANG'; barColor = 'rgba(255,179,0,0.7)';
+  } else if (val >= 5) {
+    statusText = 'VAKUM DALAM'; barColor = 'rgba(124,77,255,0.8)';
+  } else {
+    statusText = 'VAKUM SANGAT DALAM'; barColor = 'rgba(255,71,87,0.8)';
+  }
+  document.getElementById('statusText').textContent = statusText;
+  document.getElementById('statusBar').setAttribute('fill', barColor);
+
+  let infoHtml = '';
+  const vacuumGauge = 760 - val;
+  if (val >= 700) {
+    infoHtml = `<strong style="color:var(--accent-green)">Status: Tekanan atmosfer normal.</strong> Tidak ada kondisi vakum. Vakum gauge: ${(vacuumGauge/25.4).toFixed(2)} inHg.`;
+  } else {
+    infoHtml = `<strong style="color:var(--accent-cyan)">Status: VAKUM</strong> — Tekanan absolut ${mmhg} mmHg (${micron.toLocaleString()} micron). Vakum gauge: ${(vacuumGauge/25.4).toFixed(3)} inHg. `;
+    if (micron <= 500) infoHtml += `<span style="color:var(--accent-green)">✅ Target vakum RAC profesional tercapai!</span>`;
+    else if (micron <= 2000) infoHtml += `<span style="color:var(--accent-amber)">⚠️ Vakum cukup dalam, mendekati target RAC profesional.</span>`;
+    else infoHtml += `<span style="color:var(--accent-amber)">⚠️ Belum cukup dalam untuk vakum RAC. Target: 500 micron.</span>`;
+  }
+  document.getElementById('vacStatusText').innerHTML = infoHtml;
+}
+
+// ===== SIM 2: ANEROID =====
+function updateAneroid(val) {
+  val = parseInt(val);
+  document.getElementById('aneroidPVal').textContent = val + ' mbar';
+
+  // Capsule rx: normal 1013mbar = rx60, higher pressure = smaller, lower = bigger
+  const rx = 60 - (val - 1013) * 0.08;
+  const ry = 28 - (val - 1013) * 0.035;
+  const rxC = Math.max(20, Math.min(80, rx));
+  const ryC = Math.max(10, Math.min(38, ry));
+  document.getElementById('aneroidCap').setAttribute('rx', rxC.toFixed(0));
+  document.getElementById('aneroidCap').setAttribute('ry', ryC.toFixed(0));
+  document.getElementById('aneroidC1').setAttribute('rx', (rxC*0.76).toFixed(0));
+  document.getElementById('aneroidC1').setAttribute('ry', (ryC*0.75).toFixed(0));
+  document.getElementById('aneroidC2').setAttribute('rx', (rxC*0.54).toFixed(0));
+  document.getElementById('aneroidC2').setAttribute('ry', (ryC*0.5).toFixed(0));
+
+  let statusMsg = '';
+  if (val > 1013) statusMsg = `Tekanan tinggi (${val} mbar). Atmosfer menekan kapsul → kapsul mengempis → jarum bergerak ke nilai tekanan tinggi.`;
+  else if (val < 990) statusMsg = `Tekanan rendah (${val} mbar) — seperti di ketinggian atau kondisi vakum parsial. Kapsul mengembang → jarum bergerak ke tekanan rendah.`;
+  else statusMsg = `Tekanan normal (${val} mbar). Kapsul dalam kondisi setimbang bawaan (equilibrium).`;
+  document.getElementById('aneroidStatus').textContent = statusMsg;
+}
+
+// ===== SIM 3: MOISTURE =====
+function calcBoilingPoint(micron) {
+  // Approximation based on Antoine equation + lookup table
+  if (micron >= 760000) return 100;
+  if (micron >= 100000) return 51.7 + (micron - 100000) * (100 - 51.7) / 660000;
+  if (micron >= 10000) return 11.8 + (micron - 10000) * (51.7 - 11.8) / 90000;
+  if (micron >= 4600) return 0 + (micron - 4600) * (11.8 - 0) / 5400;
+  if (micron >= 1000) return -17.5 + (micron - 1000) * (0 - (-17.5)) / 3600;
+  if (micron >= 500) return -26.8 + (micron - 500) * (-17.5 - (-26.8)) / 500;
+  if (micron >= 200) return -38.8 + (micron - 200) * (-26.8 - (-38.8)) / 300;
+  return -50 + micron * (-38.8 - (-50)) / 200;
+}
+
+function updateMoistSim(val) {
+  val = parseInt(val);
+  const mmhg = (val / 1000).toFixed(2);
+  const bp = calcBoilingPoint(val).toFixed(1);
+
+  document.getElementById('micronVal').textContent = parseInt(val).toLocaleString() + ' µm';
+  document.getElementById('moist_micron').textContent = parseInt(val).toLocaleString();
+  document.getElementById('moist_mmhg').textContent = mmhg;
+  document.getElementById('moist_bp').textContent = bp + '°C';
+
+  // Thermometer fill: 100°C = y:30, -50°C = y:168
+  const bpNum = parseFloat(bp);
+  const thermY = 168 - ((bpNum + 50) / 150) * 138;
+  const thermH = 168 - Math.max(22, thermY);
+  document.getElementById('thermFill').setAttribute('y', Math.max(22, thermY).toFixed(0));
+  document.getElementById('thermFill').setAttribute('height', Math.max(0,thermH).toFixed(0));
+
+  let status = '', statusColor = '', infoText = '';
+  if (val >= 700000) {
+    status = 'Atmosfer'; statusColor = 'var(--text-muted)';
+    infoText = 'Pada tekanan atmosfer (760 mmHg), air mendidih pada 100°C. Belum ada proses vakuming. Moisture tetap cair.';
+  } else if (val >= 50000) {
+    status = 'Vakum Awal'; statusColor = 'var(--accent-cyan)';
+    infoText = `Vakum awal. Titik didih air ${bp}°C. Moisture mulai menguap lebih mudah, namun proses belum optimal untuk RAC.`;
+  } else if (val >= 2000) {
+    status = 'Vakum Sedang'; statusColor = 'var(--accent-amber)';
+    infoText = `Vakum sedang. Titik didih air ${bp}°C. Moisture lebih cepat menguap. Namun belum cukup dalam untuk RAC profesional.`;
+  } else if (val >= 500) {
+    status = '✅ Target RAC'; statusColor = 'var(--accent-green)';
+    infoText = `✅ Target vakum RAC tercapai! Titik didih air ${bp}°C — jauh di bawah suhu lingkungan. SEMUA moisture dalam sistem akan mendidih dan terhisap pompa vakum!`;
+  } else {
+    status = '🏆 Deep Vacuum'; statusColor = 'var(--accent-purple)';
+    infoText = `Deep vacuum profesional! Titik didih air ${bp}°C. Bahkan moisture di permukaan logam akan terevaporasi sempurna. Ini adalah standar untuk sistem kritis dan high-precision RAC.`;
+  }
+
+  document.getElementById('moist_status').textContent = status;
+  document.getElementById('moist_status').style.color = statusColor;
+  document.getElementById('moistInfoText').innerHTML = infoText;
+}
+
+// Init simulations
+updateBaroSim(760);
+updateAneroid(1013);
+updateMoistSim(760000);
+
+// ===== QUIZ =====
+let answers = {};
+let correctAnswers = {1:'C',2:'B',3:'B',4:'C',5:'B',6:'B',7:'C',8:'C',9:'D',10:'C'};
+const feedbackTexts = {
+  1: '❌ Jawaban kurang tepat. Yang benar: <strong>Evangelista Torricelli (1643)</strong>, murid Galileo. Blaise Pascal mengembangkan teori tekanan (Hukum Pascal). Newton fokus pada mekanika dan gravitasi.',
+  2: '❌ Jawaban kurang tepat. 760 mmHg adalah tekanan 1 atmosfer standar. Ingat: 29.92 adalah dalam INCH (inHg). 1 inHg = 25.4 mmHg.',
+  3: '❌ Jawaban kurang tepat. Pascal sangat cocok untuk tekanan rendah, namun konvensi historis Torricelli yang menggunakan panjang kolom Hg lebih mengakar di industri.',
+  4: '❌ Jawaban kurang tepat. 1 Micron = 0.001 mmHg, jadi 760 mmHg = 760 × 1000 = 760.000 Micron Hg.',
+  5: '❌ Jawaban kurang tepat. Aneroid = tanpa cairan. Prinsipnya adalah deformasi kapsul logam bergelombang berisi vakum parsial yang merespons tekanan atmosfer.',
+  6: '❌ Jawaban kurang tepat. Target vakuming profesional RAC adalah 200–500 Micron Hg absolut. 760 mmHg adalah tekanan atmosfer, bukan vakum!',
+  7: '❌ Jawaban kurang tepat. Pada 500 micron Hg, titik didih air ≈ -26.8°C. 51.7°C adalah pada 100 mmHg. 0°C adalah triple point air (4.6 mmHg).',
+  8: '❌ Jawaban kurang tepat. 1 inci = 25.4 mm, maka 1 inHg = 25.4 mmHg (bukan 2.54). Cek: 29.921 inHg × 25.4 = 760 mmHg ✓',
+  9: '❌ Jawaban kurang tepat. Bahaya utama moisture: (1) membeku di katup ekspansi = ice block; (2) reaksi H₂O + HFC → HF (asam hidrofluorat) yang korosif merusak kompressor.',
+  10: '❌ Jawaban kurang tepat. "Torr" dari Torricelli. 1 Torr = 1 mmHg. Bukan dari nama orang lain.',
+};
+
+function answerQ(qNum, selected, correct) {
+  const opts = document.querySelectorAll(`#quizQuestions .q-card:nth-child(${qNum}) .opt-btn`);
+  opts.forEach(b => b.disabled = true);
+
+  const letters = ['A','B','C','D'];
+  opts.forEach((b, i) => {
+    if (letters[i] === correct) b.classList.add('correct');
+    if (letters[i] === selected && selected !== correct) b.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  if (selected === correct) {
+    fb.classList.add('show', 'correct-fb');
+    fb.innerHTML = '✅ ' + fb.innerHTML.replace(/^✅\s*/,'');
+  } else {
+    fb.classList.add('show', 'wrong-fb');
+    fb.innerHTML = feedbackTexts[qNum];
+  }
+
+  answers[qNum] = (selected === correct);
+  if (Object.keys(answers).length === 10) {
+    document.getElementById('submitBtn').disabled = false;
+  }
+}
+
+function submitQuiz() {
+  let score = Object.values(answers).filter(Boolean).length;
+  const panel = document.getElementById('resultPanel');
+  panel.classList.add('show');
+  document.getElementById('scoreNum').textContent = score;
+
+  const circle = document.getElementById('scoreCircle');
+  let title, msg, bg;
+  if (score === 10) {
+    title = '🏆 SEMPURNA! Luar Biasa!'; bg = 'linear-gradient(135deg,rgba(0,230,118,0.2),rgba(0,229,255,0.2))';
+    msg = 'Nilai sempurna! Anda telah menguasai konsep vakum, barometer, dan satuan pengukuran vakum dalam RAC dengan sangat baik. Siap menjadi teknisi RAC profesional!';
+  } else if (score >= 8) {
+    title = '🎉 Sangat Baik!'; bg = 'linear-gradient(135deg,rgba(0,229,255,0.15),rgba(124,77,255,0.15))';
+    msg = 'Pemahaman Anda sangat bagus! Review kembali soal yang salah untuk memperkuat pemahaman di area tersebut.';
+  } else if (score >= 6) {
+    title = '👍 Cukup Baik'; bg = 'linear-gradient(135deg,rgba(255,179,0,0.12),rgba(0,229,255,0.08))';
+    msg = 'Pemahaman dasar sudah cukup baik. Perlu review lebih mendalam di materi yang masih belum dikuasai — terutama konversi satuan dan prinsip barometer.';
+  } else {
+    title = '📚 Perlu Belajar Lebih'; bg = 'linear-gradient(135deg,rgba(255,71,87,0.1),rgba(255,179,0,0.1))';
+    msg = 'Jangan menyerah! Kembali baca materi dari awal, terutama bagian Konsep Vakum, Barometer, dan Satuan. Klik "Ulangi Kuis" setelah review.';
+  }
+
+  circle.style.background = bg;
+  circle.style.border = '3px solid ' + (score >= 8 ? 'var(--accent-cyan)' : score >= 6 ? 'var(--accent-amber)' : 'var(--accent-red)');
+  document.getElementById('scoreNum').style.color = score >= 8 ? 'var(--accent-green)' : score >= 6 ? 'var(--accent-amber)' : 'var(--accent-red)';
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultMsg').textContent = msg;
+
+  const correct = Object.values(answers).filter(Boolean).length;
+  const wrong = 10 - correct;
+  document.getElementById('scoreBreakdown').innerHTML = `<span style="color:var(--accent-green)">✅ Benar: ${correct}</span> &nbsp;|&nbsp; <span style="color:var(--accent-red)">❌ Salah: ${wrong}</span> &nbsp;|&nbsp; Nilai: ${score*10}/100`;
+
+  panel.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function resetQuiz() {
+  answers = {};
+  document.getElementById('resultPanel').classList.remove('show');
+  document.getElementById('submitBtn').disabled = true;
+  document.querySelectorAll('.opt-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.q-feedback').forEach(fb => {
+    fb.classList.remove('show','correct-fb','wrong-fb');
+  });
+  window.scrollTo({top: document.getElementById('kuis').offsetTop - 130, behavior:'smooth'});
+}
+</script>
+</body>
+</html>
