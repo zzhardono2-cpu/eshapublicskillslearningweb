@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembelajaran Interaktif: Tekanan Atmosfer | eshapublicskillslearning</title>
+    
+    <!-- Chosen Palette: Deep Navy (Background), Bright Orange (Accent), Pure White (Text/Cards), Cyan (Highlight) -->
+    <!-- Application Structure Plan: 
+         Struktur SPA dirancang linear untuk membimbing pengguna (linear learning path). 
+         1. Hero/Pengantar: Menyapa pengguna dan menetapkan konteks.
+         2. Tujuan Pembelajaran: Ekspektasi yang jelas.
+         3. Konsep Dasar (Teori): Penjelasan naratif dengan elemen interaktif sederhana (tab/accordion) agar teks tidak menumpuk.
+         4. Simulasi Ketinggian vs Tekanan: Inti interaktif. Pengguna menggeser slider (ketinggian), yang secara realtime memperbarui grafik (Chart.js) dan kerapatan molekul udara (Canvas) untuk pemahaman visual yang kuat.
+         5. Relevansi RAC: Mengaitkan teori dengan praktik nyata di lapangan bagi teknisi AC/Pendingin.
+         6. Kesimpulan: Ringkasan padat.
+         7. Kuis Interaktif: Evaluasi langsung dengan umpan balik per pertanyaan untuk mengukur penyerapan materi. 
+         Struktur ini dipilih karena materi fisika dasar memerlukan transisi yang mulus dari teori -> visualisasi -> aplikasi praktis -> evaluasi. -->
+    <!-- Visualization & Content Choices: 
+         - Konversi Satuan -> Interactive Cards -> Tujuannya agar pengguna mudah membandingkan nilai atm, psi, bar tanpa melihat tabel statis. (HTML/CSS/JS).
+         - Hubungan Ketinggian & Tekanan -> Line Chart (Chart.js) & Particle Simulation (Canvas) -> Tujuannya membuktikan secara visual bahwa semakin tinggi tempat, tekanan dan molekul udara menipis. Interaksi via Slider. (NO SVG/Mermaid).
+         - Kuis -> Dinamis DOM update -> Tujuannya evaluasi interaktif. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 800: '#1a2530', 900: '#0f172a' },
+                        orange: { 500: '#f97316', 600: '#ea580c' },
+                        cyan: { 400: '#22d3ee' }
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles & Required Chart Container Setup */
+        body { background-color: #0f172a; color: #f8fafc; }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 400px;
+            min-height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container { height: 50vh; max-height: 500px; }
+        }
+
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f97316; }
+
+        .btn-interactive {
+            transition: all 0.3s ease;
+        }
+        .btn-interactive:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-orange-500 selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-panel border-b border-gray-700 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 font-bold text-xl text-white tracking-wider">
+                    <span class="text-orange-500">esha</span>publicskills
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#tujuan" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Tujuan</a>
+                        <a href="#materi" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Konsep</a>
+                        <a href="#simulasi" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium text-orange-400">Simulasi</a>
+                        <a href="#aplikasi" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">RAC</a>
+                        <a href="#kuis" class="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded-md text-sm font-bold">Kuis</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header / Hero -->
+    <header class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
+            Memahami <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">Tekanan Atmosfer</span>
+        </h1>
+        <p class="mt-4 text-xl text-gray-400 max-w-3xl mx-auto">
+            Media pembelajaran interaktif ini dirancang khusus untuk Teknisi Refrigeration and Air Conditioning (RAC) untuk memahami dasar fundamental tekanan udara dan dampaknya pada sistem pendingin.
+        </p>
+        <div class="mt-8">
+            <span class="inline-block bg-navy-800 text-cyan-400 border border-cyan-800 px-4 py-2 rounded-full text-sm font-semibold tracking-wide">
+                Instruktur: Sri Hardono, S.T., M.Sc
+            </span>
+        </div>
+    </header>
+
+    <!-- Section: Tujuan Pembelajaran -->
+    <section id="tujuan" class="py-16 px-4 max-w-5xl mx-auto">
+        <div class="glass-panel p-8 md:p-12 relative overflow-hidden">
+            <!-- Decorative element -->
+            <div class="absolute top-0 right-0 -mr-16 -mt-16 text-9xl text-gray-800 opacity-20 font-serif">&#10003;</div>
+            
+            <h2 class="text-3xl font-bold mb-6 flex items-center border-b border-gray-700 pb-4">
+                <span class="text-orange-500 mr-3 text-4xl">&#128175;</span> Tujuan Pembelajaran
+            </h2>
+            <p class="text-gray-300 mb-6 text-lg leading-relaxed">
+                Bagian ini menjelaskan apa saja kompetensi yang akan Anda capai setelah menyelesaikan modul interaktif ini.
+            </p>
+            <ul class="space-y-4 text-lg">
+                <li class="flex items-start">
+                    <span class="text-cyan-400 mr-3 text-xl">&#10148;</span>
+                    <span>Mampu <strong>mendefinisikan</strong> apa yang dimaksud dengan tekanan atmosfer dan asal mula terjadinya.</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-cyan-400 mr-3 text-xl">&#10148;</span>
+                    <span>Memahami <strong>korelasi</strong> antara perubahan ketinggian suatu wilayah (altitude) terhadap nilai tekanan atmosfer.</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-cyan-400 mr-3 text-xl">&#10148;</span>
+                    <span>Mengidentifikasi berbagai <strong>satuan pengukuran</strong> tekanan (atm, psi, bar, kPa) dan konversinya.</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-cyan-400 mr-3 text-xl">&#10148;</span>
+                    <span>Mampu <strong>mengaplikasikan</strong> pemahaman tekanan atmosfer dalam proses kerja Refrigeration & Air Conditioning (misalnya: proses vakum).</span>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Section: Konsep Dasar -->
+    <section id="materi" class="py-16 px-4 max-w-7xl mx-auto">
+        <h2 class="text-3xl font-bold mb-8 text-center"><span class="text-orange-500 mr-2">&#128214;</span> Konsep Dasar & Definisi</h2>
+        <p class="text-center text-gray-400 max-w-3xl mx-auto mb-12">
+            Pelajari narasi mendasar tentang apa yang membentuk tekanan yang kita rasakan setiap hari namun jarang kita sadari.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="glass-panel p-8">
+                <h3 class="text-2xl font-semibold mb-4 text-cyan-400">Apa Itu Tekanan Atmosfer?</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed text-justify">
+                    Bumi diselimuti oleh lapisan gas yang kita sebut <strong>Atmosfer</strong>. Meskipun gas terlihat ringan, kumpulan molekul gas yang setinggi ratusan kilometer ini memiliki <strong>massa</strong>. Karena bumi memiliki gravitasi, massa udara ini ditarik ke bawah.
+                </p>
+                <p class="text-gray-300 leading-relaxed text-justify">
+                    <strong>Tekanan atmosfer</strong> adalah tekanan pada titik manapun di atmosfer bumi yang disebabkan oleh <em>berat dari kolom udara</em> yang berada tepat di atas titik tersebut. Bayangkan Anda berada di dasar lautan udara; semakin dalam Anda berada (semakin dekat ke permukaan laut), semakin berat udara yang menekan Anda.
+                </p>
+            </div>
+            
+            <div class="glass-panel p-8">
+                <h3 class="text-2xl font-semibold mb-4 text-cyan-400">Satuan Tekanan Standar</h3>
+                <p class="text-gray-300 mb-6">
+                    Dalam pekerjaan RAC, kita sering berhadapan dengan berbagai macam manifold gauge yang menggunakan satuan berbeda. Di permukaan laut standar (Sea Level), tekanan atmosfer diukur sebesar:
+                </p>
+                
+                <!-- Interactive Unit Cards -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-navy-900 border border-gray-700 p-4 rounded-lg text-center transform transition duration-300 hover:scale-105 hover:border-orange-500 cursor-default">
+                        <div class="text-3xl font-bold text-white">1</div>
+                        <div class="text-sm text-gray-400">Atmosphere (atm)</div>
+                    </div>
+                    <div class="bg-navy-900 border border-gray-700 p-4 rounded-lg text-center transform transition duration-300 hover:scale-105 hover:border-cyan-400 cursor-default">
+                        <div class="text-3xl font-bold text-white">14.7</div>
+                        <div class="text-sm text-gray-400">PSI (Pounds / sq in)</div>
+                    </div>
+                    <div class="bg-navy-900 border border-gray-700 p-4 rounded-lg text-center transform transition duration-300 hover:scale-105 hover:border-green-400 cursor-default">
+                        <div class="text-3xl font-bold text-white">1.013</div>
+                        <div class="text-sm text-gray-400">Bar</div>
+                    </div>
+                    <div class="bg-navy-900 border border-gray-700 p-4 rounded-lg text-center transform transition duration-300 hover:scale-105 hover:border-yellow-400 cursor-default">
+                        <div class="text-3xl font-bold text-white">101.3</div>
+                        <div class="text-sm text-gray-400">Kilopascal (kPa)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Simulasi Interaktif -->
+    <section id="simulasi" class="py-16 px-4 bg-navy-800 relative border-y border-gray-700">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-4"><span class="text-orange-500 mr-2">&#127918;</span> Laboratorium Simulasi: Ketinggian vs Tekanan</h2>
+                <p class="text-gray-400 max-w-3xl mx-auto">
+                    Bagian ini mendemonstrasikan bagaimana tekanan berubah saat kita naik ke tempat yang lebih tinggi. Geser tuas ketinggian di bawah ini dan amati perubahan pada grafik serta visualisasi molekul udara.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 md:p-10">
+                <!-- Control Panel -->
+                <div class="mb-8">
+                    <label for="altitudeRange" class="block text-xl font-medium text-white mb-4">
+                        Ketinggian Saat Ini: <span id="altitudeVal" class="text-cyan-400 font-bold text-3xl">0</span> Meter (DPL)
+                    </label>
+                    <input type="range" id="altitudeRange" min="0" max="10000" step="100" value="0" 
+                           class="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-orange-500">
+                    <div class="flex justify-between text-sm text-gray-400 mt-2">
+                        <span>Permukaan Laut (0m)</span>
+                        <span>Gunung Everest (~8848m)</span>
+                    </div>
+                </div>
+
+                <!-- Visualization Area -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    
+                    <!-- Text Info based on state -->
+                    <div class="space-y-6">
+                        <div class="bg-navy-900 p-6 rounded-lg border-l-4 border-orange-500">
+                            <h4 class="text-lg font-semibold text-gray-300 mb-2">Tekanan Atmosfer Aktual:</h4>
+                            <div class="text-4xl font-bold text-white" id="pressureDisplay">101.3 <span class="text-xl text-gray-400">kPa</span></div>
+                            <div class="text-xl mt-1" id="psiDisplay">14.70 <span class="text-sm text-gray-400">psi</span></div>
+                        </div>
+                        
+                        <div class="text-gray-300 text-justify">
+                            <p id="simulationNarration">
+                                Di permukaan laut, tumpukan udara di atas kita paling tebal dan berat. Oleh karena itu, molekul udara terkompresi secara rapat (lihat kotak visualisasi) menghasilkan tekanan maksimal.
+                            </p>
+                        </div>
+
+                        <!-- Canvas for molecule visualization -->
+                        <div>
+                            <p class="text-sm text-center text-gray-400 mb-2">Simulasi Kerapatan Molekul Udara</p>
+                            <div class="bg-black rounded-lg border border-gray-600 overflow-hidden mx-auto" style="width: 100%; max-width: 300px; height: 150px;">
+                                <canvas id="moleculeCanvas" width="300" height="150" class="w-full h-full"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart Container (CRITICAL STYLING APPLIED HERE via class) -->
+                    <div class="chart-container">
+                        <canvas id="pressureChart"></canvas>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Relevansi dengan RAC -->
+    <section id="aplikasi" class="py-16 px-4 max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold mb-10 text-center"><span class="text-orange-500 mr-2">&#128295;</span> Mengapa Teknisi RAC Harus Tahu?</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-panel p-6 border-t-4 border-cyan-400 hover:bg-gray-800 transition duration-300">
+                <div class="text-4xl mb-4 text-center">&#128168;</div>
+                <h3 class="text-xl font-bold mb-3 text-center">Proses Pemvakuman (Vacuuming)</h3>
+                <p class="text-gray-400 text-sm text-justify">
+                    Tujuan vakum bukan hanya menyedot kotoran, tetapi <strong>menurunkan tekanan</strong> di dalam sistem pipa di bawah tekanan atmosfer. Dengan tekanan rendah, air (moisture) yang terperangkap dapat menguap pada suhu ruangan dan tersedot keluar oleh pompa vakum.
+                </p>
+            </div>
+            
+            <div class="glass-panel p-6 border-t-4 border-orange-500 hover:bg-gray-800 transition duration-300">
+                <div class="text-4xl mb-4 text-center">&#127777;</div>
+                <h3 class="text-xl font-bold mb-3 text-center">Titik Didih Refrigeran</h3>
+                <p class="text-gray-400 text-sm text-justify">
+                    Suhu di mana refrigeran (freon) mendidih sangat bergantung pada tekanan yang dialaminya. Hukum termodinamika dasar dalam AC didasarkan pada manipulasi tekanan (tinggi di kondensor, rendah di evaporator) dibandingkan tekanan lingkungan.
+                </p>
+            </div>
+            
+            <div class="glass-panel p-6 border-t-4 border-green-400 hover:bg-gray-800 transition duration-300">
+                <div class="text-4xl mb-4 text-center">&#128207;</div>
+                <h3 class="text-xl font-bold mb-3 text-center">Pembacaan Manifold Gauge</h3>
+                <p class="text-gray-400 text-sm text-justify">
+                    Manifold gauge standar (skala Gauge Pressure/PSIG) membaca nilai '0' pada tekanan atmosfer aktual. Mengetahui bahwa tekanan atmosfer di dataran tinggi (misal: Lembang/Puncak) berbeda dengan di pantai (Jakarta) penting untuk analisis performa sistem yang presisi.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Kesimpulan -->
+    <section class="py-12 px-4 max-w-4xl mx-auto">
+        <div class="bg-gray-800 rounded-2xl p-8 border border-gray-700 shadow-2xl relative">
+            <!-- decorative quote mark -->
+            <div class="absolute top-4 left-4 text-6xl text-gray-700 opacity-50 font-serif">"</div>
+            <h2 class="text-2xl font-bold mb-6 text-center z-10 relative">Kesimpulan Pembelajaran</h2>
+            <ul class="space-y-3 text-gray-300 z-10 relative pl-8 list-disc list-outside">
+                <li>Tekanan atmosfer adalah berat udara yang menekan ke bumi akibat gravitasi.</li>
+                <li><strong>Hukum Dasar:</strong> Semakin tinggi suatu tempat dari permukaan laut, tekanan atmosfernya <strong>semakin rendah</strong> karena kolom udara di atasnya semakin tipis.</li>
+                <li>Nilai standar tekanan di permukaan laut adalah <strong>1 atm / 14.7 psi / 101.3 kPa</strong>.</li>
+                <li>Bagi teknisi AC, menguasai konsep ini adalah syarat wajib untuk melakukan proses instalasi (vakum) dan troubleshooting sistem pendingin secara profesional.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Section: Kuis / Evaluasi -->
+    <section id="kuis" class="py-16 px-4 max-w-3xl mx-auto">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold mb-4"><span class="text-orange-500 mr-2">&#128221;</span> Uji Pemahaman Anda</h2>
+            <p class="text-gray-400">Evaluasi pemahaman Anda dengan menjawab pertanyaan pilihan ganda berikut. Umpan balik akan diberikan secara langsung.</p>
+        </div>
+
+        <div id="quiz-container" class="glass-panel p-8 relative min-h-[300px]">
+            <!-- Quiz content injected via JS -->
+            <div id="quiz-intro" class="text-center h-full flex flex-col justify-center items-center">
+                <div class="text-5xl mb-4">&#129488;</div>
+                <h3 class="text-xl font-bold mb-4">Siap untuk memulai kuis?</h3>
+                <button id="start-quiz-btn" class="btn-interactive bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full shadow-lg">
+                    Mulai Kuis
+                </button>
+            </div>
+            
+            <div id="quiz-area" class="hidden">
+                <div class="flex justify-between items-center mb-6 border-b border-gray-700 pb-2">
+                    <span id="question-counter" class="text-sm font-semibold text-cyan-400">Pertanyaan 1 dari 3</span>
+                    <span class="text-sm text-gray-400">Esha Public Skills Learning</span>
+                </div>
+                <h3 id="question-text" class="text-xl font-medium mb-6 text-white">Teks Pertanyaan</h3>
+                
+                <div id="options-container" class="space-y-3">
+                    <!-- Buttons injected here -->
+                </div>
+
+                <div id="feedback-area" class="mt-6 hidden rounded-md p-4 text-sm font-medium">
+                    <!-- Feedback text injected here -->
+                </div>
+
+                <div class="mt-6 text-right hidden" id="next-btn-container">
+                    <button id="next-question-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded">
+                        Selanjutnya &#10148;
+                    </button>
+                </div>
+            </div>
+
+            <div id="quiz-results" class="hidden text-center">
+                <div class="text-6xl mb-4" id="result-icon">&#127942;</div>
+                <h3 class="text-2xl font-bold mb-2">Kuis Selesai!</h3>
+                <p class="text-gray-400 mb-6">Skor Anda: <span id="final-score" class="text-3xl font-bold text-white ml-2">0/0</span></p>
+                <div id="result-message" class="mb-8 p-4 bg-navy-900 rounded-lg text-left text-sm text-gray-300">
+                    <!-- Custom message based on score -->
+                </div>
+                <button id="restart-quiz-btn" class="btn-interactive border border-orange-500 text-orange-500 hover:bg-orange-600 hover:text-white font-bold py-2 px-6 rounded-full">
+                    Coba Lagi
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-8 border-t border-gray-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-500 text-sm">
+                &copy; 2026 eshapublicskillslearning. Created for Educational Purposes.<br>
+                Materi disupervisi oleh: Sri Hardono, S.T., M.Sc (Instruktur Madya Kemnaker RI / Expert WorldSkills RAC)
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. SIMULATION LOGIC (Altitude vs Pressure) ---
+            const altitudeRange = document.getElementById('altitudeRange');
+            const altitudeVal = document.getElementById('altitudeVal');
+            const pressureDisplay = document.getElementById('pressureDisplay');
+            const psiDisplay = document.getElementById('psiDisplay');
+            const simulationNarration = document.getElementById('simulationNarration');
+            const canvas = document.getElementById('moleculeCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Barometric formula approximation (simplified for education)
+            // P = P0 * exp(-M*g*h / R*T) -> Simplified to: P = 101.3 * (1 - 2.25577*10^-5 * h)^5.25588
+            function calculatePressure(h) {
+                // h in meters, returns kPa
+                if (h > 11000) h = 11000; // Formula limit for troposphere
+                const p0 = 101.325; // kPa at sea level
+                return p0 * Math.pow(1 - (0.0000225577 * h), 5.25588);
+            }
+
+            function updateSimulationText(alt, kpa) {
+                if (alt == 0) {
+                    simulationNarration.innerHTML = "Di <strong>permukaan laut</strong>, tumpukan udara di atas kita paling tebal. Molekul udara terkompresi rapat menghasilkan tekanan maksimal.";
+                } else if (alt < 3000) {
+                    simulationNarration.innerHTML = "Mulai naik. Sebagian berat udara sudah berada di bawah Anda. Udara mulai sedikit merenggang, tekanan berangsur turun.";
+                } else if (alt < 6000) {
+                    simulationNarration.innerHTML = "Berada di dataran sangat tinggi (seperti puncak gunung tinggi). Udara terasa tipis. Tekanan turun drastis hampir separuh dari permukaan laut.";
+                } else {
+                    simulationNarration.innerHTML = "Zona ekstrem (misal ketinggian jelajah pesawat udara komersial). Udara sangat sangat tipis. Tanpa kabin bertekanan, manusia tidak dapat bertahan hidup lama.";
+                }
+            }
+
+            // Canvas Animation Logic
+            let particles = [];
+            const initParticles = () => {
+                particles = [];
+                for(let i=0; i<400; i++) { // Max particles at sea level
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        vx: (Math.random() - 0.5) * 1,
+                        vy: (Math.random() - 0.5) * 1
+                    });
+                }
+            };
+
+            function drawMolecules(densityPercentage) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#22d3ee'; // Cyan dots
+                
+                let activeParticlesCount = Math.floor(particles.length * (densityPercentage / 100));
+                
+                for(let i=0; i<activeParticlesCount; i++) {
+                    let p = particles[i];
+                    // Simple jiggle motion
+                    p.x += p.vx + (Math.random() - 0.5)*0.5;
+                    p.y += p.vy + (Math.random() - 0.5)*0.5;
+                    
+                    // Bounce off walls
+                    if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                requestAnimationFrame(() => drawMolecules(densityPercentage)); // Keep animating
+            }
+
+            initParticles();
+            // Store global reference to animation frame to cancel if needed, though simple enough here to let run
+            let currentDensity = 100;
+            drawMolecules(currentDensity);
+
+
+            // Chart.js Setup
+            const ctxChart = document.getElementById('pressureChart').getContext('2d');
+            
+            // Generate base data for chart line
+            let chartLabels = [];
+            let chartData = [];
+            for (let i = 0; i <= 10000; i += 1000) {
+                chartLabels.push(i + 'm');
+                chartData.push(calculatePressure(i));
+            }
+
+            const chartConfig = {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Tekanan Atmosfer (kPa)',
+                        data: chartData,
+                        borderColor: '#f97316', // Orange
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        // Current Position Marker Dataset
+                        label: 'Posisi Saat Ini',
+                        data: [{x: '0m', y: 101.325}],
+                        borderColor: '#22d3ee', // Cyan
+                        backgroundColor: '#22d3ee',
+                        pointStyle: 'circle',
+                        pointRadius: 8,
+                        pointHoverRadius: 10,
+                        showLine: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Critical for container styling to work
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y.toFixed(1) + ' kPa';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#94a3b8' },
+                            title: { display: true, text: 'Ketinggian (Meter)', color: '#fff' }
+                        },
+                        y: { 
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#94a3b8' },
+                            title: { display: true, text: 'Tekanan (kPa)', color: '#fff' },
+                            min: 0, max: 110
+                        }
+                    }
+                }
+            };
+            
+            const pressureChartObj = new Chart(ctxChart, chartConfig);
+
+            // Handle Interaction
+            altitudeRange.addEventListener('input', function(e) {
+                const alt = parseInt(e.target.value);
+                const pressureKpa = calculatePressure(alt);
+                const pressurePsi = pressureKpa * 0.145038;
+                
+                // Update UI text
+                altitudeVal.innerText = alt.toLocaleString('id-ID');
+                pressureDisplay.innerHTML = `${pressureKpa.toFixed(1)} <span class="text-xl text-gray-400">kPa</span>`;
+                psiDisplay.innerHTML = `${pressurePsi.toFixed(2)} <span class="text-sm text-gray-400">psi</span>`;
+                
+                updateSimulationText(alt, pressureKpa);
+
+                // Update Molecule Density (Percentage roughly relative to sea level pressure)
+                currentDensity = (pressureKpa / 101.325) * 100;
+                
+                // Update Chart Current Position Dot
+                // Map altitude value to chart X axis category index approximately
+                // To place exactly on line, we update dataset 1 data array
+                // Since X is categorical strings like "1000m", we need to map the numeric slider value
+                let closestIndex = Math.round(alt / 1000); 
+                let exactLabelIndexStr = alt + 'm';
+                
+                // More precise approach for scatter overlay on category axis:
+                // We recreate the marker data point
+                pressureChartObj.data.datasets[1].data = [pressureKpa]; // Need to set X and Y if scatter, but line chart is tricky with mixing numeric/categorical.
+                
+                // Simpler visual update: just redraw the whole chart highlighting the closest point if needed, 
+                // OR we just use a trick: Chart.js allows an array of colors for points.
+                let pointColors = chartData.map(() => 'rgba(0,0,0,0)');
+                let pointRadii = chartData.map(() => 0);
+                
+                // Interpolate index for visual marker (simplified: highlight closest 1000m mark)
+                if(alt % 1000 === 0){
+                   let idx = alt/1000;
+                   pointColors[idx] = '#22d3ee';
+                   pointRadii[idx] = 8;
+                }
+                
+                pressureChartObj.data.datasets[0].pointBackgroundColor = pointColors;
+                pressureChartObj.data.datasets[0].pointBorderColor = pointColors;
+                pressureChartObj.data.datasets[0].pointRadius = pointRadii;
+                
+                pressureChartObj.update();
+            });
+
+
+            // --- 2. QUIZ LOGIC ---
+            const quizData = [
+                {
+                    question: "Apa definisi utama dari Tekanan Atmosfer?",
+                    options: [
+                        "A. Gaya dorong udara dari dalam bumi ke luar angkasa.",
+                        "B. Berat dari kolom udara yang menekan ke bawah akibat gaya gravitasi.",
+                        "C. Kecepatan angin yang bergesekan dengan permukaan bumi.",
+                        "D. Suhu udara yang meningkat di siang hari."
+                    ],
+                    correctAnswerIndex: 1,
+                    feedback: "Benar! Tekanan atmosfer ditimbulkan oleh massa (berat) udara yang ditarik oleh gravitasi bumi."
+                },
+                {
+                    question: "Berdasarkan simulasi, apa yang terjadi pada tekanan atmosfer jika Anda membawa alat AC ke dataran tinggi (pegunungan)?",
+                    options: [
+                        "A. Tekanan atmosfer menurun.",
+                        "B. Tekanan atmosfer meningkat.",
+                        "C. Tekanan atmosfer tetap sama seperti di pantai.",
+                        "D. Tekanan atmosfer menjadi nol."
+                    ],
+                    correctAnswerIndex: 0,
+                    feedback: "Tepat sekali! Semakin tinggi posisi kita, kolom udara di atas kita semakin tipis sehingga berat/tekanannya menurun."
+                },
+                {
+                    question: "Berapa nilai pendekatan tekanan atmosfer standar di permukaan laut dalam satuan PSI?",
+                    options: [
+                        "A. 0 psi",
+                        "B. 14.7 psi",
+                        "C. 101.3 psi",
+                        "D. 1.013 psi"
+                    ],
+                    correctAnswerIndex: 1,
+                    feedback: "Benar. 1 atm setara dengan sekitar 14.7 psi atau 101.3 kPa."
+                }
+            ];
+
+            // DOM Elements Quiz
+            const startBtn = document.getElementById('start-quiz-btn');
+            const introArea = document.getElementById('quiz-intro');
+            const quizArea = document.getElementById('quiz-area');
+            const questionText = document.getElementById('question-text');
+            const optionsContainer = document.getElementById('options-container');
+            const feedbackArea = document.getElementById('feedback-area');
+            const nextBtnContainer = document.getElementById('next-btn-container');
+            const nextBtn = document.getElementById('next-question-btn');
+            const questionCounter = document.getElementById('question-counter');
+            const resultsArea = document.getElementById('quiz-results');
+            const finalScoreEl = document.getElementById('final-score');
+            const restartBtn = document.getElementById('restart-quiz-btn');
+            const resultMsg = document.getElementById('result-message');
+
+            let currentQuestionIndex = 0;
+            let score = 0;
+
+            startBtn.addEventListener('click', () => {
+                introArea.classList.add('hidden');
+                quizArea.classList.remove('hidden');
+                loadQuestion();
+            });
+
+            function loadQuestion() {
+                // Reset state
+                feedbackArea.classList.add('hidden');
+                nextBtnContainer.classList.add('hidden');
+                optionsContainer.innerHTML = '';
+                
+                const currentQ = quizData[currentQuestionIndex];
+                questionText.innerText = currentQ.question;
+                questionCounter.innerText = `Pertanyaan ${currentQuestionIndex + 1} dari ${quizData.length}`;
+
+                currentQ.options.forEach((opt, index) => {
+                    const btn = document.createElement('button');
+                    btn.innerText = opt;
+                    btn.className = 'w-full text-left p-4 rounded bg-gray-800 border border-gray-600 hover:bg-gray-700 transition duration-200 focus:outline-none';
+                    btn.onclick = () => handleAnswer(index, btn);
+                    optionsContainer.appendChild(btn);
+                });
+            }
+
+            function handleAnswer(selectedIndex, selectedBtn) {
+                // Disable all buttons
+                const buttons = optionsContainer.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.remove('hover:bg-gray-700');
+                    btn.classList.add('opacity-70', 'cursor-not-allowed');
+                });
+
+                const currentQ = quizData[currentQuestionIndex];
+                feedbackArea.classList.remove('hidden');
+
+                if (selectedIndex === currentQ.correctAnswerIndex) {
+                    // Correct
+                    selectedBtn.classList.replace('bg-gray-800', 'bg-green-900');
+                    selectedBtn.classList.replace('border-gray-600', 'border-green-500');
+                    feedbackArea.className = 'mt-6 rounded-md p-4 text-sm font-medium bg-green-900 text-green-200 border border-green-700';
+                    feedbackArea.innerHTML = `<strong>Benar!</strong> ${currentQ.feedback}`;
+                    score++;
+                } else {
+                    // Incorrect
+                    selectedBtn.classList.replace('bg-gray-800', 'bg-red-900');
+                    selectedBtn.classList.replace('border-gray-600', 'border-red-500');
+                    
+                    // Highlight correct answer
+                    buttons[currentQ.correctAnswerIndex].classList.replace('bg-gray-800', 'bg-green-900');
+                    buttons[currentQ.correctAnswerIndex].classList.replace('border-gray-600', 'border-green-500');
+                    buttons[currentQ.correctAnswerIndex].classList.remove('opacity-70');
+
+                    feedbackArea.className = 'mt-6 rounded-md p-4 text-sm font-medium bg-red-900 text-red-200 border border-red-700';
+                    feedbackArea.innerHTML = `<strong>Kurang Tepat.</strong> Jawaban yang benar adalah yang ditandai hijau. <br><span class="text-red-300 mt-2 block">${currentQ.feedback}</span>`;
+                }
+
+                nextBtnContainer.classList.remove('hidden');
+            }
+
+            nextBtn.addEventListener('click', () => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < quizData.length) {
+                    loadQuestion();
+                } else {
+                    showResults();
+                }
+            });
+
+            function showResults() {
+                quizArea.classList.add('hidden');
+                resultsArea.classList.remove('hidden');
+                finalScoreEl.innerText = `${score}/${quizData.length}`;
+
+                let msgHtml = '';
+                if (score === quizData.length) {
+                    document.getElementById('result-icon').innerHTML = '&#127941;'; // Medal
+                    msgHtml = "<strong>Luar Biasa!</strong> Anda telah menguasai konsep dasar tekanan atmosfer dengan sempurna. Anda siap mengaplikasikan pengetahuan ini di lapangan kerja RAC.";
+                } else if (score >= 1) {
+                    document.getElementById('result-icon').innerHTML = '&#128077;'; // Thumbs up
+                    msgHtml = "<strong>Kerja Bagus.</strong> Anda memahami sebagian besar konsep. Silakan ulas kembali bagian Simulasi untuk memperkuat pemahaman visual Anda.";
+                } else {
+                    document.getElementById('result-icon').innerHTML = '&#128218;'; // Books
+                    msgHtml = "<strong>Jangan Menyerah!</strong> Konsep tekanan memang memerlukan pemahaman bertahap. Silakan baca ulang materi 'Konsep Dasar' pelan-pelan dan coba kuis ini kembali.";
+                }
+                resultMsg.innerHTML = msgHtml;
+            }
+
+            restartBtn.addEventListener('click', () => {
+                currentQuestionIndex = 0;
+                score = 0;
+                resultsArea.classList.add('hidden');
+                introArea.classList.remove('hidden');
+            });
+
+        });
+    </script>
+</body>
+</html>
