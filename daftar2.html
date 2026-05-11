@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran RAC - Sri Hardono, S.T., M.Sc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Konfigurasi Firebase dari Environment
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'rac-learning-app';
+
+        // Fungsi Autentikasi Awal (Wajib)
+        const initAuth = async () => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                }
+            } catch (err) {
+                console.error("Auth Init Error:", err);
+            }
+        };
+        initAuth();
+
+        // Monitor Status Pengguna
+        onAuthStateChanged(auth, (user) => {
+            const authSection = document.getElementById('auth-section');
+            const mainContent = document.getElementById('main-content');
+            const userEmailDisplay = document.getElementById('user-email-display');
+            
+            if (user) {
+                authSection.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                userEmailDisplay.innerText = user.email || "User Aktif";
+                initChart();
+            } else {
+                authSection.classList.remove('hidden');
+                mainContent.classList.add('hidden');
+            }
+        });
+
+        // Handler Login dan Daftar
+        window.handleAuth = async (type) => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('auth-error');
+            const btnLogin = document.getElementById('btn-login');
+            const btnReg = document.getElementById('btn-reg');
+            
+            errorMsg.innerText = "";
+            if (!email || !password) {
+                errorMsg.innerText = "Masukkan email dan kata sandi.";
+                return;
+            }
+
+            // Loading state
+            const originalText = type === 'login' ? "Masuk" : "Daftar";
+            const activeBtn = type === 'login' ? btnLogin : btnReg;
+            activeBtn.innerText = "Memproses...";
+            activeBtn.disabled = true;
+
+            try {
+                if (type === 'login') {
+                    await signInWithEmailAndPassword(auth, email, password);
+                } else {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    
+                    // Simpan ke Firestore sesuai RULE 1 (Public Data Path)
+                    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', user.uid), {
+                        email: email,
+                        role: 'student',
+                        lastLogin: new Date().toISOString()
+                    });
+                }
+            } catch (error) {
+                let message = "Terjadi kesalahan.";
+                if (error.code === 'auth/email-already-in-use') message = "Email sudah terdaftar.";
+                if (error.code === 'auth/wrong-password') message = "Kata sandi salah.";
+                if (error.code === 'auth/user-not-found') message = "Email belum terdaftar.";
+                errorMsg.innerText = message;
+            } finally {
+                activeBtn.innerText = originalText;
+                activeBtn.disabled = false;
+            }
+        };
+
+        window.logout = () => signOut(auth);
+    </script>
+
+    <style>
+        body { scroll-behavior: smooth; background-color: #f8fafc; }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+    <!-- LOGIN / REGISTER PAGE -->
+    <section id="auth-section" class="min-h-screen flex items-center justify-center p-6 bg-slate-50">
+        <div class="max-w-md w-full glass-card rounded-3xl shadow-xl p-8 fade-in">
+            <div class="text-center mb-10">
+                <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">❄️</div>
+                <h1 class="text-2xl font-black text-blue-900 tracking-tight">eshapublicskillslearning</h1>
+                <p class="text-slate-500 text-sm mt-1">Materi: Dasar Tekanan & Fluida (RAC)</p>
+            </div>
+
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 ml-1">Email</label>
+                    <input type="email" id="email" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="nama@email.com">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 ml-1">Kata Sandi</label>
+                    <input type="password" id="password" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="••••••••">
+                </div>
+                
+                <div id="auth-error" class="text-red-500 text-xs font-medium text-center min-h-[1rem]"></div>
+                
+                <div class="flex flex-col gap-3">
+                    <button id="btn-login" onclick="handleAuth('login')" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition active:scale-[0.98]">Masuk</button>
+                    <button id="btn-reg" onclick="handleAuth('register')" class="w-full border-2 border-slate-200 text-slate-600 font-bold py-3 rounded-xl hover:bg-slate-50 transition active:scale-[0.98]">Daftar Akun Baru</button>
+                </div>
+            </div>
+            
+            <div class="mt-10 pt-6 border-t border-slate-100 text-center">
+                <p class="text-[10px] text-slate-400 leading-relaxed uppercase tracking-widest font-semibold">
+                    Instruktur: Sri Hardono, S.T., M.Sc<br>Instruktur Madya Kemnaker RI
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN DASHBOARD (HIDDEN) -->
+    <main id="main-content" class="hidden">
+        <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-100 z-50">
+            <div class="max-w-6xl mx-auto px-6 flex justify-between items-center h-16">
+                <span class="font-black text-blue-600 tracking-tighter text-xl">RAC.EDU</span>
+                <div class="flex items-center gap-4">
+                    <span id="user-email-display" class="hidden sm:block text-sm font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-lg"></span>
+                    <button onclick="logout()" class="text-sm font-bold text-red-500 hover:text-red-700">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="max-w-4xl mx-auto px-6 pt-28 pb-20 space-y-12">
+            <!-- Content Header -->
+            <header class="fade-in">
+                <h2 class="text-3xl font-black text-slate-900 leading-tight">Materi 1.11: Tekanan (Pressure)</h2>
+                <div class="h-1.5 w-20 bg-blue-600 rounded-full mt-4"></div>
+            </header>
+
+            <!-- Visualisasi PDF Logic -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+                    <h3 class="font-bold text-lg text-blue-900">Konsep Gaya/Luas</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Sesuai gambar 1.16, jika beban 100 LB berada di area 1 in², tekanan = 100 psi. Jika area diperluas, tekanan mengecil.</p>
+                    <div class="p-4 bg-slate-50 rounded-2xl flex flex-col items-center gap-4">
+                        <div id="visual-box" class="bg-blue-500 rounded-lg shadow-inner flex items-center justify-center text-white font-bold transition-all duration-300" style="width: 40px; height: 40px;">100</div>
+                        <input type="range" min="1" max="10" value="1" oninput="updateVisual(this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                        <div class="text-center">
+                            <span class="text-xs text-slate-400 block uppercase font-bold tracking-widest">Luas Area (in²)</span>
+                            <span id="area-val" class="text-xl font-black text-blue-600">1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+                    <h3 class="font-bold text-lg text-blue-900">Tekanan Fluida</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Air memiliki berat jenis 62.4 lb/ft³. Tekanan pada dasar kubik (144 in²) adalah 0.433 psi.</p>
+                    <div class="h-[180px]">
+                        <canvas id="pressureChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <section class="bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 opacity-10 text-8xl">❓</div>
+                <div class="relative z-10">
+                    <h3 class="text-2xl font-bold mb-6">Uji Pemahaman</h3>
+                    <p class="text-slate-300 mb-8">Berapakah tekanan (psi) yang dihasilkan jika berat air 62.4 lb tersebar pada alas seluas 576 in²?</p>
+                    <div class="grid gap-3 max-w-md">
+                        <button onclick="checkAns(this, 0.433)" class="p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 text-left transition">A. 0.433 psi</button>
+                        <button onclick="checkAns(this, 0.108)" class="p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 text-left transition text-blue-400 font-bold">B. 0.108 psi</button>
+                        <button onclick="checkAns(this, 1.0)" class="p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 text-left transition">C. 1.0 psi</button>
+                    </div>
+                    <div id="quiz-msg" class="mt-6 font-bold text-center h-6"></div>
+                </div>
+            </section>
+
+            <footer class="text-center pt-10 opacity-40 text-xs font-bold tracking-widest uppercase">
+                eshapublicskillslearning &copy; 2026
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        function updateVisual(val) {
+            const box = document.getElementById('visual-box');
+            const areaText = document.getElementById('area-val');
+            const size = 40 + (val * 10);
+            box.style.width = size + 'px';
+            box.style.height = size + 'px';
+            areaText.innerText = val;
+            box.innerText = (100 / val).toFixed(1);
+        }
+
+        let pChart;
+        function initChart() {
+            const ctx = document.getElementById('pressureChart').getContext('2d');
+            if(pChart) pChart.destroy();
+            pChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Dasar 144 in²', 'Dasar 576 in²'],
+                    datasets: [{
+                        label: 'psi',
+                        data: [0.433, 0.108],
+                        backgroundColor: ['#2563eb', '#94a3b8'],
+                        borderRadius: 8
+                    }]
+                },
+                options: { 
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function checkAns(btn, val) {
+            const msg = document.getElementById('quiz-msg');
+            if (val === 0.108) {
+                msg.innerText = "TEPAT SEKALI! (62.4 / 576 = 0.108)";
+                msg.className = "mt-6 font-bold text-center text-green-400 fade-in";
+            } else {
+                msg.innerText = "COBA LAGI, PERIKSA RUMUS P = F / A";
+                msg.className = "mt-6 font-bold text-center text-red-400 fade-in";
+            }
+        }
+    </script>
+</body>
+</html>
