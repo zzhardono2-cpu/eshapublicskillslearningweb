@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran RAC: Konsep Dasar Tekanan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Ocean Blue (Primary), Ice Cyan (Accent), Slate Gray (Neutral), White (Background) -->
+    <!-- Application Structure Plan: The SPA uses a vertical scrolling, section-based narrative flow. It starts with clear Learning Objectives, moves into fundamental concepts (Force vs Area), introduces interactive simulations to solidify understanding (Solid & Liquid pressure based on the document), and concludes with a summary and an interactive quiz. This structured approach guides the user step-by-step, mimicking a well-planned lesson by an RAC Expert, ensuring concepts build upon each other logically before testing comprehension. -->
+    <!-- Visualization & Content Choices: 
+         1. Objectives: Bulleted list for clarity. 
+         2. Solid Pressure Sim: Interactive CSS-based visualizer (No SVG) where users change weight to see pressure changes. Goal: Understand P=F/A intuitively. 
+         3. Liquid Pressure Sim & Chart: CSS shapes to represent water containers + Chart.js Bar Chart. Goal: Compare pressure based on base area changes for the same volume (from the document). 
+         4. Quiz: Interactive JS logic for immediate feedback and reinforcement. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { scroll-behavior: smooth; font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .weight-box { transition: all 0.3s ease; }
+        .water-container { transition: all 0.5s ease; background-color: #3b82f6; opacity: 0.8; }
+        .nav-link.active { border-bottom: 2px solid #2563eb; color: #1d4ed8; font-weight: 600; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+        .quiz-btn { transition: all 0.2s; }
+        .quiz-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .correct { background-color: #dcfce7; border-color: #22c55e; color: #166534; }
+        .incorrect { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="text-slate-800 antialiased pt-20">
+
+    <nav class="fixed top-0 w-full glass-panel z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-2">❄️</span>
+                    <span class="font-bold text-xl text-blue-800 tracking-tight">eshapublicskillslearning</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#tujuan" class="nav-link text-slate-600 hover:text-blue-600 py-2">Tujuan</a>
+                    <a href="#materi" class="nav-link text-slate-600 hover:text-blue-600 py-2">Materi & Simulasi</a>
+                    <a href="#kesimpulan" class="nav-link text-slate-600 hover:text-blue-600 py-2">Kesimpulan</a>
+                    <a href="#kuis" class="nav-link text-slate-600 hover:text-blue-600 py-2">Kuis</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-20">
+
+        <section id="hero" class="text-center py-12 lg:py-20 fade-in">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6">Memahami Konsep Dasar Tekanan</h1>
+            <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-8">
+                Disusun oleh <strong>Sri Hardono, S.T., M.Sc</strong><br>
+                Instruktur Madya Kemnaker RI & Expert WorldSkills bidang RAC (Refrigeration and Air Conditioning)
+            </p>
+            <div class="inline-block bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg text-left shadow-sm">
+                <p class="text-blue-800 font-medium text-lg">💡 Konsep fundamental yang wajib dikuasai sebelum mendalami sistem Refrigerasi dan Tata Udara.</p>
+            </div>
+        </section>
+
+        <section id="tujuan" class="scroll-mt-24 fade-in">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+                <div class="bg-blue-600 px-6 py-4">
+                    <h2 class="text-2xl font-bold text-white flex items-center">
+                        <span class="text-3xl mr-3">🎯</span> Tujuan Pembelajaran
+                    </h2>
+                </div>
+                <div class="p-6 md:p-8">
+                    <p class="text-slate-600 mb-6 text-lg">Setelah mempelajari modul interaktif ini, peserta didik diharapkan mampu:</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold mt-1">1</div>
+                            <p class="ml-4 text-lg text-slate-700">Mendefinisikan arti <strong>Tekanan (Pressure)</strong> secara tepat sesuai prinsip fisika terapan.</p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold mt-1">2</div>
+                            <p class="ml-4 text-lg text-slate-700">Menganalisis hubungan matematika antara <strong>Gaya (Force)</strong>, <strong>Luas Penampang (Area)</strong>, dan Tekanan.</p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold mt-1">3</div>
+                            <p class="ml-4 text-lg text-slate-700">Menghitung nilai tekanan dalam satuan <strong>psi (pounds per square inch)</strong> berdasarkan beban dan area.</p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold mt-1">4</div>
+                            <p class="ml-4 text-lg text-slate-700">Memahami bagaimana perubahan bentuk wadah (luas dasar) mempengaruhi tekanan <strong>statis fluida</strong> pada volume yang sama.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="materi" class="scroll-mt-24 space-y-12">
+            
+            <div>
+                <h2 class="text-3xl font-bold text-slate-900 mb-6 border-b-2 border-blue-200 pb-2 inline-block">1. Apa itu Tekanan?</h2>
+                <p class="text-lg text-slate-700 leading-relaxed mb-6">
+                    Dalam dunia teknik, <strong>Tekanan</strong> didefinisikan sebagai <strong>gaya per satuan luas</strong>. Satuan yang umum digunakan dalam sistem Imperial adalah <em>pounds per square inch</em> (psi).
+                </p>
+                <div class="bg-blue-50 rounded-xl p-8 text-center max-w-2xl mx-auto border border-blue-100 shadow-inner">
+                    <span class="block text-xl text-slate-600 mb-2">Rumus Dasar Tekanan:</span>
+                    <span class="block text-4xl md:text-5xl font-black text-blue-700 tracking-wider">P = F / A</span>
+                    <div class="mt-4 flex justify-center space-x-8 text-sm md:text-base text-slate-600 font-medium">
+                        <span>P = Pressure (Tekanan)</span>
+                        <span>F = Force (Gaya/Berat)</span>
+                        <span>A = Area (Luas Alas)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-10">
+                <h3 class="text-2xl font-bold text-slate-800 mb-4 flex items-center">
+                    <span class="text-3xl mr-2">⚖️</span> Simulasi 1: Pengaruh Gaya terhadap Tekanan
+                </h3>
+                <p class="text-slate-600 mb-8 text-lg">
+                    Mari kita lihat apa yang terjadi ketika beban yang berbeda diletakkan di atas area yang sama persis (1 in<sup>2</sup>). Pilih beban di bawah ini untuk melihat perubahan tekanannya.
+                </p>
+
+                <div class="flex flex-col md:flex-row items-center justify-center gap-10">
+                    
+                    <div class="w-full md:w-1/2 flex flex-col items-center">
+                        <div id="sim1-weight" class="weight-box w-24 bg-slate-700 text-white flex items-center justify-center font-bold text-xl rounded-t-sm shadow-xl z-10" style="height: 40px;">
+                            1 LB
+                        </div>
+                        <div class="w-24 h-4 bg-orange-500 relative">
+                            <div class="absolute w-full text-center top-6 text-sm font-bold text-orange-600">Area: 1 in²</div>
+                        </div>
+                        <div class="w-48 h-8 bg-slate-300 mt-12 rounded-sm shadow-inner"></div>
+                    </div>
+
+                    <div class="w-full md:w-1/2">
+                        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                            <h4 class="font-bold text-slate-700 mb-4">Pilih Beban (Force):</h4>
+                            <div class="flex gap-3 mb-6">
+                                <button onclick="updateSim1(1)" class="flex-1 py-2 bg-white border-2 border-blue-500 text-blue-600 font-bold rounded hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-colors">1 LB</button>
+                                <button onclick="updateSim1(50)" class="flex-1 py-2 bg-white border-2 border-blue-500 text-blue-600 font-bold rounded hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-colors">50 LB</button>
+                                <button onclick="updateSim1(100)" class="flex-1 py-2 bg-white border-2 border-blue-500 text-blue-600 font-bold rounded hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-colors">100 LB</button>
+                            </div>
+                            
+                            <div class="mt-6 p-4 bg-blue-100 rounded-lg text-center">
+                                <span class="block text-slate-600 text-sm font-semibold uppercase tracking-wide">Tekanan yang Dihasilkan</span>
+                                <span id="sim1-result" class="block text-4xl font-black text-blue-800 mt-1">1 psi</span>
+                                <p id="sim1-desc" class="text-sm text-slate-600 mt-2">1 lb dibagi 1 in² menghasilkan tekanan 1 psi.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-10 mt-12">
+                <h3 class="text-2xl font-bold text-slate-800 mb-4 flex items-center">
+                    <span class="text-3xl mr-2">💧</span> Simulasi 2: Tekanan Fluida dan Bentuk Wadah
+                </h3>
+                <p class="text-slate-600 mb-8 text-lg">
+                    Dalam sistem refrigerasi, kita sering berurusan dengan fluida. Air memiliki berat <strong>62.4 pounds per cubic foot (lb/ft³)</strong>. Jika kita memiliki 1 ft³ air (setara 7.48 galon), beratnya tetap 62.4 lb terlepas dari bentuk wadahnya. Namun, <strong>bentuk wadah mengubah luas dasar</strong>, yang secara drastis mengubah tekanan di dasar wadah.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-700 mb-4">Pilih Bentuk Wadah (Volume Tetap 1 ft³):</h4>
+                            <div class="flex flex-col gap-3 mb-6">
+                                <button onclick="updateSim2('cube')" id="btn-cube" class="py-3 px-4 bg-blue-600 text-white font-bold rounded shadow hover:bg-blue-700 transition-colors text-left flex justify-between items-center">
+                                    <span>Wadah Kubus (Tinggi & Sempit)</span>
+                                    <span class="text-sm font-normal bg-blue-800 px-2 py-1 rounded">12" x 12" base</span>
+                                </button>
+                                <button onclick="updateSim2('flat')" id="btn-flat" class="py-3 px-4 bg-white border-2 border-slate-300 text-slate-700 font-bold rounded shadow-sm hover:bg-slate-50 transition-colors text-left flex justify-between items-center">
+                                    <span>Wadah Pipih (Rendah & Lebar)</span>
+                                    <span class="text-sm font-normal bg-slate-200 px-2 py-1 rounded">24" x 24" base</span>
+                                </button>
+                            </div>
+
+                            <div class="mt-8 flex justify-center items-end h-40 border-b-4 border-slate-400 pb-1 relative">
+                                <div id="sim2-visual" class="water-container rounded-sm shadow-inner" style="width: 80px; height: 120px;"></div>
+                                <div class="absolute -bottom-6 text-sm font-bold text-slate-500" id="sim2-base-label">Alas: 144 in²</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-5 bg-cyan-50 border border-cyan-200 rounded-lg">
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div>
+                                    <span class="block text-xs text-slate-500 uppercase font-bold">Berat Air (F)</span>
+                                    <span class="block text-xl font-bold text-slate-800">62.4 lb</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs text-slate-500 uppercase font-bold">Luas Alas (A)</span>
+                                    <span id="sim2-area" class="block text-xl font-bold text-slate-800">144 in²</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-cyan-200 text-center">
+                                <span class="block text-sm text-cyan-800 font-semibold uppercase">Tekanan Dasar (P = F/A)</span>
+                                <span id="sim2-result" class="block text-3xl font-black text-cyan-700 mt-1">0.433 psi</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-center">
+                        <div class="chart-container">
+                            <canvas id="pressureChart"></canvas>
+                        </div>
+                        <p class="text-sm text-slate-500 text-center mt-4 italic">
+                            Grafik menunjukkan penurunan tekanan dasar saat area dasar diperbesar, meskipun berat fluida sama.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kesimpulan" class="scroll-mt-24 fade-in">
+            <div class="bg-gradient-to-br from-slate-800 to-blue-900 rounded-2xl shadow-xl overflow-hidden text-white p-8 md:p-12">
+                <h2 class="text-3xl font-bold mb-6 flex items-center">
+                    <span class="text-3xl mr-3">📝</span> Kesimpulan Materi
+                </h2>
+                <div class="space-y-4 text-lg text-blue-100 leading-relaxed">
+                    <p>
+                        Dari penjabaran dan simulasi di atas, sebagai praktisi RAC, kita dapat menyimpulkan prinsip fundamental berikut:
+                    </p>
+                    <ul class="list-disc pl-6 space-y-3 mt-4 text-white">
+                        <li><strong>Tekanan berbanding lurus dengan Gaya/Berat.</strong> Semakin besar beban yang menekan suatu area tetap, semakin besar tekanannya.</li>
+                        <li><strong>Tekanan berbanding terbalik dengan Luas Penampang.</strong> Dengan berat yang sama, jika area penyebaran diperbesar, tekanan yang dihasilkan pada permukaan tersebut akan <strong>menurun drastis</strong>.</li>
+                        <li>Fluida statis mematuhi hukum ini. Mengubah dimensi wadah (misalnya memperlebar dasar tabung) tanpa menambah volume fluida akan menurunkan tekanan pada dasar wadah tersebut.</li>
+                    </ul>
+                    <div class="mt-8 bg-white/10 p-4 rounded-lg border border-white/20">
+                        <p class="font-semibold">Aplikasi di Lapangan RAC:</p>
+                        <p class="text-base mt-2">Pemahaman ini vital saat menganalisis tekanan refrigerant di dalam pipa dengan diameter berbeda, atau saat merancang dudukan (base) kompresor agar tekanan mekanis pada lantai tidak melebihi batas aman.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kuis" class="scroll-mt-24 pb-20 fade-in">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden max-w-4xl mx-auto">
+                <div class="bg-slate-100 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-slate-800 flex items-center">
+                        <span class="text-3xl mr-3">🧠</span> Uji Pemahaman
+                    </h2>
+                    <div id="quiz-progress" class="text-sm font-bold text-blue-600 bg-blue-100 py-1 px-3 rounded-full">
+                        Pertanyaan 1 / 3
+                    </div>
+                </div>
+                
+                <div class="p-6 md:p-10" id="quiz-container">
+                    <div id="question-text" class="text-xl font-medium text-slate-800 mb-8">
+                        Berapakah tekanan yang dihasilkan oleh beban 100 lb yang menekan area seluas 1 in²?
+                    </div>
+                    
+                    <div class="space-y-3" id="options-container">
+                        <button class="quiz-btn w-full text-left px-6 py-4 rounded-xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700 font-medium" onclick="checkAnswer(0)">A) 1 psi</button>
+                        <button class="quiz-btn w-full text-left px-6 py-4 rounded-xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700 font-medium" onclick="checkAnswer(1)">B) 10 psi</button>
+                        <button class="quiz-btn w-full text-left px-6 py-4 rounded-xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700 font-medium" onclick="checkAnswer(2)">C) 100 psi</button>
+                        <button class="quiz-btn w-full text-left px-6 py-4 rounded-xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700 font-medium" onclick="checkAnswer(3)">D) 1000 psi</button>
+                    </div>
+
+                    <div id="feedback-container" class="hidden mt-6 p-4 rounded-lg">
+                        <div class="flex items-start">
+                            <span id="feedback-icon" class="text-2xl mr-3"></span>
+                            <div>
+                                <h4 id="feedback-title" class="font-bold text-lg mb-1"></h4>
+                                <p id="feedback-text" class="text-sm"></p>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-right">
+                            <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 shadow hidden">Selanjutnya ➔</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="result-container" class="hidden p-6 md:p-10 text-center">
+                    <div class="text-6xl mb-4">🏆</div>
+                    <h3 class="text-3xl font-bold text-slate-800 mb-2">Kuis Selesai!</h3>
+                    <p class="text-lg text-slate-600 mb-6">Skor Anda:</p>
+                    <div class="inline-block bg-blue-100 text-blue-800 text-5xl font-black px-8 py-4 rounded-2xl mb-8">
+                        <span id="final-score">0</span> / 3
+                    </div>
+                    <p id="result-message" class="text-lg font-medium text-slate-700 mb-8"></p>
+                    <button onclick="resetQuiz()" class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg transition-transform hover:-translate-y-1">Ulangi Kuis</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center">
+        <p>© 2026 eshapublicskillslearning. Disusun oleh Sri Hardono, S.T., M.Sc.</p>
+        <p class="text-sm mt-2">Materi bersumber dari kurikulum dasar Refrigeration and Air Conditioning.</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.5 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.nav-link').forEach(l => {
+                        l.classList.remove('active');
+                        if(l.getAttribute('href') === `#${id}`) l.classList.add('active');
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => observer.observe(section));
+
+        function updateSim1(weight) {
+            const box = document.getElementById('sim1-weight');
+            const result = document.getElementById('sim1-result');
+            const desc = document.getElementById('sim1-desc');
+            
+            box.innerText = weight + ' LB';
+            
+            let height = 40;
+            if(weight === 50) height = 80;
+            if(weight === 100) height = 140;
+            box.style.height = height + 'px';
+            
+            result.innerText = weight + ' psi';
+            desc.innerText = `${weight} lb dibagi 1 in² menghasilkan tekanan ${weight} psi.`;
+        }
+
+        let pressureChart;
+
+        function initChart() {
+            const ctx = document.getElementById('pressureChart').getContext('2d');
+            pressureChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Wadah Kubus (Alas 144 in²)', 'Wadah Pipih (Alas 576 in²)'],
+                    datasets: [{
+                        label: 'Tekanan (psi)',
+                        data: [0.433, 0.108],
+                        backgroundColor: ['rgba(37, 99, 235, 0.8)', 'rgba(148, 163, 184, 0.5)'],
+                        borderColor: ['rgb(29, 78, 216)', 'rgb(100, 116, 139)'],
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Tekanan Dasar (psi)', font: {weight: 'bold'} }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return context.parsed.y + ' psi'; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateSim2(shape) {
+            const visual = document.getElementById('sim2-visual');
+            const baseLabel = document.getElementById('sim2-base-label');
+            const areaText = document.getElementById('sim2-area');
+            const resultText = document.getElementById('sim2-result');
+            const btnCube = document.getElementById('btn-cube');
+            const btnFlat = document.getElementById('btn-flat');
+
+            if(shape === 'cube') {
+                visual.style.width = '80px';
+                visual.style.height = '120px';
+                baseLabel.innerText = 'Alas: 144 in²';
+                areaText.innerText = '144 in²';
+                resultText.innerText = '0.433 psi';
+                
+                btnCube.classList.replace('bg-white', 'bg-blue-600');
+                btnCube.classList.replace('text-slate-700', 'text-white');
+                btnCube.classList.replace('border-slate-300', 'border-transparent');
+                btnCube.querySelector('span:last-child').classList.replace('bg-slate-200', 'bg-blue-800');
+                
+                btnFlat.classList.replace('bg-blue-600', 'bg-white');
+                btnFlat.classList.replace('text-white', 'text-slate-700');
+                btnFlat.classList.replace('border-transparent', 'border-slate-300');
+                btnFlat.querySelector('span:last-child').classList.replace('bg-blue-800', 'bg-slate-200');
+
+                pressureChart.data.datasets[0].backgroundColor = ['rgba(37, 99, 235, 0.8)', 'rgba(148, 163, 184, 0.5)'];
+                pressureChart.update();
+
+            } else {
+                visual.style.width = '240px';
+                visual.style.height = '40px';
+                baseLabel.innerText = 'Alas: 576 in²';
+                areaText.innerText = '576 in²';
+                resultText.innerText = '0.108 psi';
+
+                btnFlat.classList.replace('bg-white', 'bg-blue-600');
+                btnFlat.classList.replace('text-slate-700', 'text-white');
+                btnFlat.classList.replace('border-slate-300', 'border-transparent');
+                btnFlat.querySelector('span:last-child').classList.replace('bg-slate-200', 'bg-blue-800');
+                
+                btnCube.classList.replace('bg-blue-600', 'bg-white');
+                btnCube.classList.replace('text-white', 'text-slate-700');
+                btnCube.classList.replace('border-transparent', 'border-slate-300');
+                btnCube.querySelector('span:last-child').classList.replace('bg-blue-800', 'bg-slate-200');
+
+                pressureChart.data.datasets[0].backgroundColor = ['rgba(148, 163, 184, 0.5)', 'rgba(37, 99, 235, 0.8)'];
+                pressureChart.update();
+            }
+        }
+
+        const quizData = [
+            {
+                question: "Berapakah tekanan yang dihasilkan oleh beban 100 lb yang menekan area seluas 1 in²?",
+                options: ["A) 1 psi", "B) 10 psi", "C) 100 psi", "D) 1000 psi"],
+                answer: 2,
+                explanation: "Sesuai rumus P = F/A. Gaya 100 lb dibagi luas area 1 in² menghasilkan tekanan 100 psi."
+            },
+            {
+                question: "Sesuai standar, 1 cubic foot (1 ft³) air memiliki berat sebesar...",
+                options: ["A) 144 lb", "B) 62.4 lb", "C) 0.433 lb", "D) 1728 lb"],
+                answer: 1,
+                explanation: "Satu kaki kubik (1 cubic foot / 7.48 galon) air selalu memiliki berat konstan 62.4 pounds (lb)."
+            },
+            {
+                question: "Wadah berisi 1 ft³ air dengan luas dasar 144 in² memiliki tekanan dasar 0.433 psi. Apa yang terjadi pada tekanan jika air dipindah ke wadah lebih pipih dengan luas dasar 576 in²?",
+                options: ["A) Tekanan meningkat", "B) Tekanan tetap sama", "C) Tekanan menurun menjadi 0.108 psi", "D) Tekanan menjadi 1 psi"],
+                answer: 2,
+                explanation: "Karena berat tetap (62.4 lb) namun area dasar bertambah besar (menjadi 576 in²), tekanan akan menurun. P = 62.4 / 576 = 0.108 psi."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const qContainer = document.getElementById('quiz-container');
+        const rContainer = document.getElementById('result-container');
+        const qText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const nextBtn = document.getElementById('next-btn');
+        const progressText = document.getElementById('quiz-progress');
+
+        function loadQuestion() {
+            answered = false;
+            feedbackContainer.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            
+            const q = quizData[currentQuestionIndex];
+            progressText.innerText = `Pertanyaan ${currentQuestionIndex + 1} / ${quizData.length}`;
+            qText.innerText = q.question;
+            
+            optionsContainer.innerHTML = '';
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-btn w-full text-left px-6 py-4 rounded-xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700 font-medium';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            if(answered) return;
+            answered = true;
+            
+            const q = quizData[currentQuestionIndex];
+            const buttons = optionsContainer.querySelectorAll('button');
+            
+            buttons.forEach(btn => {
+                btn.classList.remove('hover:border-blue-500', 'hover:bg-blue-50', 'cursor-pointer');
+                btn.disabled = true;
+            });
+
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+
+            if(selectedIndex === q.answer) {
+                score++;
+                btnElement.classList.add('correct');
+                feedbackContainer.className = 'mt-6 p-4 rounded-lg correct block fade-in';
+                feedbackIcon.innerText = '✅';
+                feedbackTitle.innerText = 'Tepat Sekali!';
+            } else {
+                btnElement.classList.add('incorrect');
+                buttons[q.answer].classList.add('correct');
+                feedbackContainer.className = 'mt-6 p-4 rounded-lg incorrect block fade-in';
+                feedbackIcon.innerText = '❌';
+                feedbackTitle.innerText = 'Kurang Tepat';
+            }
+            
+            feedbackText.innerText = q.explanation;
+            nextBtn.classList.remove('hidden');
+            
+            if(currentQuestionIndex === quizData.length - 1) {
+                nextBtn.innerText = 'Lihat Hasil Akhir';
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if(currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            qContainer.classList.add('hidden');
+            rContainer.classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+            progressText.innerText = 'Selesai';
+            
+            const msg = document.getElementById('result-message');
+            if(score === 3) {
+                msg.innerText = "Luar biasa! Anda telah menguasai konsep dasar tekanan dengan sempurna.";
+            } else if (score === 2) {
+                msg.innerText = "Bagus! Anda memahami sebagian besar konsep. Silakan tinjau kembali materi untuk hasil maksimal.";
+            } else {
+                msg.innerText = "Jangan menyerah! Silakan pelajari kembali materi dan simulasi di atas, lalu coba lagi.";
+            }
+        }
+
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            qContainer.classList.remove('hidden');
+            rContainer.classList.add('hidden');
+            loadQuestion();
+        }
+
+        window.onload = () => {
+            initChart();
+            loadQuestion();
+        };
+
+    </script>
+</body>
+</html>
