@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Interaktif: Memahami BTU (British Thermal Unit)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutral & Cool Blue (Background: Slate-50, Text: Slate-800, Accents: Blue-500 for cooling, Orange-500 for heat) -->
+    <!-- Application Structure Plan: 
+         1. Header/Intro: Introduces the persona (Sri Hardono) and the topic to build authority and rapport.
+         2. Concept Simulation: A visual, interactive HTML/CSS block to explain the abstract definition of 1 BTU (heat, water, temperature rise).
+         3. Practical Application (AC Sizing): Explains why BTU matters in daily life (HVAC), supported by a Chart.js visualization comparing Room Size to BTU/PK.
+         4. Interactive Tools: A Calculator to empower users to apply knowledge immediately (calculating their own room's AC needs).
+         5. Knowledge Check: A mini-quiz to reinforce learning outcomes.
+         This structure moves from abstract definition -> practical context -> interactive application -> assessment, which is optimal for adult and student learning. 
+    -->
+    <!-- Visualization & Content Choices: 
+         - Concept Simulation -> Goal: Inform/Demonstrate -> Method: HTML/CSS dynamic elements -> Justification: Tangible representation of "1 pound of water + 1 degree F" is better than text alone. NO SVG used.
+         - AC Sizing Chart -> Goal: Compare/Organize -> Method: Chart.js Bar Chart -> Justification: Clearly shows the proportional relationship between room area and required BTU.
+         - Interactive Calculator -> Goal: Apply knowledge -> Method: HTML Form + Vanilla JS -> Justification: Gives immediate personal value to the learner.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .thermometer-tube {
+            width: 20px;
+            height: 100px;
+            background: #e2e8f0;
+            border-radius: 10px 10px 0 0;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thermometer-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50%;
+            background: #ef4444;
+            transition: height 1s ease-in-out, background-color 1s ease;
+        }
+
+        .thermometer-bulb {
+            width: 40px;
+            height: 40px;
+            background: #ef4444;
+            border-radius: 50%;
+            margin: -10px auto 0;
+            position: relative;
+            z-index: 10;
+            transition: background-color 1s ease;
+        }
+
+        .flame {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid #f97316;
+            margin: 10px auto;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            animation: flicker 0.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .active-flame {
+            opacity: 1;
+        }
+
+        .water-block {
+            width: 100px;
+            height: 80px;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin: 0 auto;
+            font-weight: bold;
+            transition: background 1s ease;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        
+        <header class="mb-10 text-center">
+            <div class="w-24 h-24 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl text-white shadow-lg">
+                👨‍🏫
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-2">Memahami BTU (British Thermal Unit)</h1>
+            <p class="text-slate-600 font-medium">Oleh: Sri Hardono, S.T., M.Sc.</p>
+            <p class="text-sm text-slate-500">Instruktur Madya Kemnaker RI | Expert WorldSkills</p>
+        </header>
+
+        <section class="glass-card rounded-2xl p-6 md:p-8 mb-8 border-t-4 border-blue-500">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2"><span>💡</span> Pengantar: Apa itu BTU?</h2>
+            <p class="text-slate-700 leading-relaxed mb-4">
+                Selamat datang! Sebagai instruktur, saya sering melihat banyak orang kebingungan saat membeli AC (Air Conditioner). Mereka sering mendengar istilah "PK", namun jarang yang benar-benar memahami dasar pengukurannya: <strong>BTU</strong>. Bagian ini bertujuan untuk memberikan pemahaman dasar tentang konsep BTU secara visual dan mudah dimengerti, menjembatani teori fisika dengan aplikasi praktis sehari-hari.
+            </p>
+            
+            <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 text-center">
+                <h3 class="text-xl font-semibold mb-6">Simulasi Konsep 1 BTU</h3>
+                <p class="text-sm text-slate-600 mb-8 max-w-2xl mx-auto">
+                    Secara teknis, 1 BTU adalah jumlah energi panas yang dibutuhkan untuk menaikkan suhu <strong>1 pound (sekitar 0.45 kg) air</strong> sebesar <strong>1 derajat Fahrenheit</strong> (pada suhu laut). Mari kita simulasikan!
+                </p>
+
+                <div class="flex flex-col md:flex-row items-center justify-center gap-12">
+                    <div class="flex flex-col items-center">
+                        <div class="water-block shadow-md" id="waterBlock">
+                            1 lb Air
+                        </div>
+                        <div class="flame" id="simFlame"></div>
+                        <button id="btnHeat" class="mt-4 px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-colors shadow-sm">
+                            🔥 Beri Energi Panas (1 BTU)
+                        </button>
+                    </div>
+
+                    <div class="flex flex-col items-center">
+                        <div class="text-lg font-bold text-slate-700 mb-2">Termometer Air</div>
+                        <div class="flex items-end">
+                            <div class="mr-4 text-right">
+                                <div class="h-[50px] text-sm text-slate-500">40°F</div>
+                                <div class="h-[50px] text-sm text-slate-500">39°F</div>
+                            </div>
+                            <div>
+                                <div class="thermometer-tube border border-slate-300">
+                                    <div class="thermometer-fill" id="thermoFill"></div>
+                                </div>
+                                <div class="thermometer-bulb shadow-md" id="thermoBulb"></div>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-2xl font-bold text-blue-600" id="tempDisplay">39.0 °F</div>
+                    </div>
+                </div>
+                <div id="simMessage" class="mt-6 text-emerald-600 font-medium min-h-[24px] opacity-0 transition-opacity"></div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-2xl p-6 md:p-8 mb-8 border-t-4 border-slate-800">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2"><span>📊</span> Mengapa BTU Penting untuk Ruangan?</h2>
+            <p class="text-slate-700 leading-relaxed mb-6">
+                Setelah memahami konsep dasarnya, kita harus tahu aplikasinya. Di Indonesia, kapasitas pendingin ruangan sering disebut dalam PK (Paardekracht / Horsepower). Padahal, parameter aslinya adalah <strong>BTU/h (BTU per hour)</strong>. Grafik di bawah ini menjelaskan korelasi standar antara luas ruangan, nilai BTU/h yang dibutuhkan, dan konversinya ke nilai PK di pasaran. Bagian ini membantu Anda memvisualisasikan ukuran AC yang tepat berdasarkan luasan standar.
+            </p>
+
+            <div class="bg-white p-4 rounded-xl shadow-inner mb-6">
+                <div class="chart-container">
+                    <canvas id="btuChart"></canvas>
+                </div>
+                <p class="text-center text-xs text-slate-500 mt-2">*Asumsi tinggi plafon standar 2.5m - 3m, ruangan tidak terpapar sinar matahari langsung ekstrem.</p>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-2xl p-6 md:p-8 mb-8 border-t-4 border-cyan-500">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2"><span>📐</span> Kalkulator Cerdas Kebutuhan AC</h2>
+            <p class="text-slate-700 leading-relaxed mb-6">
+                Teori tanpa praktik kurang lengkap. Gunakan kalkulator interaktif ini untuk menghitung kebutuhan AC ruangan Anda. Sistem akan menggunakan rumus dasar teknis (Panas $\times$ Lebar $\times$ 500) yang sering digunakan teknisi HVAC sebagai standar rule of thumb, lalu mengonversinya menjadi rekomendasi unit AC di pasaran.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Panjang Ruangan (Meter)</label>
+                        <input type="number" id="inputLength" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:outline-none" placeholder="Contoh: 4" value="4">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Lebar Ruangan (Meter)</label>
+                        <input type="number" id="inputWidth" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:outline-none" placeholder="Contoh: 3" value="3">
+                    </div>
+                    <button id="btnCalculate" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold shadow-md transition-colors">
+                        Hitung Kebutuhan BTU
+                    </button>
+                </div>
+
+                <div class="bg-gradient-to-br from-cyan-500 to-blue-600 p-6 rounded-xl text-white flex flex-col justify-center items-center shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-20 text-6xl">❄️</div>
+                    <h3 class="text-lg font-medium mb-2 opacity-90">Hasil Perhitungan:</h3>
+                    <div class="text-5xl font-bold mb-2 tracking-tight" id="resultBtu">6.000 <span class="text-2xl font-normal">BTU/h</span></div>
+                    <div class="w-full h-px bg-white/30 my-4"></div>
+                    <p class="text-sm mb-1 opacity-90">Rekomendasi AC di Pasaran:</p>
+                    <div class="text-3xl font-bold" id="resultPk">3/4 PK</div>
+                    <p class="text-xs mt-4 text-center opacity-80" id="resultContext">Ruangan 12 m² membutuhkan minimal 6000 BTU/h. Disarankan menggunakan 3/4 PK untuk pendinginan optimal.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-2xl p-6 md:p-8 border-t-4 border-emerald-500">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2"><span>📝</span> Uji Pemahaman Anda</h2>
+            <p class="text-slate-700 leading-relaxed mb-6">
+                Sebagai instruktur, saya selalu memastikan materi dapat diserap dengan baik. Bagian ini dirancang untuk menguji ingatan Anda terhadap poin-poin kunci terkait BTU yang baru saja kita pelajari. Jawab pertanyaan berikut untuk mengevaluasi pemahaman Anda.
+            </p>
+
+            <div id="quizContainer" class="bg-white p-6 rounded-xl border border-slate-200">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm font-bold text-slate-500" id="quizProgress">Pertanyaan 1 dari 3</span>
+                    <span class="text-sm font-bold bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full" id="quizScoreDisplay">Skor: 0</span>
+                </div>
+                
+                <h3 class="text-xl font-bold text-slate-800 mb-6" id="questionText">1 BTU setara dengan energi untuk menaikkan suhu...</h3>
+                
+                <div class="space-y-3" id="optionsContainer">
+                </div>
+
+                <div id="quizFeedback" class="mt-6 p-4 rounded-lg hidden font-medium"></div>
+                
+                <button id="btnNextQuiz" class="mt-6 px-6 py-2 bg-slate-800 text-white rounded-lg font-semibold hidden hover:bg-slate-700 transition-colors">Pertanyaan Selanjutnya ➔</button>
+                <button id="btnRestartQuiz" class="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hidden hover:bg-blue-700 transition-colors">🔄 Ulangi Kuis</button>
+            </div>
+        </section>
+
+        <footer class="mt-12 text-center text-slate-500 text-sm">
+            <p>© 2026 Materi Interaktif Kompetensi Keahlian. Dirancang khusus untuk pembelajaran praktis.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const waterBlock = document.getElementById('waterBlock');
+            const simFlame = document.getElementById('simFlame');
+            const btnHeat = document.getElementById('btnHeat');
+            const thermoFill = document.getElementById('thermoFill');
+            const thermoBulb = document.getElementById('thermoBulb');
+            const tempDisplay = document.getElementById('tempDisplay');
+            const simMessage = document.getElementById('simMessage');
+
+            let isHeated = false;
+
+            btnHeat.addEventListener('click', () => {
+                if(isHeated) {
+                    simFlame.classList.remove('active-flame');
+                    thermoFill.style.height = '50%';
+                    thermoFill.style.backgroundColor = '#3b82f6';
+                    thermoBulb.style.backgroundColor = '#3b82f6';
+                    waterBlock.style.backgroundColor = '#3b82f6';
+                    tempDisplay.innerText = '39.0 °F';
+                    tempDisplay.classList.remove('text-orange-500');
+                    tempDisplay.classList.add('text-blue-600');
+                    btnHeat.innerHTML = '🔥 Beri Energi Panas (1 BTU)';
+                    simMessage.style.opacity = '0';
+                    isHeated = false;
+                } else {
+                    simFlame.classList.add('active-flame');
+                    simMessage.style.opacity = '1';
+                    simMessage.innerText = "Memanaskan...";
+                    
+                    setTimeout(() => {
+                        thermoFill.style.height = '100%';
+                        thermoFill.style.backgroundColor = '#ef4444';
+                        thermoBulb.style.backgroundColor = '#ef4444';
+                        waterBlock.style.backgroundColor = '#ef4444';
+                        tempDisplay.innerText = '40.0 °F';
+                        tempDisplay.classList.remove('text-blue-600');
+                        tempDisplay.classList.add('text-orange-500');
+                        
+                        simMessage.innerText = "Selesai! 1 BTU telah ditransfer. Suhu naik 1°F.";
+                        simFlame.classList.remove('active-flame');
+                        btnHeat.innerHTML = '❄️ Reset Simulasi';
+                        isHeated = true;
+                    }, 1500);
+                }
+            });
+
+            const ctx = document.getElementById('btuChart').getContext('2d');
+            const chartData = {
+                labels: ['3x3m (9m²)', '3x4m (12m²)', '4x4m (16m²)', '4x6m (24m²)', '6x6m (36m²)'],
+                datasets: [{
+                    label: 'Kapasitas AC Ideal (BTU/h)',
+                    data: [5000, 7000, 9000, 12000, 18000],
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    borderWidth: 1,
+                    borderRadius: 4,
+                }]
+            };
+
+            const btuChart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + ' BTU/h';
+                                    }
+                                    
+                                    let pk = '';
+                                    const val = context.parsed.y;
+                                    if(val <= 5000) pk = ' (1/2 PK)';
+                                    else if(val <= 7000) pk = ' (3/4 PK)';
+                                    else if(val <= 9000) pk = ' (1 PK)';
+                                    else if(val <= 12000) pk = ' (1.5 PK)';
+                                    else pk = ' (2 PK)';
+
+                                    return label + pk;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Nilai BTU/h'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Luas Ruangan Standar'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const inputLength = document.getElementById('inputLength');
+            const inputWidth = document.getElementById('inputWidth');
+            const btnCalculate = document.getElementById('btnCalculate');
+            const resultBtu = document.getElementById('resultBtu');
+            const resultPk = document.getElementById('resultPk');
+            const resultContext = document.getElementById('resultContext');
+
+            function calculateBTU() {
+                const l = parseFloat(inputLength.value) || 0;
+                const w = parseFloat(inputWidth.value) || 0;
+                const area = l * w;
+                
+                const btu = area * 500;
+                
+                let pkStr = "Belum diketahui";
+                let recBtu = 0;
+
+                if (area === 0) {
+                    resultBtu.innerHTML = `0 <span class="text-2xl font-normal">BTU/h</span>`;
+                    resultPk.innerText = "-";
+                    resultContext.innerText = "Masukkan panjang dan lebar ruangan yang valid.";
+                    return;
+                }
+
+                if (btu <= 5000) { pkStr = "1/2 PK"; recBtu = 5000; }
+                else if (btu <= 7000) { pkStr = "3/4 PK"; recBtu = 7000; }
+                else if (btu <= 9000) { pkStr = "1 PK"; recBtu = 9000; }
+                else if (btu <= 12000) { pkStr = "1.5 PK"; recBtu = 12000; }
+                else if (btu <= 18000) { pkStr = "2 PK"; recBtu = 18000; }
+                else if (btu <= 24000) { pkStr = "2.5 PK"; recBtu = 24000; }
+                else { pkStr = "Lebih dari 2.5 PK atau Multi AC"; recBtu = btu; }
+
+                const formattedBtu = btu.toLocaleString('id-ID');
+                
+                resultBtu.style.opacity = 0;
+                resultPk.style.opacity = 0;
+                
+                setTimeout(() => {
+                    resultBtu.innerHTML = `${formattedBtu} <span class="text-2xl font-normal">BTU/h</span>`;
+                    resultPk.innerText = pkStr;
+                    resultContext.innerText = `Ruangan ${area} m² membutuhkan minimal ${formattedBtu} BTU/h. Disarankan menggunakan AC kapasitas ${pkStr} (sekitar ${recBtu.toLocaleString('id-ID')} BTU/h) untuk kinerja kompresor yang awet.`;
+                    
+                    resultBtu.style.transition = "opacity 0.5s ease";
+                    resultPk.style.transition = "opacity 0.5s ease";
+                    resultBtu.style.opacity = 1;
+                    resultPk.style.opacity = 1;
+                }, 150);
+            }
+
+            btnCalculate.addEventListener('click', calculateBTU);
+            calculateBTU();
+
+            const quizData = [
+                {
+                    question: "1 BTU setara dengan energi panas yang dibutuhkan untuk menaikkan suhu...",
+                    options: [
+                        "1 liter air sebesar 1 derajat Celcius",
+                        "1 pound air sebesar 1 derajat Fahrenheit",
+                        "1 kilogram es menjadi air",
+                        "1 meter kubik udara sebesar 1 derajat Kelvin"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Rumus praktis yang sering digunakan teknisi untuk menghitung kebutuhan AC (BTU/h) ruangan standar adalah...",
+                    options: [
+                        "Panjang x Lebar x Tinggi",
+                        "Luas Ruangan / 100",
+                        "Panjang x Lebar x 500",
+                        "Volume Ruangan x 1000"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Jika hasil perhitungan ruangan membutuhkan 6.500 BTU/h, kapasitas AC apa yang paling tepat disarankan?",
+                    options: [
+                        "1/2 PK (5.000 BTU/h)",
+                        "3/4 PK (7.000 BTU/h)",
+                        "1 PK (9.000 BTU/h)",
+                        "2 PK (18.000 BTU/h)"
+                    ],
+                    correctAnswer: 1
+                }
+            ];
+
+            let currentQuestion = 0;
+            let score = 0;
+            let quizAnswered = false;
+
+            const questionText = document.getElementById('questionText');
+            const optionsContainer = document.getElementById('optionsContainer');
+            const quizProgress = document.getElementById('quizProgress');
+            const quizScoreDisplay = document.getElementById('quizScoreDisplay');
+            const quizFeedback = document.getElementById('quizFeedback');
+            const btnNextQuiz = document.getElementById('btnNextQuiz');
+            const btnRestartQuiz = document.getElementById('btnRestartQuiz');
+
+            function loadQuiz() {
+                quizAnswered = false;
+                const q = quizData[currentQuestion];
+                questionText.innerText = q.question;
+                quizProgress.innerText = `Pertanyaan ${currentQuestion + 1} dari ${quizData.length}`;
+                quizFeedback.classList.add('hidden');
+                btnNextQuiz.classList.add('hidden');
+                
+                optionsContainer.innerHTML = '';
+                q.options.forEach((opt, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors font-medium text-slate-700 bg-white';
+                    btn.innerText = opt;
+                    btn.onclick = () => selectAnswer(index, btn);
+                    optionsContainer.appendChild(btn);
+                });
+            }
+
+            function selectAnswer(selectedIndex, btnElement) {
+                if (quizAnswered) return;
+                quizAnswered = true;
+
+                const q = quizData[currentQuestion];
+                const buttons = optionsContainer.querySelectorAll('button');
+                
+                buttons.forEach(b => {
+                    b.classList.remove('hover:bg-slate-50');
+                    b.style.cursor = 'default';
+                });
+
+                if (selectedIndex === q.correctAnswer) {
+                    btnElement.classList.remove('border-slate-200', 'bg-white');
+                    btnElement.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+                    score += 100;
+                    quizScoreDisplay.innerText = `Skor: ${score}`;
+                    
+                    quizFeedback.innerText = "✅ Tepat Sekali!";
+                    quizFeedback.className = "mt-6 p-4 rounded-lg font-bold bg-emerald-100 text-emerald-800 block";
+                } else {
+                    btnElement.classList.remove('border-slate-200', 'bg-white');
+                    btnElement.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-800');
+                    
+                    buttons[q.correctAnswer].classList.remove('border-slate-200', 'bg-white');
+                    buttons[q.correctAnswer].classList.add('border-emerald-500', 'bg-emerald-50');
+
+                    quizFeedback.innerText = "❌ Kurang Tepat. Jawaban benar ditandai dengan warna hijau.";
+                    quizFeedback.className = "mt-6 p-4 rounded-lg font-bold bg-rose-100 text-rose-800 block";
+                }
+
+                if (currentQuestion < quizData.length - 1) {
+                    btnNextQuiz.classList.remove('hidden');
+                } else {
+                    showFinalResult();
+                }
+            }
+
+            btnNextQuiz.addEventListener('click', () => {
+                currentQuestion++;
+                loadQuiz();
+            });
+
+            function showFinalResult() {
+                btnRestartQuiz.classList.remove('hidden');
+                let message = "";
+                if(score === 300) message = "Luar Biasa! Anda sudah menguasai konsep dasar BTU.";
+                else if(score === 200) message = "Bagus! Pemahaman Anda sudah cukup baik.";
+                else message = "Jangan menyerah! Silakan baca kembali materinya.";
+
+                quizFeedback.innerText = `Kuis Selesai! Skor Total: ${score}. ${message}`;
+                quizFeedback.className = "mt-6 p-4 rounded-lg font-bold bg-blue-100 text-blue-800 block text-center";
+            }
+
+            btnRestartQuiz.addEventListener('click', () => {
+                currentQuestion = 0;
+                score = 0;
+                quizScoreDisplay.innerText = `Skor: 0`;
+                btnRestartQuiz.classList.add('hidden');
+                loadQuiz();
+            });
+
+            loadQuiz();
+        });
+    </script>
+</body>
+</html>
