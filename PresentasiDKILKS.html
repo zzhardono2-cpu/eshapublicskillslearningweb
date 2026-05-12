@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WorldSkills — Pembukaan Lomba</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #E8B84B;
+    --gold-light: #F5D080;
+    --gold-dark: #B8891A;
+    --navy: #0A1628;
+    --navy-mid: #112240;
+    --navy-light: #1E3A5F;
+    --white: #F4F0E8;
+    --red: #C0392B;
+    --accent: #4FC3F7;
+    --green: #27AE60;
+    --text-muted: #8BA0B8;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #1a3a6e55 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, #E8B84B18 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 20% 80%, #4FC3F718 0%, transparent 60%);
+    z-index: 0;
+  }
+
+  /* animated grid lines */
+  .grid-lines {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(232,184,75,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,184,75,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove { to { background-position: 60px 60px; } }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+
+  .ws-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(232,184,75,0.12);
+    border: 1px solid rgba(232,184,75,0.35);
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .ws-badge::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--gold);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+  .hero h1 span.gold { color: var(--gold); }
+  .hero h1 span.outline {
+    -webkit-text-stroke: 2px var(--gold);
+    color: transparent;
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 300;
+    color: rgba(244,240,232,0.75);
+    max-width: 620px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.75;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    padding: 14px 32px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    animation: fadeUp 1s 0.35s ease both;
+  }
+  .hero-cta:hover { background: var(--gold-light); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(232,184,75,0.4); }
+  .hero-cta svg { transition: transform 0.3s; }
+  .hero-cta:hover svg { transform: translateY(4px); }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    animation: fadeIn 1.5s 1s both;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--gold));
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse { 0%,100%{opacity:0;transform:scaleY(0);transform-origin:top} 50%{opacity:1;transform:scaleY(1)} }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  /* ---- SECTIONS COMMON ---- */
+  section {
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+  .section-title em { font-style: normal; color: var(--gold); }
+
+  .section-desc {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: rgba(244,240,232,0.75);
+    max-width: 640px;
+    margin-bottom: 3rem;
+  }
+
+  /* ---- DIVIDER ---- */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(232,184,75,0.3), transparent);
+    margin: 0 auto;
+  }
+
+  /* ---- TUJUAN SECTION ---- */
+  .tujuan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .tujuan-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(232,184,75,0.15);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tujuan-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .tujuan-card:hover { border-color: rgba(232,184,75,0.4); transform: translateY(-6px); background: rgba(255,255,255,0.07); }
+  .tujuan-card:hover::before { transform: scaleX(1); }
+
+  .tujuan-icon {
+    width: 52px; height: 52px;
+    background: rgba(232,184,75,0.1);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid rgba(232,184,75,0.2);
+  }
+
+  .tujuan-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: var(--white);
+  }
+  .tujuan-card p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: rgba(244,240,232,0.68);
+  }
+
+  /* ---- NILAI SECTION ---- */
+  .nilai-section { background: rgba(17,34,64,0.5); padding: 5rem 2rem; border-top: 1px solid rgba(232,184,75,0.08); border-bottom: 1px solid rgba(232,184,75,0.08); }
+  .nilai-inner { max-width: 1100px; margin: 0 auto; }
+
+  .nilai-wheel {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-top: 2rem;
+  }
+
+  .nilai-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.4rem;
+    background: rgba(255,255,255,0.03);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: all 0.3s;
+  }
+  .nilai-item:hover { background: rgba(232,184,75,0.07); border-color: rgba(232,184,75,0.25); transform: scale(1.02); }
+
+  .nilai-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: rgba(232,184,75,0.3);
+    line-height: 1;
+    min-width: 36px;
+  }
+  .nilai-text h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.03em;
+  }
+  .nilai-text p {
+    font-size: 0.84rem;
+    line-height: 1.65;
+    color: rgba(244,240,232,0.6);
+  }
+
+  /* ---- STANDARD SECTION ---- */
+  .standard-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  @media(max-width:720px){ .standard-layout { grid-template-columns: 1fr; gap: 2rem; } }
+
+  .standard-visual {
+    position: relative;
+    aspect-ratio: 1;
+    max-width: 400px;
+  }
+  .standard-ring {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 2px dashed rgba(232,184,75,0.25);
+    animation: spin 20s linear infinite;
+  }
+  .standard-ring:nth-child(2) {
+    inset: 15%;
+    border-style: solid;
+    border-color: rgba(79,195,247,0.2);
+    animation-duration: 15s;
+    animation-direction: reverse;
+  }
+  .standard-ring:nth-child(3) {
+    inset: 30%;
+    border-color: rgba(232,184,75,0.4);
+    animation-duration: 10s;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .standard-center {
+    position: absolute;
+    inset: 38%;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 0 40px rgba(232,184,75,0.4);
+  }
+
+  .standard-points { display: flex; flex-direction: column; gap: 1.2rem; }
+  .std-point {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .std-icon {
+    width: 42px; height: 42px; flex-shrink: 0;
+    border-radius: 12px;
+    background: rgba(192,57,43,0.12);
+    border: 1px solid rgba(192,57,43,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+  .std-point h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.2rem;
+  }
+  .std-point p {
+    font-size: 0.86rem;
+    line-height: 1.65;
+    color: rgba(244,240,232,0.62);
+  }
+
+  /* ---- BELAJAR SECTION ---- */
+  .belajar-banner {
+    background: linear-gradient(135deg, rgba(17,34,64,0.9) 0%, rgba(26,58,110,0.7) 100%);
+    border: 1px solid rgba(232,184,75,0.2);
+    border-radius: 28px;
+    padding: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .belajar-banner::before {
+    content: '"';
+    position: absolute;
+    top: -1rem;
+    left: 2rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 15rem;
+    font-weight: 800;
+    color: rgba(232,184,75,0.05);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .belajar-quote {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  .belajar-quote em { font-style: normal; color: var(--gold); }
+
+  .belajar-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 2.5rem;
+  }
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 100px;
+    font-size: 0.84rem;
+    font-weight: 500;
+    background: rgba(79,195,247,0.1);
+    border: 1px solid rgba(79,195,247,0.25);
+    color: var(--accent);
+  }
+  .pill.green { background: rgba(39,174,96,0.1); border-color: rgba(39,174,96,0.3); color: #52d98a; }
+  .pill.gold { background: rgba(232,184,75,0.1); border-color: rgba(232,184,75,0.3); color: var(--gold); }
+
+  .belajar-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+  }
+  .bcard {
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 1.5rem;
+    transition: all 0.3s;
+  }
+  .bcard:hover { background: rgba(232,184,75,0.06); border-color: rgba(232,184,75,0.2); }
+  .bcard-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+  .bcard h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    margin-bottom: 0.4rem;
+  }
+  .bcard p { font-size: 0.84rem; line-height: 1.65; color: rgba(244,240,232,0.6); }
+
+  /* ---- CLOSING ---- */
+  .closing {
+    text-align: center;
+    padding: 7rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .closing-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(232,184,75,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .closing h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .closing h2 span { color: var(--gold); }
+  .closing p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: rgba(244,240,232,0.7);
+    max-width: 560px;
+    margin: 0 auto 3rem;
+    position: relative;
+  }
+
+  .closing-flags {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    position: relative;
+  }
+  .flag-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .flag-icon { font-size: 2.2rem; }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,22,40,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(232,184,75,0.08);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(244,240,232,0.6);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  @media(max-width:600px){
+    .nav-links { display: none; }
+    .belajar-banner { padding: 2rem; }
+  }
+
+  /* ---- REVEAL ANIMATION ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ---- PROGRESS BAR ---- */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+    z-index: 200;
+    transition: width 0.1s;
+    box-shadow: 0 0 10px var(--gold);
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav>
+  <div class="nav-logo">⚡ youtube ; esha public skills learning</div>
+  <ul class="nav-links">
+    <li><a href="#tujuan">Tujuan</a></li>
+    <li><a href="#nilai">Nilai</a></li>
+    <li><a href="#standard">Standar</a></li>
+    <li><a href="#belajar">Belajar</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="hero-content">
+    <div class="ws-badge">Pembukaan Lomba WorldSkills</div>
+    <h1>
+      Dalam kompetisi LKS DKI <span class="gold">Kita Bersaing.</span><br>
+      Di sini Kita <span class="outline">Bertumbuh Bersama.</span>
+    </h1>
+    <p class="hero-sub">
+      Selamat datang di ajang yang bukan sekadar lomba —
+      ini adalah panggung terbaik untuk mengukur, membuktikan,
+      dan menginspirasi masa depan pendidikan vokasi kita.
+    </p>
+    <a href="#tujuan" class="hero-cta">
+      Mulai Perjalanan
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+  <div class="scroll-hint">
+    Gulir ke bawah
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- TUJUAN -->
+<section id="tujuan">
+  <div class="reveal">
+    <div class="section-label">01 — Tujuan Lomba</div>
+    <h2 class="section-title">Mengapa Kita <em>Ada di Sini?</em></h2>
+    <p class="section-desc">
+      Lomba ini bukan tentang menang atau kalah semata. Ini adalah instrumen nyata
+      untuk mendorong kemajuan pendidikan dan pelatihan vokasi di seluruh Indonesia —
+      dengan pendekatan penilaian sesuai standar WorldSkills.
+    </p>
+  </div>
+  <div class="tujuan-grid reveal">
+    <div class="tujuan-card">
+      <div class="tujuan-icon">🎯</div>
+      <h3>Meningkatkan Sistem Penilaian Praktik</h3>
+      <p>Mendorong sekolah untuk mengadopsi metode asesmen yang objektif, terukur, dan selaras dengan standar industri global WorldSkills.</p>
+    </div>
+    <div class="tujuan-card">
+      <div class="tujuan-icon">🛠️</div>
+      <h3>Standar Peralatan yang Tepat</h3>
+      <p>Memastikan peserta menguasai peralatan sesuai standar kompetensi dunia, sehingga lulusan vokasi siap bersaing di pasar kerja internasional.</p>
+    </div>
+    <div class="tujuan-card">
+      <div class="tujuan-icon">📐</div>
+      <h3>Kepatuhan Terhadap Standar</h3>
+      <p>Mewujudkan konsistensi penyelenggaraan diklat vokasi yang memenuhi benchmark WorldSkills: dari kurikulum hingga fasilitas pembelajaran.</p>
+    </div>
+    <div class="tujuan-card">
+      <div class="tujuan-icon">🌐</div>
+      <h3>Praktik Terbaik Internasional</h3>
+      <p>Membuka wawasan penyelenggara pendidikan terhadap best practice global yang dapat diadopsi untuk meningkatkan kualitas lulusan vokasi nasional.</p>
+    </div>
+    <div class="tujuan-card">
+      <div class="tujuan-icon">🤝</div>
+      <h3>Penguatan Jaringan Vokasi</h3>
+      <p>Membangun ekosistem kolaborasi antar-lembaga pendidikan vokasi agar saling belajar, berbagi, dan tumbuh bersama menuju keunggulan.</p>
+    </div>
+    <div class="tujuan-card">
+      <div class="tujuan-icon">🚀</div>
+      <h3>Mendorong Inovasi Delivery</h3>
+      <p>Menstimulasi pengembangan metode pengajaran dan pelatihan yang lebih efektif, inovatif, dan relevan dengan tuntutan industri masa kini.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- NILAI -->
+<div class="nilai-section" id="nilai">
+  <div class="nilai-inner">
+    <div class="reveal">
+      <div class="section-label">02 — Nilai WorldSkills</div>
+      <h2 class="section-title">Tujuh <em>Pilar</em> yang Melandasi Pelaksanaan Lomba</h2>
+      <p class="section-desc">
+        LKS bukan sekadar kompetisi. tetapi berdiri di atas nilai-nilai fundamental yang merujuk kepada induknya yaitu WorldSkills
+        yang menjadi DNA setiap kegiatan — dari persiapan, pelaksanaan, hingga penilaian.
+      </p>
+    </div>
+    <div class="nilai-wheel reveal">
+      <div class="nilai-item">
+        <div class="nilai-num">01</div>
+        <div class="nilai-text">
+          <h4>⚖️ Fairness</h4>
+          <p>Setiap peserta mendapat perlakuan yang adil dan setara. Tidak ada keistimewaan, tidak ada diskriminasi.</p>
+        </div>
+      </div>
+      <div class="nilai-item">
+        <div class="nilai-num">02</div>
+        <div class="nilai-text">
+          <h4>🌈 Diversity</h4>
+          <p>Keberagaman latar belakang, budaya, dan kemampuan adalah kekuatan — bukan pembatas.</p>
+        </div>
+      </div>
+      <div class="nilai-item">
+        <div class="nilai-num">03</div>
+        <div class="nilai-text">
+          <h4>💡 Innovation</h4>
+          <p>Mendorong cara-cara baru dalam belajar, mengajar, dan menilai kompetensi vokasi.</p>
+        </div>
+      </div>
+      <div class="nilai-item">
+        <div class="nilai-num">04</div>
+        <div class="nilai-text">
+          <h4>🤝 Partnership</h4>
+          <p>Kolaborasi antara industri, lembaga pendidikan, dan pemerintah adalah kunci kemajuan bersama. Bahkan kolaborasi pembimbing antar sekolah selama masa persiapan</p>
+        </div>
+      </div>
+      <div class="nilai-item">
+        <div class="nilai-num">05</div>
+        <div class="nilai-text">
+          <h4>🔍 Transparency</h4>
+          <p>Setiap proses, kriteria, dan penilaian terbuka dan dapat diverifikasi oleh semua pihak.</p>
+        </div>
+      </div>
+      <div class="nilai-item">
+        <div class="nilai-num">06</div>
+        <div class="nilai-text">
+          <h4>🏆 Excellence</h4>
+          <p>Standar tertinggi selalu menjadi acuan — bukan rata-rata, tapi yang terbaik yang mungkin dicapai.</p>
+        </div>
+      </div>
+      <div class="nilai-item">
+        <div class="nilai-num">07</div>
+        <div class="nilai-text">
+          <h4>🛡️ Integrity</h4>
+          <p>Kejujuran dan etika profesional adalah fondasi yang tidak bisa dikompromikan dalam setiap langkah.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STANDARD -->
+<section id="standard">
+  <div class="standard-layout">
+    <div class="reveal">
+      <div class="section-label">03 — Standar Lomba</div>
+      <h2 class="section-title">Standar <em>adalah Hakim</em> yang Sebenarnya, Bukan juri</h2>
+      <p class="section-desc">
+        Dalam arena ini, tidak ada penilaian berdasarkan asumsi atau persepsi lapangan.
+        Satu rujukan yang dari pengalaman dan pembelajaran yang diadopsi selama keanggotaan Indonesia selama 22 tahun sejak 2004 dan pengalaman LKS selama 34 tahun: <strong style="color:var(--gold)">Standar WorldSkills atau standar yang diakui secara global (bukan biasanya/ kebiasaan).</strong>
+      </p>
+      <div class="standard-points">
+        <div class="std-point">
+          <div class="std-icon">📋</div>
+          <div>
+            <h4>Semua Mengacu ke Standar Tertulis</h4>
+            <p>Setiap kriteria penilaian telah ditetapkan secara eksplisit dalam Competition Standards. Tidak ada ruang untuk interpretasi subjektif.</p>
+          </div>
+        </div>
+        <div class="std-point">
+          <div class="std-icon">🚫</div>
+          <div>
+            <h4>Tidak Ada Penilaian Perseptual</h4>
+            <p>Perasaan, kesan, atau pandangan pribadi tidak memiliki tempat dalam penilaian. Fakta dan standar yang tertulis dalam setiap deskripsi aspek penilaian adalah ukuran yang harus dipatuhi dalam lomba.</p>
+          </div>
+        </div>
+        <div class="std-point">
+          <div class="std-icon">⚖️</div>
+          <div>
+            <h4>Berlaku Sama untuk Semua</h4>
+            <p>Standar yang sama diterapkan untuk setiap peserta, tanpa pengecualian. Inilah substansi dari fairness Nilai WorldSkills yang kita ikuti sebagai benefit yang bisa diambil sebagai salah satu pendorong kemajuan.</p>
+          </div>
+        </div>
+        <div class="std-point">
+          <div class="std-icon">📊</div>
+          <div>
+            <h4>Terukur dan Dapat Diverifikasi</h4>
+            <p>Setiap penilaian berbasis data yang dapat diaudit, memastikan hasil yang kredibel dan dapat dipertanggungjawabkan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="standard-visual reveal">
+      <div class="standard-ring"></div>
+      <div class="standard-ring"></div>
+      <div class="standard-ring"></div>
+      <div class="standard-center">📐</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BELAJAR -->
+<section id="belajar">
+  <div class="reveal">
+    <div class="section-label">04 — Lomba sebagai Ruang Belajar</div>
+    <h2 class="section-title">Medali adalah BONUS — <em>Sebuah Refleksi</em></h2>
+  </div>
+  <div class="belajar-banner reveal">
+    <p class="belajar-quote">
+      "Peserta terbaik hari ini adalah <em>guru terbaik</em> bagi
+      sekolah Anda esok hari — jika Anda mau belajar dari mereka."
+    </p>
+    <div class="belajar-pills">
+      <div class="pill">🔬 Amati Praktik Terbaik</div>
+      <div class="pill green">🌱 Jadikan Inspirasi</div>
+      <div class="pill gold">✨ Implementasikan di Sekolah</div>
+    </div>
+    <div class="belajar-cards">
+      <div class="bcard">
+        <div class="bcard-icon">🔧</div>
+        <h4>Upgrade Peralatan</h4>
+        <p>Lihat standar peralatan yang digunakan peserta terbaik. Jadikan referensi untuk pengadaan di sekolah Anda.</p>
+      </div>
+      <div class="bcard">
+        <div class="bcard-icon">📚</div>
+        <h4>Metode Delivery Baru</h4>
+        <p>Perhatikan bagaimana peserta top melakukan pekerjaan. Adopsi pendekatan instruksional yang lebih efektif.</p>
+      </div>
+      <div class="bcard">
+        <div class="bcard-icon">📏</div>
+        <h4>Sistem Penilaian Praktik</h4>
+        <p>Pelajari cara WorldSkills menilai kompetensi. Adaptasikan ke dalam asesmen praktik di sekolah Anda.</p>
+      </div>
+      <div class="bcard">
+        <div class="bcard-icon">🧭</div>
+        <h4>Benchmark Nyata</h4>
+        <p>Ketahui di mana posisi sekolah Anda sekarang. Gunakan sebagai road map perbaikan yang konkret.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CLOSING -->
+<div class="closing">
+  <div class="closing-glow"></div>
+  <h2 class="reveal">Setiap <span>UPAYA</span><br>Menjadi Pembelajaran</h2>
+  <p class="reveal">
+    Kita semua —
+    dalam lomba ini Kita bukan hanya mewakili sekolah,
+    Kita mewakili generasi penerus vokasi Indonesia.
+    <strong style="color:var(--gold)"> Berikan yang terbaik. Belajar dari semua. Pulang dengan hal baru untuk maju.</strong>
+  </p>
+  <div class="closing-flags reveal">
+    <div class="flag-item"><div class="flag-icon">🏅</div><span>Fairness</span></div>
+    <div class="flag-item"><div class="flag-icon">💎</div><span>Excellence</span></div>
+    <div class="flag-item"><div class="flag-icon">🌟</div><span>Integrity</span></div>
+    <div class="flag-item"><div class="flag-icon">🤝</div><span>Partnership</span></div>
+    <div class="flag-item"><div class="flag-icon">💡</div><span>Innovation</span></div>
+  </div>
+  <p style="margin-top:3rem; font-size:0.8rem; color: rgba(244,240,232,0.3); letter-spacing:0.1em; text-transform:uppercase;">
+    LKS DIKMEN-WorldSkills — Shaping the Future of Skills Excellence
+  </p>
+</div>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
