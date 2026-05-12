@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deskripsi Teknis LKS DIKMEN XXXIV 2026 – Teknik Tata Udara & Pendingin</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --bg2: #0f1628;
+    --bg3: #151d35;
+    --card: #111827;
+    --card2: #1a2540;
+    --accent: #00c6ff;
+    --accent2: #0072ff;
+    --gold: #f5a623;
+    --green: #00e676;
+    --red: #ff5252;
+    --text: #e8edf8;
+    --muted: #7b8bb2;
+    --border: rgba(0,198,255,0.15);
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SIDEBAR NAV ── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 240px;
+    height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+    transition: transform 0.3s;
+  }
+
+  #sidebar-brand {
+    padding: 20px 16px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #sidebar-brand .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  #sidebar-brand h2 {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text);
+  }
+
+  nav { padding: 12px 0; flex: 1; }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    font-size: 12.5px;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  nav a:hover, nav a.active {
+    color: var(--accent);
+    background: rgba(0,198,255,0.06);
+    border-left-color: var(--accent);
+  }
+
+  nav a .nav-icon { font-size: 16px; width: 18px; text-align: center; }
+  nav .nav-group { padding: 8px 16px 4px; font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+
+  /* ── MAIN ── */
+  main {
+    margin-left: 240px;
+    padding: 0 0 80px;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    background: linear-gradient(135deg, #0a1930 0%, #0d2045 40%, #091525 100%);
+    padding: 60px 48px 48px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,198,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  #hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  #hero h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff, #a8d8f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  #hero .subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    text-align: center;
+    min-width: 100px;
+  }
+
+  .hero-stat .num {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .hero-stat .lbl {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ── SECTION ── */
+  section {
+    padding: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    scroll-margin-top: 20px;
+  }
+
+  section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  h2.section-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 20px 0 10px;
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+
+  .card-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .card-grid.cols2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* ── TASK CARDS ── */
+  .task-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .task-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--accent);
+  }
+
+  .task-card .task-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .task-card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .task-card .score {
+    display: inline-block;
+    background: rgba(0,198,255,0.1);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+
+  .task-card p {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+
+  .tag {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(0,198,255,0.08);
+    color: var(--accent);
+    border: 1px solid rgba(0,198,255,0.2);
+  }
+
+  /* ── SCORE BAR ── */
+  .score-bar-wrap { margin-bottom: 14px; }
+
+  .score-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .score-bar-label span:last-child {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .score-bar-track {
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+    width: 0;
+  }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+
+  th {
+    background: rgba(0,198,255,0.08);
+    color: var(--accent);
+    font-weight: 500;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--muted);
+    vertical-align: top;
+  }
+
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  td strong { color: var(--text); font-weight: 500; }
+
+  .td-accent { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+
+  /* ── ALERT ── */
+  .alert {
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin: 12px 0;
+    line-height: 1.6;
+    border-left: 4px solid;
+  }
+
+  .alert-info { background: rgba(0,198,255,0.07); border-color: var(--accent); color: #a0d4f0; }
+  .alert-warn { background: rgba(245,166,35,0.08); border-color: var(--gold); color: #f5d090; }
+  .alert-danger { background: rgba(255,82,82,0.08); border-color: var(--red); color: #ffaaaa; }
+  .alert-success { background: rgba(0,230,118,0.08); border-color: var(--green); color: #90f0c0; }
+
+  .alert strong { font-weight: 600; display: block; margin-bottom: 4px; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px; top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg2);
+    box-shadow: 0 0 0 3px rgba(0,198,255,0.2);
+  }
+
+  .tl-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 3px;
+  }
+
+  .tl-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .tl-desc { font-size: 12.5px; color: var(--muted); }
+
+  /* ── SCHEDULE ── */
+  .schedule-block {
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .sch-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+
+  .sch-name {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .sch-blue { background: rgba(0,114,255,0.1); border-color: rgba(0,114,255,0.25); }
+  .sch-teal { background: rgba(0,180,140,0.1); border-color: rgba(0,180,140,0.25); }
+  .sch-amber { background: rgba(245,166,35,0.1); border-color: rgba(245,166,35,0.25); }
+  .sch-red { background: rgba(255,82,82,0.1); border-color: rgba(255,82,82,0.25); }
+  .sch-gray { background: rgba(255,255,255,0.04); }
+
+  /* ── COMPETENCY GRID ── */
+  .comp-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .comp-item:last-child { border-bottom: none; }
+
+  .comp-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,198,255,0.08);
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .comp-title {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* ── SCALE ── */
+  .scale-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
+
+  .scale-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .scale-num {
+    font-size: 32px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 4px;
+  }
+
+  .scale-label { font-size: 12px; color: var(--muted); }
+
+  /* ── RULE LIST ── */
+  .rule-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .rule-item:last-child { border-bottom: none; }
+
+  .rule-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 24px;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+
+  /* ── EQUIPMENT ── */
+  .equip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-top: 12px; }
+
+  .equip-item {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12.5px;
+  }
+
+  .equip-item .num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+  .equip-item .name { color: var(--text); font-weight: 500; margin: 2px 0; }
+  .equip-item .spec { font-size: 11.5px; color: var(--muted); }
+
+  /* ── PILL ── */
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 500;
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
+
+  .pill-blue { background: rgba(0,114,255,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+  .pill-green { background: rgba(0,230,118,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.25); }
+  .pill-gold { background: rgba(245,166,35,0.12); color: var(--gold); border: 1px solid rgba(245,166,35,0.25); }
+  .pill-red { background: rgba(255,82,82,0.12); color: var(--red); border: 1px solid rgba(255,82,82,0.25); }
+
+  /* ── TOGGLE SECTION ── */
+  details {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  summary {
+    padding: 14px 18px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    list-style: none;
+    user-select: none;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  summary::after {
+    content: '▶';
+    font-size: 10px;
+    color: var(--muted);
+    margin-left: auto;
+    transition: transform 0.2s;
+  }
+
+  details[open] summary::after { transform: rotate(90deg); }
+
+  details .detail-body { padding: 0 18px 18px; }
+
+  /* ── MOBILE TOGGLE ── */
+  #menu-toggle {
+    display: none;
+    position: fixed;
+    top: 12px; right: 16px;
+    z-index: 200;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--accent);
+  }
+
+  /* ── PROGRESS INDICATOR ── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 240px; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.1s;
+    z-index: 50;
+  }
+
+  /* ── LIVE BADGE ── */
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--red);
+    background: rgba(255,82,82,0.1);
+    border: 1px solid rgba(255,82,82,0.3);
+    border-radius: 20px;
+    padding: 3px 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: pulse 1.2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    main { margin-left: 0; }
+    #menu-toggle { display: block; }
+    section { padding: 32px 20px; }
+    #hero { padding: 40px 20px 32px; }
+    #hero h1 { font-size: 24px; }
+    .card-grid.cols2, .card-grid.cols3 { grid-template-columns: 1fr; }
+    .scale-grid { grid-template-columns: 1fr 1fr; }
+    #progress-bar { left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<button id="menu-toggle" onclick="toggleMenu()">☰</button>
+
+<aside id="sidebar">
+  <div id="sidebar-brand">
+    <div class="badge">LKS DIKMEN XXXIV · 2026</div>
+    <h2>Teknik Tata Udara &amp; Pendingin</h2>
+  </div>
+  <nav>
+    <div class="nav-group">Pengantar</div>
+    <a href="#pendahuluan" onclick="navClick(this)"><span class="nav-icon">📋</span> Pendahuluan</a>
+    <a href="#kompetensi" onclick="navClick(this)"><span class="nav-icon">🎯</span> Standar Kompetensi</a>
+
+    <div class="nav-group">Penilaian</div>
+    <a href="#sistem-penilaian" onclick="navClick(this)"><span class="nav-icon">⚖️</span> Sistem Penilaian</a>
+    <a href="#materi-uji" onclick="navClick(this)"><span class="nav-icon">🔧</span> Materi Uji</a>
+    <a href="#marking" onclick="navClick(this)"><span class="nav-icon">📊</span> Komposisi Nilai</a>
+
+    <div class="nav-group">Persiapan</div>
+    <a href="#alat" onclick="navClick(this)"><span class="nav-icon">🛠️</span> Alat & Bahan</a>
+    <a href="#jadwal" onclick="navClick(this)"><span class="nav-icon">📅</span> Jadwal</a>
+
+    <div class="nav-group">Regulasi</div>
+    <a href="#peraturan" onclick="navClick(this)"><span class="nav-icon">📜</span> Peraturan Lomba</a>
+    <a href="#tatatertib" onclick="navClick(this)"><span class="nav-icon">🏛️</span> Tata Tertib</a>
+  </nav>
+</aside>
+
+<main>
+
+<!-- ── HERO ── -->
+<div id="hero">
+  <div class="hero-tag">Deskripsi Teknis Resmi · Tingkat Provinsi DKI Jakarta</div>
+  <h1>LKS DIKMEN XXXIV<br>Tata Udara &amp; Pendingin 2026</h1>
+  <p class="subtitle">Refrigeration and Air Conditioning — SMK/SMA/MAK/MA</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="num">5</div>
+      <div class="lbl">Tugas Praktik</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">9</div>
+      <div class="lbl">Jam Lomba</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">226</div>
+      <div class="lbl">Aspek Penilaian</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">100</div>
+      <div class="lbl">Skala Nilai</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">2</div>
+      <div class="lbl">Hari Lomba</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PENDAHULUAN ── -->
+<section id="pendahuluan">
+  <div class="section-label">Bagian A</div>
+  <h2 class="section-title">Pendahuluan</h2>
+
+  <div class="card-grid cols2">
+    <div class="card">
+      <h3>Nama Bidang Lomba</h3>
+      <p>Teknik Tata Udara / Air Conditioning (AC)</p>
+      <span class="pill pill-blue">Refrigeration & AC</span>
+      <span class="pill pill-green">WorldSkills Standard</span>
+    </div>
+    <div class="card">
+      <h3>Peserta</h3>
+      <p>Siswa Pendidikan Menengah dari wilayah DKI Jakarta yang telah melalui proses seleksi di tingkat kota/wilayah.</p>
+      <span class="pill pill-gold">Individu</span>
+      <span class="pill pill-blue">SMK / SMA / MAK / MA</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Deskripsi Tugas Teknisi AC</h3>
+    <p>Teknisi AC harus mampu melakukan pekerjaan <strong>instalasi, komisioning, perawatan, dan perbaikan</strong> sistem AC; memiliki pengetahuan good servicing practices meliputi K3LH, komunikasi di tempat kerja, penggunaan peralatan ukur, penggantian/pemasangan komponen elektrik dan mekanik, serta penanganan refrigeran yang benar.</p>
+  </div>
+
+  <div class="card">
+    <h3>Tujuan Lomba</h3>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-title">Peningkatan Kualitas Pendidikan Vokasi</div>
+        <div class="tl-desc">Mendorong Pendidikan Menengah meningkatkan KBM mengacu SKKNI bidang Pendingin dan Tata Udara.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Promosi Kompetensi ke Industri</div>
+        <div class="tl-desc">Mempromosikan kompetensi siswa kepada Dunia Usaha dan Industri sebagai calon pengguna tenaga kerja.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Motivasi Kompetisi Positif</div>
+        <div class="tl-desc">Memberikan kesempatan kepada siswa untuk berkompetisi secara positif dan menumbuhkan rasa bangga.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Seleksi Menuju LKS Nasional</div>
+        <div class="tl-desc">Memilih peserta terbaik untuk ajang LKS Nasional yang mengacu pada materi ASC, WSA, dan WSC.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-warn">
+    <strong>⚠ Perubahan Soal Hari H</strong>
+    Untuk menjaga prinsip fairness dan objectivity, pada hari H akan terdapat perubahan maksimum 30%. Perubahan tidak meliputi bahan yang telah tercantum pada daftar bahan.
+  </div>
+</section>
+
+<!-- ── KOMPETENSI ── -->
+<section id="kompetensi">
+  <div class="section-label">Bagian B</div>
+  <h2 class="section-title">Standar Kompetensi Bidang Lomba</h2>
+
+  <p>Spesifikasi Kompetensi mengacu pada <strong>WorldSkills Occupational Standards (WSOS)</strong> dan <strong>SKKNI</strong>. Peserta harus setara dengan jenjang kualifikasi 2 teknisi refrigerasi dan teknisi tata udara.</p>
+
+  <h3>Bobot Standar Kompetensi</h3>
+
+  <div id="comp-bars"></div>
+
+  <h3>Unit SKKNI Terkait</h3>
+  <div class="card" style="padding:0;">
+    <div style="padding: 0 20px;">
+      <div class="comp-item"><span class="comp-code">F.43RAC01.001.1</span><span class="comp-title">Menerapkan K3 dan Lingkungan Hidup (K3-LH)</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.002.1</span><span class="comp-title">Menerapkan Komunikasi di Tempat Kerja</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.003.1</span><span class="comp-title">Menerapkan Kerjasama di Tempat Kerja</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.004.1</span><span class="comp-title">Mempersiapkan Peralatan dan Material</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.005.1</span><span class="comp-title">Menginterpretasi Gambar Teknik Refrigerasi dan Tata Udara</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.006.1</span><span class="comp-title">Merangkai Sistem Kelistrikan Sederhana</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.007.1</span><span class="comp-title">Merangkai Sistem Pemipaan Sederhana</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.008.1</span><span class="comp-title">Menggunakan Alat Ukur Refrigerasi dan Tata Udara</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.010.1</span><span class="comp-title">Memeriksa Kebocoran Refrigeran</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.011.1</span><span class="comp-title">Menguji Instalasi Pemipaan</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.012.1</span><span class="comp-title">Mengevakuasi Sistem Refrigerasi dan Tata Udara</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.020.1</span><span class="comp-title">Memasang Sistem Refrigerasi Komersial dan Industri</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.023.1</span><span class="comp-title">Mengganti Komponen Elektrik dan Mekanik Pada Sistem RAC</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.024.1</span><span class="comp-title">Memperbaiki Unit dan Sistem Refrigerasi dan Tata Udara</span></div>
+      <div class="comp-item"><span class="comp-code">F.43RAC01.025.1</span><span class="comp-title">Melakukan Testing dan Commissioning Unit Refrigerasi Komersial dan Industri</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SISTEM PENILAIAN ── -->
+<section id="sistem-penilaian">
+  <div class="section-label">Bagian C</div>
+  <h2 class="section-title">Sistem Penilaian</h2>
+
+  <div class="card-grid cols2">
+    <div class="card">
+      <h3>Penilaian Subjektif</h3>
+      <p>Dilakukan melalui observasi proses dan hasil kerja peserta oleh juri. Menggunakan skala justifikasi berikut:</p>
+      <div class="scale-grid" style="grid-template-columns: repeat(4,1fr);">
+        <div class="scale-item">
+          <div class="scale-num" style="color: var(--red);">0</div>
+          <div class="scale-label">Tidak melakukan</div>
+        </div>
+        <div class="scale-item">
+          <div class="scale-num" style="color: var(--gold);">1</div>
+          <div class="scale-label">Di bawah rata-rata industri</div>
+        </div>
+        <div class="scale-item">
+          <div class="scale-num" style="color: #60a5fa;">2</div>
+          <div class="scale-label">Rata-rata industri</div>
+        </div>
+        <div class="scale-item">
+          <div class="scale-num" style="color: var(--green);">3</div>
+          <div class="scale-label">Sempurna</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Penilaian Objektif</h3>
+      <p>Dilakukan oleh juri berdasarkan pengukuran kuantitatif. Keputusan bersifat biner:</p>
+      <div style="display:flex; gap:12px; margin-top:16px;">
+        <div class="scale-item" style="flex:1; border-color: rgba(0,230,118,0.3);">
+          <div class="scale-num" style="color: var(--green);">✓ YA</div>
+          <div class="scale-label">Sesuai ukuran &amp; toleransi → nilai 1</div>
+        </div>
+        <div class="scale-item" style="flex:1; border-color: rgba(255,82,82,0.3);">
+          <div class="scale-num" style="color: var(--red);">✗ TIDAK</div>
+          <div class="scale-label">Tidak sesuai ukuran &amp; toleransi → nilai 0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Aspek Penilaian Umum</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:12px; margin-top:12px;">
+      <div style="padding:14px; background:var(--card2); border-radius:8px; border:1px solid var(--border);">
+        <div style="font-size:11px; color:var(--accent); margin-bottom:4px;">STANDAR PEMASANGAN</div>
+        <div style="font-size:13px; color:var(--text);">Kesesuaian komponen, peralatan dan sikap kerja dengan standar yang ditetapkan dalam lomba</div>
+      </div>
+      <div style="padding:14px; background:var(--card2); border-radius:8px; border:1px solid var(--border);">
+        <div style="font-size:11px; color:var(--accent); margin-bottom:4px;">WAKTU KERJA</div>
+        <div style="font-size:13px; color:var(--text);">Sesuai alokasi waktu yang disediakan dalam lomba</div>
+      </div>
+      <div style="padding:14px; background:var(--card2); border-radius:8px; border:1px solid var(--border);">
+        <div style="font-size:11px; color:var(--accent); margin-bottom:4px;">PROSES KERJA</div>
+        <div style="font-size:13px; color:var(--text);">SOP dan aspek keselamatan lingkungan</div>
+      </div>
+      <div style="padding:14px; background:var(--card2); border-radius:8px; border:1px solid var(--border);">
+        <div style="font-size:11px; color:var(--accent); margin-bottom:4px;">STANDAR HASIL</div>
+        <div style="font-size:13px; color:var(--text);">Memenuhi kriteria standar yang ditetapkan</div>
+      </div>
+      <div style="padding:14px; background:var(--card2); border-radius:8px; border:1px solid var(--border);">
+        <div style="font-size:11px; color:var(--accent); margin-bottom:4px;">SAFETY PRACTICE</div>
+        <div style="font-size:13px; color:var(--text);">K3LH: penggunaan APD dan prosedur aman</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <strong>ℹ Sistem Pemenang</strong>
+    Seluruh nilai pada masing-masing aspek akan diakumulasi. Peserta dengan nilai tertinggi dalam skala CIS (100 poin) dinyatakan sebagai pemenang.
+  </div>
+</section>
+
+<!-- ── MATERI UJI ── -->
+<section id="materi-uji">
+  <div class="section-label">Bagian D</div>
+  <h2 class="section-title">Materi Uji</h2>
+
+  <p>Materi uji dikembangkan mengacu pada <strong>WorldSkills Standards Specification (WSSS)</strong> dan <strong>WSOS</strong> bidang Refrigeration and Air Conditioning, baik pada tingkat WorldSkills ASEAN maupun internasional.</p>
+
+  <h3>Spesifikasi Sistem yang Digunakan</h3>
+  <div class="card" style="border-color: rgba(0,198,255,0.3);">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <div>
+        <div style="font-size:11px; color:var(--muted); margin-bottom:4px;">JENIS SISTEM</div>
+        <div style="font-size:16px; font-weight:600; color:var(--text);">Split Air Conditioning</div>
+      </div>
+      <div style="width:1px; height:40px; background:var(--border);"></div>
+      <div><span class="pill pill-blue">Suhu: 18°C</span><span class="pill pill-blue">Fan: Maksimum</span><span class="pill pill-blue">Louvre: Full Dinamis</span><span class="pill pill-blue">Mode: Cool</span></div>
+    </div>
+  </div>
+
+  <h3>Detail Tugas Lomba</h3>
+  <div class="card-grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
+
+    <div class="task-card" style="--accent: #00c6ff;">
+      <div class="task-num">TUGAS 1 · HARI 2</div>
+      <h4>Instalasi Sistem AC</h4>
+      <div class="score">19.45 poin</div>
+      <p>Pemasangan unit indoor dan outdoor sesuai gambar dan deskripsi teknis. Termasuk instalasi pemipaan sesuai standar proses dan hasil yang ditetapkan.</p>
+      <div class="tag-list">
+        <span class="tag">Baca Gambar Teknik</span>
+        <span class="tag">Manajemen Kerja</span>
+        <span class="tag">Komunikasi</span>
+        <span class="tag">K3LH</span>
+      </div>
+    </div>
+
+    <div class="task-card" style="--accent: #00b4ff;">
+      <div class="task-num">TUGAS 2 · HARI 2</div>
+      <h4>Instalasi Sistem Kelistrikan AC</h4>
+      <div class="score">10.85 poin</div>
+      <p>Pemasangan kelistrikan sesuai standar manufaktur, SNI (PUIL), dan WSOS. Mencakup rangkaian listrik sederhana dan commissioning kelistrikan.</p>
+      <div class="tag-list">
+        <span class="tag">Rangkaian Listrik</span>
+        <span class="tag">SNI / PUIL</span>
+        <span class="tag">WSOS</span>
+        <span class="tag">K3LH</span>
+      </div>
+    </div>
+
+    <div class="task-card" style="--accent: #0090ff;">
+      <div class="task-num">TUGAS 3 · HARI 2</div>
+      <h4>Komisioning Sistem AC</h4>
+      <div class="score">18.40 poin</div>
+      <p>Melakukan dan merekam data komisioning sistem untuk memastikan sistem berfungsi benar sesuai spesifikasi. Analisis kegagalan sistem dan pencatatan data.</p>
+      <div class="tag-list">
+        <span class="tag">Siklus Refrigerasi</span>
+        <span class="tag">Termodinamika</span>
+        <span class="tag">Alat Ukur</span>
+        <span class="tag">K3LH Lingkungan</span>
+      </div>
+    </div>
+
+    <div class="task-card" style="--accent: #c084fc;">
+      <div class="task-num">TUGAS 4 · HARI 1</div>
+      <h4>Component Fabrication</h4>
+      <div class="score" style="background: rgba(192,132,252,0.1); color: #c084fc;">21.10 poin</div>
+      <p>Pekerjaan pembuatan komponen mengacu ke standar Lomba Tingkat Nasional. Menuntut kecepatan kerja, kemampuan baca gambar teknik, dan ketepatan dimensi.</p>
+      <div class="tag-list">
+        <span class="tag" style="color:#c084fc; border-color: rgba(192,132,252,0.3); background: rgba(192,132,252,0.08);">Fabrikasi Komponen</span>
+        <span class="tag" style="color:#c084fc; border-color: rgba(192,132,252,0.3); background: rgba(192,132,252,0.08);">Uji Tekan</span>
+        <span class="tag" style="color:#c084fc; border-color: rgba(192,132,252,0.3); background: rgba(192,132,252,0.08);">Uji Kebocoran</span>
+      </div>
+    </div>
+
+    <div class="task-card" style="--accent: #4ade80; grid-column: 1 / -1;">
+      <div class="task-num">TUGAS 5 · HARI 2</div>
+      <h4>Penanganan Refrigeran</h4>
+      <div class="score" style="background: rgba(74,222,128,0.1); color: #4ade80;">15.80 poin</div>
+      <p>Pekerjaan yang berhubungan dengan penanganan refrigeran untuk mendukung program global kesinambungan lingkungan hidup dan penggunaan refrigeran yang efektif dan efisien. <strong style="color: #f87171;">Teknisi DILARANG melepaskan refrigeran ke atmosfer</strong> dalam rangka mendukung perlindungan lapisan ozon dan pengurangan emisi GRK.</p>
+      <p>Mencakup: prosedur uji tekanan → uji kebocoran → evakuasi → pengisian refrigeran.</p>
+      <div class="tag-list">
+        <span class="tag" style="color:#4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.08);">Recovery</span>
+        <span class="tag" style="color:#4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.08);">Uji Tekanan</span>
+        <span class="tag" style="color:#4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.08);">Evakuasi</span>
+        <span class="tag" style="color:#4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.08);">Pengisian Refrigeran</span>
+        <span class="tag" style="color:#4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.08);">Manifold Gauge</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card" style="margin-top:20px; border-color: rgba(245,166,35,0.3); background: rgba(245,166,35,0.04);">
+    <h3 style="color: var(--gold);">🛡 Praktik K3LH (Berlaku Sepanjang Lomba)</h3>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px;">
+      <div class="comp-item" style="border:none; padding:8px 0;"><span style="color:var(--gold);">✓</span>&nbsp;<span style="font-size:13px; color:var(--muted);">Baju kerja lengan panjang (seluruh pekerjaan refrigeran)</span></div>
+      <div class="comp-item" style="border:none; padding:8px 0;"><span style="color:var(--gold);">✓</span>&nbsp;<span style="font-size:13px; color:var(--muted);">Safety shoes wajib digunakan</span></div>
+      <div class="comp-item" style="border:none; padding:8px 0;"><span style="color:var(--gold);">✓</span>&nbsp;<span style="font-size:13px; color:var(--muted);">Sarung tangan, masker, kacamata relevan</span></div>
+      <div class="comp-item" style="border:none; padding:8px 0;"><span style="color:var(--red);">✗</span>&nbsp;<span style="font-size:13px; color:var(--muted);">Dilarang melepaskan refrigeran ke atmosfer</span></div>
+    </div>
+  </div>
+
+  <h3>Catatan Penting Refrigeran</h3>
+  <div class="card-grid cols2">
+    <div class="card" style="border-color:rgba(255,82,82,0.3);">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--red); font-weight:600; margin-bottom:6px;">GWP</div>
+      <div style="font-size:13px; color:var(--text); font-weight:500;">Global Warming Potential</div>
+      <div style="font-size:12.5px; color:var(--muted); margin-top:4px;">Potensi pemanasan global — refrigeran dapat berkontribusi terhadap perubahan iklim</div>
+    </div>
+    <div class="card" style="border-color:rgba(96,165,250,0.3);">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:14px; color:#60a5fa; font-weight:600; margin-bottom:6px;">ODP</div>
+      <div style="font-size:13px; color:var(--text); font-weight:500;">Ozone Depleting Potential</div>
+      <div style="font-size:12.5px; color:var(--muted); margin-top:4px;">Potensi perusak ozon — refrigeran dapat merusak lapisan ozon stratosfer</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MARKING ── -->
+<section id="marking">
+  <div class="section-label">Bagian D.4–D.5</div>
+  <h2 class="section-title">Komposisi Penilaian</h2>
+
+  <div class="alert alert-info">
+    <strong>Total: 226 Aspek Penilaian</strong>
+    208 aspek objektif (92.8 poin) + 18 aspek subjektif (7.2 poin) = 226 aspek / 100 poin total
+  </div>
+
+  <table style="margin-top:16px;">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Tugas</th>
+        <th>Kriteria</th>
+        <th>Objektif*</th>
+        <th>Subjektif*</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Tugas 1</strong></td>
+        <td>Instalasi sistem AC</td>
+        <td>60 / 16.65</td>
+        <td>12 / 2.8</td>
+        <td class="td-accent">74 / 19.45</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>Tugas 2</strong></td>
+        <td>Instalasi sistem kelistrikan AC</td>
+        <td>19 / 9.85</td>
+        <td>2 / 1</td>
+        <td class="td-accent">21 / 10.85</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>Tugas 3</strong></td>
+        <td>Komisioning sistem AC</td>
+        <td>51 / 18.4</td>
+        <td>0 / 0</td>
+        <td class="td-accent">51 / 18.40</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>Tugas 4</strong></td>
+        <td>Component Fabrication</td>
+        <td>33 / 17.7</td>
+        <td>4 / 3.4</td>
+        <td class="td-accent">38 / 21.10</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>Tugas 5</strong></td>
+        <td>Penanganan refrigeran</td>
+        <td>27 / 15.8</td>
+        <td>0 / 0</td>
+        <td class="td-accent">27 / 15.80</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>—</strong></td>
+        <td>Praktik K3LH</td>
+        <td>18 / 14.4</td>
+        <td>0 / 0</td>
+        <td class="td-accent">18 / 14.40</td>
+      </tr>
+      <tr style="background: rgba(0,198,255,0.06);">
+        <td colspan="3"><strong>Total</strong></td>
+        <td><strong>208 / 92.8</strong></td>
+        <td><strong>18 / 7.2</strong></td>
+        <td class="td-accent"><strong>226 / 100</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="alert alert-warn" style="margin-top:16px;">
+    <strong>* Tentatif</strong>
+    Jumlah poin maksimal bersifat tentatif. Dokumen detail marking form dan komposisi detail akan diberikan sebelum lomba dilaksanakan.
+  </div>
+
+  <h3>Alokasi Waktu per Modul</h3>
+  <table>
+    <thead>
+      <tr><th>Modul</th><th>Tugas</th><th>Deskripsi</th><th>Waktu Std.</th><th>Est. Penilaian</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>A</strong></td>
+        <td>4</td>
+        <td>Component Fabrication + Uji Tekan + K3LH</td>
+        <td class="td-accent">2:30</td>
+        <td>2:00</td>
+      </tr>
+      <tr>
+        <td><strong>B</strong></td>
+        <td>1, 2, 3, 5</td>
+        <td>Instalasi AC + Kelistrikan + Penanganan Refrigeran + Komisioning + K3LH</td>
+        <td class="td-accent">2:30</td>
+        <td>2:00</td>
+      </tr>
+      <tr style="background: rgba(0,198,255,0.06);">
+        <td colspan="3"><strong>Grand Total Waktu Lomba</strong></td>
+        <td class="td-accent"><strong>9:00</strong></td>
+        <td><strong>4:00</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ── ALAT & BAHAN ── -->
+<section id="alat">
+  <div class="section-label">Bagian E & F</div>
+  <h2 class="section-title">Alat &amp; Bahan</h2>
+
+  <div class="alert alert-warn">
+    <strong>⚠ Ketentuan Penting</strong>
+    Peserta <strong>dilarang</strong> menggunakan special tools / jig (tools custom yang tidak beredar di pasaran). Seluruh peralatan harus dilaporkan ke juri untuk pengecekan sebelum memasuki area lomba.
+  </div>
+
+  <details open>
+    <summary>🛠 Sarana Lomba (per Peserta — disiapkan panitia & peserta)</summary>
+    <div class="detail-body">
+      <table>
+        <thead><tr><th>No</th><th>Nama Barang</th><th>Jumlah</th><th>Ket.</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Meja kerja</td><td>1 unit</td><td>—</td></tr>
+          <tr><td>2</td><td>Ragum</td><td>1 buah</td><td>—</td></tr>
+          <tr><td>3</td><td>RAC technician tools set</td><td>1 set</td><td><span class="pill pill-gold">Peserta</span></td></tr>
+          <tr><td>4</td><td>Area kerja minimal 2 × 3 m</td><td>1 area</td><td>—</td></tr>
+          <tr><td>5</td><td>Supply listrik terproteksi 6A</td><td>1 buah</td><td>—</td></tr>
+          <tr><td>6</td><td>Kabel extension</td><td>1 unit</td><td><span class="pill pill-gold">Peserta</span></td></tr>
+          <tr><td>7</td><td>Brazing equipment</td><td>1 set</td><td><span class="pill pill-gold">Peserta</span></td></tr>
+          <tr><td>8</td><td>Oxy acetilin &amp; nitrogen</td><td>1 set</td><td><span class="pill pill-gold">Peserta</span></td></tr>
+          <tr><td>9</td><td>APD/PPE</td><td>1 set</td><td><span class="pill pill-gold">Peserta</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <details>
+    <summary>🔧 Peralatan yang Disiapkan Peserta (38 item)</summary>
+    <div class="detail-body">
+      <div class="equip-grid">
+        <div class="equip-item"><div class="num">#1</div><div class="name">Flaring tools</div><div class="spec">Standar</div></div>
+        <div class="equip-item"><div class="num">#2</div><div class="name">Swaging tool</div><div class="spec">Standar</div></div>
+        <div class="equip-item"><div class="num">#3</div><div class="name">Kunci Inggris</div><div class="spec">10"</div></div>
+        <div class="equip-item"><div class="num">#4</div><div class="name">Kunci Inggris</div><div class="spec">8"</div></div>
+        <div class="equip-item"><div class="num">#5</div><div class="name">Kunci L</div><div class="spec">Standar (set)</div></div>
+        <div class="equip-item"><div class="num">#6</div><div class="name">Kunci torsi</div><div class="spec">1/4"</div></div>
+        <div class="equip-item"><div class="num">#7</div><div class="name">Kunci torsi</div><div class="spec">3/8"</div></div>
+        <div class="equip-item"><div class="num">#8</div><div class="name">Kunci pas</div><div class="spec">Standar</div></div>
+        <div class="equip-item"><div class="num">#9</div><div class="name">Cutter pisau</div><div class="spec">Standar</div></div>
+        <div class="equip-item"><div class="num">#10</div><div class="name">Cutter pipa</div><div class="spec">Khusus tembaga</div></div>
+        <div class="equip-item"><div class="num">#11</div><div class="name">Bending pipa</div><div class="spec">1/4"</div></div>
+        <div class="equip-item"><div class="num">#12</div><div class="name">Bending pipa</div><div class="spec">1/2"</div></div>
+        <div class="equip-item"><div class="num">#13–15</div><div class="name">Tang potong / lancip / kombinasi</div><div class="spec">6"</div></div>
+        <div class="equip-item"><div class="num">#16–18</div><div class="name">Tang kupas/crimping</div><div class="spec">Standar</div></div>
+        <div class="equip-item"><div class="num">#19–22</div><div class="name">Obeng +/−</div><div class="spec">6/8mm & 3/4mm</div></div>
+        <div class="equip-item"><div class="num">#23</div><div class="name">Tespen</div><div class="spec">Standard</div></div>
+        <div class="equip-item"><div class="num">#24</div><div class="name">Charging valve</div><div class="spec">5/16" R32</div></div>
+        <div class="equip-item"><div class="num">#28</div><div class="name">AVO Meter</div><div class="spec">Analog</div></div>
+        <div class="equip-item"><div class="num">#29</div><div class="name">Tang Ampere</div><div class="spec">Digital</div></div>
+        <div class="equip-item"><div class="num">#30</div><div class="name">Termometer</div><div class="spec">Digital</div></div>
+        <div class="equip-item"><div class="num">#31</div><div class="name">Manifold Gauge</div><div class="spec">Analog R32</div></div>
+        <div class="equip-item"><div class="num">#32</div><div class="name">Micron Gauge</div><div class="spec">1000 micron</div></div>
+        <div class="equip-item"><div class="num">#33</div><div class="name">Waterpass</div><div class="spec">Standar</div></div>
+        <div class="equip-item"><div class="num">#34</div><div class="name">Leak detector</div><div class="spec">Standar</div></div>
+        <div class="equip-item"><div class="num">#35</div><div class="name">Helm safety</div><div class="spec">Standar</div></div>
+        <div class="equip-item"><div class="num">#36</div><div class="name">Kacamata</div><div class="spec">Standar</div></div>
+        <div class="equip-item"><div class="num">#38</div><div class="name">Cordless Screwdriver</div><div class="spec">Standar (set)</div></div>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>📦 Daftar Bahan per Peserta</summary>
+    <div class="detail-body">
+      <table>
+        <thead><tr><th>No</th><th>Nama Bahan</th><th>Spesifikasi</th><th>Merk</th><th>Kebutuhan</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>AC split</strong></td><td>R32, 1/2 PK</td><td>Panasonic</td><td>1 Unit</td></tr>
+          <tr><td>2</td><td><strong>Pipa AC</strong></td><td>1/4" & 3/8", 0.71mm</td><td>—</td><td>5 Meter</td></tr>
+          <tr><td>3</td><td><strong>Refrigerant R32</strong></td><td>3 kg</td><td>—</td><td>1 Can</td></tr>
+          <tr><td>4</td><td>Bracket outdoor AC</td><td>1/2 pk</td><td>—</td><td>1 Set</td></tr>
+          <tr><td>5</td><td>Kabel NYYHY</td><td>3×1.5 mm</td><td>Eterna</td><td>10 m</td></tr>
+          <tr><td>6</td><td>Stop kontak 3 pin</td><td>—</td><td>Panasonic</td><td>1 Set</td></tr>
+          <tr><td>7</td><td>Drain hose</td><td>5/8"</td><td>—</td><td>5 m</td></tr>
+          <tr><td>8-10</td><td>Skun kabel SV 1.25-4</td><td>Merah / Biru / Kuning</td><td>—</td><td>1 Pack ea.</td></tr>
+          <tr><td>11-12</td><td>Insulation tape</td><td>Tanpa lem / Dengan lem</td><td>—</td><td>3 / 1 pcs</td></tr>
+          <tr><td>13-14</td><td>Double nipple</td><td>1/4" & 3/8"</td><td>—</td><td>2 pcs ea.</td></tr>
+          <tr><td>15-16</td><td>Nipple</td><td>1/4" & 3/8"</td><td>—</td><td>4 pcs ea.</td></tr>
+          <tr><td>17</td><td><strong>Filler material</strong></td><td>Silver 15%</td><td>Harris</td><td>3 pcs</td></tr>
+          <tr><td>23</td><td>Gas Nitrogen</td><td>7 m³</td><td>—</td><td>1 tabung</td></tr>
+          <tr><td>31</td><td>Charging Valve</td><td>R32/R410</td><td>—</td><td>1 Pcs</td></tr>
+          <tr><td>32</td><td>Pipa Tembaga</td><td>SDCT 1/4" 0.61</td><td>—</td><td>1 Rol</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</section>
+
+<!-- ── JADWAL ── -->
+<section id="jadwal">
+  <div class="section-label">Bagian H</div>
+  <h2 class="section-title">Jadwal Lomba (Tentatif)</h2>
+
+  <div class="alert alert-info">
+    Jadwal akan diupdate setiap hari menyesuaikan situasi dan kondisi lomba.
+  </div>
+
+  <div class="card-grid cols2" style="margin-top:16px;">
+
+    <div>
+      <h3>H-1 (Hari Persiapan)</h3>
+      <div class="schedule-block sch-gray">
+        <div class="sch-time">08.00 – 12.00</div>
+        <div class="sch-name">Kedatangan Peserta, Juri &amp; Persiapan</div>
+      </div>
+      <div class="schedule-block sch-gray">
+        <div class="sch-time">Siang</div>
+        <div class="sch-name">Break &amp; Ishoma</div>
+      </div>
+      <div class="schedule-block sch-blue">
+        <div class="sch-time">Sore</div>
+        <div class="sch-name">Technical Meeting Final &amp; Initial Marking</div>
+      </div>
+    </div>
+
+    <div>
+      <h3>H1 (Hari Pertama Lomba)</h3>
+      <div class="schedule-block sch-gray">
+        <div class="sch-time">08.00 – 09.00</div>
+        <div class="sch-name">Briefing &amp; Komunikasi Peserta</div>
+      </div>
+      <div class="schedule-block sch-blue">
+        <div class="sch-time">09.00 – 11.30</div>
+        <div class="sch-name">Module A – Tugas 4 (Component Fabrication)</div>
+      </div>
+      <div class="schedule-block sch-amber">
+        <div class="sch-time">11.30 – 12.00</div>
+        <div class="sch-name">Marking Tugas 4</div>
+      </div>
+      <div class="schedule-block sch-gray">
+        <div class="sch-time">12.00 – 13.00</div>
+        <div class="sch-name">Break Ishoma</div>
+      </div>
+      <div class="schedule-block sch-amber">
+        <div class="sch-time">13.00 – 15.00</div>
+        <div class="sch-name">Marking Tugas 4 (Lanjutan)</div>
+      </div>
+      <div class="schedule-block sch-red">
+        <div class="sch-time">15.40 – 16.30</div>
+        <div class="sch-name">Appeal Session &amp; Lock Marking</div>
+      </div>
+    </div>
+
+    <div style="grid-column: 1 / -1;">
+      <h3>H2 (Hari Kedua Lomba)</h3>
+      <div class="card-grid cols2">
+        <div>
+          <div class="schedule-block sch-gray">
+            <div class="sch-time">08.00 – 09.00</div>
+            <div class="sch-name">Briefing &amp; Komunikasi Peserta</div>
+          </div>
+          <div class="schedule-block sch-teal">
+            <div class="sch-time">09.00 – 11.30</div>
+            <div class="sch-name">Module B – Tugas 1, 2, 3, 5 (Instalasi + Komisioning + Refrigeran)</div>
+          </div>
+        </div>
+        <div>
+          <div class="schedule-block sch-amber">
+            <div class="sch-time">11.30 – 12.00</div>
+            <div class="sch-name">Marking Tugas 1,2,3,5</div>
+          </div>
+          <div class="schedule-block sch-gray">
+            <div class="sch-time">12.00 – 13.00</div>
+            <div class="sch-name">Break Ishoma</div>
+          </div>
+          <div class="schedule-block sch-amber">
+            <div class="sch-time">13.00 – 15.00</div>
+            <div class="sch-name">Marking Tugas 1,2,3,5 (Lanjutan)</div>
+          </div>
+          <div class="schedule-block sch-red">
+            <div class="sch-time">15.40 – 16.30</div>
+            <div class="sch-name">Appeal Session &amp; Lock Marking</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── PERATURAN ── -->
+<section id="peraturan">
+  <div class="section-label">Bagian I</div>
+  <h2 class="section-title">Peraturan Lomba</h2>
+
+  <details open>
+    <summary>⚖️ Pedoman Juri — Umum</summary>
+    <div class="detail-body">
+      <div class="rule-item"><span class="rule-num">1</span><span>Juri hanya <strong>mendokumentasikan</strong> proses dan hasil pekerjaan peserta berdasarkan lembar penilaian, serta memberikan peringatan K3LH.</span></div>
+      <div class="rule-item"><span class="rule-num">2</span><span>Juri menjunjung sportivitas dan kompetisi yang sehat — tidak merugikan peserta.</span></div>
+      <div class="rule-item"><span class="rule-num">3</span><span>Juri tidak mengintimidasi peserta yang dapat memengaruhi mental peserta selama lomba.</span></div>
+      <div class="rule-item"><span class="rule-num">4</span><span><strong>Perlombaan ≠ Training.</strong> Juri dilarang memberikan informasi yang membantu peserta mendapatkan nilai tertentu. Coaching hanya diberikan setelah lomba selesai.</span></div>
+      <div class="rule-item"><span class="rule-num">5</span><span>Juri dilarang mengulur waktu peserta. Jika terbukti, peserta mendapat tambahan waktu sesuai kerugian yang diakibatkan.</span></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>📐 Pedoman Penilaian</summary>
+    <div class="detail-body">
+      <div class="rule-item"><span class="rule-num">1</span><span><strong>Penilaian Pengukuran:</strong> Juri melibatkan peserta untuk melakukan pengukuran di bawah pengawasan juri, memastikan kedua pihak mengetahui hasil secara objektif.</span></div>
+      <div class="rule-item"><span class="rule-num">2</span><span><strong>Penilaian Kualitatif:</strong> 3 orang juri memberikan nilai 0–3. Selisih antar juri maksimal 1 angka. Jika selisih lebih dari 1, juri yang memberikan nilai ekstrem wajib memberi alasan.</span></div>
+      <div class="rule-item"><span class="rule-num">3</span><span><strong>Penilaian K3-LH:</strong> 1 juri khusus berkeliling mengawasi prosedur K3. Peringatan diberikan 3 kali — pada peringatan ketiga, peserta diskors 10 menit.</span></div>
+      <div class="rule-item"><span class="rule-num">4</span><span><strong>Live Marking:</strong> 1 juri menilai secara langsung proses brazing, electrical commissioning, uji tekanan, evakuasi, pengisian, running system, dan uji kebocoran. Juri harus memiliki bukti (foto/ceklis).</span></div>
+      <div class="rule-item"><span class="rule-num">5</span><span><strong>Dokumen Pelaporan:</strong> 1 juri menilai dokumen laporan hasil isian peserta dan mencantumkan koreksi dengan paraf.</span></div>
+      <div class="rule-item"><span class="rule-num">6</span><span><strong>Dokumen Komisioning:</strong> Penilaian dilakukan bila jeda start–selesai minimal 15 menit dan peserta tidak menyebabkan kerusakan material/peralatan.</span></div>
+    </div>
+  </details>
+
+  <div class="alert alert-danger" style="margin-top:16px;">
+    <strong>❗ Live Marking — Peserta Harus Melapor</strong>
+    Untuk proses: electrical commissioning, uji tekanan, evakuasi sistem/vakum, pengisian sistem, dan running system — peserta <strong>harus memanggil/melapor kepada juri</strong>. Juri tidak akan menilai tanpa panggilan peserta.
+  </div>
+</section>
+
+<!-- ── TATA TERTIB ── -->
+<section id="tatatertib">
+  <div class="section-label">Bagian I — Tata Tertib</div>
+  <h2 class="section-title">Tata Tertib Lomba</h2>
+
+  <div class="card-grid cols2">
+
+    <div class="card">
+      <h3>Kewajiban Peserta</h3>
+      <div class="rule-item"><span class="rule-num">1</span><span>Mengikuti final technical meeting <strong>18 Mei 2026</strong>. Tidak ada pengulangan informasi.</span></div>
+      <div class="rule-item"><span class="rule-num">4</span><span>Melaporkan seluruh peralatan ke tim juri untuk pengecekan sebelum masuk area lomba.</span></div>
+      <div class="rule-item"><span class="rule-num">5</span><span>Dilarang membawa catatan, kecuali lembaran soal dari juri.</span></div>
+      <div class="rule-item"><span class="rule-num">6</span><span>Datang <strong>15 menit sebelum</strong> jadwal dimulai setiap hari. Tidak ada tambahan waktu untuk keterlambatan.</span></div>
+    </div>
+
+    <div class="card">
+      <h3>Aturan Pendamping</h3>
+      <div class="rule-item"><span class="rule-num">9</span><span>Pendamping <strong>dilarang</strong> memberikan instruksi kepada peserta selama alokasi waktu lomba.</span></div>
+      <div class="rule-item"><span class="rule-num">10</span><span>Komunikasi tanpa izin → skors 15 menit bagi peserta yang bersangkutan.</span></div>
+      <div class="rule-item"><span class="rule-num">12</span><span>Pendamping <strong>diizinkan</strong> mendampingi saat penilaian dan mendokumentasikan di lembar marking untuk evaluasi internal.</span></div>
+      <div class="rule-item"><span class="rule-num">13</span><span>Pendamping <strong>dilarang</strong> mengintervensi penilaian juri → akan diminta keluar area lomba.</span></div>
+    </div>
+
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3>Prosedur Banding (Appeal Session)</h3>
+    <div class="timeline" style="margin-top:12px;">
+      <div class="tl-item">
+        <div class="tl-time">Setelah Marking Hari Kedua</div>
+        <div class="tl-title">Waktu Banding (Appeal Session)</div>
+        <div class="tl-desc">Alokasi 30 menit setelah input marking ke sistem CIS oleh Data Entry Team.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Ketua Juri sebagai Mediator</div>
+        <div class="tl-desc">Dihadiri juri penilai, peserta, pendamping, dan ketua juri di ruangan penyelesaian banding.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Voting Seluruh Juri (jika diperlukan)</div>
+        <div class="tl-desc">Apabila tidak ditemukan solusi, ketua juri memanggil seluruh juri untuk voting.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Hasil Voting = Keputusan Final</div>
+        <div class="tl-desc">Hasil voting merupakan keputusan final yang tidak dapat diganggu gugat.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px; border-color: rgba(0,198,255,0.2);">
+    <h3>Manajer Workshop</h3>
+    <p>Panitia menunjuk manajer workshop yang bertanggungjawab terhadap masalah teknis, supply listrik, sarana prasarana lomba, dan manajemen workshop. Manajer workshop tidak berkomunikasi langsung dengan peserta kecuali atas izin dan disaksikan oleh juri.</p>
+  </div>
+
+  <div class="alert alert-success" style="margin-top:20px;">
+    <strong>📌 Referensi Dokumen Pendukung</strong>
+    Pedoman Lomba · Kisi-kisi Soal LKS · Rencana Kerja · Form Kebutuhan Bahan · Lembar Ceklist Kebutuhan Bahan — tersedia di website panitia.
+  </div>
+
+  <div style="text-align:center; padding: 32px 0 0; border-top: 1px solid var(--border); margin-top: 32px;">
+    <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">Presentasi Deskripsi Teknis</div>
+    <div style="font-size:15px; font-weight:600; color:var(--text);">Sri Hardono, S.T., M.Sc.</div>
+    <div style="font-size:13px; color:var(--muted); margin-top:4px;">LKS DIKMEN XXXIV · DKI Jakarta · 2026</div>
+    <div style="margin-top:16px;">
+      <span class="live-badge"><span class="live-dot"></span>Technical Meeting</span>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<script>
+const compData = [
+  { label: 'Pemasangan & Perawatan Sistem RAC', wsc: 30, lks: 25.15 },
+  { label: 'Komisioning Sistem Refrigerasi & AC', wsc: 25, lks: 26.10 },
+  { label: 'Praktik Keselamatan & Kesehatan Kerja', wsc: 20, lks: 18.10 },
+  { label: 'Work Organization Management', wsc: 10, lks: 14.85 },
+  { label: 'Desain & Instalasi Sistem RAC', wsc: 10, lks: 11.10 },
+  { label: 'Keterampilan Komunikasi & Interpersonal', wsc: 5, lks: 4.70 },
+];
+
+const barsEl = document.getElementById('comp-bars');
+compData.forEach(d => {
+  barsEl.innerHTML += `
+    <div class="score-bar-wrap">
+      <div class="score-bar-label">
+        <span>${d.label}</span>
+        <span>WSC: ${d.wsc}% | LKS: ${d.lks}%</span>
+      </div>
+      <div class="score-bar-track">
+        <div class="score-bar-fill" data-w="${d.wsc}"></div>
+      </div>
+    </div>`;
+});
+
+setTimeout(() => {
+  document.querySelectorAll('.score-bar-fill').forEach(el => {
+    el.style.width = el.dataset.w + '%';
+  });
+}, 300);
+
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const sc = el.scrollTop || document.body.scrollTop;
+  const h = el.scrollHeight - el.clientHeight;
+  progressBar.style.transform = `scaleX(${sc / h})`;
+
+  document.querySelectorAll('section').forEach(sec => {
+    const top = sec.offsetTop - 60;
+    const bot = top + sec.offsetHeight;
+    if (sc >= top && sc < bot) {
+      document.querySelectorAll('nav a').forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === '#' + sec.id) a.classList.add('active');
+      });
+    }
+  });
+});
+
+function navClick(el) {
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  el.classList.add('active');
+  if (window.innerWidth < 768) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+}
+
+function toggleMenu() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    const id = this.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
