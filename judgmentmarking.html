@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Prosedur Penilaian Judgment WorldSkills | Brazing Sambungan Pipa</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif;
+      background: linear-gradient(145deg, #0b1a2f 0%, #1a2f40 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      margin: 0;
+    }
+    .presentation-container {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 3rem;
+      padding: 2rem 2rem 2.2rem;
+      box-shadow: 0 30px 55px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #eef5ff;
+    }
+
+    h1 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      font-size: 1.9rem;
+      letter-spacing: -0.3px;
+      margin-bottom: 0.3rem;
+      color: #ffffff;
+      text-shadow: 0 4px 10px rgba(0,160,255,0.3);
+    }
+    h1 span {
+      background: #f5b042;
+      color: #0a121f;
+      font-size: 1rem;
+      padding: 0.2rem 1rem;
+      border-radius: 30px;
+      margin-left: 0.5rem;
+      letter-spacing: 0.4px;
+      font-weight: 700;
+    }
+    .subtitle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.8rem;
+      flex-wrap: wrap;
+      color: #b4d0f0;
+      border-bottom: 1px dashed rgba(255,255,255,0.25);
+      padding-bottom: 0.9rem;
+    }
+    .badge {
+      background: #2c3f5c;
+      padding: 0.4rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #e0edff;
+    }
+    .flow-steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.8rem;
+      margin: 1.8rem 0 2rem;
+    }
+    .step {
+      background: #1e3349;
+      border-radius: 2rem;
+      padding: 0.7rem 1.4rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #cbdff2;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+      border-bottom: 3px solid #3f5b7a;
+      transition: all 0.3s ease;
+      text-align: center;
+      min-width: 95px;
+    }
+    .step.active {
+      background: #f5b042;
+      color: #0a1a2b;
+      border-bottom: 3px solid #ffda85;
+      box-shadow: 0 0 25px #f5a623;
+      transform: scale(1.03);
+      font-weight: 700;
+    }
+    .arrow {
+      font-size: 1.8rem;
+      color: #5b7ea3;
+      font-weight: 300;
+    }
+    .scene {
+      background: rgba(10, 25, 45, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 2.2rem;
+      padding: 1.8rem;
+      margin: 1.2rem 0 1.8rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.5);
+    }
+    .jurors-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      align-items: center;
+      margin: 1.5rem 0;
+    }
+    .juror-card {
+      background: #11273e;
+      border-radius: 1.8rem;
+      padding: 1.4rem 1rem;
+      min-width: 150px;
+      flex: 1;
+      text-align: center;
+      box-shadow: 0 12px 18px rgba(0,0,0,0.5);
+      border: 1px solid #3d5a78;
+      transition: 0.2s;
+    }
+    .juror-card input {
+      width: 80px;
+      padding: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      border-radius: 20px;
+      border: none;
+      background: #eef7ff;
+      color: #0a1a2b;
+      margin-top: 0.6rem;
+      outline: 2px solid transparent;
+      transition: 0.2s;
+    }
+    .juror-card input:focus {
+      outline: 2px solid #f5b042;
+    }
+    .range-hint {
+      font-size: 0.8rem;
+      color: #9bb7da;
+    }
+    .object-sample {
+      background: #1f3447;
+      border-radius: 1.5rem;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    .pipe-icon {
+      font-size: 2.8rem;
+      filter: drop-shadow(0 8px 10px black);
+    }
+    .guide-badge {
+      background: #1e3b5a;
+      padding: 0.4rem 1.2rem;
+      border-radius: 20px;
+      font-weight: 600;
+      color: #f5b042;
+    }
+    button {
+      background: #f5b042;
+      border: none;
+      color: #0a1a2b;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.8rem 2rem;
+      border-radius: 3rem;
+      cursor: pointer;
+      transition: 0.25s;
+      box-shadow: 0 8px 18px rgba(245,176,66,0.35);
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0.7rem 0.4rem;
+      border: 1px solid #ffd58c;
+    }
+    button:hover {
+      background: #ffbe4d;
+      box-shadow: 0 10px 22px #f5a623;
+      transform: translateY(-2px);
+    }
+    button:disabled {
+      opacity: 0.5;
+      transform: none;
+      box-shadow: none;
+      cursor: not-allowed;
+      background: #5d6f82;
+      border-color: #7b8b9a;
+    }
+    .message-box {
+      background: #0e1e2f;
+      border-radius: 1.5rem;
+      padding: 1rem 1.5rem;
+      margin-top: 1.2rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      border-left: 6px solid #f5b042;
+      color: #dfecff;
+    }
+    .difference-warning {
+      color: #ffaa5e;
+      font-weight: 700;
+    }
+    @media (max-width: 650px) {
+      .flow-steps {
+        gap: 0.3rem;
+      }
+      .step {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="presentation-container">
+  <h1>
+    ⚖️ Judgment WorldSkills
+    <span>Brazing Pipa</span>
+  </h1>
+  <div class="subtitle">
+    <div>📋 Assessment Guide sebagai acuan</div>
+    <div class="badge">3 Juri • Skala 0–3</div>
+  </div>
+
+  <!-- animated step indicator -->
+  <div class="flow-steps" id="stepIndicator">
+    <div class="step" data-step="1">1️⃣ Acuan Guide</div>
+    <div class="arrow">→</div>
+    <div class="step" data-step="2">2️⃣ Penilaian Individu</div>
+    <div class="arrow">→</div>
+    <div class="step" data-step="3">3️⃣ Input Skor (0-3)</div>
+    <div class="arrow">→</div>
+    <div class="step" data-step="4">4️⃣ Validasi Selisih</div>
+    <div class="arrow">→</div>
+    <div class="step" data-step="5">5️⃣ Hasil/Diskusi</div>
+  </div>
+
+  <div class="scene">
+    <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+      <div class="guide-badge">📘 ASSESSMENT GUIDE (Brazing)</div>
+      <div style="font-size:0.9rem; color:#bdd3f0;">Kriteria: penetrasi, porositas, retak, visual</div>
+    </div>
+    
+    <!-- objek penilaian -->
+    <div class="object-sample">
+      <div class="pipe-icon">🔧🔩<span style="font-size:2rem;">🌀</span></div>
+      <div>
+        <strong>Sambungan Pipa Brazing</strong><br>
+        <span style="font-size:0.85rem; color:#aac8ff;">Objek dinilai oleh 3 juri secara terpisah</span>
+      </div>
+    </div>
+
+    <!-- tiga juri card -->
+    <div class="jurors-row" id="jurorContainer">
+      <div class="juror-card">
+        <div>👤 Juri A</div>
+        <input type="number" id="scoreA" min="0" max="3" step="0.1" placeholder="0-3" value="2.5">
+        <div class="range-hint">0 - 3</div>
+      </div>
+      <div class="juror-card">
+        <div>👤 Juri B</div>
+        <input type="number" id="scoreB" min="0" max="3" step="0.1" placeholder="0-3" value="2.0">
+        <div class="range-hint">0 - 3</div>
+      </div>
+      <div class="juror-card">
+        <div>👤 Juri C</div>
+        <input type="number" id="scoreC" min="0" max="3" step="0.1" placeholder="0-3" value="2.7">
+        <div class="range-hint">0 - 3</div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+      <button id="submitBtn"><span>📊 Proses Penilaian</span></button>
+      <button id="resetBtn" style="background:#3a506e; color:white; box-shadow:none;">🔄 Reset Contoh</button>
+    </div>
+
+    <div id="messageArea" class="message-box">
+      💡 Klik "Proses Penilaian" untuk memvalidasi selisih antar juri.
+    </div>
+  </div>
+  <div style="font-size:0.8rem; margin-top:0.8rem; color:#869db5; text-align:center;">
+    * Prosedur WorldSkills: Jika selisih nilai > 1, sistem menolak → juri wajib diskusi & menilai ulang.
+  </div>
+</div>
+
+<script>
+  (function() {
+    // --- DOM elements ---
+    const scoreAInput = document.getElementById('scoreA');
+    const scoreBInput = document.getElementById('scoreB');
+    const scoreCInput = document.getElementById('scoreC');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const messageArea = document.getElementById('messageArea');
+    const stepElements = document.querySelectorAll('.step');
+
+    // --- Helper: update langkah visual aktif ---
+    function setActiveStep(stepNumber) {
+      stepElements.forEach(el => {
+        const step = el.getAttribute('data-step');
+        if (step === String(stepNumber)) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      });
+    }
+
+    // --- ambil nilai numerik, fallback ---
+    function getScores() {
+      let a = parseFloat(scoreAInput.value);
+      let b = parseFloat(scoreBInput.value);
+      let c = parseFloat(scoreCInput.value);
+      if (isNaN(a)) a = 0;
+      if (isNaN(b)) b = 0;
+      if (isNaN(c)) c = 0;
+      // batasi ke rentang 0-3 secara ketat (tampilan)
+      a = Math.min(3, Math.max(0, a));
+      b = Math.min(3, Math.max(0, b));
+      c = Math.min(3, Math.max(0, c));
+      return { a, b, c };
+    }
+
+    // --- perbarui input dengan nilai terbatas ---
+    function sanitizeInputs() {
+      let scores = getScores();
+      scoreAInput.value = scores.a;
+      scoreBInput.value = scores.b;
+      scoreCInput.value = scores.c;
+      return scores;
+    }
+
+    // --- cek selisih maksimum ---
+    function maxDifference(scores) {
+      const { a, b, c } = scores;
+      return Math.max(Math.abs(a - b), Math.abs(a - c), Math.abs(b - c));
+    }
+
+    // --- tampilkan pesan dan animasi langkah ---
+    function displayValidation(scores, diff) {
+      const { a, b, c } = scores;
+      const avg = ((a + b + c) / 3).toFixed(2);
+      
+      if (diff > 1.0) {
+        // Ditolak
+        setActiveStep(4); // langkah validasi (penolakan)
+        messageArea.innerHTML = `❌ <strong>Selisih terlalu besar (${diff.toFixed(1)} > 1.0)</strong><br>
+        ➤ Nilai Juri A: ${a}, Juri B: ${b}, Juri C: ${b} <br>
+        <span class="difference-warning">🚫 Sistem menolak! Juri wajib berdiskusi & menilai ulang hingga selisih ≤ 1.</span>`;
+        // tetap tampilkan langkah 4 sebagai peringatan
+      } else {
+        // Diterima
+        setActiveStep(5); // hasil final
+        messageArea.innerHTML = `✅ <strong>Penilaian Diterima (selisih ${diff.toFixed(1)} ≤ 1)</strong><br>
+        ➤ Skor: Juri A = ${a}, Juri B = ${b}, Juri C = ${c}<br>
+        ⭐ <strong>Rata-rata Judgment: ${avg}</strong> (rentang 0-3) — Hasil kualitas brazing tercatat.`;
+      }
+    }
+
+    // --- proses utama saat tombol ditekan ---
+    function handleSubmit() {
+      // Langkah 1-2-3 sudah ditampilkan secara visual, kita set langkah 3 aktif dulu
+      setActiveStep(3);
+      
+      const scores = sanitizeInputs(); // pastikan input rapi
+      const diff = maxDifference(scores);
+      
+      // Animasi kecil: tampilkan langkah 3 (input), lalu setelah sebentar evaluasi
+      setTimeout(() => {
+        displayValidation(scores, diff);
+      }, 80);
+    }
+
+    // --- reset ke contoh awal (selisih kecil) ---
+    function resetExample() {
+      scoreAInput.value = 2.4;
+      scoreBInput.value = 2.1;
+      scoreCInput.value = 2.9;
+      // set langkah awal 
+      setActiveStep(1);
+      messageArea.innerHTML = `💡 Contoh siap. Juri telah mengisi nilai berdasarkan Assessment Guide. Klik "Proses Penilaian".`;
+      // opsional: trigger validasi ulang? Tidak, biarkan pengguna klik.
+    }
+
+    // --- event listeners ---
+    submitBtn.addEventListener('click', handleSubmit);
+
+    resetBtn.addEventListener('click', resetExample);
+
+    // Saat pengguna mengubah input, kita bisa arahkan ke langkah 2-3
+    function onInputChange() {
+      setActiveStep(2); // mengindikasikan juri sedang menilai
+      // kecilkan delay
+      setTimeout(() => {
+        setActiveStep(3);
+      }, 60);
+      // Tampilkan pesan netral
+      messageArea.innerHTML = `📝 Juri sedang memasukkan skor (0-3). Tekan "Proses Penilaian" untuk validasi selisih.`;
+    }
+
+    scoreAInput.addEventListener('input', onInputChange);
+    scoreBInput.addEventListener('input', onInputChange);
+    scoreCInput.addEventListener('input', onInputChange);
+
+    // Inisialisasi: set langkah 1 dan pastikan nilai awal sesuai
+    window.addEventListener('load', () => {
+      // pastikan nilai default valid
+      sanitizeInputs();
+      setActiveStep(1);
+      messageArea.innerHTML = `📘 Acuan: Assessment Guide kualitas brazing. 3 juri menilai secara individu (skala 0-3).`;
+      
+      // Pre-fill contoh yang selisihnya <1 agar demo langsung berhasil
+      if (!scoreAInput.value || scoreAInput.value === '') scoreAInput.value = 2.3;
+      if (!scoreBInput.value || scoreBInput.value === '') scoreBInput.value = 2.0;
+      if (!scoreCInput.value || scoreCInput.value === '') scoreCInput.value = 2.6;
+      sanitizeInputs();
+    });
+
+    // Tambahan: jika user menekan enter di input, proses
+    const inputs = [scoreAInput, scoreBInput, scoreCInput];
+    inputs.forEach(inp => {
+      inp.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleSubmit();
+        }
+      });
+    });
+
+  })();
+</script>
+</body>
+</html>
