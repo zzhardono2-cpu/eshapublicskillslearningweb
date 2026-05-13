@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transformasi Vokasi — Sri Hardono, S.T., M.Sc.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --gold:#C9A227;--gold2:#F0D080;--gold3:#8B6914;
+    --navy:#0A1628;--navy2:#112240;--navy3:#0F3460;
+    --teal:#1D9E75;--teal2:#0F6E56;--teal-bg:#E1F5EE;
+    --coral:#D85A30;--coral2:#993C1D;--coral-bg:#FAECE7;
+    --blue:#185FA5;--blue2:#0C447C;--blue-bg:#E6F1FB;
+    --gray:#888780;--gray-bg:#F1EFE8;
+    --white:#fff;--dark:#1a1a1a;--muted:#555;--lighter:#f7f6f2;
+    --radius:12px;--radius-sm:8px;--radius-lg:18px;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:#f7f6f2;color:var(--dark);overflow-x:hidden}
+
+  /* ── NAV ── */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,22,40,0.96);backdrop-filter:blur(12px);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;border-bottom:1px solid rgba(201,162,39,0.2)}
+  .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .nav-brand .logo{width:32px;height:32px;background:var(--gold);border-radius:6px;display:flex;align-items:center;justify-content:center}
+  .nav-brand .logo i{color:var(--navy);font-size:18px}
+  .nav-brand span{color:#fff;font-weight:700;font-size:14px;letter-spacing:0.02em}
+  .nav-links{display:flex;gap:4px}
+  .nav-links a{color:rgba(255,255,255,0.65);font-size:12px;font-weight:500;padding:6px 12px;border-radius:20px;text-decoration:none;transition:all 0.2s;white-space:nowrap}
+  .nav-links a:hover,.nav-links a.active{color:#fff;background:rgba(201,162,39,0.2)}
+  .nav-yt{display:flex;align-items:center;gap:7px;background:#FF0000;color:#fff;font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px;text-decoration:none;transition:opacity 0.2s;white-space:nowrap}
+  .nav-yt:hover{opacity:0.85}
+  .nav-yt i{font-size:16px}
+  .hamburger{display:none;background:none;border:none;color:#fff;font-size:24px;cursor:pointer}
+
+  /* ── HERO ── */
+  .hero{min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 55%,var(--navy3) 100%);display:flex;flex-direction:column;justify-content:center;padding:80px 2rem 4rem;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(201,162,39,0.12) 0%,transparent 70%);pointer-events:none}
+  .hero::after{content:'';position:absolute;bottom:-80px;left:10%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(29,158,117,0.1) 0%,transparent 70%);pointer-events:none}
+  .hero-inner{max-width:900px;margin:0 auto;width:100%;position:relative;z-index:2}
+  .hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(201,162,39,0.18);border:1px solid rgba(201,162,39,0.4);color:var(--gold2);font-size:11px;font-weight:700;padding:6px 16px;border-radius:20px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1.5rem;animation:fadeUp 0.6s ease both}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,60px);font-weight:900;color:#fff;line-height:1.18;margin-bottom:1.25rem;animation:fadeUp 0.7s 0.1s ease both}
+  .hero h1 .accent{color:var(--gold)}
+  .hero h1 .accent2{color:#5DCAA5}
+  .hero-sub{font-size:clamp(14px,1.5vw,17px);color:rgba(255,255,255,0.72);line-height:1.75;max-width:580px;margin-bottom:2rem;animation:fadeUp 0.7s 0.2s ease both}
+  .hero-stats{display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:2.5rem;animation:fadeUp 0.7s 0.3s ease both}
+  .hero-stat{text-align:center}
+  .hero-stat .n{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--gold);line-height:1}
+  .hero-stat .u{font-size:12px;color:rgba(255,255,255,0.55);margin-top:4px;max-width:90px;line-height:1.4}
+  .hero-divider{width:1px;height:50px;background:rgba(255,255,255,0.15);align-self:center}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center;animation:fadeUp 0.7s 0.4s ease both}
+  .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy);font-size:14px;font-weight:700;padding:12px 24px;border-radius:25px;text-decoration:none;transition:all 0.2s}
+  .btn-primary:hover{background:var(--gold2);transform:translateY(-2px)}
+  .btn-yt{display:inline-flex;align-items:center;gap:8px;background:#FF0000;color:#fff;font-size:14px;font-weight:700;padding:12px 24px;border-radius:25px;text-decoration:none;transition:all 0.2s}
+  .btn-yt:hover{opacity:0.85;transform:translateY(-2px)}
+  .btn-yt i{font-size:20px}
+  .btn-ghost{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.8);font-size:14px;font-weight:500;padding:12px 24px;border-radius:25px;text-decoration:none;transition:all 0.2s}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+  .hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:rgba(255,255,255,0.4);font-size:11px;animation:bounce 2s infinite}
+  @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ── SECTIONS ── */
+  section{padding:5rem 2rem;scroll-margin-top:60px}
+  .container{max-width:960px;margin:0 auto}
+  .sec-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+  .sec-eyebrow .line{flex:1;height:1px;background:linear-gradient(to right,var(--gold),transparent)}
+  .sec-eyebrow span{font-size:11px;font-weight:700;color:var(--gold3);text-transform:uppercase;letter-spacing:0.1em;white-space:nowrap}
+  .sec-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,36px);font-weight:900;color:var(--navy);line-height:1.25;margin-bottom:0.75rem}
+  .sec-lead{font-size:15px;color:var(--muted);line-height:1.75;max-width:640px;margin-bottom:2.5rem}
+
+  /* ── KONTEKS ── */
+  #konteks{background:#fff}
+  .konteks-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
+  .kcard{border-radius:var(--radius);padding:1.5rem;border:1px solid transparent;transition:transform 0.2s}
+  .kcard:hover{transform:translateY(-3px)}
+  .kcard.gold{background:#C9A22710;border-color:#C9A22730}
+  .kcard.blue{background:var(--blue-bg);border-color:#185FA530}
+  .kcard.teal{background:var(--teal-bg);border-color:#1D9E7530}
+  .kcard.coral{background:var(--coral-bg);border-color:#D85A3030}
+  .kcard-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.9rem}
+  .kcard-icon.gold{background:#C9A22720} .kcard-icon.gold i{color:var(--gold3)}
+  .kcard-icon.blue{background:#185FA520} .kcard-icon.blue i{color:var(--blue2)}
+  .kcard-icon.teal{background:#1D9E7520} .kcard-icon.teal i{color:var(--teal2)}
+  .kcard-icon.coral{background:#D85A3020} .kcard-icon.coral i{color:var(--coral2)}
+  .kcard-icon i{font-size:22px}
+  .kcard h3{font-size:15px;font-weight:700;margin-bottom:0.5rem;color:var(--navy)}
+  .kcard ul{padding-left:1.1rem;font-size:13px;color:var(--muted);line-height:1.75}
+  .invest-bar{background:var(--navy);border-radius:var(--radius);padding:2rem;color:#fff;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;text-align:center}
+  .invest-item i{font-size:28px;color:var(--gold);margin-bottom:0.5rem;display:block}
+  .invest-item .il{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.4}
+
+  /* ── WORLDSKILLS VISION ── */
+  #visi{background:var(--lighter)}
+  .ws-vision-quote{background:var(--navy);color:var(--gold);font-family:'Playfair Display',serif;font-size:clamp(18px,2.5vw,26px);font-style:italic;font-weight:700;line-height:1.4;text-align:center;padding:2.5rem 2rem;border-radius:var(--radius-lg);margin-bottom:2rem;position:relative}
+  .ws-vision-quote::before{content:'"';font-size:80px;opacity:0.15;position:absolute;top:-10px;left:20px;line-height:1}
+  .ws-6areas{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+  .area-card{background:#fff;border-radius:var(--radius);padding:1.25rem;text-align:center;border:1px solid #e8e4de;transition:all 0.2s}
+  .area-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 24px rgba(201,162,39,0.12)}
+  .area-card i{font-size:28px;margin-bottom:0.6rem;display:block}
+  .area-card h4{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:0.3rem}
+  .area-card p{font-size:12px;color:var(--muted);line-height:1.5}
+  .ws-values-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:1.5rem;background:var(--navy2);border-radius:var(--radius)}
+  .val-pill{background:rgba(201,162,39,0.18);border:1px solid rgba(201,162,39,0.35);color:var(--gold2);font-size:12px;font-weight:600;padding:7px 18px;border-radius:20px}
+
+  /* ── TIMELINE ── */
+  #perjalanan{background:#fff}
+  .timeline{position:relative;padding-left:2.5rem;max-width:680px;margin:0 auto}
+  .timeline::before{content:'';position:absolute;left:12px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),var(--teal),var(--blue))}
+  .tl-item{position:relative;margin-bottom:2rem;opacity:0;transform:translateX(-20px);transition:all 0.5s ease}
+  .tl-item.visible{opacity:1;transform:translateX(0)}
+  .tl-dot{position:absolute;left:-2.5rem;top:3px;width:24px;height:24px;border-radius:50%;border:2px solid var(--gold);background:#fff;display:flex;align-items:center;justify-content:center}
+  .tl-dot.g{border-color:var(--gold)} .tl-dot.t{border-color:var(--teal)} .tl-dot.b{border-color:var(--blue)} .tl-dot.c{border-color:var(--coral)}
+  .tl-dot i{font-size:11px;color:var(--gold)}
+  .tl-dot.t i{color:var(--teal)} .tl-dot.b i{color:var(--blue)} .tl-dot.c i{color:var(--coral)}
+  .tl-year{font-size:11px;font-weight:700;color:var(--gold3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px}
+  .tl-year.t{color:var(--teal2)} .tl-year.b{color:var(--blue2)} .tl-year.c{color:var(--coral2)}
+  .tl-text strong{font-size:15px;font-weight:700;color:var(--navy);display:block;margin-bottom:3px}
+  .tl-text p{font-size:13px;color:var(--muted);line-height:1.6}
+  .berlian-box{background:linear-gradient(135deg,var(--navy),var(--navy3));border-radius:var(--radius);padding:2rem;color:#fff;margin-top:2rem;display:flex;gap:1.5rem;align-items:flex-start}
+  .berlian-box .icon{width:56px;height:56px;border-radius:12px;background:rgba(201,162,39,0.2);border:1px solid rgba(201,162,39,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .berlian-box .icon i{font-size:28px;color:var(--gold)}
+  .berlian-box h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--gold);margin-bottom:0.5rem}
+  .berlian-box p{font-size:14px;color:rgba(255,255,255,0.75);line-height:1.7}
+
+  /* ── MENGAPA ── */
+  #mengapa{background:var(--lighter)}
+  .gap-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
+  .gap-now{background:#D85A3008;border:1px solid #D85A3025;border-radius:var(--radius);padding:1.5rem}
+  .gap-should{background:#1D9E7508;border:1px solid #1D9E7525;border-radius:var(--radius);padding:1.5rem}
+  .gap-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;display:flex;align-items:center;gap:6px}
+  .gap-label.red{color:var(--coral2)} .gap-label.green{color:var(--teal2)}
+  .gap-list{list-style:none;font-size:13px;color:var(--muted);line-height:1.8}
+  .gap-list li{display:flex;gap:8px;align-items:flex-start}
+  .gap-list li::before{content:'';width:5px;height:5px;border-radius:50%;margin-top:7px;flex-shrink:0}
+  .gap-now .gap-list li::before{background:var(--coral)}
+  .gap-should .gap-list li::before{background:var(--teal)}
+  .peluang-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem}
+  .peluang-card{border-radius:var(--radius-sm);padding:1.25rem;border:1px solid transparent}
+  .peluang-card.g{background:#C9A22708;border-color:#C9A22728}
+  .peluang-card.b{background:var(--blue-bg);border-color:#185FA520}
+  .peluang-card h4{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:0.5rem;display:flex;align-items:center;gap:7px}
+  .peluang-card h4 i{font-size:16px}
+  .peluang-card ul{font-size:12px;color:var(--muted);padding-left:1rem;line-height:1.7}
+  .inti-box{background:var(--navy);border-radius:var(--radius-lg);padding:2.5rem;text-align:center;color:#fff}
+  .inti-box h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);margin-bottom:0.75rem}
+  .inti-box p{font-size:15px;color:rgba(255,255,255,0.78);line-height:1.75;max-width:580px;margin:0 auto}
+
+  /* ── KPI ── */
+  #kpi{background:#fff}
+  .kpi-tabs{display:flex;gap:8px;margin-bottom:2rem;background:#f0ece5;padding:6px;border-radius:25px;width:fit-content}
+  .kpi-tab{font-size:13px;font-weight:600;padding:9px 20px;border-radius:20px;border:none;background:none;cursor:pointer;color:var(--muted);transition:all 0.2s}
+  .kpi-tab.active{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+  .kpi-panel{display:none}
+  .kpi-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:1rem;animation:fadeUp 0.4s ease}
+  .kpi-card{background:var(--lighter);border-radius:var(--radius);padding:1.25rem;border-left:4px solid transparent}
+  .kpi-card.school{border-color:var(--gold)}
+  .kpi-card.region{border-color:var(--teal)}
+  .kpi-card.nation{border-color:var(--blue)}
+  .kpi-card h4{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:0.6rem;display:flex;align-items:center;gap:7px}
+  .kpi-card h4 i{font-size:15px}
+  .kpi-card ul{font-size:12px;color:var(--muted);padding-left:1rem;line-height:1.75}
+
+  /* ── ROADMAP ── */
+  #roadmap{background:var(--lighter)}
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:2rem}
+  .phase-card{background:#fff;border-radius:var(--radius);padding:1.5rem;border:1px solid #e8e4de;position:relative;overflow:hidden}
+  .phase-card::before{content:attr(data-n);position:absolute;top:-10px;right:-5px;font-family:'Playfair Display',serif;font-size:80px;font-weight:900;color:#f0ece5;line-height:1}
+  .phase-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.05em}
+  .phase-card:nth-child(1) .phase-badge{background:#C9A22718;color:var(--gold3)}
+  .phase-card:nth-child(2) .phase-badge{background:#1D9E7518;color:var(--teal2)}
+  .phase-card:nth-child(3) .phase-badge{background:#185FA518;color:var(--blue2)}
+  .phase-card h3{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:0.25rem}
+  .phase-card .dur{font-size:12px;color:var(--muted);margin-bottom:0.75rem}
+  .phase-card ul{font-size:13px;color:var(--muted);padding-left:1rem;line-height:1.75;position:relative;z-index:1}
+  .resources-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .res-card{background:#fff;border-radius:var(--radius-sm);padding:1rem;border:1px solid #e8e4de;display:flex;gap:10px;align-items:flex-start}
+  .res-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .res-card:nth-child(1) .res-icon{background:#C9A22718} .res-card:nth-child(1) .res-icon i{color:var(--gold3)}
+  .res-card:nth-child(2) .res-icon{background:#1D9E7518} .res-card:nth-child(2) .res-icon i{color:var(--teal2)}
+  .res-card:nth-child(3) .res-icon{background:#185FA518} .res-card:nth-child(3) .res-icon i{color:var(--blue2)}
+  .res-card:nth-child(4) .res-icon{background:#FF000018} .res-card:nth-child(4) .res-icon i{color:#CC0000}
+  .res-icon i{font-size:18px}
+  .res-card h4{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px}
+  .res-card p{font-size:12px;color:var(--muted);line-height:1.5}
+
+  /* ── CLOSING ── */
+  #penutup{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);padding:6rem 2rem;text-align:center;position:relative;overflow:hidden}
+  #penutup::before{content:'';position:absolute;top:-80px;right:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(201,162,39,0.1) 0%,transparent 70%);pointer-events:none}
+  .close-quote{font-family:'Playfair Display',serif;font-size:clamp(18px,2.5vw,28px);font-style:italic;color:var(--gold);line-height:1.5;margin-bottom:0.75rem;max-width:680px;margin-left:auto;margin-right:auto}
+  .close-sub{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:2.5rem}
+  .close-author{font-size:14px;font-weight:600;color:rgba(255,255,255,0.85);margin-bottom:0.25rem}
+  .close-author-sub{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:2.5rem}
+  .close-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+  /* ── FOOTER ── */
+  footer{background:#070f1e;padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+  footer p{font-size:12px;color:rgba(255,255,255,0.4)}
+  .footer-yt{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.7);font-size:12px;font-weight:600;text-decoration:none;transition:color 0.2s}
+  .footer-yt:hover{color:#FF0000}
+  .footer-yt i{font-size:16px;color:#FF0000}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:768px){
+    .nav-links{display:none}
+    .hamburger{display:block}
+    .konteks-grid,.gap-grid,.peluang-grid,.phases,.kpi-panel,.resources-grid,.ws-6areas{grid-template-columns:1fr}
+    .invest-bar{grid-template-columns:1fr 1fr}
+    .hero-stats{gap:1.25rem}
+    .hero-divider{display:none}
+    .berlian-box{flex-direction:column}
+    .kpi-tabs{width:100%;justify-content:center}
+    footer{flex-direction:column;text-align:center}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#hero">
+    <div class="logo"><i class="ti ti-award"></i></div>
+    <span>Transformasi Vokasi</span>
+  </a>
+  <div class="nav-links">
+    <a href="#konteks">Konteks</a>
+    <a href="#visi">WorldSkills</a>
+    <a href="#perjalanan">Perjalanan</a>
+    <a href="#mengapa">Mengapa?</a>
+    <a href="#kpi">KPI</a>
+    <a href="#roadmap">Roadmap</a>
+  </div>
+  <a class="nav-yt" href="https://www.youtube.com/@eSHa-PSL" target="_blank"><i class="ti ti-brand-youtube"></i>eSHa-PSL</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge"><i class="ti ti-sparkles"></i>&nbsp;&nbsp;Gagasan Awal — Presentasi kepada Pimpinan Sekolah</div>
+    <h1>Adopsi Metode <span class="accent">WorldSkills</span><br>dalam Pembelajaran<br><span class="accent2">Praktik Vokasi</span></h1>
+    <p class="hero-sub">Sebuah gagasan untuk mengintegrasikan metode <em>delivery</em> dan penilaian berbasis WorldSkills ke dalam penyelenggaraan pendidikan dan pelatihan vokasi sehari-hari, sebagai tindak lanjut dari 22 tahun keikutsertaan Indonesia di WorldSkills Internasional dan 34 tahun penyelenggaraan LKS.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="n">22</div><div class="u">Tahun delegasi Indonesia di WorldSkills Intl</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="n">34</div><div class="u">Tahun LKS berjalan di Indonesia</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="n">85</div><div class="u">Anggota WorldSkills (semua negara G20)</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="n">#5</div><div class="u">Target PDB Indonesia di dunia 2045</div></div>
+    </div>
+    <div class="hero-cta">
+      <a class="btn-primary" href="#konteks"><i class="ti ti-arrow-down"></i>&nbsp;Pelajari Selengkapnya</a>
+      <a class="btn-yt" href="https://www.youtube.com/@eSHa-PSL" target="_blank"><i class="ti ti-brand-youtube"></i>eSHa Public Skills Learning</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><i class="ti ti-chevrons-down"></i><span>scroll</span></div>
+</section>
+
+<!-- KONTEKS -->
+<section id="konteks">
+  <div class="container">
+    <div class="sec-eyebrow"><div class="line"></div><span>Konteks & Kebijakan</span><div class="line"></div></div>
+    <h2 class="sec-title">Latar Belakang dan Dasar Kebijakan</h2>
+    <p class="sec-lead">Terdapat beberapa faktor kebijakan dan kondisi faktual yang menjadi dasar pertimbangan perlunya perubahan pendekatan dalam penyelenggaraan pendidikan vokasi.</p>
+    <div class="konteks-grid">
+      <div class="kcard gold">
+        <div class="kcard-icon gold"><i class="ti ti-file-certificate"></i></div>
+        <h3>Perpres 68 Tahun 2022</h3>
+        <ul>
+          <li>Mandat resmi revitalisasi pendidikan vokasi &amp; pelatihan kejuruan</li>
+          <li>Link &amp; match dengan kebutuhan industri sebagai kewajiban</li>
+          <li>Standar kompetensi berbasis kebutuhan dunia kerja nyata</li>
+          <li>Sertifikasi dan rekognisi di level internasional</li>
+          <li>Penguatan peran industri dalam kurikulum vokasi</li>
+        </ul>
+      </div>
+      <div class="kcard blue">
+        <div class="kcard-icon blue"><i class="ti ti-trophy"></i></div>
+        <h3>Visi Indonesia Emas 2045</h3>
+        <ul>
+          <li>Target PDB terbesar ke-5 di dunia pada 2045</li>
+          <li>Pemanfaatan bonus demografi sebagai modal pembangunan</li>
+          <li>Ketersediaan SDM terampil menjadi faktor penentu daya saing</li>
+          <li>Pendidikan vokasi diposisikan sebagai penopang ekonomi produktif</li>
+          <li>Diperlukan tenaga kerja terampil dalam jumlah besar dan terstandarisasi</li>
+        </ul>
+      </div>
+      <div class="kcard teal">
+        <div class="kcard-icon teal"><i class="ti ti-world"></i></div>
+        <h3>Pengakuan Global terhadap Sistem VET</h3>
+        <ul>
+          <li>UNESCO, ILO, World Bank, OECD, dan EU Commission menempatkan VET sebagai prioritas</li>
+          <li>Sistem VET yang kuat berkorelasi dengan pertumbuhan ekonomi negara</li>
+          <li>WorldSkills berperan sebagai forum benchmark kompetensi global</li>
+          <li>Negara dengan sistem VET yang terstandarisasi menunjukkan produktivitas lebih tinggi</li>
+          <li>Indonesia memiliki potensi untuk menjadi referensi VET di kawasan ASEAN</li>
+        </ul>
+      </div>
+      <div class="kcard coral">
+        <div class="kcard-icon coral"><i class="ti ti-coins"></i></div>
+        <h3>Efektivitas Investasi LKS dan WorldSkills</h3>
+        <ul>
+          <li>Setiap tahun terdapat pengeluaran anggaran untuk penyelenggaraan LKS dari tingkat kabupaten hingga internasional</li>
+          <li>Biaya pengiriman delegasi ke WorldSkills Internasional cukup signifikan</li>
+          <li>Pengetahuan dan pengalaman yang diperoleh delegasi belum tersistem ke dalam pembelajaran kelas</li>
+          <li>Transfer pengetahuan pascakompetisi belum terjadi secara terstruktur</li>
+          <li>Perlu mekanisme agar manfaat partisipasi dapat dirasakan oleh seluruh siswa</li>
+        </ul>
+      </div>
+    </div>
+    <div class="invest-bar">
+      <div class="invest-item"><i class="ti ti-map-pin"></i><div class="il">LKS Kabupaten</div></div>
+      <div class="invest-item"><i class="ti ti-map"></i><div class="il">LKS Provinsi</div></div>
+      <div class="invest-item"><i class="ti ti-flag"></i><div class="il">LKS Nasional</div></div>
+      <div class="invest-item"><i class="ti ti-globe"></i><div class="il">WorldSkills Internasional</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORLDSKILLS VISION -->
+<section id="visi">
+  <div class="container">
+    <div class="sec-eyebrow"><div class="line"></div><span>Visi WorldSkills</span><div class="line"></div></div>
+    <h2 class="sec-title">Visi dan Misi WorldSkills</h2>
+    <p class="sec-lead">WorldSkills International telah merumuskan visi, misi, dan area strategis yang secara substansial selaras dengan arah kebijakan pendidikan vokasi Indonesia.</p>
+    <div class="ws-vision-quote">"Improving our world with the power of skills."<br><span style="font-size:16px;color:rgba(255,255,255,0.6);font-style:normal">Memperbaiki dunia kita dengan kekuatan keterampilan.</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem">
+      <div class="kcard gold" style="margin-bottom:0">
+        <div class="kcard-icon gold"><i class="ti ti-target"></i></div>
+        <h3>Misi WorldSkills</h3>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7">Meningkatkan profil dan pengakuan tenaga terampil, serta menunjukkan betapa pentingnya keterampilan dalam mencapai pertumbuhan ekonomi dan kesuksesan pribadi setiap individu.</p>
+      </div>
+      <div class="kcard teal" style="margin-bottom:0">
+        <div class="kcard-icon teal"><i class="ti ti-building-community"></i></div>
+        <h3>Posisi WorldSkills</h3>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7">Pusat global (<em>global hub</em>) untuk keunggulan dan pengembangan keterampilan — menjadi rujukan standar kompetensi dunia yang diakui oleh industri dan pemerintah seluruh dunia.</p>
+      </div>
+    </div>
+    <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:1rem;text-align:center">Enam Area Fokus Strategis WorldSkills</h3>
+    <div class="ws-6areas" style="margin-bottom:1.5rem">
+      <div class="area-card"><i class="ti ti-medal" style="color:var(--gold)"></i><h4>Kompetisi</h4><p>Showcase keunggulan, testbed standar, wawasan skill masa depan</p></div>
+      <div class="area-card"><i class="ti ti-school" style="color:var(--teal)"></i><h4>Pendidikan &amp; Pelatihan</h4><p>WorldSkills Occupational Standards, pengembangan profesional guru</p></div>
+      <div class="area-card"><i class="ti ti-microscope" style="color:var(--blue)"></i><h4>Riset</h4><p>Testbed evaluasi, kemitraan riset skills, observatori internasional</p></div>
+      <div class="area-card"><i class="ti ti-user-star" style="color:var(--coral)"></i><h4>Career Building</h4><p>Peserta kompetisi sebagai role model, alumni network global</p></div>
+      <div class="area-card"><i class="ti ti-world-upload" style="color:var(--gold)"></i><h4>Pengembangan Intl</h4><p>Kolaborasi antar anggota, knowledge base, coaching &amp; mentoring</p></div>
+      <div class="area-card"><i class="ti ti-speakerphone" style="color:var(--teal)"></i><h4>Promosi Keterampilan</h4><p>Konferensi internasional, media sosial, advokasi skills global</p></div>
+    </div>
+    <h3 style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:0.75rem;text-align:center">Tujuh Nilai yang Menjadi Landasan Gerak WorldSkills</h3>
+    <div class="ws-values-row">
+      <span class="val-pill">Keunggulan</span>
+      <span class="val-pill">Inovasi</span>
+      <span class="val-pill">Kemitraan</span>
+      <span class="val-pill">Kejujuran</span>
+      <span class="val-pill">Integritas</span>
+      <span class="val-pill">Keberagaman</span>
+      <span class="val-pill">Transparansi</span>
+    </div>
+  </div>
+</section>
+
+<!-- PERJALANAN -->
+<section id="perjalanan">
+  <div class="container">
+    <div class="sec-eyebrow"><div class="line"></div><span>Perjalanan Indonesia</span><div class="line"></div></div>
+    <h2 class="sec-title">Rekam Jejak Indonesia bersama WorldSkills</h2>
+    <p class="sec-lead">Indonesia telah berpartisipasi dalam ekosistem WorldSkills selama lebih dari dua dekade. Berikut adalah tonggak-tonggak penting dalam perjalanan tersebut.</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot g"><i class="ti ti-flag-filled"></i></div>
+        <div class="tl-year g">1992</div>
+        <div class="tl-text"><strong>LKS Pertama Kali Diselenggarakan</strong><p>Lomba Kompetensi Siswa hadir sebagai mekanisme penjaminan mutu keterampilan siswa SMK dan pendidikan vokasi di Indonesia.</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot t"><i class="ti ti-globe"></i></div>
+        <div class="tl-year t">2004</div>
+        <div class="tl-text"><strong>Indonesia Bergabung dengan WorldSkills International</strong><p>Delegasi pertama dikirim ke kompetisi internasional. Keikutsertaan ini membuka akses terhadap standar kompetensi, metode pelatihan, dan jaringan ahli di tingkat global.</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot b"><i class="ti ti-trending-up"></i></div>
+        <div class="tl-year b">2010-an</div>
+        <div class="tl-text"><strong>Perluasan Bidang dan Intensifikasi Partisipasi</strong><p>Jumlah skill area yang diikutsertakan bertambah; pengiriman delegasi dilakukan secara lebih reguler dengan dukungan anggaran pemerintah.</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot c"><i class="ti ti-file-certificate"></i></div>
+        <div class="tl-year c">2022</div>
+        <div class="tl-text"><strong>Perpres 68/2022 — Revitalisasi Pendidikan Vokasi</strong><p>Terbitnya Perpres ini memperkuat posisi link &amp; match sebagai agenda utama. Standar kompetensi internasional menjadi semakin relevan sebagai acuan pengembangan kurikulum.</p></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot g"><i class="ti ti-diamond"></i></div>
+        <div class="tl-year g">Kondisi Saat Ini</div>
+        <div class="tl-text"><strong>Akumulasi Pengetahuan yang Belum Tersistemkan</strong><p>Setelah 22 tahun keikutsertaan di WorldSkills Internasional dan 34 tahun penyelenggaraan LKS, belum ada mekanisme yang sistematis untuk mengintegrasikan pengetahuan tersebut ke dalam pembelajaran harian.</p></div>
+      </div>
+    </div>
+    <div class="berlian-box">
+      <div class="icon"><i class="ti ti-diamond"></i></div>
+      <div>
+        <h3>Akumulasi Pengetahuan yang Belum Dikelola Secara Sistemik</h3>
+        <p>Setiap delegasi yang mengikuti WorldSkills memperoleh paparan terhadap standar penilaian internasional, metode delivery praktik, jaringan expert global, dan benchmark kompetensi. Pertanyaan yang perlu dijawab bersama: <em>apakah pengetahuan tersebut sudah diintegrasikan ke dalam sistem pembelajaran di sekolah secara terstruktur?</em></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENGAPA -->
+<section id="mengapa">
+  <div class="container">
+    <div class="sec-eyebrow"><div class="line"></div><span>Urgensi Transformasi</span><div class="line"></div></div>
+    <h2 class="sec-title">Identifikasi Kesenjangan dan Peluang</h2>
+    <p class="sec-lead">Terdapat kesenjangan antara kondisi penyelenggaraan praktik saat ini dengan standar yang telah Indonesia pelajari selama lebih dari dua dekade melalui WorldSkills.</p>
+    <div class="gap-grid">
+      <div class="gap-now">
+        <div class="gap-label red"><i class="ti ti-alert-circle" style="font-size:15px"></i>Kondisi Saat Ini</div>
+        <ul class="gap-list">
+          <li>Standar praktik di kelas belum mengacu pada WorldSkills Occupational Standards</li>
+          <li>LKS berfungsi sebagai event seleksi tahunan, belum menjadi pendorong budaya belajar</li>
+          <li>Penilaian praktik belum menggunakan rubrik yang terstandarisasi dan konsisten</li>
+          <li>Tidak ada mekanisme sistematis untuk transfer pengetahuan pascakompetisi</li>
+          <li>Manfaat keikutsertaan kompetisi belum dirasakan oleh seluruh siswa di kelas</li>
+        </ul>
+      </div>
+      <div class="gap-should">
+        <div class="gap-label green"><i class="ti ti-circle-check" style="font-size:15px"></i>Kondisi yang Diharapkan</div>
+        <ul class="gap-list">
+          <li>Materi dan metode praktik mengacu pada WorldSkills Occupational Standards</li>
+          <li>Kompetisi menjadi instrumen pembelajaran yang terintegrasi dalam kurikulum</li>
+          <li>Penilaian menggunakan rubrik dan kriteria yang diadopsi dari metodologi WorldSkills</li>
+          <li>Transfer pengetahuan dari kompetisi ke kelas berjalan secara terstruktur</li>
+          <li>Seluruh siswa memperoleh pengalaman belajar yang setara dengan standar kompetisi</li>
+        </ul>
+      </div>
+    </div>
+    <div class="peluang-grid">
+      <div class="peluang-card g">
+        <h4><i class="ti ti-trending-up" style="color:var(--gold3)"></i>Faktor Pendukung yang Tersedia</h4>
+        <ul>
+          <li>Perpres 68/2022 memberikan landasan hukum yang jelas untuk perubahan ini</li>
+          <li>WorldSkills Occupational Standards dapat diakses secara terbuka</li>
+          <li>Jaringan alumni dan expert Indonesia yang berpengalaman sudah ada</li>
+          <li>Dukungan anggaran pemerintah untuk penguatan vokasi terus meningkat</li>
+          <li>Ekosistem pelatihan guru vokasi sudah tersedia melalui BBPPMPV</li>
+        </ul>
+      </div>
+      <div class="peluang-card b">
+        <h4><i class="ti ti-clock" style="color:var(--blue2)"></i>Pertimbangan Waktu</h4>
+        <ul>
+          <li>Target Indonesia Emas 2045 mensyaratkan SDM terampil yang disiapkan mulai saat ini</li>
+          <li>Negara-negara ASEAN lain secara aktif meningkatkan standar sistem VET mereka</li>
+          <li>Pergeseran kebutuhan kompetensi akibat otomasi dan digitalisasi industri berlangsung cepat</li>
+          <li>Jendela bonus demografi memiliki batas waktu yang perlu diperhitungkan</li>
+          <li>Penundaan perubahan akan memperlebar jarak antara standar sekolah dan standar industri</li>
+        </ul>
+      </div>
+    </div>
+    <div class="inti-box">
+      <h3>Gagasan Inti Transformasi</h3>
+      <p>Mengadopsi <strong style="color:var(--gold2)">metode delivery</strong> (cara mengajarkan praktik secara efektif) dan <strong style="color:var(--gold2)">metode penilaian</strong> (cara mengevaluasi hasil kerja secara objektif) dari WorldSkills ke dalam keseharian pembelajaran vokasi — bukan hanya untuk peserta LKS, tetapi untuk <em>seluruh siswa</em> di seluruh program keahlian.</p>
+    </div>
+  </div>
+</section>
+
+<!-- KPI -->
+<section id="kpi">
+  <div class="container">
+    <div class="sec-eyebrow"><div class="line"></div><span>Indikator Keberhasilan</span><div class="line"></div></div>
+    <h2 class="sec-title">KPI Transformasi — Terukur di Tiga Tingkatan</h2>
+    <p class="sec-lead">Jika berlian WorldSkills dimanfaatkan secara sistemik, berikut indikator kunci keberhasilan yang dapat diukur pada tingkat sekolah, daerah, dan nasional.</p>
+    <div class="kpi-tabs">
+      <button class="kpi-tab active" onclick="switchKPI('school')"><i class="ti ti-building-school"></i>&nbsp;Sekolah</button>
+      <button class="kpi-tab" onclick="switchKPI('region')"><i class="ti ti-map-pin"></i>&nbsp;Daerah</button>
+      <button class="kpi-tab" onclick="switchKPI('nation')"><i class="ti ti-flag"></i>&nbsp;Nasional</button>
+    </div>
+    <div class="kpi-panel active" id="kpi-school">
+      <div class="kpi-card school">
+        <h4><i class="ti ti-certificate" style="color:var(--gold3)"></i>Kualitas Lulusan</h4>
+        <ul>
+          <li>% lulusan bersertifikat kompetensi ≥ 80%</li>
+          <li>Skor uji kompetensi berbasis standar WorldSkills</li>
+          <li>% lulusan terserap industri dalam 6 bulan pertama</li>
+          <li>Kepuasan industri terhadap kualitas lulusan (survei)</li>
+        </ul>
+      </div>
+      <div class="kpi-card school">
+        <h4><i class="ti ti-tool" style="color:var(--gold3)"></i>Mutu Pembelajaran Praktik</h4>
+        <ul>
+          <li>% guru terlatih metode delivery WorldSkills</li>
+          <li>% materi praktik sesuai Occupational Standards</li>
+          <li>Jam praktik kontekstual per semester per siswa</li>
+          <li>Rasio alat &amp; bahan praktik sesuai standar industri</li>
+        </ul>
+      </div>
+      <div class="kpi-card school">
+        <h4><i class="ti ti-trophy" style="color:var(--gold3)"></i>Kompetisi &amp; Budaya</h4>
+        <ul>
+          <li>Jumlah siswa berpartisipasi dalam kompetisi internal/LKS</li>
+          <li>Peringkat LKS dibanding tahun sebelumnya</li>
+          <li>Jumlah medali dan penghargaan yang diraih</li>
+          <li>Jumlah mini-kompetisi internal terstandarisasi per tahun</li>
+        </ul>
+      </div>
+      <div class="kpi-card school">
+        <h4><i class="ti ti-clipboard-check" style="color:var(--gold3)"></i>Sistem Penilaian Berbasis Standar</h4>
+        <ul>
+          <li>% rubrik penilaian mengadopsi WorldSkills criteria</li>
+          <li>Reliabilitas penilaian antar penguji (inter-rater reliability)</li>
+          <li>Tingkat transparansi dan dokumentasi penilaian</li>
+          <li>% soal praktik yang mengacu Test Project WorldSkills</li>
+        </ul>
+      </div>
+    </div>
+    <div class="kpi-panel" id="kpi-region">
+      <div class="kpi-card region">
+        <h4><i class="ti ti-chart-bar" style="color:var(--teal2)"></i>Standar VET Daerah</h4>
+        <ul>
+          <li>% SMK/sekolah vokasi mengadopsi WorldSkills standards</li>
+          <li>Roadmap transformasi daerah tersedia dan diimplementasi</li>
+          <li>Regulasi daerah yang mendukung adopsi standar internasional</li>
+          <li>Jumlah bidang LKS daerah yang align WorldSkills areas</li>
+        </ul>
+      </div>
+      <div class="kpi-card region">
+        <h4><i class="ti ti-users" style="color:var(--teal2)"></i>Kapasitas Pengajar</h4>
+        <ul>
+          <li>% guru vokasi bersertifikat kompetensi industri aktif</li>
+          <li>Jumlah program pelatihan guru berbasis WorldSkills per tahun</li>
+          <li>Jaringan expert dan alumni WorldSkills aktif di daerah</li>
+          <li>Jumlah guru yang telah mengikuti magang di industri</li>
+        </ul>
+      </div>
+      <div class="kpi-card region">
+        <h4><i class="ti ti-building-factory" style="color:var(--teal2)"></i>Koneksi Industri</h4>
+        <ul>
+          <li>% sekolah dengan MoU industri yang aktif dan terrealisasi</li>
+          <li>Industri terlibat sebagai juri/assessor LKS daerah</li>
+          <li>Jumlah proyek real industri yang masuk ke kurikulum</li>
+          <li>Teaching factory yang beroperasi sesuai standar industri</li>
+        </ul>
+      </div>
+      <div class="kpi-card region">
+        <h4><i class="ti ti-medal" style="color:var(--teal2)"></i>Prestasi LKS Daerah</h4>
+        <ul>
+          <li>Peringkat prestasi LKS Nasional per provinsi/kab</li>
+          <li>Pertumbuhan jumlah peserta LKS dari tahun ke tahun</li>
+          <li>Jumlah bidang LKS yang menggunakan sistem penilaian WorldSkills</li>
+          <li>Jumlah sekolah yang menjadi center of excellence daerah</li>
+        </ul>
+      </div>
+    </div>
+    <div class="kpi-panel" id="kpi-nation">
+      <div class="kpi-card nation">
+        <h4><i class="ti ti-world" style="color:var(--blue2)"></i>Daya Saing Global</h4>
+        <ul>
+          <li>Peringkat Indonesia di WorldSkills International</li>
+          <li>Jumlah medali dan total poin WorldSkills per siklus</li>
+          <li>Gap skor vs. top-performing nations (China, Korea, Swiss)</li>
+          <li>Jumlah bidang di mana Indonesia masuk 10 besar dunia</li>
+        </ul>
+      </div>
+      <div class="kpi-card nation">
+        <h4><i class="ti ti-certificate" style="color:var(--blue2)"></i>Standar Kompetensi Nasional</h4>
+        <ul>
+          <li>% SKKNI yang telah di-benchmark ke WorldSkills standards</li>
+          <li>Kualifikasi nasional yang diakui secara internasional (MRA)</li>
+          <li>Jumlah bidang dengan standar setara internasional</li>
+          <li>Indeks kualitas VET dalam Human Capital Index (World Bank)</li>
+        </ul>
+      </div>
+      <div class="kpi-card nation">
+        <h4><i class="ti ti-chart-line" style="color:var(--blue2)"></i>Dampak Ekonomi</h4>
+        <ul>
+          <li>Kontribusi tenaga terampil terhadap pertumbuhan PDB nasional</li>
+          <li>Penurunan tingkat pengangguran lulusan vokasi (%)</li>
+          <li>Peningkatan FDI di sektor manufaktur &amp; jasa terampil</li>
+          <li>Peningkatan upah rata-rata tenaga kerja vokasi terampil</li>
+        </ul>
+      </div>
+      <div class="kpi-card nation">
+        <h4><i class="ti ti-network" style="color:var(--blue2)"></i>Ekosistem VET Nasional</h4>
+        <ul>
+          <li>Jumlah institusi vokasi terakreditasi secara internasional</li>
+          <li>Jumlah program knowledge sharing aktif ke negara ASEAN</li>
+          <li>Indonesia sebagai tuan rumah/co-host event WorldSkills regional</li>
+          <li>Platform nasional berbagi praktik baik VET antar sekolah</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="container">
+    <div class="sec-eyebrow"><div class="line"></div><span>Rencana Aksi</span><div class="line"></div></div>
+    <h2 class="sec-title">Langkah Awal yang Dapat Dimulai Segera</h2>
+    <p class="sec-lead">Transformasi besar dimulai dari langkah nyata yang terencana. Berikut tiga fase yang dapat segera kita mulai bersama.</p>
+    <div class="phases">
+      <div class="phase-card" data-n="1">
+        <div class="phase-badge">Fase 1</div>
+        <h3>Pemetaan &amp; Audit</h3>
+        <div class="dur">0 – 6 bulan</div>
+        <ul>
+          <li>Audit standar kompetensi vs. WorldSkills Occupational Standards</li>
+          <li>Identifikasi guru &amp; alumni yang pernah ikut WorldSkills/LKS Nasional</li>
+          <li>Pemetaan rubrik penilaian praktik yang sudah ada</li>
+          <li>Benchmarking materi praktik terhadap Test Projects WorldSkills</li>
+          <li>Pemetaan gap dan potensi program keahlian prioritas</li>
+        </ul>
+      </div>
+      <div class="phase-card" data-n="2">
+        <div class="phase-badge">Fase 2</div>
+        <h3>Piloting &amp; Implementasi</h3>
+        <div class="dur">6 – 18 bulan</div>
+        <ul>
+          <li>Pilih 2–3 program keahlian sebagai model transformasi</li>
+          <li>Implementasi rubrik penilaian berbasis WorldSkills criteria</li>
+          <li>Pelatihan guru: metode delivery &amp; assessment WorldSkills</li>
+          <li>Mini-kompetisi internal dengan standar WorldSkills</li>
+          <li>Dokumentasi dan evaluasi hasil pilot secara berkala</li>
+        </ul>
+      </div>
+      <div class="phase-card" data-n="3">
+        <div class="phase-badge">Fase 3</div>
+        <h3>Scaling &amp; Kontribusi</h3>
+        <div class="dur">18 – 36 bulan</div>
+        <ul>
+          <li>Roll-out ke semua program keahlian di sekolah</li>
+          <li>Bangun sistem dokumentasi KPI dan evaluasi berkelanjutan</li>
+          <li>Kemitraan dengan industri sebagai assessor dan validator</li>
+          <li>Berkontribusi ke jaringan sekolah vokasi daerah dan nasional</li>
+          <li>Menjadi model dan rujukan bagi sekolah lain di daerah</li>
+        </ul>
+      </div>
+    </div>
+    <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:1rem">Sumber Daya Kunci</h3>
+    <div class="resources-grid">
+      <div class="res-card">
+        <div class="res-icon"><i class="ti ti-world"></i></div>
+        <div><h4>WorldSkills Occupational Standards</h4><p>Tersedia di worldskills.org — standar kompetensi benchmark internasional</p></div>
+      </div>
+      <div class="res-card">
+        <div class="res-icon"><i class="ti ti-users"></i></div>
+        <div><h4>Alumni Delegasi WorldSkills &amp; LKS</h4><p>Jaringan expert dan alumni Indonesia yang sudah berpengalaman</p></div>
+      </div>
+      <div class="res-card">
+        <div class="res-icon"><i class="ti ti-building"></i></div>
+        <div><h4>BBPPMPV &amp; Balai Vokasi</h4><p>Balai Besar Pengembangan Penjaminan Mutu Pendidikan Vokasi</p></div>
+      </div>
+      <div class="res-card">
+        <div class="res-icon"><i class="ti ti-brand-youtube"></i></div>
+        <div><h4>eSHa Public Skills Learning</h4><p>Platform pembelajaran vokasi — <a href="https://www.youtube.com/@eSHa-PSL" target="_blank" style="color:#CC0000;font-weight:600">youtube.com/@eSHa-PSL</a></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PENUTUP -->
+<section id="penutup">
+  <div class="container" style="position:relative;z-index:2">
+    <div class="sec-eyebrow" style="justify-content:center"><span style="color:rgba(255,255,255,0.5)">Penutup</span></div>
+    <p class="close-quote">"Bukan lagi soal <em>apakah</em> kita harus bertransformasi — melainkan <em>seberapa cepat</em> kita berani memulai."</p>
+    <p class="close-sub">22 tahun belajar dari yang terbaik di dunia. 34 tahun LKS menggembleng kita. Kini saatnya berlian itu berkilau di setiap ruang kelas vokasi Indonesia.</p>
+    <p class="close-author">Sri Hardono, S.T., M.Sc.</p>
+    <p class="close-author-sub">eSHa Public Skills Learning &nbsp;|&nbsp; Pendidikan &amp; Pelatihan Vokasi</p>
+    <div class="close-btns">
+      <a class="btn-primary" href="#hero"><i class="ti ti-refresh"></i>&nbsp;Kembali ke Awal</a>
+      <a class="btn-yt" href="https://www.youtube.com/@eSHa-PSL" target="_blank"><i class="ti ti-brand-youtube"></i>eSHa-PSL di YouTube</a>
+      <a class="btn-ghost" href="#kpi">Lihat KPI Transformasi</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Sri Hardono, S.T., M.Sc. &nbsp;|&nbsp; Transformasi Pendidikan &amp; Pelatihan Vokasi &nbsp;|&nbsp; Perpres 68/2022</p>
+  <a class="footer-yt" href="https://www.youtube.com/@eSHa-PSL" target="_blank"><i class="ti ti-brand-youtube"></i>eSHa Public Skills Learning — @eSHa-PSL</a>
+</footer>
+
+<script>
+  /* KPI tab switcher */
+  function switchKPI(tab){
+    document.querySelectorAll('.kpi-tab').forEach(b=>b.classList.remove('active'))
+    document.querySelectorAll('.kpi-panel').forEach(p=>p.classList.remove('active'))
+    event.currentTarget.classList.add('active')
+    document.getElementById('kpi-'+tab).classList.add('active')
+  }
+
+  /* Scroll animation for timeline */
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})
+  },{threshold:0.2})
+  document.querySelectorAll('.tl-item').forEach(el=>observer.observe(el))
+
+  /* Active nav link on scroll */
+  const sections = document.querySelectorAll('section[id]')
+  const navLinks = document.querySelectorAll('.nav-links a')
+  window.addEventListener('scroll',()=>{
+    let current=''
+    sections.forEach(s=>{
+      if(window.scrollY>=s.offsetTop-80) current=s.id
+    })
+    navLinks.forEach(a=>{
+      a.classList.toggle('active',a.getAttribute('href')==='#'+current)
+    })
+  },{passive:true})
+</script>
+</body>
+</html>
