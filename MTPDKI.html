@@ -34,7 +34,6 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -61,13 +60,9 @@
   }
 
   .topnav-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-right: 28px;
-    flex-shrink: 0;
+    display: flex; align-items: center; gap: 10px;
+    margin-right: 28px; flex-shrink: 0;
   }
-
   .brand-icon {
     width: 32px; height: 32px;
     background: linear-gradient(135deg, var(--blue), var(--cyan));
@@ -75,280 +70,108 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 14px;
   }
-
-  .brand-text {
-    font-size: 12.5px;
-    font-weight: 700;
-    color: var(--text-hi);
-    letter-spacing: 0.3px;
-    line-height: 1.2;
-  }
-
-  .brand-sub {
-    font-size: 10px;
-    color: var(--text-mid);
-    font-weight: 400;
-  }
-
-  .topnav-divider {
-    width: 1px;
-    height: 28px;
-    background: var(--border-bright);
-    margin-right: 20px;
-  }
+  .brand-text { font-size: 12.5px; font-weight: 700; color: var(--text-hi); letter-spacing: 0.3px; line-height: 1.2; }
+  .brand-sub  { font-size: 10px; color: var(--text-mid); font-weight: 400; }
+  .topnav-divider { width: 1px; height: 28px; background: var(--border-bright); margin-right: 20px; }
 
   .nav-scroll {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    overflow-x: auto;
-    flex: 1;
-    scrollbar-width: none;
+    display: flex; align-items: center; gap: 2px;
+    overflow-x: auto; flex: 1; scrollbar-width: none;
   }
   .nav-scroll::-webkit-scrollbar { display: none; }
 
   .nav-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 13px;
-    border-radius: 8px;
-    color: var(--text-mid);
-    font-size: 11.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.18s;
-    text-decoration: none;
-    white-space: nowrap;
-    border: 1px solid transparent;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 13px; border-radius: 8px;
+    color: var(--text-mid); font-size: 11.5px; font-weight: 600;
+    cursor: pointer; transition: all 0.18s; text-decoration: none;
+    white-space: nowrap; border: 1px solid transparent;
   }
-
-  .nav-pill:hover {
-    background: rgba(255,255,255,0.07);
-    color: var(--text-hi);
-    border-color: var(--border);
-  }
-
-  .nav-pill.active {
-    background: var(--blue-glow);
-    color: #7db8ff;
-    border-color: rgba(26,110,255,0.35);
-  }
-
+  .nav-pill:hover { background: rgba(255,255,255,0.07); color: var(--text-hi); border-color: var(--border); }
+  .nav-pill.active { background: var(--blue-glow); color: #7db8ff; border-color: rgba(26,110,255,0.35); }
   .nav-pill span.ico { font-size: 13px; }
 
   .topnav-yt {
-    margin-left: 16px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    background: rgba(255,0,0,0.14);
-    border: 1px solid rgba(255,80,80,0.25);
-    padding: 5px 12px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 11px;
-    font-weight: 700;
-    color: #ff9090;
-    transition: background 0.15s;
+    margin-left: 16px; flex-shrink: 0;
+    display: flex; align-items: center; gap: 7px;
+    background: rgba(255,0,0,0.14); border: 1px solid rgba(255,80,80,0.25);
+    padding: 5px 12px; border-radius: 8px; text-decoration: none;
+    font-size: 11px; font-weight: 700; color: #ff9090; transition: background 0.15s;
   }
   .topnav-yt:hover { background: rgba(255,0,0,0.25); }
   .topnav-yt svg { flex-shrink: 0; }
 
   /* ── MAIN ── */
-  .main {
-    padding-top: 58px;
-  }
+  .main { padding-top: 58px; }
 
   /* ── HERO ── */
   .hero {
     background: linear-gradient(160deg, #071528 0%, #0a1f3d 40%, #0c2850 100%);
-    padding: 64px 64px 52px;
-    position: relative;
-    overflow: hidden;
+    padding: 64px 64px 52px; position: relative; overflow: hidden;
     border-bottom: 1px solid var(--border-bright);
   }
-
-  .hero-bg-orb {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-  }
-  .hero-bg-orb.o1 {
-    right: -120px; top: -120px;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(26,110,255,0.12) 0%, transparent 70%);
-  }
-  .hero-bg-orb.o2 {
-    left: 30%; bottom: -60px;
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(0,200,150,0.08) 0%, transparent 70%);
-  }
+  .hero-bg-orb { position: absolute; border-radius: 50%; pointer-events: none; }
+  .hero-bg-orb.o1 { right: -120px; top: -120px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(26,110,255,0.12) 0%, transparent 70%); }
+  .hero-bg-orb.o2 { left: 30%; bottom: -60px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,200,150,0.08) 0%, transparent 70%); }
 
   .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    background: rgba(26,110,255,0.15);
-    border: 1px solid rgba(26,110,255,0.35);
-    color: #7db8ff;
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border-radius: 20px;
-    margin-bottom: 20px;
-    position: relative; z-index: 1;
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(26,110,255,0.15); border: 1px solid rgba(26,110,255,0.35);
+    color: #7db8ff; font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; padding: 5px 14px; border-radius: 20px;
+    margin-bottom: 20px; position: relative; z-index: 1;
   }
-
   .hero h1 {
-    font-size: 38px;
-    font-weight: 800;
-    color: var(--text-hi);
-    line-height: 1.18;
-    max-width: 620px;
-    margin-bottom: 14px;
-    position: relative; z-index: 1;
-    letter-spacing: -0.5px;
+    font-size: 38px; font-weight: 800; color: var(--text-hi);
+    line-height: 1.18; max-width: 620px; margin-bottom: 14px;
+    position: relative; z-index: 1; letter-spacing: -0.5px;
   }
-
   .hero h1 .accent { color: var(--cyan); }
-
   .hero-sub {
-    font-size: 14.5px;
-    color: var(--text-mid);
-    max-width: 580px;
-    line-height: 1.65;
-    position: relative; z-index: 1;
-    margin-bottom: 36px;
+    font-size: 14.5px; color: var(--text-mid); max-width: 580px;
+    line-height: 1.65; position: relative; z-index: 1; margin-bottom: 36px;
   }
-
-  .hero-stats {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    position: relative; z-index: 1;
-  }
-
+  .hero-stats { display: flex; gap: 16px; flex-wrap: wrap; position: relative; z-index: 1; }
   .stat-pill {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--border-bright);
-    border-radius: 12px;
-    padding: 13px 22px;
-    text-align: center;
-    transition: border-color 0.2s;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--border-bright);
+    border-radius: 12px; padding: 13px 22px; text-align: center; transition: border-color 0.2s;
   }
   .stat-pill:hover { border-color: rgba(26,110,255,0.4); }
-
-  .stat-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-hi);
-    display: block;
-    line-height: 1;
-  }
-
-  .stat-lbl {
-    font-size: 9.5px;
-    font-weight: 700;
-    color: var(--text-lo);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    display: block;
-    margin-top: 5px;
-  }
+  .stat-val { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: var(--text-hi); display: block; line-height: 1; }
+  .stat-lbl { font-size: 9.5px; font-weight: 700; color: var(--text-lo); text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 5px; }
 
   /* ── CONTENT ── */
-  .content {
-    padding: 48px 64px 96px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .section {
-    margin-bottom: 56px;
-  }
+  .content { padding: 48px 64px 96px; max-width: 1200px; margin: 0 auto; }
+  .section { margin-bottom: 56px; }
 
   /* ── SECTION HEADER ── */
   .sec-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 24px; padding-bottom: 16px;
     border-bottom: 1px solid var(--border-bright);
   }
-
-  .sec-icon {
-    width: 42px; height: 42px;
-    border-radius: 11px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-  .sec-title {
-    font-size: 21px;
-    font-weight: 800;
-    color: var(--text-hi);
-    letter-spacing: -0.3px;
-  }
-
-  .sec-sub {
-    font-size: 12px;
-    color: var(--text-lo);
-    font-weight: 500;
-    margin-top: 2px;
-  }
+  .sec-icon { width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .sec-title { font-size: 21px; font-weight: 800; color: var(--text-hi); letter-spacing: -0.3px; }
+  .sec-sub { font-size: 12px; color: var(--text-lo); font-weight: 500; margin-top: 2px; }
 
   /* ── CARD ── */
-  .card {
-    background: var(--navy-card);
-    border-radius: var(--radius);
-    padding: 24px;
-    border: 1px solid var(--border-bright);
-    box-shadow: var(--shadow-sm);
-  }
+  .card { background: var(--navy-card); border-radius: var(--radius); padding: 24px; border: 1px solid var(--border-bright); box-shadow: var(--shadow-sm); }
+  .card-label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-lo); margin-bottom: 14px; display: block; }
 
-  .card-label {
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-lo);
-    margin-bottom: 14px;
-    display: block;
-  }
-
-  /* ── 2-COL GRID ── */
+  /* ── GRIDS ── */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 
   /* ── TABLE ── */
   .tbl { width: 100%; border-collapse: collapse; }
   .tbl thead th {
-    background: rgba(26,110,255,0.2);
-    color: #7db8ff;
-    font-size: 11px;
-    font-weight: 800;
-    padding: 11px 15px;
-    text-align: left;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid rgba(26,110,255,0.35);
+    background: rgba(26,110,255,0.2); color: #7db8ff;
+    font-size: 11px; font-weight: 800; padding: 11px 15px; text-align: left;
+    letter-spacing: 0.5px; border-bottom: 2px solid rgba(26,110,255,0.35);
   }
   .tbl thead th:first-child { border-radius: 8px 0 0 0; }
   .tbl thead th:last-child  { border-radius: 0 8px 0 0; }
-
-  .tbl tbody td {
-    padding: 11px 15px;
-    font-size: 13px;
-    color: var(--text-mid);
-    border-bottom: 1px solid var(--border);
-  }
-
+  .tbl tbody td { padding: 11px 15px; font-size: 13px; color: var(--text-mid); border-bottom: 1px solid var(--border); }
   .tbl tbody tr:hover td { background: rgba(255,255,255,0.03); }
   .tbl tbody td:first-child { font-weight: 600; color: var(--text-hi); }
 
@@ -360,128 +183,64 @@
   .badge-violet{ background: var(--violet-dim); color: var(--violet); padding: 3px 11px; border-radius: 20px; font-size: 11px; font-weight: 800; border: 1px solid rgba(155,109,255,0.25); }
 
   /* ── ALERT BOXES ── */
-  .alert {
-    border-radius: 10px;
-    padding: 14px 18px;
-    display: flex;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
+  .alert { border-radius: 10px; padding: 14px 18px; display: flex; gap: 12px; margin-bottom: 14px; }
   .alert:last-child { margin-bottom: 0; }
   .alert-ico { font-size: 18px; flex-shrink: 0; }
   .alert-title { font-size: 13px; font-weight: 800; margin-bottom: 3px; }
   .alert-body  { font-size: 12.5px; line-height: 1.6; }
-
-  .alert-warn  { background: var(--amber-dim); border-left: 4px solid var(--amber); }
-  .alert-warn  .alert-title { color: var(--amber); }
-  .alert-warn  .alert-body  { color: #c89040; }
-  .alert-danger{ background: var(--red-dim); border-left: 4px solid var(--red); }
+  .alert-warn   { background: var(--amber-dim); border-left: 4px solid var(--amber); }
+  .alert-warn   .alert-title { color: var(--amber); }
+  .alert-warn   .alert-body  { color: #c89040; }
+  .alert-danger { background: var(--red-dim); border-left: 4px solid var(--red); }
   .alert-danger .alert-title { color: var(--red); }
   .alert-danger .alert-body  { color: #c05050; }
-  .alert-info  { background: var(--blue-glow); border-left: 4px solid var(--blue); }
-  .alert-info  .alert-title { color: #7db8ff; }
-  .alert-info  .alert-body  { color: var(--text-mid); }
+  .alert-info   { background: var(--blue-glow); border-left: 4px solid var(--blue); }
+  .alert-info   .alert-title { color: #7db8ff; }
+  .alert-info   .alert-body  { color: var(--text-mid); }
   .alert-success{ background: var(--teal-dim); border-left: 4px solid var(--teal); }
   .alert-success .alert-title { color: var(--teal); }
   .alert-success .alert-body  { color: #40a88a; }
 
   /* ── PRESSURE STEPS ── */
   .press-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .press-step {
-    border-radius: 12px;
-    padding: 20px;
-    border: 1px solid var(--border-bright);
-  }
-  .press-badge {
-    font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
-    text-transform: uppercase; padding: 3px 9px;
-    border-radius: 20px; display: inline-block; margin-bottom: 10px;
-  }
-  .press-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 8px;
-  }
-  .press-desc { font-size: 12.5px; color: var(--text-mid); line-height: 1.55; }
+  .press-step { border-radius: 12px; padding: 20px; border: 1px solid var(--border-bright); }
+  .press-badge { font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+  .press-val   { font-family: 'JetBrains Mono', monospace; font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
+  .press-desc  { font-size: 12.5px; color: var(--text-mid); line-height: 1.55; }
 
   /* ── CHECKLIST ── */
-  .check-item {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 8px 0; border-bottom: 1px solid var(--border);
-  }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .check-item:last-child { border-bottom: none; }
-  .check-box {
-    width: 18px; height: 18px; border: 2px solid var(--border-bright);
-    border-radius: 5px; display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 2px;
-  }
+  .check-box  { width: 18px; height: 18px; border: 2px solid var(--border-bright); border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
   .check-text { font-size: 12.5px; color: var(--text-mid); line-height: 1.55; }
-  .check-label {
-    font-size: 10px; font-weight: 800; letter-spacing: 1.2px;
-    text-transform: uppercase; color: var(--text-lo);
-    padding: 12px 0 7px; border-bottom: 1px solid var(--border);
-    margin-bottom: 2px;
-  }
+  .check-label { font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-lo); padding: 12px 0 7px; border-bottom: 1px solid var(--border); margin-bottom: 2px; }
 
   /* ── FLOW ── */
-  .flow-grid {
-    display: grid; grid-template-columns: repeat(5,1fr); gap: 0;
-    position: relative;
-  }
-  .flow-step {
-    text-align: center; padding: 0 8px; position: relative;
-  }
-  .flow-step:not(:last-child)::after {
-    content: '→'; position: absolute; right: -8px; top: 22px;
-    font-size: 16px; color: var(--text-lo);
-  }
-  .flow-circle {
-    width: 48px; height: 48px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 19px; margin: 0 auto 10px;
-  }
+  .flow-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 0; position: relative; }
+  .flow-step { text-align: center; padding: 0 8px; position: relative; }
+  .flow-step:not(:last-child)::after { content: '→'; position: absolute; right: -8px; top: 22px; font-size: 16px; color: var(--text-lo); }
+  .flow-circle { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 19px; margin: 0 auto 10px; }
   .flow-step-title { font-size: 11.5px; font-weight: 700; color: var(--text-hi); margin-bottom: 4px; line-height: 1.3; }
   .flow-step-sub   { font-size: 10.5px; color: var(--text-lo); line-height: 1.4; }
 
   /* ── TIMELINE ── */
   .timeline { position: relative; padding-left: 24px; }
-  .timeline::before {
-    content: ''; position: absolute;
-    left: 8px; top: 8px; bottom: 8px; width: 2px;
-    background: linear-gradient(to bottom, var(--blue), var(--teal));
-    border-radius: 2px;
-  }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(to bottom, var(--blue), var(--teal)); border-radius: 2px; }
   .timeline-item { position: relative; margin-bottom: 18px; padding-left: 20px; }
   .timeline-item:last-child { margin-bottom: 0; }
-  .tl-dot {
-    position: absolute; left: -24px; top: 5px;
-    width: 16px; height: 16px; border-radius: 50%;
-    border: 3px solid var(--navy-card); background: var(--blue);
-  }
+  .tl-dot   { position: absolute; left: -24px; top: 5px; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--navy-card); background: var(--blue); }
   .tl-dot.green { background: var(--teal); }
-  .tl-lbl  { font-size: 9.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-lo); margin-bottom: 3px; }
-  .tl-title{ font-size: 13.5px; font-weight: 700; color: var(--text-hi); margin-bottom: 3px; }
-  .tl-desc { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
+  .tl-lbl   { font-size: 9.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-lo); margin-bottom: 3px; }
+  .tl-title { font-size: 13.5px; font-weight: 700; color: var(--text-hi); margin-bottom: 3px; }
+  .tl-desc  { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
 
   /* ── SAFETY CARDS ── */
   .safety-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
-  .safety-card {
-    background: var(--navy-card);
-    border-radius: var(--radius);
-    padding: 18px;
-    border: 1px solid var(--border-bright);
-    border-top: 3px solid var(--red);
-  }
-  .safety-icon {
-    width: 38px; height: 38px; background: var(--red-dim); border-radius: 9px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; margin-bottom: 10px;
-  }
+  .safety-card { background: var(--navy-card); border-radius: var(--radius); padding: 18px; border: 1px solid var(--border-bright); border-top: 3px solid var(--red); }
+  .safety-icon { width: 38px; height: 38px; background: var(--red-dim); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 10px; }
   .safety-title { font-size: 13px; font-weight: 700; color: var(--text-hi); margin-bottom: 8px; }
   .safety-items { list-style: none; }
-  .safety-items li {
-    font-size: 11.5px; color: var(--text-mid); padding: 3px 0 3px 14px;
-    position: relative; line-height: 1.5; border-bottom: 1px solid var(--border);
-  }
+  .safety-items li { font-size: 11.5px; color: var(--text-mid); padding: 3px 0 3px 14px; position: relative; line-height: 1.5; border-bottom: 1px solid var(--border); }
   .safety-items li:last-child { border-bottom: none; }
   .safety-items li::before { content: '›'; position: absolute; left: 0; color: var(--red); font-weight: 800; }
 
@@ -489,28 +248,19 @@
   .spec-tbl { width: 100%; border-collapse: collapse; }
   .spec-tbl td { padding: 10px 0; font-size: 13px; border-bottom: 1px solid var(--border); }
   .spec-tbl td:first-child { color: var(--text-mid); width: 60%; }
-  .spec-tbl td:last-child { font-weight: 700; color: var(--text-hi); }
+  .spec-tbl td:last-child  { font-weight: 700; color: var(--text-hi); }
 
   /* ── DRAWING CARDS ── */
   .drawing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-  .drawing-card {
-    padding: 16px; background: rgba(255,255,255,0.03);
-    border-radius: 10px; border: 1px solid var(--border-bright);
-  }
-  .drawing-id { font-family: 'JetBrains Mono',monospace; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
+  .drawing-card { padding: 16px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid var(--border-bright); }
+  .drawing-id    { font-family: 'JetBrains Mono',monospace; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
   .drawing-title { font-size: 13px; font-weight: 700; color: var(--text-hi); margin-bottom: 3px; }
-  .drawing-sub { font-size: 11.5px; color: var(--text-lo); }
+  .drawing-sub   { font-size: 11.5px; color: var(--text-lo); }
 
   /* ── COMMISSIONING TABLE ── */
   .comm-tbl { width: 100%; border-collapse: collapse; }
-  .comm-tbl th {
-    background: rgba(26,110,255,0.2); color: #7db8ff;
-    font-size: 11px; font-weight: 800; padding: 10px 14px; text-align: left;
-  }
-  .comm-tbl td {
-    padding: 10px 14px; font-size: 12.5px; color: var(--text-mid);
-    border-bottom: 1px solid var(--border);
-  }
+  .comm-tbl th { background: rgba(26,110,255,0.2); color: #7db8ff; font-size: 11px; font-weight: 800; padding: 10px 14px; text-align: left; }
+  .comm-tbl td { padding: 10px 14px; font-size: 12.5px; color: var(--text-mid); border-bottom: 1px solid var(--border); }
   .comm-tbl tr:hover td { background: rgba(255,255,255,0.03); }
   .comm-tbl td:first-child { font-weight: 600; color: var(--text-hi); }
 
@@ -518,81 +268,151 @@
   .elec-tbl { width: 100%; border-collapse: collapse; }
   .elec-tbl td { padding: 8px 0; font-size: 12.5px; border-bottom: 1px solid var(--border); }
   .elec-tbl td:first-child { color: var(--text-mid); }
-  .elec-tbl td:last-child { font-weight: 700; color: var(--text-hi); font-family: 'JetBrains Mono',monospace; font-size: 12px; }
+  .elec-tbl td:last-child  { font-weight: 700; color: var(--text-hi); font-family: 'JetBrains Mono',monospace; font-size: 12px; }
+
+  /* ── CHECKPOINT BOX ── */
+  .cpbox { border-radius: 10px; padding: 16px; border: 1px solid var(--border-bright); }
+  .cpbox-label { font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; }
+  .cpbox-body  { font-size: 12.5px; color: var(--text-mid); line-height: 1.6; }
+  .cpbox-sign  { margin-top: 10px; padding: 7px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+
+  /* ── CHECKPOINT BANNER (baru) ── */
+  /* Dipakai untuk checkpoint-checkpoint Modul B yang tersebar di setiap task */
+  .cp-banner {
+    margin-top: 20px;
+    border-radius: 12px;
+    border: 2px solid;
+    overflow: hidden;
+  }
+  .cp-banner-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 18px;
+  }
+  .cp-banner-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 800; flex-shrink: 0;
+  }
+  .cp-banner-title { font-size: 13px; font-weight: 800; }
+  .cp-banner-task  { font-size: 11px; font-weight: 600; margin-left: auto; opacity: 0.8; }
+  .cp-banner-body  { padding: 14px 18px; font-size: 12.5px; line-height: 1.65; }
+  .cp-banner-body ul { list-style: none; margin: 8px 0 0; }
+  .cp-banner-body ul li { padding: 3px 0 3px 18px; position: relative; }
+  .cp-banner-body ul li::before { content: '›'; position: absolute; left: 4px; font-weight: 800; }
+  .cp-banner-sign {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 18px 14px;
+    font-size: 11.5px; font-weight: 700;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .cp-banner-sign .sign-label { display: flex; align-items: center; gap: 8px; }
+  .cp-banner-sign .sign-box {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 14px; border-radius: 6px;
+    font-size: 11px; font-weight: 800;
+    border: 1px dashed;
+  }
+
+  /* Warna varian checkpoint */
+  .cp-amber { border-color: rgba(255,176,32,0.4); }
+  .cp-amber .cp-banner-head { background: rgba(255,176,32,0.10); }
+  .cp-amber .cp-banner-num  { background: var(--amber-dim); color: var(--amber); }
+  .cp-amber .cp-banner-title { color: var(--amber); }
+  .cp-amber .cp-banner-body  { color: var(--text-mid); background: rgba(255,176,32,0.04); }
+  .cp-amber .cp-banner-body ul li::before { color: var(--amber); }
+  .cp-amber .cp-banner-sign  { color: var(--amber); }
+  .cp-amber .sign-box        { background: rgba(255,176,32,0.08); border-color: rgba(255,176,32,0.4); color: var(--amber); }
+
+  .cp-teal { border-color: rgba(0,200,150,0.4); }
+  .cp-teal .cp-banner-head { background: rgba(0,200,150,0.10); }
+  .cp-teal .cp-banner-num  { background: var(--teal-dim); color: var(--teal); }
+  .cp-teal .cp-banner-title { color: var(--teal); }
+  .cp-teal .cp-banner-body  { color: var(--text-mid); background: rgba(0,200,150,0.04); }
+  .cp-teal .cp-banner-body ul li::before { color: var(--teal); }
+  .cp-teal .cp-banner-sign  { color: var(--teal); }
+  .cp-teal .sign-box        { background: rgba(0,200,150,0.08); border-color: rgba(0,200,150,0.4); color: var(--teal); }
+
+  .cp-violet { border-color: rgba(155,109,255,0.4); }
+  .cp-violet .cp-banner-head { background: rgba(155,109,255,0.10); }
+  .cp-violet .cp-banner-num  { background: var(--violet-dim); color: var(--violet); }
+  .cp-violet .cp-banner-title { color: var(--violet); }
+  .cp-violet .cp-banner-body  { color: var(--text-mid); background: rgba(155,109,255,0.04); }
+  .cp-violet .cp-banner-body ul li::before { color: var(--violet); }
+  .cp-violet .cp-banner-sign  { color: var(--violet); }
+  .cp-violet .sign-box        { background: rgba(155,109,255,0.08); border-color: rgba(155,109,255,0.4); color: var(--violet); }
+
+  .cp-cyan { border-color: rgba(0,212,255,0.4); }
+  .cp-cyan .cp-banner-head { background: rgba(0,212,255,0.10); }
+  .cp-cyan .cp-banner-num  { background: rgba(0,212,255,0.12); color: var(--cyan); }
+  .cp-cyan .cp-banner-title { color: var(--cyan); }
+  .cp-cyan .cp-banner-body  { color: var(--text-mid); background: rgba(0,212,255,0.04); }
+  .cp-cyan .cp-banner-body ul li::before { color: var(--cyan); }
+  .cp-cyan .cp-banner-sign  { color: var(--cyan); }
+  .cp-cyan .sign-box        { background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.4); color: var(--cyan); }
+
+  .cp-blue { border-color: rgba(26,110,255,0.4); }
+  .cp-blue .cp-banner-head { background: rgba(26,110,255,0.10); }
+  .cp-blue .cp-banner-num  { background: var(--blue-glow); color: #7db8ff; }
+  .cp-blue .cp-banner-title { color: #7db8ff; }
+  .cp-blue .cp-banner-body  { color: var(--text-mid); background: rgba(26,110,255,0.04); }
+  .cp-blue .cp-banner-body ul li::before { color: #7db8ff; }
+  .cp-blue .cp-banner-sign  { color: #7db8ff; }
+  .cp-blue .sign-box        { background: rgba(26,110,255,0.10); border-color: rgba(26,110,255,0.4); color: #7db8ff; }
+
+  /* ── CHECKPOINT TRACKER (ringkasan semua CP di bagian atas Modul B) ── */
+  .cp-tracker {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
+    margin-bottom: 24px;
+  }
+  .cp-tracker-item {
+    padding: 12px 10px; border-radius: 10px; text-align: center;
+    border: 1px solid var(--border-bright);
+    background: rgba(255,255,255,0.03);
+    transition: border-color 0.2s;
+  }
+  .cp-tracker-item:hover { border-color: rgba(255,255,255,0.2); }
+  .cp-tracker-badge {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; margin: 0 auto 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .cp-tracker-lbl  { font-size: 10px; font-weight: 700; margin-bottom: 2px; }
+  .cp-tracker-task { font-size: 9.5px; color: var(--text-lo); }
 
   /* ── AUTHOR CARD ── */
   .author-card {
     background: linear-gradient(135deg, #0d2240, #112d55);
-    border: 1px solid rgba(26,110,255,0.3);
-    border-radius: var(--radius);
-    padding: 32px;
-    display: flex;
-    gap: 28px;
-    align-items: center;
+    border: 1px solid rgba(26,110,255,0.3); border-radius: var(--radius);
+    padding: 32px; display: flex; gap: 28px; align-items: center;
   }
   .author-avatar {
     width: 80px; height: 80px; border-radius: 50%;
-    background: rgba(26,110,255,0.25);
-    border: 2px solid rgba(26,110,255,0.4);
+    background: rgba(26,110,255,0.25); border: 2px solid rgba(26,110,255,0.4);
     display: flex; align-items: center; justify-content: center;
-    font-family: 'JetBrains Mono',monospace;
-    font-size: 20px; font-weight: 700; color: var(--cyan); flex-shrink: 0;
+    font-family: 'JetBrains Mono',monospace; font-size: 20px; font-weight: 700; color: var(--cyan); flex-shrink: 0;
   }
   .author-name  { font-size: 22px; font-weight: 800; color: var(--text-hi); margin-bottom: 4px; }
   .author-title { font-size: 13.5px; color: var(--text-mid); margin-bottom: 14px; }
   .author-tags  { display: flex; flex-wrap: wrap; gap: 7px; }
-  .author-tag {
-    background: rgba(255,255,255,0.07); border: 1px solid var(--border-bright);
-    padding: 4px 11px; border-radius: 20px;
-    font-size: 11px; font-weight: 600; color: var(--text-mid);
-  }
-
-  /* ── INFOBOX ── */
-  .infobox {
-    background: rgba(0,200,150,0.06);
-    border: 1px solid rgba(0,200,150,0.2);
-    border-radius: 10px; padding: 14px 18px;
-    font-size: 12.5px; color: var(--text-mid); line-height: 1.6;
-  }
+  .author-tag   { background: rgba(255,255,255,0.07); border: 1px solid var(--border-bright); padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 600; color: var(--text-mid); }
 
   /* ── MONO VALUE ── */
-  .mono-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 28px; font-weight: 700;
-  }
-
-  /* ── CHECKPOINT BOX ── */
-  .cpbox {
-    border-radius: 10px; padding: 16px; border: 1px solid var(--border-bright);
-  }
-  .cpbox-label {
-    font-size: 10px; font-weight: 800; letter-spacing: 1.2px;
-    text-transform: uppercase; margin-bottom: 8px;
-  }
-  .cpbox-body { font-size: 12.5px; color: var(--text-mid); line-height: 1.6; }
-  .cpbox-sign {
-    margin-top: 10px; padding: 7px 12px;
-    border-radius: 6px; font-size: 11px; font-weight: 700;
-  }
+  .mono-val { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700; }
 
   /* ── FOOTER ── */
   .footer {
-    background: var(--navy-mid);
-    padding: 20px 64px;
+    background: var(--navy-mid); padding: 20px 64px;
     border-top: 1px solid var(--border-bright);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
   }
   .footer span { font-size: 11px; color: var(--text-lo); }
   .footer-yt {
     display: inline-flex; align-items: center; gap: 7px;
     background: rgba(255,0,0,0.14); border: 1px solid rgba(255,80,80,0.25);
     padding: 5px 12px; border-radius: 8px; text-decoration: none;
-    font-size: 11px; font-weight: 700; color: #ff9090;
-    transition: background 0.15s;
+    font-size: 11px; font-weight: 700; color: #ff9090; transition: background 0.15s;
   }
   .footer-yt:hover { background: rgba(255,0,0,0.25); }
 
@@ -601,7 +421,8 @@
   @media (max-width: 960px) {
     .hero { padding: 40px 24px 36px; }
     .content { padding: 24px 24px 60px; }
-    .grid-2, .safety-grid, .grid-3, .flow-grid, .press-grid, .drawing-grid { grid-template-columns: 1fr; }
+    .grid-2, .safety-grid, .grid-3, .flow-grid, .press-grid, .drawing-grid,
+    .cp-tracker { grid-template-columns: 1fr; }
     .flow-step:not(:last-child)::after { display: none; }
     .author-card { flex-direction: column; }
   }
@@ -651,30 +472,12 @@
     <h1>Proyek Uji <span class="accent">Pendinginan &<br>Pendingin Udara</span></h1>
     <p class="hero-sub">Dokumen kompetisi resmi LKS Dikmen bidang Refrigeration and Air Conditioning (RAC) – DKI Jakarta. Disusun selaras dengan standar WorldSkills International.</p>
     <div class="hero-stats">
-      <div class="stat-pill">
-        <span class="stat-val">5</span>
-        <span class="stat-lbl">Total Task</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-val">5:45</span>
-        <span class="stat-lbl">Waktu Kerja</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-val">2</span>
-        <span class="stat-lbl">Modul Utama</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-val">4:00</span>
-        <span class="stat-lbl">Est. Penilaian</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-val">09:45</span>
-        <span class="stat-lbl">Grand Total</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-val">H-7</span>
-        <span class="stat-lbl">Distribusi Dok.</span>
-      </div>
+      <div class="stat-pill"><span class="stat-val">5</span><span class="stat-lbl">Total Task</span></div>
+      <div class="stat-pill"><span class="stat-val">5:45</span><span class="stat-lbl">Waktu Kerja</span></div>
+      <div class="stat-pill"><span class="stat-val">2</span><span class="stat-lbl">Modul Utama</span></div>
+      <div class="stat-pill"><span class="stat-val">4:00</span><span class="stat-lbl">Est. Penilaian</span></div>
+      <div class="stat-pill"><span class="stat-val">09:45</span><span class="stat-lbl">Grand Total</span></div>
+      <div class="stat-pill"><span class="stat-val">H-7</span><span class="stat-lbl">Distribusi Dok.</span></div>
     </div>
   </div>
 
@@ -731,12 +534,8 @@
         <table class="tbl">
           <thead>
             <tr>
-              <th>Modul</th>
-              <th>Task</th>
-              <th>Deskripsi</th>
-              <th>Waktu Std.</th>
-              <th>Est. Penilaian</th>
-              <th>Hari</th>
+              <th>Modul</th><th>Task</th><th>Deskripsi</th>
+              <th>Waktu Std.</th><th>Est. Penilaian</th><th>Hari</th>
             </tr>
           </thead>
           <tbody>
@@ -745,29 +544,17 @@
               <td>Task 1, 2</td>
               <td>Component Fabrication, Brazing & Uji Tekan</td>
               <td><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--text-hi);">2:30</span></td>
-              <td>2:00</td>
-              <td>Hari ke-1</td>
+              <td>2:00</td><td>Hari ke-1</td>
             </tr>
             <tr>
               <td rowspan="4"><span class="badge-blue">Modul B</span></td>
-              <td>Task 3</td>
-              <td>Instalasi Komponen Utama AC Split</td>
+              <td>Task 3</td><td>Instalasi Komponen Utama AC Split</td>
               <td rowspan="4"><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--text-hi);">3:15</span></td>
-              <td rowspan="4">2:00</td>
-              <td rowspan="4">Hari ke-2</td>
+              <td rowspan="4">2:00</td><td rowspan="4">Hari ke-2</td>
             </tr>
-            <tr>
-              <td>Task 4</td>
-              <td>Pressure & Initial Leak Test</td>
-            </tr>
-            <tr>
-              <td>Task 5, 6</td>
-              <td>Instalasi & Electrical Safety Check</td>
-            </tr>
-            <tr>
-              <td>Task 7, 8, 9</td>
-              <td>Evakuasi, Pump Up & Komisioning</td>
-            </tr>
+            <tr><td>Task 4</td><td>Pressure & Initial Leak Test</td></tr>
+            <tr><td>Task 5, 6</td><td>Instalasi & Electrical Safety Check</td></tr>
+            <tr><td>Task 7, 8, 9</td><td>Evakuasi, Pump Up & Komisioning</td></tr>
             <tr style="background:rgba(26,110,255,0.06);">
               <td colspan="2"><strong style="color:var(--text-hi);">TOTAL WAKTU KERJA</strong></td>
               <td colspan="4"><span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--cyan);">5:45 Jam</span></td>
@@ -885,7 +672,9 @@
       </div>
     </section>
 
-    <!-- MODUL B -->
+    <!-- ══════════════════════════════════════════════════════
+         MODUL B
+    ══════════════════════════════════════════════════════ -->
     <section id="modul-b" class="section">
       <div class="sec-header">
         <div class="sec-icon" style="background:var(--blue-glow)">❄️</div>
@@ -895,8 +684,44 @@
         </div>
       </div>
 
+      <!-- TRACKER CHECKPOINT MODUL B -->
+      <div class="card" style="margin-bottom:24px;">
+        <span class="card-label" style="color:var(--red);">🔔 Ringkasan Checkpoint Modul B — 5 Tanda Tangan Expert</span>
+        <div class="cp-tracker">
+          <div class="cp-tracker-item">
+            <div class="cp-tracker-badge" style="background:rgba(255,176,32,0.15);color:var(--amber);">B1</div>
+            <div class="cp-tracker-lbl" style="color:var(--amber);">Instalasi Komponen</div>
+            <div class="cp-tracker-task">Task 3</div>
+          </div>
+          <div class="cp-tracker-item">
+            <div class="cp-tracker-badge" style="background:rgba(0,200,150,0.15);color:var(--teal);">B2</div>
+            <div class="cp-tracker-lbl" style="color:var(--teal);">Uji Tekan Selesai</div>
+            <div class="cp-tracker-task">Task 4</div>
+          </div>
+          <div class="cp-tracker-item">
+            <div class="cp-tracker-badge" style="background:rgba(155,109,255,0.15);color:var(--violet);">B3</div>
+            <div class="cp-tracker-lbl" style="color:var(--violet);">Electrical Safety Check</div>
+            <div class="cp-tracker-task">Task 6</div>
+          </div>
+          <div class="cp-tracker-item">
+            <div class="cp-tracker-badge" style="background:rgba(0,212,255,0.15);color:var(--cyan);">B4</div>
+            <div class="cp-tracker-lbl" style="color:var(--cyan);">Evakuasi Selesai</div>
+            <div class="cp-tracker-task">Task 7</div>
+          </div>
+          <div class="cp-tracker-item">
+            <div class="cp-tracker-badge" style="background:rgba(26,110,255,0.20);color:#7db8ff;">B5</div>
+            <div class="cp-tracker-lbl" style="color:#7db8ff;">Komisioning Siap</div>
+            <div class="cp-tracker-task">Task 8 → 9</div>
+          </div>
+        </div>
+        <div style="font-size:11.5px;color:var(--text-lo);line-height:1.5;padding-top:12px;border-top:1px solid var(--border);">
+          ℹ️ Setiap checkpoint <strong style="color:var(--text-mid);">wajib ditandatangani expert</strong> sebelum kompetitor melanjutkan ke tahap berikutnya. Kompetitor berhak mengingatkan/meminta tanda tangan expert.
+        </div>
+      </div>
+
+      <!-- TASK 3 – INSTALASI -->
       <div class="card" style="margin-bottom:20px;">
-        <span class="card-label" style="color:#7db8ff;">📦 Ruang Lingkup Instalasi (Task 3)</span>
+        <span class="card-label" style="color:#7db8ff;">📦 Task 3 – Instalasi Komponen Utama AC Split</span>
         <div class="grid-3" style="margin-bottom:16px;">
           <div style="padding:13px;background:var(--blue-glow);border:1px solid rgba(26,110,255,0.2);border-radius:10px;text-align:center;">
             <div style="font-size:22px;margin-bottom:5px;">🖥️</div>
@@ -925,6 +750,31 @@
         </div>
         <div style="font-size:12.5px;color:var(--text-mid);line-height:1.6;">
           Referensi drawing: <strong style="color:var(--text-hi);">R.002</strong> (Isometric View) dan <strong style="color:var(--text-hi);">R.003</strong> (Dimensions). Prioritas penilaian: ketepatan ukuran dengan toleransi, kerapihan, dan kekuatan pemasangan.
+        </div>
+
+        <!-- CHECKPOINT B1 -->
+        <div class="cp-banner cp-amber">
+          <div class="cp-banner-head">
+            <div class="cp-banner-num">B1</div>
+            <div>
+              <div class="cp-banner-title">Checkpoint B1 – Pemasangan Komponen Utama</div>
+            </div>
+            <div class="cp-banner-task">📍 Task 3</div>
+          </div>
+          <div class="cp-banner-body">
+            Setelah menyelesaikan pemasangan komponen utama AC Split, kompetitor <strong style="color:var(--text-hi);">WAJIB</strong> melapor kepada expert. Expert/juri akan melakukan observasi dan membuat catatan penilaian sebelum mengizinkan kompetitor melanjutkan pekerjaan. Komponen yang telah terpasang:
+            <ul>
+              <li>Indoor unit</li>
+              <li>Outdoor unit</li>
+              <li>Stop kontak 3 pin</li>
+              <li>Stecker indoor</li>
+              <li>Pemipaan (tanpa isolasi – isolasi dipasang setelah lulus uji tekan)</li>
+            </ul>
+          </div>
+          <div class="cp-banner-sign">
+            <div class="sign-label">✍️ Tanda tangan expert diperlukan sebelum melanjutkan ke Task 4</div>
+            <div class="sign-box">✅ Expert: <strong>"Pemasangan Komponen Utama"</strong></div>
+          </div>
         </div>
       </div>
 
@@ -959,28 +809,10 @@
           </div>
         </div>
       </div>
-      
-   <!-- CHECKPOINTS MODUL B -->
-      <div class="card" style="margin-bottom:20px;">
-        <span class="card-label" style="color:var(--red);">🔔 Checkpoint Wajib Modul B</span>
-        <div class="grid-2">
-          <div class="cpbox" style="background:var(--amber-dim);border-color:rgba(255,176,32,0.2);">
-            <div class="cpbox-label" style="color:var(--amber);">Checkpoint 1 – Setelah Kompetitor menyelesaikan pemasangan komponen utama AC Split</div>
-            <div class="cpbox-body">Setelah menyelesaikan pemasangan komponen utama AC Split (-	•	Indoor unit ;-	•	Outdoor unit;-	•	Stop Kontak 3 pin;-	•	Stecker Indoor;-	•	Pemipaan
-, kompetitor <strong style="color:var(--text-hi);">WAJIB</strong> melapor dan expert/ juri akan melakukan observasi dan membuat catatan penilaian sebelum mengijinkan kompetitor melanjutkan pekerjaan.</div>
-            <div class="cpbox-sign" style="background:rgba(255,176,32,0.1);color:var(--amber);">→ Expert menandatangani: <strong>"Pemasangan komponen utama"</strong></div>
-          </div>
-          <div class="cpbox" style="background:var(--teal-dim);border-color:rgba(0,200,150,0.2);">
-            <div class="cpbox-label" style="color:var(--teal);">Checkpoint 2 – Task 4 PRESSURE AND INITIAL LEAK TEST (Uji tekan dan Uji kebocoran awal)</div>
-            <div class="cpbox-body">kompetitor melapor kepada expert.Lakukan uji tekan bertahap pada Modul B menggunakan nitrogen sesuai dengan petunjuk penggunaan peralatan dari produsen, Standar Kerja WorldSkills, dan Bagian B Proyek Uji. Setelah uji selesai, pertahankan nitrogen di dalam sistem selama 15 untuk diperiksa: Expert <strong style="color:var(--text-hi);">WAJIB</strong> menyaksikan uji tekanan selama berlangsung.</div>
-            <div class="cpbox-sign" style="background:rgba(0,200,150,0.1);color:var(--teal);">→ Expert menandatangani: <strong>"Uji tekan  – Telah diselesaikan"</strong></div>
-          </div>
-         </div>
-      </div>
-      
+
       <!-- TASK 4 – PRESSURE TEST MODUL B -->
-      <div class="card">
-        <span class="card-label" style="color:var(--amber);">Task 4 – Pressure & Initial Leak Test (Modul B)</span>
+      <div class="card" style="margin-bottom:20px;">
+        <span class="card-label" style="color:var(--amber);">🔬 Task 4 – Pressure & Initial Leak Test (Modul B)</span>
         <div class="press-grid" style="margin-bottom:16px;">
           <div class="press-step" style="background:rgba(255,176,32,0.05);border-color:rgba(255,176,32,0.2);">
             <span class="press-badge" style="background:var(--amber-dim);color:var(--amber);">Tahap 1</span>
@@ -1000,11 +832,29 @@
             <div class="alert-body">Jangan pasang seluruh isolasi pipa/komponen sebelum penilaian dan sebelum lolos uji tekanan. Prosedur evakuasi <strong>TIDAK BOLEH</strong> dimulai sebelum sistem lulus uji tekanan.</div>
           </div>
         </div>
-        <div class="alert alert-info">
+        <div class="alert alert-info" style="margin-bottom:0;">
           <div class="alert-ico">📊</div>
           <div>
             <div class="alert-title">Tekanan Uji = Suhu Saturasi R32 pada 12,87°C</div>
-            <div class="alert-body">Pressure test dilakukan hanya pada bagian indoor. Uji kebocoran menggunakan busa sabun pada seluruh titik sambungan.</div>
+            <div class="alert-body">Pressure test dilakukan hanya pada bagian indoor. Uji kebocoran menggunakan busa sabun pada seluruh titik sambungan. Setelah uji selesai, pertahankan nitrogen di dalam sistem selama 15 menit untuk diperiksa.</div>
+          </div>
+        </div>
+
+        <!-- CHECKPOINT B2 -->
+        <div class="cp-banner cp-teal">
+          <div class="cp-banner-head">
+            <div class="cp-banner-num">B2</div>
+            <div>
+              <div class="cp-banner-title">Checkpoint B2 – Uji Tekan & Kebocoran Awal Selesai</div>
+            </div>
+            <div class="cp-banner-task">📍 Task 4</div>
+          </div>
+          <div class="cp-banner-body">
+            Kompetitor melapor kepada expert. Lakukan uji tekan bertahap pada Modul B menggunakan nitrogen sesuai dengan petunjuk penggunaan peralatan dari produsen, Standar Kerja WorldSkills, dan Bagian B Proyek Uji. Expert <strong style="color:var(--text-hi);">WAJIB</strong> menyaksikan uji tekanan selama berlangsung. Nitrogen dipertahankan dalam sistem selama 15 menit untuk diperiksa.
+          </div>
+          <div class="cp-banner-sign">
+            <div class="sign-label">✍️ Tanda tangan expert diperlukan sebelum melanjutkan ke Task 5</div>
+            <div class="sign-box">✅ Expert: <strong>"Uji Tekan – Telah Diselesaikan"</strong></div>
           </div>
         </div>
       </div>
@@ -1065,11 +915,34 @@
         </div>
       </div>
 
-      <div class="alert alert-danger">
+      <div class="alert alert-danger" style="margin-bottom:20px;">
         <div class="alert-ico">🚫</div>
         <div>
           <div class="alert-title">Larangan Mutlak</div>
           <div class="alert-body">Peserta <strong>DILARANG</strong> menyalakan/menghidupkan peralatan listrik apa pun sebelum mendapat izin dari Expert, kecuali peralatan listrik genggam. Jangan pasang cover yang menutupi terminasi kabel sebelum dicek Expert.</div>
+        </div>
+      </div>
+
+      <!-- CHECKPOINT B3 -->
+      <div class="cp-banner cp-violet">
+        <div class="cp-banner-head">
+          <div class="cp-banner-num">B3</div>
+          <div>
+            <div class="cp-banner-title">Checkpoint B3 – Electrical Safety Check Selesai</div>
+          </div>
+          <div class="cp-banner-task">📍 Task 6</div>
+        </div>
+        <div class="cp-banner-body">
+          Setelah seluruh pengujian kelistrikan (Task 6) selesai dilakukan, kompetitor <strong style="color:var(--text-hi);">WAJIB</strong> melapor kepada expert. Expert harus hadir dan menyaksikan seluruh proses electrical safety check. Kompetitor <strong style="color:var(--text-hi);">DILARANG</strong> menghubungkan sistem ke sumber listrik sebelum mendapat persetujuan tertulis dari expert.
+          <ul>
+            <li>Semua nilai pengukuran telah dicatat dalam lembar kerja</li>
+            <li>Tidak ada cover terminal yang terpasang (cover dipasang setelah cek expert)</li>
+            <li>Live dan neutral sudah dipastikan tidak tertukar</li>
+          </ul>
+        </div>
+        <div class="cp-banner-sign">
+          <div class="sign-label">✍️ Tanda tangan expert diperlukan sebelum sistem boleh dinyalakan</div>
+          <div class="sign-box">✅ Expert: <strong>"Electrical Safety Check – Disetujui"</strong></div>
         </div>
       </div>
     </section>
@@ -1110,7 +983,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" style="margin-bottom:20px;">
         <span class="card-label" style="color:var(--teal);">✅ Checklist Evakuasi (Observasi Expert)</span>
         <div class="grid-2">
           <div>
@@ -1125,6 +998,30 @@
           </div>
         </div>
       </div>
+
+      <!-- CHECKPOINT B4 -->
+      <div class="cp-banner cp-cyan">
+        <div class="cp-banner-head">
+          <div class="cp-banner-num">B4</div>
+          <div>
+            <div class="cp-banner-title">Checkpoint B4 – Evakuasi Selesai & Isolasi Pipa Terpasang</div>
+          </div>
+          <div class="cp-banner-task">📍 Task 7</div>
+        </div>
+        <div class="cp-banner-body">
+          Setelah proses evakuasi/vakum mencapai target (≤ 2500 micron Hg) dan dinyatakan lulus uji hold (≤ 5000 micron Hg dalam 10 menit), kompetitor <strong style="color:var(--text-hi);">WAJIB</strong> melapor kepada expert sebelum melanjutkan ke Task 8 (Pump Up). Pastikan pula seluruh isolasi pipa telah terpasang dengan benar, menutup seluruh bagian pipa yang berpotensi kondensasi.
+          <ul>
+            <li>Level vakum akhir tercapai dan dicatat (≤ 2500 micron Hg)</li>
+            <li>Hasil hold test dicatat (≤ 5000 micron Hg setelah 10 menit)</li>
+            <li>Seluruh isolasi pipa terpasang rapih dan menutup sempurna</li>
+            <li>Manifold gauge masih terpasang dan terisolasi dari pompa vakum</li>
+          </ul>
+        </div>
+        <div class="cp-banner-sign">
+          <div class="sign-label">✍️ Tanda tangan expert diperlukan sebelum memulai Pump Up (Task 8)</div>
+          <div class="sign-box">✅ Expert: <strong>"Evakuasi & Isolasi Pipa – Disetujui"</strong></div>
+        </div>
+      </div>
     </section>
 
     <!-- KOMISIONING -->
@@ -1137,11 +1034,26 @@
         </div>
       </div>
 
-      <div class="alert alert-success" style="margin-bottom:20px;">
-        <div class="alert-ico">🔒</div>
-        <div>
-          <div class="alert-title">Prasyarat Sebelum Komisioning (G1 – Dokumen Pengoperasian Sistem)</div>
-          <div class="alert-body">Pump up selesai ✓ · Isolasi pipa terpasang rapih & seluruh pipa tertutup ✓ · Cek parameter kelistrikan selesai ✓. Ketiga prasyarat WAJIB dikonfirmasi dan ditandatangani expert sebelum Task 9 dimulai.</div>
+      <!-- CHECKPOINT B5 -->
+      <div class="cp-banner cp-blue" style="margin-bottom:20px;">
+        <div class="cp-banner-head">
+          <div class="cp-banner-num">B5</div>
+          <div>
+            <div class="cp-banner-title">Checkpoint B5 – Sistem Siap Komisioning (G1)</div>
+          </div>
+          <div class="cp-banner-task">📍 Task 8 → Task 9</div>
+        </div>
+        <div class="cp-banner-body">
+          Sebelum Task 9 (komisioning) dimulai, <strong style="color:var(--text-hi);">ketiga prasyarat berikut WAJIB</strong> dikonfirmasi dan ditandatangani expert. Expert harus hadir selama proses pump up dan pengisian refrigeran. Kompetitor melapor kepada expert setelah pump up selesai untuk meminta persetujuan komisioning.
+          <ul>
+            <li>Pump up selesai – refrigeran telah diisikan ke sistem</li>
+            <li>Isolasi pipa terpasang rapih &amp; seluruh pipa tertutup sempurna</li>
+            <li>Cek parameter kelistrikan telah selesai &amp; disetujui</li>
+          </ul>
+        </div>
+        <div class="cp-banner-sign">
+          <div class="sign-label">✍️ Tanda tangan expert diperlukan sebelum sistem pertama kali dinyalakan</div>
+          <div class="sign-box">✅ Expert: <strong>"G1 – Sistem Siap Dioperasikan"</strong></div>
         </div>
       </div>
 
@@ -1150,9 +1062,7 @@
         <table class="comm-tbl">
           <thead>
             <tr>
-              <th>Obyek Observasi & Pengukuran</th>
-              <th>Hasil</th>
-              <th>Satuan</th>
+              <th>Obyek Observasi & Pengukuran</th><th>Hasil</th><th>Satuan</th>
             </tr>
           </thead>
           <tbody>
