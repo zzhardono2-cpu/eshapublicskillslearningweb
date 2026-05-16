@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lembar Observasi Safety & Housekeeping K3</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --accent: #f0a500;
+    --accent2: #e05c00;
+    --danger: #da3633;
+    --success: #238636;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --juror1: #58a6ff;
+    --juror2: #3fb950;
+    --juror3: #f78166;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* LOGIN SCREEN */
+  #login-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: radial-gradient(ellipse at 50% 0%, #1a2030 0%, #0d1117 70%);
+  }
+  .login-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 6px;
+    color: var(--accent);
+    text-shadow: 0 0 40px rgba(240,165,0,0.3);
+    margin-bottom: 4px;
+  }
+  .login-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  .login-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 36px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .login-card h2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--text2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .juror-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 14px 18px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .juror-btn:hover { background: #2d333b; border-color: var(--accent); transform: translateX(4px); }
+  .juror-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .juri1 { background: var(--juror1); }
+  .juri2 { background: var(--juror2); }
+  .juri3 { background: var(--juror3); }
+
+  /* MAIN APP */
+  #app { display: none; flex-direction: column; min-height: 100vh; }
+  
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 58px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .header-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--accent);
+  }
+  .header-title {
+    font-size: 12px;
+    color: var(--text2);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .juror-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .juror-badge .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .logout-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    transition: all 0.2s;
+  }
+  .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+  /* PARTICIPANT GRID */
+  #participant-grid {
+    padding: 24px;
+  }
+  .grid-header {
+    margin-bottom: 24px;
+  }
+  .grid-header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 4px;
+    color: var(--text);
+  }
+  .grid-header p {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+  .participants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .participant-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .participant-card:hover:not(.locked) { 
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(240,165,0,0.1);
+  }
+  .participant-card.locked {
+    opacity: 0.7;
+    cursor: not-allowed;
+    border-color: transparent;
+  }
+  .participant-card.locked::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(255,255,255,0.02) 8px,
+      rgba(255,255,255,0.02) 16px
+    );
+  }
+  .participant-card.has-data { border-color: rgba(240,165,0,0.3); }
+  .participant-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .participant-label {
+    font-size: 11px;
+    color: var(--text2);
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .participant-name {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    min-height: 18px;
+  }
+  .lock-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .lock-badge.juri1-lock { background: rgba(88,166,255,0.15); color: var(--juror1); }
+  .lock-badge.juri2-lock { background: rgba(63,185,80,0.15); color: var(--juror2); }
+  .lock-badge.juri3-lock { background: rgba(247,129,102,0.15); color: var(--juror3); }
+  .completed-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(35,134,54,0.2);
+    color: var(--success);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* FORM PAGE */
+  #form-page { display: none; padding: 24px; max-width: 900px; margin: 0 auto; }
+  .form-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .back-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .back-btn:hover { border-color: var(--accent); }
+  .form-breadcrumb {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .form-breadcrumb span { color: var(--accent); }
+
+  .form-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .form-header-left h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--accent);
+  }
+  .form-header-left p {
+    font-size: 12px;
+    color: var(--text2);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 9px 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    font-family: 'IBM Plex Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { background: #ffb800; transform: translateY(-1px); }
+  .btn-secondary { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+  .btn-secondary:hover { border-color: var(--accent); }
+  .btn-print { background: #1c2b3a; border: 1px solid #2d4a5e; color: #58a6ff; }
+  .btn-print:hover { background: #2d4a5e; }
+  .btn-danger { background: rgba(218,54,51,0.15); border: 1px solid rgba(218,54,51,0.3); color: var(--danger); }
+  .btn-danger:hover { background: rgba(218,54,51,0.25); }
+
+  /* MODULE TABS */
+  .module-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px;
+  }
+  .module-tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .module-tab.active {
+    background: var(--accent);
+    color: #000;
+  }
+  .module-tab:hover:not(.active) { color: var(--text); background: var(--surface2); }
+
+  /* FORM SECTIONS */
+  .form-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .section-title {
+    background: var(--surface2);
+    padding: 12px 18px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+  }
+  .section-body { padding: 0; }
+
+  .obs-row {
+    display: grid;
+    grid-template-columns: 1fr 50px 50px 50px 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    align-items: stretch;
+  }
+  .obs-row:last-child { border-bottom: none; }
+  .obs-row.header-row {
+    background: rgba(255,255,255,0.03);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .obs-row.sub-header {
+    background: rgba(240,165,0,0.05);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    grid-column: 1 / -1;
+    padding: 10px 18px;
+  }
+  .obs-row.paraf-row {
+    background: rgba(255,255,255,0.015);
+    font-size: 11px;
+    color: var(--text2);
+    font-family: 'IBM Plex Mono', monospace;
+    grid-column: 1 / -1;
+    padding: 6px 18px;
+    font-style: italic;
+  }
+  .obs-cell {
+    padding: 10px 12px;
+    font-size: 13px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
+  .obs-cell:last-child { border-right: none; }
+  .obs-cell.center { justify-content: center; }
+  .obs-cell.label { font-size: 12px; color: var(--text); line-height: 1.4; }
+
+  .teguran-btn {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text2);
+    cursor: pointer;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .teguran-btn.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+  }
+  .teguran-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+  .obs-input {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    width: 100%;
+    outline: none;
+    resize: none;
+    height: 36px;
+    line-height: 1.3;
+    padding: 2px 0;
+  }
+  .obs-input:focus { 
+    background: rgba(240,165,0,0.05);
+    border-radius: 3px;
+    padding: 2px 4px;
+  }
+  .obs-input::placeholder { color: var(--text2); opacity: 0.5; }
+
+  /* YA/TIDAK toggle */
+  .yn-toggle {
+    display: flex;
+    gap: 4px;
+  }
+  .yn-btn {
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text2);
+    cursor: pointer;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .yn-btn.ya-active { background: rgba(35,134,54,0.3); border-color: var(--success); color: #3fb950; }
+  .yn-btn.tidak-active { background: rgba(218,54,51,0.2); border-color: var(--danger); color: var(--danger); }
+  .yn-btn:hover:not(.ya-active):not(.tidak-active) { border-color: var(--text2); }
+
+  /* Housekeeping section */
+  .hk-row {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    align-items: stretch;
+  }
+  .hk-row:last-child { border-bottom: none; }
+
+  /* Catatan insiden */
+  .insiden-area {
+    padding: 14px 18px;
+  }
+  .insiden-area textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    padding: 10px 12px;
+    resize: vertical;
+    min-height: 70px;
+    outline: none;
+  }
+  .insiden-area textarea:focus { border-color: var(--accent); }
+  .insiden-area textarea::placeholder { color: var(--text2); opacity: 0.5; }
+
+  /* Name input */
+  .name-input-wrapper {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .name-input-wrapper label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+    white-space: nowrap;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .name-input-wrapper input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .name-input-wrapper input:focus { border-color: var(--accent); }
+
+  /* Locked overlay */
+  .locked-overlay {
+    background: rgba(13,17,23,0.85);
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .locked-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    max-width: 360px;
+  }
+  .locked-box .lock-icon { font-size: 48px; margin-bottom: 16px; }
+  .locked-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .locked-box p { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+  /* PRINT */
+  @media print {
+    header, .form-nav, .form-actions, .module-tabs, #participant-grid,
+    #login-screen, .logout-btn { display: none !important; }
+    body { background: white; color: black; }
+    #app { display: block !important; }
+    #form-page { display: block !important; padding: 10px; max-width: 100%; }
+    .form-section { border: 1px solid #ccc; break-inside: avoid; margin-bottom: 10px; }
+    .section-title { background: #f0f0f0; color: #333; }
+    .obs-row { border-bottom: 1px solid #ccc; }
+    .obs-cell { color: #333; border-right: 1px solid #ccc; }
+    .obs-input { color: #000; }
+    .teguran-btn.active { background: #333; color: white; }
+    .yn-btn.ya-active { background: #d4edda; color: #155724; border-color: #c3e6cb; }
+    .yn-btn.tidak-active { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+    .form-header { background: white; border: 1px solid #ccc; }
+    .form-header-left h2 { color: #333; }
+    .print-only { display: block !important; }
+    .name-input-wrapper { border: 1px solid #ccc; }
+  }
+  .print-only { display: none; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 13px;
+    z-index: 999;
+    animation: slideIn 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .toast.success { border-color: var(--success); }
+  .toast.error { border-color: var(--danger); }
+  @keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 8px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-logo">K3 OBSERVER</div>
+  <div class="login-sub">Safety Observation System · Modul A & B</div>
+  <div class="login-card">
+    <h2>Pilih Identitas Juri</h2>
+    <button class="juror-btn" onclick="selectJuror(1)">
+      <span class="juror-dot juri1"></span>
+      Juri 1
+    </button>
+    <button class="juror-btn" onclick="selectJuror(2)">
+      <span class="juror-dot juri2"></span>
+      Juri 2
+    </button>
+    <button class="juror-btn" onclick="selectJuror(3)">
+      <span class="juror-dot juri3"></span>
+      Juri 3
+    </button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <header>
+    <div class="header-left">
+      <div class="header-logo">K3</div>
+      <div class="header-title">SAFETY OBSERVATION SYSTEM</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="juror-badge" id="juror-badge">
+        <span class="dot" id="juror-dot-header"></span>
+        <span id="juror-name-header"></span>
+      </div>
+      <button class="logout-btn" onclick="logout()">↩ Keluar</button>
+    </div>
+  </header>
+
+  <!-- PARTICIPANT GRID -->
+  <div id="participant-grid">
+    <div class="grid-header">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <h1>DAFTAR PESERTA</h1>
+          <p>Pilih peserta untuk membuka lembar observasi. Total 15 peserta · Modul A & B</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+            <div class="progress-bar" style="width:180px;">
+              <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+            </div>
+            <span id="progress-label" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text2);">0 / 15 peserta</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;">
+          <button class="btn btn-print" onclick="exportAllCSV()" style="gap:6px;">
+            📊 Export CSV
+          </button>
+          <button class="btn btn-secondary" onclick="exportAllJSON()" style="gap:6px;">
+            ↓ Export Semua (JSON)
+          </button>
+          <button class="btn btn-danger" onclick="confirmReset()" style="gap:6px;">
+            🗑 Reset Data
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPORT MODAL -->
+    <div id="export-modal" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.85);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px;max-width:420px;width:90%;text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">✅</div>
+        <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">Export Berhasil</h3>
+        <p id="export-modal-msg" style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px;"></p>
+        <button class="btn btn-primary" onclick="document.getElementById('export-modal').style.display='none'" style="width:100%;justify-content:center;">Tutup</button>
+      </div>
+    </div>
+
+    <!-- RESET MODAL -->
+    <div id="reset-modal" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.85);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px;max-width:380px;width:90%;text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">⚠️</div>
+        <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;color:var(--danger);">Reset Semua Data?</h3>
+        <p style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px;">Tindakan ini akan <strong style="color:var(--danger);">menghapus semua data</strong> seluruh peserta secara permanen dan tidak bisa dibatalkan. Pastikan sudah export terlebih dahulu.</p>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-secondary" onclick="document.getElementById('reset-modal').style.display='none'" style="flex:1;justify-content:center;">Batal</button>
+          <button class="btn btn-danger" onclick="doReset()" style="flex:1;justify-content:center;">Ya, Hapus Semua</button>
+        </div>
+      </div>
+    </div>
+    <div class="participants-grid" id="participants-grid"></div>
+  </div>
+
+  <!-- FORM PAGE -->
+  <div id="form-page">
+    <div class="form-nav">
+      <button class="back-btn" onclick="goBack()">← Kembali</button>
+      <div class="form-breadcrumb">Peserta <span id="breadcrumb-num"></span></div>
+    </div>
+
+    <div class="form-header">
+      <div class="form-header-left">
+        <h2 id="form-participant-title">PESERTA 1</h2>
+        <p id="form-juror-info" style="font-size:11px;margin-top:2px;"></p>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-print" onclick="printForm()">🖨 Cetak</button>
+        <button class="btn btn-secondary" onclick="downloadJSON()">↓ Unduh Data</button>
+        <button class="btn btn-primary" onclick="saveForm()">✓ Simpan</button>
+      </div>
+    </div>
+
+    <div class="name-input-wrapper">
+      <label>Nama Peserta:</label>
+      <input type="text" id="peserta-nama" placeholder="Masukkan nama peserta..." />
+      <label style="margin-left:16px;">No:</label>
+      <input type="text" id="peserta-no" placeholder="No..." style="width:80px;" />
+    </div>
+
+    <div class="module-tabs">
+      <div class="module-tab active" id="tab-a" onclick="switchModule('A')">MODUL A</div>
+      <div class="module-tab" id="tab-b" onclick="switchModule('B')">MODUL B</div>
+    </div>
+
+    <div id="form-content-a"></div>
+    <div id="form-content-b" style="display:none;"></div>
+  </div>
+</div>
+
+<script>
+// ============================
+// STATE
+// ============================
+let currentJuror = null;
+let currentParticipant = null;
+let currentModule = 'A';
+const TOTAL = 15;
+const JUROR_NAMES = { 1: 'Juri 1', 2: 'Juri 2', 3: 'Juri 3' };
+const JUROR_COLORS = { 1: '#58a6ff', 2: '#3fb950', 3: '#f78166' };
+const STORAGE_KEY = 'k3_observer_v2';
+
+// Load state from localStorage
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : { participants: {}, locks: {} };
+  } catch(e) { return { participants: {}, locks: {} }; }
+}
+
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+let appState = loadState();
+
+// ============================
+// FORM STRUCTURE
+// ============================
+const APD_ROWS_A = [
+  { id: 'apd_kacamata_clear', label: 'Kacamata clear pada saat melakukan pekerjaan, Pemotongan, pengikiran, reamer, sweaging pipa, penanganan gas bertekanan' },
+  { id: 'apd_kacamata_gelap', label: 'Kacamata gelap dan sarung tangan kulit pada saat melakukan pekerjaan brazing' },
+  { id: 'apd_sarung_tangan', label: 'Sarung tangan safety pada saat melakukan pekerjaan Pemotongan, pengikiran, reamer, sweaging pipa, penanganan gas bertekanan' },
+  { id: 'apd_masker', label: 'Masker pada saat melakukan pekerjaan, dengan potensi paparan gas berbahaya/beracun' },
+];
+const APD_ROWS_B = [
+  ...APD_ROWS_A,
+];
+const HOUSEKEEPING_ROWS = [
+  { id: 'hk1', label: 'Peserta tidak meninggalkan peralatan yang sudah tidak digunakan (idle) di luar tool box' },
+  { id: 'hk2', label: 'Peserta tidak membiarkan kotoran tertinggal di area kerja/benda kerja walaupun berupa debu, sisa potongan pipa kecil atau serpihan penggerindaan' },
+  { id: 'hk3', label: 'Peserta Tidak membiarkan indikator tekanan gas berada pada level di atas nol/masih bertekanan' },
+  { id: 'hk4', label: 'Peserta Tidak membiarkan Material atau benda kerja berada dalam kondisi yang berpotensi rusak, terinjak, terjatuh dll.' },
+  { id: 'hk5', label: 'Peserta tidak meninggalkan area kerja dalam kondisi yang belum rapih' },
+  { id: 'hk6', label: 'Peserta tidak menutup bagian material atau pipa yang terbuka (tidak melakukan pencegahan kontaminan)' },
+];
+const KESELAMATAN_ROWS_A = [
+  { id: 'ks_injak', label: 'Meletakkan alat atau material pada posisi yang memiliki kemungkinan terinjak/terjatuh' },
+  { id: 'ks_genangan', label: 'Membiarkan genangan air yang menimbulkan potensi terpeleset atau air bisa menjadi kontaminan sistem' },
+  { id: 'ks_brazing', label: 'Melakukan pekerjaan brazing yang berpotensi merusak material dan infrastruktur' },
+];
+const KESELAMATAN_ROWS_B = [
+  ...KESELAMATAN_ROWS_A,
+  { id: 'ks_tangga', label: 'Menggunakan Peralatan sesuai dengan prinsip K3 (mis. Tangga)' },
+];
+const TEGURAN_ROWS_A = [
+  { id: 'teg_nitrogen', label: 'Peserta Selalu menggunakan aliran nitrogen untuk mencegah kontaminan dalam Heat recovery koil', type: 'teguran' },
+  { id: 'teg_schrader', label: 'Peserta melepaskan core schrader valve pada saat melakukan penyambungan brazing schrader valve', type: 'yn' },
+];
+const TEGURAN_ROWS_B = [
+  { id: 'teg_nitrogen_b', label: 'Peserta Selalu menggunakan aliran nitrogen untuk mencegah kontaminan Pada peralatan AC selama proses Installasi', type: 'teguran' },
+  { id: 'teg_schrader_b', label: 'Peserta melepaskan core schrader valve pada saat melakukan penyambungan brazing schrader valve', type: 'yn' },
+];
+
+// ============================
+// BUILD FORM HTML
+// ============================
+function buildTeguranRow(row) {
+  const p = currentParticipant;
+  const m = currentModule;
+  const key = `${m}_${row.id}`;
+  const data = getParticipantData();
+  const obs = data[key] || { t1: false, t2: false, t3: false, keterangan: '' };
+
+  return `
+    <div class="obs-row sub-header">${row.label}</div>
+    <div class="obs-row">
+      <div class="obs-cell label" style="font-size:12px;color:var(--text2);">Teguran ke:</div>
+      <div class="obs-cell center">
+        <button class="teguran-btn ${obs.t1 ? 'active' : ''}" onclick="toggleTeguran('${key}','t1',this)">1</button>
+      </div>
+      <div class="obs-cell center">
+        <button class="teguran-btn ${obs.t2 ? 'active' : ''}" onclick="toggleTeguran('${key}','t2',this)">2</button>
+      </div>
+      <div class="obs-cell center">
+        <button class="teguran-btn ${obs.t3 ? 'active' : ''}" onclick="toggleTeguran('${key}','t3',this)">3</button>
+      </div>
+      <div class="obs-cell">
+        <input class="obs-input" placeholder="Keterangan detail..." value="${escHtml(obs.keterangan||'')}"
+          oninput="updateField('${key}','keterangan',this.value)" />
+      </div>
+    </div>
+    <div class="obs-row paraf-row">⬝ Waktu dan Paraf Expert (2 juri)</div>
+  `;
+}
+
+function buildYNRow(row) {
+  const p = currentParticipant;
+  const m = currentModule;
+  const key = `${m}_${row.id}`;
+  const data = getParticipantData();
+  const obs = data[key] || { yn: null, keterangan: '' };
+
+  return `
+    <div class="obs-row sub-header">${row.label}</div>
+    <div class="obs-row">
+      <div class="obs-cell label" style="font-size:12px;color:var(--text2);">Hasil:</div>
+      <div class="obs-cell center" style="grid-column:2/4;">
+        <div class="yn-toggle">
+          <button class="yn-btn ${obs.yn === 'ya' ? 'ya-active' : ''}" onclick="toggleYN('${key}','ya',this)">YA</button>
+          <button class="yn-btn ${obs.yn === 'tidak' ? 'tidak-active' : ''}" onclick="toggleYN('${key}','tidak',this)">TIDAK</button>
+        </div>
+      </div>
+      <div class="obs-cell" style="grid-column:4/5;"></div>
+      <div class="obs-cell">
+        <input class="obs-input" placeholder="Keterangan detail..." value="${escHtml(obs.keterangan||'')}"
+          oninput="updateField('${key}','keterangan',this.value)" />
+      </div>
+    </div>
+    <div class="obs-row paraf-row">⬝ Waktu dan Paraf Expert (2 juri)</div>
+  `;
+}
+
+function buildObsRows(rows) {
+  const m = currentModule;
+  const data = getParticipantData();
+  return rows.map(row => {
+    const key = `${m}_${row.id}`;
+    const obs = data[key] || { t1: false, t2: false, t3: false, keterangan: '' };
+    return `
+      <div class="obs-row">
+        <div class="obs-cell label">${row.label}</div>
+        <div class="obs-cell center">
+          <button class="teguran-btn ${obs.t1 ? 'active' : ''}" onclick="toggleTeguran('${key}','t1',this)">1</button>
+        </div>
+        <div class="obs-cell center">
+          <button class="teguran-btn ${obs.t2 ? 'active' : ''}" onclick="toggleTeguran('${key}','t2',this)">2</button>
+        </div>
+        <div class="obs-cell center">
+          <button class="teguran-btn ${obs.t3 ? 'active' : ''}" onclick="toggleTeguran('${key}','t3',this)">3</button>
+        </div>
+        <div class="obs-cell">
+          <input class="obs-input" placeholder="Keterangan detail..." value="${escHtml(obs.keterangan||'')}"
+            oninput="updateField('${key}','keterangan',this.value)" />
+        </div>
+      </div>
+      <div class="obs-row paraf-row">⬝ Waktu dan Paraf Expert (2 juri)</div>
+    `;
+  }).join('');
+}
+
+function buildPakaianRows() {
+  const m = currentModule;
+  const data = getParticipantData();
+  const items = [
+    { id: `${m}_pakaian_sepatu`, label: '1. Sepatu Safety' },
+    { id: `${m}_pakaian_celana`, label: '2. Celana Panjang' },
+    { id: `${m}_pakaian_baju`, label: '3. Baju Lengan Panjang' },
+  ];
+  return items.map(item => {
+    const obs = data[item.id] || { yn: null };
+    return `
+      <div class="obs-row">
+        <div class="obs-cell label">${item.label}</div>
+        <div class="obs-cell center" style="grid-column:2/4;">
+          <div class="yn-toggle">
+            <button class="yn-btn ${obs.yn === 'ya' ? 'ya-active' : ''}" onclick="toggleYN('${item.id}','ya',this)">YA</button>
+            <button class="yn-btn ${obs.yn === 'tidak' ? 'tidak-active' : ''}" onclick="toggleYN('${item.id}','tidak',this)">TIDAK</button>
+          </div>
+        </div>
+        <div class="obs-cell" style="grid-column:4/5;"></div>
+        <div class="obs-cell"></div>
+      </div>
+    `;
+  }).join('');
+}
+
+function buildInsidenRow() {
+  const m = currentModule;
+  const data = getParticipantData();
+  const key = `${m}_insiden`;
+  const obs = data[key] || { yn: null };
+  return `
+    <div class="obs-row">
+      <div class="obs-cell label">Tidak terjadi Insiden selama mengerjakan Modul ${m}</div>
+      <div class="obs-cell center" style="grid-column:2/4;">
+        <div class="yn-toggle">
+          <button class="yn-btn ${obs.yn === 'ya' ? 'ya-active' : ''}" onclick="toggleYN('${key}','ya',this)">YA</button>
+          <button class="yn-btn ${obs.yn === 'tidak' ? 'tidak-active' : ''}" onclick="toggleYN('${key}','tidak',this)">TIDAK</button>
+        </div>
+      </div>
+      <div class="obs-cell" style="grid-column:4/5;"></div>
+      <div class="obs-cell"></div>
+    </div>
+  `;
+}
+
+function buildHKRows() {
+  const m = currentModule;
+  const data = getParticipantData();
+  return HOUSEKEEPING_ROWS.map(row => {
+    const key = `${m}_${row.id}`;
+    const obs = data[key] || { yn: null, keterangan: '' };
+    return `
+      <div class="hk-row">
+        <div class="obs-cell label" style="padding:12px 14px;">${row.label}</div>
+        <div class="obs-cell center" style="border-right:1px solid var(--border);">
+          <div class="yn-toggle" style="flex-direction:column;gap:3px;">
+            <button class="yn-btn ${obs.yn === 'ya' ? 'ya-active' : ''}" onclick="toggleYN('${key}','ya',this)">YA</button>
+            <button class="yn-btn ${obs.yn === 'tidak' ? 'tidak-active' : ''}" onclick="toggleYN('${key}','tidak',this)">TIDAK</button>
+          </div>
+        </div>
+        <div class="obs-cell" style="padding:10px 14px;">
+          <input class="obs-input" placeholder="Keterangan..." value="${escHtml(obs.keterangan||'')}"
+            oninput="updateField('${key}','keterangan',this.value)" />
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function buildCatatanInsiden() {
+  const m = currentModule;
+  const data = getParticipantData();
+  const val = data[`${m}_catatan_insiden`] || '';
+  return `
+    <div class="insiden-area">
+      <div style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Catatan Insiden:</div>
+      <textarea placeholder="Tulis catatan insiden di sini..." oninput="updateField('${m}_catatan_insiden','_direct',this.value)">${escHtml(val)}</textarea>
+    </div>
+  `;
+}
+
+function buildModuleContent(mod) {
+  const APD = mod === 'A' ? APD_ROWS_A : APD_ROWS_B;
+  const KS = mod === 'A' ? KESELAMATAN_ROWS_A : KESELAMATAN_ROWS_B;
+  const TEG = mod === 'A' ? TEGURAN_ROWS_A : TEGURAN_ROWS_B;
+  const savedMod = currentModule;
+  currentModule = mod;
+
+  const hdr = `
+    <div class="obs-row header-row">
+      <div class="obs-cell">Lokus Observasi</div>
+      <div class="obs-cell center">Teg.1</div>
+      <div class="obs-cell center">Teg.2</div>
+      <div class="obs-cell center">Teg.3</div>
+      <div class="obs-cell">Keterangan (detail)</div>
+    </div>
+  `;
+
+  const html = `
+    <div class="form-section">
+      <div class="section-title">APD — Alat Pelindung Diri</div>
+      <div class="section-body">
+        ${hdr}
+        <div class="obs-row sub-header">Peserta selalu menggunakan APD yang relevan selama melakukan pekerjaan Modul ${mod}</div>
+        ${buildObsRows(APD)}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Keselamatan Kerja</div>
+      <div class="section-body">
+        ${hdr}
+        <div class="obs-row sub-header">Selama Bekerja peserta selalu menjaga kondisi alat, benda kerja, infrastruktur dari kerusakan dan kerugian</div>
+        ${buildObsRows(KS)}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Pakaian Kerja</div>
+      <div class="section-body">
+        ${hdr}
+        <div class="obs-row sub-header">Peserta selalu mengenakan pakaian kerja sesuai dengan ketentuan Lomba</div>
+        ${buildPakaianRows()}
+        ${buildInsidenRow()}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Teguran Lain yang Relevan</div>
+      <div class="section-body">
+        ${TEG.map(row => row.type === 'yn' ? buildYNRow(row) : buildTeguranRow(row)).join('')}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Housekeeping Modul ${mod}</div>
+      <div class="section-body">
+        <div class="hk-row" style="background:rgba(255,255,255,0.02);font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;">
+          <div class="obs-cell">Observasi Housekeeping pasca Kerja</div>
+          <div class="obs-cell center" style="border-right:1px solid var(--border);">Hasil</div>
+          <div class="obs-cell">Keterangan</div>
+        </div>
+        ${buildHKRows()}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Catatan Insiden</div>
+      ${buildCatatanInsiden()}
+    </div>
+  `;
+
+  currentModule = savedMod;
+  return html;
+}
+
+// ============================
+// HELPERS
+// ============================
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getParticipantData() {
+  if (!appState.participants[currentParticipant]) appState.participants[currentParticipant] = {};
+  return appState.participants[currentParticipant];
+}
+
+function updateField(key, subkey, value) {
+  const data = getParticipantData();
+  if (subkey === '_direct') {
+    data[key] = value;
+  } else {
+    if (!data[key]) data[key] = {};
+    data[key][subkey] = value;
+  }
+  saveState(appState);
+}
+
+function toggleTeguran(key, tNum, btn) {
+  const data = getParticipantData();
+  if (!data[key]) data[key] = { t1: false, t2: false, t3: false, keterangan: '' };
+  data[key][tNum] = !data[key][tNum];
+  btn.classList.toggle('active', data[key][tNum]);
+  saveState(appState);
+  stampTime(key, tNum);
+}
+
+function toggleYN(key, val, btn) {
+  const data = getParticipantData();
+  if (!data[key]) data[key] = { yn: null };
+  const same = data[key].yn === val;
+  data[key].yn = same ? null : val;
+  
+  const parent = btn.closest('.yn-toggle');
+  parent.querySelectorAll('.yn-btn').forEach(b => b.classList.remove('ya-active','tidak-active'));
+  if (!same) {
+    btn.classList.add(val === 'ya' ? 'ya-active' : 'tidak-active');
+  }
+  saveState(appState);
+}
+
+function stampTime(key, tNum) {
+  const now = new Date();
+  const ts = `${now.toLocaleDateString('id-ID')} ${now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}`;
+  const data = getParticipantData();
+  if (!data[key + '_timestamps']) data[key + '_timestamps'] = {};
+  data[key + '_timestamps'][tNum] = { juror: currentJuror, time: ts };
+  saveState(appState);
+}
+
+function showToast(msg, type = 'success') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = (type === 'success' ? '✓ ' : '✕ ') + msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ============================
+// JUROR FLOW
+// ============================
+function selectJuror(num) {
+  currentJuror = num;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('app').style.flexDirection = 'column';
+  
+  const dot = document.getElementById('juror-dot-header');
+  dot.style.background = JUROR_COLORS[num];
+  document.getElementById('juror-name-header').textContent = JUROR_NAMES[num];
+  
+  renderGrid();
+}
+
+function logout() {
+  // Release any locks held by this juror
+  if (currentParticipant) releaseLock(currentParticipant);
+  currentJuror = null;
+  currentParticipant = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
+// ============================
+// LOCKS
+// ============================
+function acquireLock(p) {
+  appState = loadState(); // refresh
+  const lock = appState.locks[p];
+  if (lock && lock.juror !== currentJuror) return false; // locked by other
+  appState.locks[p] = { juror: currentJuror, name: JUROR_NAMES[currentJuror], time: new Date().toISOString() };
+  saveState(appState);
+  return true;
+}
+
+function releaseLock(p) {
+  appState = loadState();
+  if (appState.locks[p] && appState.locks[p].juror === currentJuror) {
+    delete appState.locks[p];
+    saveState(appState);
+  }
+}
+
+function getLock(p) {
+  appState = loadState();
+  return appState.locks[p] || null;
+}
+
+// ============================
+// GRID
+// ============================
+function renderGrid() {
+  appState = loadState();
+  const grid = document.getElementById('participants-grid');
+  let completedCount = 0;
+  grid.innerHTML = '';
+  
+  for (let i = 1; i <= TOTAL; i++) {
+    const lock = getLock(i);
+    const isLockedByOther = lock && lock.juror !== currentJuror;
+    const isLockedByMe = lock && lock.juror === currentJuror;
+    const data = appState.participants[i] || {};
+    const hasName = data.nama && data.nama.length > 0;
+    const hasData = Object.keys(data).length > 0;
+    if (hasData) completedCount++;
+
+    let badgeHtml = '';
+    if (isLockedByOther) {
+      const cls = `juri${lock.juror}-lock`;
+      badgeHtml = `<div class="lock-badge ${cls}">🔒 ${lock.name} sedang mengisi</div>`;
+    } else if (isLockedByMe) {
+      badgeHtml = `<div class="completed-badge">✎ Anda sedang di sini</div>`;
+    } else if (hasData) {
+      badgeHtml = `<div class="completed-badge">✓ Ada data tersimpan</div>`;
+    }
+
+    const card = document.createElement('div');
+    card.className = `participant-card ${isLockedByOther ? 'locked' : ''} ${hasData ? 'has-data' : ''}`;
+    card.innerHTML = `
+      <div class="participant-label">Peserta</div>
+      <div class="participant-num">${String(i).padStart(2,'0')}</div>
+      <div class="participant-name">${hasName ? escHtml(data.nama) : '<span style="color:var(--text2);font-weight:400;font-style:italic;">Belum diisi</span>'}</div>
+      ${badgeHtml}
+    `;
+    if (!isLockedByOther) {
+      card.onclick = () => openParticipant(i);
+    }
+    grid.appendChild(card);
+  }
+
+  const pct = Math.round(completedCount / TOTAL * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  const lbl = document.getElementById('progress-label');
+  if (lbl) lbl.textContent = completedCount + ' / ' + TOTAL + ' peserta';
+}
+
+// ============================
+// FORM
+// ============================
+function openParticipant(num) {
+  appState = loadState();
+  if (!acquireLock(num)) {
+    showToast('Lembar ini sedang dibuka oleh juri lain!', 'error');
+    return;
+  }
+  currentParticipant = num;
+  currentModule = 'A';
+
+  document.getElementById('participant-grid').style.display = 'none';
+  document.getElementById('form-page').style.display = 'block';
+  document.getElementById('breadcrumb-num').textContent = String(num).padStart(2,'0');
+  document.getElementById('form-participant-title').textContent = `PESERTA ${String(num).padStart(2,'0')}`;
+  document.getElementById('form-juror-info').textContent = `Sedang diisi oleh: ${JUROR_NAMES[currentJuror]}`;
+
+  const data = appState.participants[num] || {};
+  document.getElementById('peserta-nama').value = data.nama || '';
+  document.getElementById('peserta-no').value = data.no || '';
+
+  document.getElementById('peserta-nama').oninput = (e) => {
+    updateField('nama', '_direct', e.target.value);
+    appState.participants[num] = appState.participants[num] || {};
+    appState.participants[num].nama = e.target.value;
+    saveState(appState);
+  };
+  document.getElementById('peserta-no').oninput = (e) => {
+    appState.participants[num] = appState.participants[num] || {};
+    appState.participants[num].no = e.target.value;
+    saveState(appState);
+  };
+
+  buildAllModuleForms();
+  switchModule('A');
+  renderGrid();
+}
+
+function buildAllModuleForms() {
+  currentModule = 'A';
+  document.getElementById('form-content-a').innerHTML = buildModuleContent('A');
+  currentModule = 'B';
+  document.getElementById('form-content-b').innerHTML = buildModuleContent('B');
+  currentModule = 'A';
+}
+
+function switchModule(mod) {
+  currentModule = mod;
+  document.getElementById('form-content-a').style.display = mod === 'A' ? 'block' : 'none';
+  document.getElementById('form-content-b').style.display = mod === 'B' ? 'block' : 'none';
+  document.getElementById('tab-a').classList.toggle('active', mod === 'A');
+  document.getElementById('tab-b').classList.toggle('active', mod === 'B');
+}
+
+function goBack() {
+  releaseLock(currentParticipant);
+  currentParticipant = null;
+  document.getElementById('participant-grid').style.display = 'block';
+  document.getElementById('form-page').style.display = 'none';
+  renderGrid();
+}
+
+function saveForm() {
+  // data is auto-saved on input, this just confirms
+  showToast(`Data Peserta ${String(currentParticipant).padStart(2,'0')} tersimpan!`);
+  renderGrid();
+}
+
+function downloadJSON() {
+  const data = appState.participants[currentParticipant] || {};
+  const blob = new Blob([JSON.stringify({ peserta: currentParticipant, ...data }, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url;
+  a.download = `observasi_peserta_${String(currentParticipant).padStart(2,'0')}.json`;
+  a.click(); URL.revokeObjectURL(url);
+}
+
+function printForm() {
+  window.print();
+}
+
+// ============================
+// EXPORT ALL & RESET
+// ============================
+function exportAllJSON() {
+  appState = loadState();
+  const out = { exportedAt: new Date().toISOString(), totalPeserta: TOTAL, participants: {} };
+  let filled = 0;
+  for (let i = 1; i <= TOTAL; i++) {
+    const d = appState.participants[i] || {};
+    out.participants[i] = { no: i, ...d };
+    if (Object.keys(d).length > 0) filled++;
+  }
+  const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url;
+  const ts = new Date().toISOString().slice(0,16).replace('T','_').replace(':','-');
+  a.download = 'k3_semua_peserta_' + ts + '.json';
+  a.click(); URL.revokeObjectURL(url);
+  const modal = document.getElementById('export-modal');
+  document.getElementById('export-modal-msg').innerHTML =
+    'File <strong>k3_semua_peserta_' + ts + '.json</strong> berhasil diunduh.<br>Berisi data <strong>' + filled + ' dari ' + TOTAL + ' peserta</strong> yang sudah diisi.';
+  modal.style.display = 'flex';
+}
+
+function exportAllCSV() {
+  appState = loadState();
+  const fields = [
+    'A_apd_kacamata_clear','A_apd_kacamata_gelap','A_apd_sarung_tangan','A_apd_masker',
+    'A_ks_injak','A_ks_genangan','A_ks_brazing',
+    'A_pakaian_sepatu','A_pakaian_celana','A_pakaian_baju','A_insiden',
+    'A_teg_nitrogen','A_teg_schrader',
+    'A_hk1','A_hk2','A_hk3','A_hk4','A_hk5','A_hk6',
+    'B_apd_kacamata_clear','B_apd_kacamata_gelap','B_apd_sarung_tangan','B_apd_masker',
+    'B_ks_injak','B_ks_genangan','B_ks_brazing','B_ks_tangga',
+    'B_pakaian_sepatu','B_pakaian_celana','B_pakaian_baju','B_insiden',
+    'B_teg_nitrogen_b','B_teg_schrader_b',
+    'B_hk1','B_hk2','B_hk3','B_hk4','B_hk5','B_hk6'
+  ];
+  const labelMap = {
+    'A_apd_kacamata_clear':'[A] APD Kacamata Clear','A_apd_kacamata_gelap':'[A] APD Kacamata Gelap+Sarung Tangan',
+    'A_apd_sarung_tangan':'[A] APD Sarung Tangan Safety','A_apd_masker':'[A] APD Masker',
+    'A_ks_injak':'[A] KS Injak/Jatuh','A_ks_genangan':'[A] KS Genangan Air','A_ks_brazing':'[A] KS Brazing',
+    'A_pakaian_sepatu':'[A] Sepatu Safety','A_pakaian_celana':'[A] Celana Panjang','A_pakaian_baju':'[A] Baju Lengan Panjang',
+    'A_insiden':'[A] Tidak Ada Insiden','A_teg_nitrogen':'[A] Nitrogen HR Koil','A_teg_schrader':'[A] Schrader Valve',
+    'A_hk1':'[A] HK Peralatan Toolbox','A_hk2':'[A] HK Kotoran Area','A_hk3':'[A] HK Tekanan Gas',
+    'A_hk4':'[A] HK Material Aman','A_hk5':'[A] HK Area Rapih','A_hk6':'[A] HK Pipa Tertutup',
+    'B_apd_kacamata_clear':'[B] APD Kacamata Clear','B_apd_kacamata_gelap':'[B] APD Kacamata Gelap+Sarung Tangan',
+    'B_apd_sarung_tangan':'[B] APD Sarung Tangan Safety','B_apd_masker':'[B] APD Masker',
+    'B_ks_injak':'[B] KS Injak/Jatuh','B_ks_genangan':'[B] KS Genangan Air','B_ks_brazing':'[B] KS Brazing','B_ks_tangga':'[B] KS Tangga',
+    'B_pakaian_sepatu':'[B] Sepatu Safety','B_pakaian_celana':'[B] Celana Panjang','B_pakaian_baju':'[B] Baju Lengan Panjang',
+    'B_insiden':'[B] Tidak Ada Insiden','B_teg_nitrogen_b':'[B] Nitrogen AC Instalasi','B_teg_schrader_b':'[B] Schrader Valve',
+    'B_hk1':'[B] HK Peralatan Toolbox','B_hk2':'[B] HK Kotoran Area','B_hk3':'[B] HK Tekanan Gas',
+    'B_hk4':'[B] HK Material Aman','B_hk5':'[B] HK Area Rapih','B_hk6':'[B] HK Pipa Tertutup'
+  };
+  const header = ['No Peserta','Nama','No/ID'].concat(fields.map(function(f){ return labelMap[f]||f; })).concat(['Catatan Insiden A','Catatan Insiden B']);
+  const rows = [header];
+  for (let i = 1; i <= TOTAL; i++) {
+    const d = appState.participants[i] || {};
+    const row = [i, d.nama||'', d.no||''];
+    fields.forEach(function(f) {
+      const v = d[f];
+      if (!v) { row.push(''); return; }
+      if (typeof v === 'string') { row.push(v); return; }
+      if (v.yn !== undefined) { row.push(v.yn || ''); return; }
+      const tegs = [];
+      if (v.t1) tegs.push('Teg-1');
+      if (v.t2) tegs.push('Teg-2');
+      if (v.t3) tegs.push('Teg-3');
+      const base = tegs.length ? tegs.join('+') : '-';
+      row.push(v.keterangan ? base + ' | ' + v.keterangan : base);
+    });
+    row.push(d['A_catatan_insiden']||'');
+    row.push(d['B_catatan_insiden']||'');
+    rows.push(row);
+  }
+  const csv = rows.map(function(r){ return r.map(function(cell){ return '"' + String(cell).replace(/"/g,'""') + '"'; }).join(','); }).join('\n');
+  const bom = '\uFEFF';
+  const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url;
+  const ts = new Date().toISOString().slice(0,16).replace('T','_').replace(':','-');
+  a.download = 'k3_observasi_' + ts + '.csv';
+  a.click(); URL.revokeObjectURL(url);
+  const modal = document.getElementById('export-modal');
+  document.getElementById('export-modal-msg').innerHTML =
+    'File <strong>k3_observasi_' + ts + '.csv</strong> berhasil diunduh.<br>Bisa langsung dibuka di <strong>Microsoft Excel</strong> atau Google Sheets.';
+  modal.style.display = 'flex';
+}
+
+function confirmReset() {
+  document.getElementById('reset-modal').style.display = 'flex';
+}
+
+function doReset() {
+  appState = { participants: {}, locks: {} };
+  saveState(appState);
+  document.getElementById('reset-modal').style.display = 'none';
+  renderGrid();
+  showToast('Semua data berhasil direset.', 'success');
+}
+
+// Sync grid periodically for lock awareness
+setInterval(() => {
+  if (currentParticipant === null) renderGrid();
+}, 5000);
+
+// Release lock on page close
+window.addEventListener('beforeunload', () => {
+  if (currentParticipant) releaseLock(currentParticipant);
+});
+</script>
+</body>
+</html>
