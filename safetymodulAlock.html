@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistem Observasi K3 - Modul A (Real-Time)</title>
+    <style>
+        :root { --primary: #2c3e50; --secondary: #e74c3c; --bg: #f4f7f6; --locked: #95a5a6; --success: #27ae60; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 950px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1, h2 { text-align: center; color: var(--primary); margin: 5px; }
+        
+        .status-banner { padding: 10px; margin-bottom: 20px; border-radius: 5px; text-align: center; font-weight: bold; display: none; }
+        .banner-locked { background: #ffdada; color: #c0392b; display: block; }
+
+        .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; padding: 15px; background: #eee; border-radius: 8px; }
+        .tab-btn { padding: 10px 15px; cursor: pointer; border: 2px solid #ccc; background: white; border-radius: 6px; font-weight: bold; position: relative; }
+        .tab-btn.active { border-color: var(--primary); background: var(--primary); color: white; }
+        .tab-btn.is-locked { background: #fab1a0; border-color: var(--secondary); cursor: not-allowed; }
+        .tab-btn.is-locked::after { content: "🔒"; position: absolute; top: -5px; right: -5px; font-size: 12px; }
+
+        .peserta-panel { display: none; }
+        .peserta-panel.active { display: block; animation: fadeIn 0.5s; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #333; padding: 10px; text-align: left; font-size: 14px; }
+        th { background-color: #f2f2f2; }
+        .center { text-align: center; }
+        textarea { width: 98%; height: 50px; resize: vertical; }
+        input[type="text"] { width: 90%; padding: 5px; }
+
+        .action-bar { display: flex; gap: 10px; margin-top: 20px; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; color: white; }
+        .btn-save { background: var(--success); }
+        .btn-print { background: #3498db; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @media print { .tabs, .action-bar, .status-banner, h1 { display: none !important; } .container { box-shadow: none; border: none; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Safety Observation & Housekeeping</h1>
+    <h2>Modul A</h2>
+    
+    <div id="lock-banner" class="status-banner"></div>
+
+    <div class="tabs" id="tabs"></div>
+
+    <div id="panels"></div>
+
+    <div class="action-bar no-print">
+        <button class="btn btn-save" onclick="submitData()">Simpan & Selesai (Unlock)</button>
+        <button class="btn btn-print" onclick="window.print()">Cetak PDF</button>
+    </div>
+</div>
+
+<script>
+    // --- KONFIGURASI ---
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxV533G_p6AnDDfwh8wcrkqlUW-egvuNuwfkzn1K653CF9QS2q2DKRpANCrrC6pDYpV/exec";
+    const totalPeserta = 15;
+    let currentPesertaId = 1;
+    let namaJuri = prompt("Masukkan Nama Juri Anda:", "Juri A") || "Anonim";
+
+    // --- INISIALISASI ---
+    async function init() {
+        const tabsContainer = document.getElementById('tabs');
+        const panelsContainer = document.getElementById('panels');
+        
+        // Ambil status lock terbaru dari server
+        let lockStatus = [];
+        try {
+            const resp = await fetch(SCRIPT_URL);
+            lockStatus = await resp.json();
+        } catch(e) { console.log("Mode Offline / URL belum diset"); }
+
+        for (let i = 1; i <= totalPeserta; i++) {
+            const isLocked = lockStatus.find(s => s.id == i && s.status === "LOCKED");
+            
+            // Create Tab
+            const btn = document.createElement('button');
+            btn.className = `tab-btn ${i === 1 ? 'active' : ''} ${isLocked ? 'is-locked' : ''}`;
+            btn.innerText = `Peserta ${i}`;
+            btn.id = `tab-${i}`;
+            btn.onclick = isLocked ? () => alert(`Peserta ${i} sedang diinput ${isLocked.juri}`) : () => switchPeserta(i);
+            tabsContainer.appendChild(btn);
+
+            // Create Panel
+            const panel = document.createElement('div');
+            panel.className = `peserta-panel ${i === 1 ? 'active' : ''}`;
+            panel.id = `panel-${i}`;
+            panel.innerHTML = `
+                <div style="margin-bottom:15px; background:#f9f9f9; padding:10px; border-radius:5px;">
+                    <label><strong>Nama Peserta ${i}:</strong></label>
+                    <input type="text" id="nama-${i}" placeholder="Input Nama Peserta...">
+                </div>
+                <table>
+                    <thead>
+                        <tr><th rowspan="2">Lokus Observasi</th><th colspan="3" class="center">Peringatan</th><th rowspan="2">Waktu/Paraf</th></tr>
+                        <tr><th class="center">1</th><th class="center">2</th><th class="center">3</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1. Kacamata clear (Potong, kikir, reamer, swaging)</td>
+                            <td class="center"><input type="checkbox" class="check-${i}"></td><td class="center"><input type="checkbox" class="check-${i}"></td><td class="center"><input type="checkbox" class="check-${i}"></td>
+                            <td><input type="text" class="paraf-${i}"></td></tr>
+                        <tr><td>2. Kacamata gelap & sarung tangan kulit (Brazing)</td>
+                            <td class="center"><input type="checkbox" class="check-${i}"></td><td class="center"><input type="checkbox" class="check-${i}"></td><td class="center"><input type="checkbox" class="check-${i}"></td>
+                            <td><input type="text" class="paraf-${i}"></td></tr>
+                        <tr><td>3. Sarung tangan safety (Peralatan tajam)</td>
+                            <td class="center"><input type="checkbox" class="check-${i}"></td><td class="center"><input type="checkbox" class="check-${i}"></td><td class="center"><input type="checkbox" class="check-${i}"></td>
+                            <td><input type="text" class="paraf-${i}"></td></tr>
+                        <tr><td>4. Membiarkan genangan air / kontaminan</td>
+                            <td class="center"><input type="checkbox" class="check-${i}"></td><td class="center"><input type="checkbox" class="check-${i}"></td><td class="center"><input type="checkbox" class="check-${i}"></td>
+                            <td><input type="text" class="paraf-${i}"></td></tr>
+                        <tr><td>Catatan Insiden / Teguran Lain</td><td colspan="4"><textarea id="note-${i}"></textarea></td></tr>
+                    </tbody>
+                </table>
+            `;
+            panelsContainer.appendChild(panel);
+        }
+    }
+
+    async function switchPeserta(index) {
+        // Request Lock ke Server
+        const res = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'lock', id: index, juri: namaJuri })
+        });
+        const result = await res.json();
+
+        if (result.success) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.peserta-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(`tab-${index}`).classList.add('active');
+            document.getElementById(`panel-${index}`).classList.add('active');
+            currentPesertaId = index;
+            document.getElementById('lock-banner').innerText = `⚠️ Anda sedang mengunci Peserta ${index}`;
+            document.getElementById('lock-banner').className = "status-banner banner-locked";
+        } else {
+            alert(result.message);
+            location.reload(); // Refresh untuk update status terbaru
+        }
+    }
+
+    async function submitData() {
+        const payload = {
+            action: 'save',
+            id: currentPesertaId,
+            juri: namaJuri,
+            items: [
+                { lokus: "APD & Housekeeping", peringatan: "Cek Tabel", keterangan: document.getElementById(`note-${currentPesertaId}`).value }
+            ]
+        };
+
+        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+        const result = await res.json();
+        if(result.success) {
+            alert("Data tersimpan ke Excel dan status kembali tersedia!");
+            location.reload();
+        }
+    }
+
+    init();
+</script>
+</body>
+</html>
