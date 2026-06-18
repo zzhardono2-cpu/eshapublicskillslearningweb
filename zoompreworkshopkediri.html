@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop Penyelarasan Assessment WorldSkills — SMK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green-deep:  #173404;
+  --green-dark:  #27500A;
+  --green-mid:   #3B6D11;
+  --green-light: #639922;
+  --green-pale:  #EAF3DE;
+  --green-pale2: #C0DD97;
+  --gold-dark:   #633806;
+  --gold-mid:    #854F0B;
+  --gold:        #BA7517;
+  --gold-light:  #EF9F27;
+  --gold-pale:   #FAEEDA;
+  --gold-pale2:  #FAC775;
+  --red-pale:    #FCEBEB;
+  --red:         #A32D2D;
+  --text:        #1a2010;
+  --text-muted:  #4a5a30;
+  --text-hint:   #8a9a70;
+  --surface:     #ffffff;
+  --bg:          #f4f7f0;
+  --border:      rgba(59,109,17,0.13);
+  --border-strong: rgba(59,109,17,0.28);
+  --radius:      10px;
+  --radius-lg:   16px;
+  --shadow:      0 1px 3px rgba(23,52,4,0.07), 0 4px 16px rgba(23,52,4,0.05);
+  --shadow-lg:   0 8px 32px rgba(23,52,4,0.12);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.93);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  height: 58px;
+  gap: 0;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--green-deep);
+  margin-right: auto;
+  text-decoration: none;
+  letter-spacing: -0.2px;
+}
+
+.nav-links { display: flex; gap: 2px; }
+
+.nav-link {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-muted);
+  transition: all 0.15s;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.nav-link:hover { color: var(--green-mid); background: var(--green-pale); }
+.nav-link.active { color: var(--green-mid); background: var(--green-pale); font-weight: 600; }
+
+/* PAGES */
+.page { display: none; animation: fadeUp 0.25s ease; }
+.page.active { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* HERO */
+.hero {
+  background: var(--green-deep);
+  position: relative;
+  overflow: hidden;
+  padding: 72px 2rem 60px;
+  text-align: center;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 110%, rgba(99,153,34,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% -10%, rgba(59,109,17,0.45) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(192,221,151,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(192,221,151,0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.hero-inner { position: relative; max-width: 740px; margin: 0 auto; }
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(192,221,151,0.15);
+  border: 1px solid rgba(192,221,151,0.3);
+  color: #C0DD97;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+
+.hero h1 span { color: var(--gold-pale2); }
+
+.hero p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.68);
+  max-width: 580px;
+  margin: 0 auto 28px;
+  line-height: 1.8;
+}
+
+.hero-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(192,221,151,0.12);
+  border: 1px solid rgba(192,221,151,0.22);
+  border-radius: 40px;
+  padding: 8px 18px 8px 8px;
+  margin-bottom: 32px;
+}
+
+.hero-author-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--gold-light);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green-deep);
+  flex-shrink: 0;
+}
+
+.hero-author-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+}
+
+.hero-author-title {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1px;
+  background: rgba(192,221,151,0.12);
+  border: 1px solid rgba(192,221,151,0.2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.hero-stat { flex: 1; padding: 18px 12px; text-align: center; position: relative; }
+
+.hero-stat + .hero-stat::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; height: 60%;
+  width: 1px;
+  background: rgba(192,221,151,0.2);
+}
+
+.hero-stat .num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gold-pale2);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.hero-stat .lbl {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* MINI HERO */
+.mini-hero {
+  background: var(--green-deep);
+  padding: 40px 2rem 36px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.mini-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 100% at 50% 120%, rgba(99,153,34,0.18) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.mini-hero-inner { position: relative; }
+
+.mini-hero .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(192,221,151,0.15);
+  border: 1px solid rgba(192,221,151,0.25);
+  color: #C0DD97;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.mini-hero h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.3px;
+  margin-bottom: 8px;
+}
+
+.mini-hero p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.58);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* LAYOUT */
+.container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 2rem; }
+.section { margin-bottom: 2.5rem; }
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--green-mid);
+  margin-bottom: 16px;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* CARDS */
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+
+/* WHY CARDS */
+.why-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.why-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.why-icon.danger  { background: var(--red-pale); }
+.why-icon.info    { background: var(--green-pale); }
+.why-icon.success { background: var(--gold-pale); }
+
+.why-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+.why-card p  { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+
+/* OUTPUT CARDS */
+.output-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.output-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+.output-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--green-pale);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+  font-size: 22px;
+}
+
+.output-card span  { font-size: 13px; font-weight: 600; color: var(--text); display: block; margin-bottom: 4px; }
+.output-card small { font-size: 12px; color: var(--text-muted); }
+
+/* CTA INLINE */
+.cta-inline {
+  background: var(--green-deep);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-inline::before {
+  content: '';
+  position: absolute;
+  right: -40px; top: -40px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: rgba(99,153,34,0.18);
+  pointer-events: none;
+}
+
+.cta-inline h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px; font-weight: 700;
+  color: white; margin-bottom: 4px;
+}
+
+.cta-inline p { font-size: 13px; color: rgba(255,255,255,0.58); }
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--gold-pale2);
+  color: var(--green-deep);
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-primary:hover { background: white; }
+
+.btn-green {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--green-mid);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+
+.btn-green:hover { background: var(--green-dark); }
+
+/* ROADMAP */
+.day-switcher { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+
+.day-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 40px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+}
+
+.day-btn:hover { border-color: var(--green-mid); color: var(--green-mid); }
+
+.day-btn.active {
+  background: var(--green-mid);
+  border-color: var(--green-mid);
+  color: white;
+  box-shadow: 0 2px 8px rgba(59,109,17,0.3);
+}
+
+.day-badge {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.day-btn:not(.active) .day-badge { background: var(--green-pale); color: var(--green-mid); }
+
+.day-panel { display: none; animation: fadeUp 0.2s ease; }
+.day-panel.active { display: block; }
+
+.day-header-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--gold);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.day-tag {
+  display: inline-block;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--gold-mid);
+  margin-bottom: 6px;
+}
+
+.day-header-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px; font-weight: 700;
+  color: var(--text); margin-bottom: 4px;
+}
+
+.day-header-card p { font-size: 13px; color: var(--text-muted); }
+
+.agenda-list { display: grid; gap: 8px; }
+
+.agenda-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s;
+}
+
+.agenda-item:hover { border-color: var(--border-strong); }
+
+.agenda-sesi {
+  background: var(--gold-pale);
+  color: var(--gold-mid);
+  font-size: 11px; font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.agenda-item h4 { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.agenda-item p  { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+/* PLATFORM */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.feature-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow);
+  transition: all 0.15s;
+}
+
+.feature-item:hover { border-color: var(--green-pale2); transform: translateX(2px); }
+
+.feature-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+.feature-item span { font-size: 13px; font-weight: 500; }
+
+.access-highlight {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.access-highlight::after {
+  content: '6';
+  position: absolute;
+  right: -10px; top: -20px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 120px; font-weight: 700;
+  color: var(--green-pale);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.access-highlight > * { position: relative; z-index: 1; }
+
+.badge-months {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gold-pale);
+  color: var(--gold-mid);
+  font-size: 12px; font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  border: 1px solid var(--gold-pale2);
+}
+
+.access-highlight h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 700;
+  margin-bottom: 10px; color: var(--text);
+}
+
+.access-highlight p {
+  font-size: 14px; color: var(--text-muted);
+  line-height: 1.75; margin-bottom: 10px;
+  max-width: 560px;
+}
+
+/* BENEFITS */
+.benefit-tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+
+.benefit-tab {
+  padding: 8px 20px;
+  border-radius: 40px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-muted);
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+}
+
+.benefit-tab:hover { color: var(--green-mid); border-color: var(--green-mid); }
+
+.benefit-tab.active {
+  background: var(--green-mid);
+  border-color: var(--green-mid);
+  color: white;
+}
+
+.benefit-panel { display: none; animation: fadeUp 0.2s ease; }
+.benefit-panel.active { display: block; }
+
+.benefit-list { display: grid; gap: 10px; }
+
+.benefit-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  box-shadow: var(--shadow);
+}
+
+.b-icon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: var(--green-pale);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 19px;
+}
+
+.benefit-item h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.benefit-item p  { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+/* PERSIAPAN */
+.prep-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 700px) {
+  .prep-grid { grid-template-columns: 1fr; }
+}
+
+.prep-section-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.prep-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.prep-section-header.wajib {
+  background: linear-gradient(135deg, #173404 0%, #27500A 100%);
+}
+
+.prep-section-header.anjur {
+  background: linear-gradient(135deg, #633806 0%, #854F0B 100%);
+}
+
+.prep-section-icon {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.prep-section-title { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: white; }
+.prep-section-sub   { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 1px; }
+
+.prep-items { display: grid; gap: 0; }
+
+.prep-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+}
+
+.prep-item:last-child { border-bottom: none; }
+.prep-item:hover { background: var(--bg); }
+
+.prep-num {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.wajib-num { background: var(--green-pale); color: var(--green-mid); }
+.anjur-num { background: var(--gold-pale); color: var(--gold-mid); }
+
+.prep-item h4 { font-size: 13px; font-weight: 600; margin-bottom: 3px; color: var(--text); }
+.prep-item p  { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+.prep-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.prep-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--green-pale);
+  color: var(--green-mid);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(59,109,17,0.15);
+}
+
+.prep-tag.gold {
+  background: var(--gold-pale);
+  color: var(--gold-mid);
+  border-color: rgba(186,117,23,0.2);
+}
+
+.prep-notice {
+  background: var(--green-pale);
+  border: 1px solid rgba(59,109,17,0.2);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+}
+
+.prep-notice-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.prep-notice p { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+.prep-notice strong { color: var(--green-mid); }
+
+/* FOOTER */
+footer {
+  background: var(--green-deep);
+  color: rgba(255,255,255,0.45);
+  padding: 28px 24px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.footer-inner { max-width: 600px; margin: 0 auto; }
+.footer-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  background: rgba(192,221,151,0.1);
+  border: 1px solid rgba(192,221,151,0.18);
+  border-radius: 30px;
+  padding: 6px 14px 6px 6px;
+}
+
+.footer-avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--gold-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  color: var(--green-deep);
+}
+
+.footer-author span { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.8); }
+footer p { font-size: 11.5px; }
+footer strong { color: rgba(255,255,255,0.75); }
+
+@media (max-width: 600px) {
+  nav { padding: 0 1rem; }
+  .nav-brand { font-size: 12px; }
+  .nav-link { padding: 6px 10px; font-size: 12px; }
+  .hero { padding: 48px 1.25rem 40px; }
+  .hero h1 { font-size: 1.7rem; }
+  .container { padding: 1.5rem 1.25rem; }
+  .cta-inline { padding: 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="#" onclick="showPage('home');return false;">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <rect x="1" y="1" width="20" height="20" rx="5" fill="#3B6D11" opacity="0.15"/>
+      <path d="M6 16L11 6L16 16" stroke="#3B6D11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M7.5 13h7" stroke="#3B6D11" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    WorldSkills SMK
+  </a>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="showPage('home')">Beranda</button>
+    <button class="nav-link" onclick="showPage('roadmap')">Roadmap</button>
+    <button class="nav-link" onclick="showPage('platform')">Platform CIS</button>
+    <button class="nav-link" onclick="showPage('manfaat')">Manfaat</button>
+    <button class="nav-link" onclick="showPage('persiapan')">Persiapan</button>
+  </div>
+</nav>
+
+<!-- ═══════ HALAMAN 1 — BERANDA ═══════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 3v3l2 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Workshop Harmonisasi Sistem Assessment
+      </div>
+      <h1>Kompetensi <span>WorldSkills</span><br>pada Kurikulum Praktik Reguler Pendidikan Vokasi/ SMK</h1>
+      <p>Menyelaraskan praktik assessment dengan prinsip WorldSkills untuk menghasilkan pembelajaran yang objektif, transparan, dan relevan dengan kebutuhan industri.</p>
+      <div class="hero-author">
+        <div class="hero-author-avatar">SH</div>
+        <div>
+          <div class="hero-author-name">Sri Hardono, S.T., M.Sc.</div>
+          <div class="hero-author-title">Fasilitator Workshop</div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="num">3</div>
+          <div class="lbl">Hari Workshop</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">6</div>
+          <div class="lbl">Bulan Trial CIS</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">4</div>
+          <div class="lbl">Output Dokumen</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+      <div class="section-label">Mengapa workshop ini penting</div>
+      <div class="grid-3">
+        <div class="why-card">
+          <div class="why-icon danger">⚠️</div>
+          <div>
+            <h3>Tantangan saat ini</h3>
+            <p>Penilaian praktik sering bersifat global, sulit ditelusuri, dan hasilnya berbeda-beda antar penilai — menghambat konsistensi mutu lulusan.</p>
+          </div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon info">🌐</div>
+          <div>
+            <h3>Pendekatan WorldSkills</h3>
+            <p>Assessment berbasis bukti nyata (evidence-based), transparan, dan selaras langsung dengan standar kompetensi dunia industri.</p>
+          </div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon success">🎯</div>
+          <div>
+            <h3>Tujuan workshop</h3>
+            <p>Mengadopsi praktik terbaik WorldSkills secara terstruktur, tanpa mengubah kurikulum SMK yang sudah berjalan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Output yang dibawa pulang</div>
+      <div class="grid-4">
+        <div class="output-card">
+          <div class="output-icon">📊</div>
+          <span>Marking Scheme</span>
+          <small>Format standar WorldSkills</small>
+        </div>
+        <div class="output-card">
+          <div class="output-icon">📋</div>
+          <span>Rubrik Penilaian</span>
+          <small>Siap diimplementasikan</small>
+        </div>
+        <div class="output-card">
+          <div class="output-icon">📝</div>
+          <span>Format Assessment</span>
+          <small>Terstruktur & terstandar</small>
+        </div>
+        <div class="output-card">
+          <div class="output-icon">🗺️</div>
+          <span>Rencana Implementasi</span>
+          <small>Disesuaikan tiap sekolah</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-inline">
+      <div>
+        <h3>Siap untuk mengikuti workshop?</h3>
+        <p>Lihat roadmap lengkap 3 hari dan apa yang akan dipelajari</p>
+      </div>
+      <button class="btn-primary" onclick="showPage('roadmap')">
+        Lihat Roadmap
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-author">
+          <div class="footer-avatar">SH</div>
+          <span>Sri Hardono, S.T., M.Sc.</span>
+        </div>
+      </div>
+      <p><strong>Workshop Penyelarasan Assessment Kompetensi Berbasis WorldSkills</strong> dengan Kurikulum Praktik SMK</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ HALAMAN 2 — ROADMAP ═══════ -->
+<div id="page-roadmap" class="page">
+  <div class="mini-hero">
+    <div class="mini-hero-inner">
+      <div class="eyebrow">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="1" y="1" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 5.5h4M5.5 3.5v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        3 Hari Intensif
+      </div>
+      <h2>Roadmap Workshop</h2>
+      <p>Dari pemahaman kesenjangan hingga implementasi penuh di sekolah</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="day-switcher">
+      <button class="day-btn active" onclick="showDay(1,this)"><div class="day-badge">1</div>Hari Pertama</button>
+      <button class="day-btn" onclick="showDay(2,this)"><div class="day-badge">2</div>Hari Kedua</button>
+      <button class="day-btn" onclick="showDay(3,this)"><div class="day-badge">3</div>Hari Ketiga</button>
+    </div>
+
+    <div id="day-1" class="day-panel active">
+      <div class="day-header-card">
+        <div class="day-tag">Hari Pertama</div>
+        <h3>Memahami Kesenjangan dan Memetakan Kebutuhan Assessment</h3>
+        <p>Membangun fondasi pemahaman tentang filosofi dan kerangka WorldSkills</p>
+      </div>
+      <div class="agenda-list">
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 1</div><div><h4>Filosofi Lomba Keterampilan Siswa/ WorldSkills</h4><p>Prinsip-prinsip dasar assessment dalam kompetisi keterampilan internasional dan relevansinya untuk SMK</p></div></div>
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 2</div><div><h4>Evidence-Based Assessment</h4><p>Penilaian berbasis bukti nyata hasil kerja — bukan sekadar kesan atau intuisi penilai</p></div></div>
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 3</div><div><h4>Bedah Rubrik Penilaian</h4><p>Analisis mendalam rubrik yang saat ini digunakan — kekuatan dan titik lemahnya</p></div></div>
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 4</div><div><h4>Identifikasi Kelemahan Assessment</h4><p>Pemetaan gap antara praktik penilaian saat ini dengan standar WorldSkills secara konkret</p></div></div>
+      </div>
+    </div>
+
+    <div id="day-2" class="day-panel">
+      <div class="day-header-card">
+        <div class="day-tag">Hari Kedua</div>
+        <h3>Menyusun Marking Scheme dan Rubrik Harmonisasi</h3>
+        <p>Workshop praktis penyusunan dokumen assessment yang terstruktur dan terstandar</p>
+      </div>
+      <div class="agenda-list">
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 1</div><div><h4>Aspect & Sub Aspect</h4><p>Memecah kompetensi menjadi aspek dan sub-aspek yang terukur dan dapat diamati</p></div></div>
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 2</div><div><h4>Weighting</h4><p>Menentukan bobot penilaian yang proporsional untuk setiap aspek kompetensi</p></div></div>
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 3</div><div><h4>Objective Criteria</h4><p>Menyusun kriteria penilaian yang dapat diukur secara standar oleh semua penilai</p></div></div>
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 4</div><div><h4>Subjective Descriptor</h4><p>Menyusun deskriptor kualitatif untuk aspek yang memerlukan pertimbangan profesional</p></div></div>
+      </div>
+    </div>
+
+    <div id="day-3" class="day-panel">
+      <div class="day-header-card">
+        <div class="day-tag">Hari Ketiga</div>
+        <h3>Calibration dan Implementasi</h3>
+        <p>Uji coba langsung, kalibrasi antar penilai, dan penyusunan rencana implementasi di sekolah</p>
+      </div>
+      <div class="agenda-list">
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 1</div><div><h4>Simulasi Penilaian</h4><p>Praktik langsung menggunakan marking scheme yang baru disusun pada kasus nyata</p></div></div>
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 2</div><div><h4>Consensus Judging</h4><p>Kalibrasi antar penilai untuk mencapai konsistensi dan kesepahaman standar</p></div></div>
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 3</div><div><h4>Penyempurnaan Rubrik</h4><p>Revisi dan finalisasi rubrik berdasarkan temuan dari simulasi</p></div></div>
+        <div class="agenda-item"><div class="agenda-sesi">Sesi 4</div><div><h4>Rencana Implementasi</h4><p>Menyusun roadmap penerapan yang konkret dan realistis di sekolah masing-masing</p></div></div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem">
+      <div class="cta-inline">
+        <div>
+          <h3>Dukung implementasi dengan platform digital</h3>
+          <p>Lihat fitur-fitur Platform CIS untuk assessment sehari-hari</p>
+        </div>
+        <button class="btn-primary" onclick="showPage('platform')">
+          Platform CIS
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-author">
+        <div class="footer-avatar">SH</div>
+        <span>Sri Hardono, S.T., M.Sc.</span>
+      </div>
+      <p><strong>Workshop Penyelarasan Assessment Kompetensi Berbasis WorldSkills</strong> dengan Kurikulum Praktik SMK</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ HALAMAN 3 — PLATFORM CIS ═══════ -->
+<div id="page-platform" class="page">
+  <div class="mini-hero">
+    <div class="mini-hero-inner">
+      <div class="eyebrow">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="1" y="2" width="9" height="7" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 2V1M7 2V1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Platform Digital
+      </div>
+      <h2>Demonstrasi Platform CIS</h2>
+      <p>Sistem penilaian digital terintegrasi untuk assessment berbasis WorldSkills</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+      <div class="section-label">Fitur yang akan didemonstrasikan</div>
+      <div class="feature-grid">
+        <div class="feature-item"><div class="feature-dot"></div><span>Membuat Marking Scheme dengan Excel</span></div>
+        <div class="feature-item"><div class="feature-dot"></div><span>Mengunggah file ke platform</span></div>
+        <div class="feature-item"><div class="feature-dot"></div><span>Mengelola data peserta</span></div>
+        <div class="feature-item"><div class="feature-dot"></div><span>Proses penilaian langsung</span></div>
+        <div class="feature-item"><div class="feature-dot"></div><span>Self Assessment peserta didik</span></div>
+        <div class="feature-item"><div class="feature-dot"></div><span>Peer Assessment antar siswa</span></div>
+        <div class="feature-item"><div class="feature-dot"></div><span>Monitoring progres peserta</span></div>
+        <div class="feature-item"><div class="feature-dot"></div><span>Mengunduh hasil penilaian</span></div>
+        <div class="feature-item"><div class="feature-dot"></div><span>Mengelola dokumen assessment</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Akses untuk peserta workshop</div>
+      <div class="access-highlight">
+        <div class="badge-months">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.3"/><path d="M6 3v3l2 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          6 bulan gratis untuk peserta workshop
+        </div>
+        <h3>Coba, terapkan, dan evaluasi selama 6 bulan</h3>
+        <p>Seluruh peserta workshop memperoleh akses penuh Platform CIS selama <strong>6 bulan</strong> — cukup waktu untuk mencoba, menerapkan, dan mengevaluasi perangkat assessment yang dikembangkan selama workshop.</p>
+        <p>Setelah masa pendampingan berakhir, peserta bebas menentukan apakah ingin melanjutkan penggunaan platform. Apabila dirasakan bermanfaat, tersedia skema dukungan untuk keberlanjutan layanan.</p>
+        <a href="https://cis.rac38eshapublicskillslearning.com" target="_blank" rel="noopener" class="btn-green">
+          Buka Platform CIS
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M5 2H2.5A1.5 1.5 0 001 3.5v7A1.5 1.5 0 002.5 12h7A1.5 1.5 0 0011 10.5V8M8 1h4v4M12 1L6.5 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-author">
+        <div class="footer-avatar">SH</div>
+        <span>Sri Hardono, S.T., M.Sc.</span>
+      </div>
+      <p><strong>Workshop Penyelarasan Assessment Kompetensi Berbasis WorldSkills</strong> dengan Kurikulum Praktik SMK</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ HALAMAN 4 — MANFAAT ═══════ -->
+<div id="page-manfaat" class="page">
+  <div class="mini-hero">
+    <div class="mini-hero-inner">
+      <div class="eyebrow">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1.5l1.2 2.4 2.7.4-2 1.9.5 2.7-2.4-1.3L3.1 9l.5-2.7L1.6 4.3l2.7-.4z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+        Nilai Tambah
+      </div>
+      <h2>Manfaat untuk Semua Pihak</h2>
+      <p>Dampak nyata workshop dan Platform CIS bagi ekosistem SMK</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="benefit-tabs">
+      <button class="benefit-tab active" onclick="showBenefit('guru',this)">👩‍🏫 Guru</button>
+      <button class="benefit-tab" onclick="showBenefit('siswa',this)">🧑‍🎓 Siswa</button>
+      <button class="benefit-tab" onclick="showBenefit('sekolah',this)">🏫 Sekolah</button>
+    </div>
+
+    <div id="benefit-guru" class="benefit-panel active">
+      <div class="benefit-list">
+        <div class="benefit-item"><div class="b-icon">📋</div><div><h4>Assessment lebih terstruktur</h4><p>Rubrik dan marking scheme yang jelas memudahkan proses penilaian harian — tidak lagi bergantung pada kesan subjektif.</p></div></div>
+        <div class="benefit-item"><div class="b-icon">📊</div><div><h4>Monitoring lebih mudah</h4><p>Dashboard digital memperlihatkan perkembangan setiap peserta didik secara real-time tanpa harus mengolah data manual.</p></div></div>
+        <div class="benefit-item"><div class="b-icon">💾</div><div><h4>Data terdokumentasi rapi</h4><p>Rekam jejak assessment tersimpan secara digital — mudah diakses kembali saat dibutuhkan untuk pelaporan atau akreditasi.</p></div></div>
+        <div class="benefit-item"><div class="b-icon">⚡</div><div><h4>Feedback lebih cepat</h4><p>Sistem digital mempercepat proses pemberian umpan balik — siswa mendapat respons segera, bukan menunggu berhari-hari.</p></div></div>
+      </div>
+    </div>
+
+    <div id="benefit-siswa" class="benefit-panel">
+      <div class="benefit-list">
+        <div class="benefit-item"><div class="b-icon">🎯</div><div><h4>Belajar lebih mandiri</h4><p>Akses ke standar penilaian yang jelas mendorong siswa memahami apa yang harus dicapai dan belajar secara proaktif.</p></div></div>
+        <div class="benefit-item"><div class="b-icon">🏆</div><div><h4>Memahami standar kompetensi</h4><p>Siswa mengetahui dengan tepat apa yang diharapkan dari mereka — tidak ada lagi ambiguitas dalam target belajar.</p></div></div>
+        <div class="benefit-item"><div class="b-icon">🪞</div><div><h4>Self Assessment</h4><p>Kemampuan menilai diri sendiri mengembangkan kesadaran diri, refleksi, dan tanggung jawab atas proses belajar.</p></div></div>
+        <div class="benefit-item"><div class="b-icon">🤝</div><div><h4>Peer Assessment</h4><p>Belajar dari dan bersama teman sebaya meningkatkan pemahaman kolaboratif dan kemampuan memberi umpan balik konstruktif.</p></div></div>
+      </div>
+    </div>
+
+    <div id="benefit-sekolah" class="benefit-panel">
+      <div class="benefit-list">
+        <div class="benefit-item"><div class="b-icon">⚖️</div><div><h4>Assessment lebih konsisten</h4><p>Standar yang sama diterapkan di seluruh kelas dan angkatan — hasil penilaian tidak lagi bergantung pada siapa penilainya.</p></div></div>
+        <div class="benefit-item"><div class="b-icon">🔍</div><div><h4>Data mudah ditelusuri</h4><p>Audit dan proses akreditasi menjadi lebih mudah dengan dokumentasi digital yang lengkap dan terstruktur.</p></div></div>
+        <div class="benefit-item"><div class="b-icon">🌟</div><div><h4>Mendukung budaya mutu</h4><p>Assessment berstandar dunia menjadi bagian dari identitas dan keunggulan kompetitif sekolah.</p></div></div>
+        <div class="benefit-item"><div class="b-icon">🏭</div><div><h4>Selaras dengan industri</h4><p>Lulusan siap kerja dengan kompetensi yang diakui dan relevan di tingkat nasional maupun internasional.</p></div></div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem">
+      <div class="cta-inline">
+        <div>
+          <h3>Mulai perjalanan transformasi assessment</h3>
+          <p>Akses Platform CIS selama 6 bulan gratis bagi peserta workshop</p>
+        </div>
+        <button class="btn-primary" onclick="showPage('platform')">
+          Pelajari Platform
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-author">
+        <div class="footer-avatar">SH</div>
+        <span>Sri Hardono, S.T., M.Sc.</span>
+      </div>
+      <p><strong>Workshop Penyelarasan Assessment Kompetensi Berbasis WorldSkills</strong> dengan Kurikulum Praktik SMK</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ HALAMAN 5 — PERSIAPAN ═══════ -->
+<div id="page-persiapan" class="page">
+  <div class="mini-hero">
+    <div class="mini-hero-inner">
+      <div class="eyebrow">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Sebelum Hadir
+      </div>
+      <h2>Persiapan Peserta Workshop</h2>
+      <p>Pastikan Anda hadir dengan perlengkapan lengkap agar workshop berjalan efektif dan menghasilkan perangkat assessment yang siap diterapkan</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="section">
+      <div class="prep-grid">
+
+        <!-- WAJIB DIBAWA -->
+        <div class="prep-section-card">
+          <div class="prep-section-header wajib">
+            <div class="prep-section-icon">✅</div>
+            <div>
+              <div class="prep-section-title">Wajib Dibawa</div>
+              <div class="prep-section-sub">5 item — harus disiapkan sebelum hadir</div>
+            </div>
+          </div>
+          <div class="prep-items">
+
+            <div class="prep-item">
+              <div class="prep-num wajib-num">1</div>
+              <div>
+                <h4>Laptop dan Charger</h4>
+                <p>Digunakan untuk penyusunan marking scheme, rubrik penilaian, dan praktik penggunaan Platform CIS.</p>
+              </div>
+            </div>
+
+            <div class="prep-item">
+              <div class="prep-num wajib-num">2</div>
+              <div>
+                <h4>Kurikulum atau Capaian Pembelajaran (CP)</h4>
+                <p>Mata pelajaran yang diampu sebagai dasar penyelarasan assessment.</p>
+              </div>
+            </div>
+
+            <div class="prep-item">
+              <div class="prep-num wajib-num">3</div>
+              <div>
+                <h4>Modul Ajar / Job Sheet Praktik</h4>
+                <p>Yang saat ini digunakan dalam pembelajaran praktik.</p>
+              </div>
+            </div>
+
+            <div class="prep-item">
+              <div class="prep-num wajib-num">4</div>
+              <div>
+                <h4>Rubrik atau Format Penilaian yang Saat Ini Digunakan</h4>
+                <p>Baik dalam bentuk cetak maupun digital.</p>
+              </div>
+            </div>
+
+            <div class="prep-item">
+              <div class="prep-num wajib-num">5</div>
+              <div>
+                <h4>Memilih Satu Pekerjaan Praktik</h4>
+                <p>Yang akan dijadikan proyek selama workshop. Contoh:</p>
+                <div class="prep-examples">
+                  <span class="prep-tag">⚙️ Instalasi AC Split</span>
+                  <span class="prep-tag">🔧 Tune Up Engine</span>
+                  <span class="prep-tag">⚡ Instalasi Panel Listrik</span>
+                  <span class="prep-tag">🔩 Pengelasan SMAW</span>
+                  <span class="prep-tag">🖧 Instalasi Jaringan Komputer</span>
+                  <span class="prep-tag">+ dan sebagainya sesuai bidang</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- SANGAT DIANJURKAN -->
+        <div class="prep-section-card">
+          <div class="prep-section-header anjur">
+            <div class="prep-section-icon">💡</div>
+            <div>
+              <div class="prep-section-title">Sangat Dianjurkan</div>
+              <div class="prep-section-sub">2 item — memperkaya hasil workshop</div>
+            </div>
+          </div>
+          <div class="prep-items">
+
+            <div class="prep-item">
+              <div class="prep-num anjur-num">6</div>
+              <div>
+                <h4>Contoh Hasil Kerja Peserta Didik</h4>
+                <p>Berupa:</p>
+                <div class="prep-examples">
+                  <span class="prep-tag gold">📷 Foto</span>
+                  <span class="prep-tag gold">🎬 Video</span>
+                  <span class="prep-tag gold">📦 Produk fisik</span>
+                  <span class="prep-tag gold">📄 Laporan praktik</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="prep-item">
+              <div class="prep-num anjur-num">7</div>
+              <div>
+                <h4>Data Pembelajaran Praktik</h4>
+                <p>Misalnya:</p>
+                <div class="prep-examples">
+                  <span class="prep-tag gold">👥 Jumlah siswa per kelas</span>
+                  <span class="prep-tag gold">⏱️ Jumlah jam praktik</span>
+                  <span class="prep-tag gold">👨‍🏫 Jumlah guru/instruktur</span>
+                  <span class="prep-tag gold">⚠️ Kendala assessment yang sering dihadapi</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="prep-notice">
+        <div class="prep-notice-icon">💬</div>
+        <p>Semakin lengkap bahan yang dibawa, semakin relevan dan siap-pakai perangkat assessment yang akan dihasilkan. Item wajib adalah dasar kerja selama workshop — <strong>tanpanya, proses penyusunan tidak dapat dilakukan secara optimal</strong>.</p>
+      </div>
+    </div>
+
+    <div class="cta-inline">
+      <div>
+        <h3>Sudah siap? Lihat apa yang akan dipelajari</h3>
+        <p>Roadmap lengkap 3 hari workshop tersedia di sini</p>
+      </div>
+      <button class="btn-primary" onclick="showPage('roadmap')">
+        Lihat Roadmap
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-author">
+        <div class="footer-avatar">SH</div>
+        <span>Sri Hardono, S.T., M.Sc.</span>
+      </div>
+      <p><strong>Workshop Harmonisasi Metode Assessment Kompetensi WorldSkills</strong> pada Kurikulum Praktik Regular Pendidikan Vokasi/ SMK</p>
+    </div>
+  </footer>
+</div>
+
+<script>
+const pages = ['home','roadmap','platform','manfaat','persiapan'];
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-link')[pages.indexOf(id)].classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showDay(n, btn) {
+  document.querySelectorAll('.day-panel').forEach(d => d.classList.remove('active'));
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('day-' + n).classList.add('active');
+  btn.classList.add('active');
+}
+
+function showBenefit(id, btn) {
+  document.querySelectorAll('.benefit-panel').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.benefit-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('benefit-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
