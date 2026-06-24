@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Handout EBA - Sri Hardono</title>
+    <style>
+        /* ===== RESET & GLOBAL ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Georgia, 'Segoe UI', serif;
+            background: #f0f2f5;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .handout-container {
+            max-width: 1100px;
+            width: 100%;
+            background: #ffffff;
+            padding: 50px 60px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            border-radius: 8px;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1 {
+            font-size: 26pt;
+            font-weight: 700;
+            color: #0b2a4a;
+            text-align: center;
+            border-bottom: 4px solid #f6b83d;
+            padding-bottom: 12px;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14pt;
+            color: #1e3a5f;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .author {
+            text-align: center;
+            font-size: 13pt;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .author span {
+            background: #f6b83d20;
+            padding: 4px 18px;
+            border-radius: 30px;
+            border: 1px solid #f6b83d;
+        }
+
+        h2 {
+            font-size: 18pt;
+            font-weight: 700;
+            color: #0b2a4a;
+            margin-top: 32px;
+            margin-bottom: 14px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #f6b83d;
+        }
+
+        h3 {
+            font-size: 14pt;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        h4 {
+            font-size: 12pt;
+            font-weight: 700;
+            color: #0b2a4a;
+            margin-top: 16px;
+            margin-bottom: 4px;
+            font-style: italic;
+        }
+
+        p {
+            font-size: 12pt;
+            line-height: 1.7;
+            color: #1e2e41;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            padding-left: 28px;
+            margin-bottom: 12px;
+        }
+
+        li {
+            font-size: 12pt;
+            line-height: 1.7;
+            color: #1e2e41;
+            margin-bottom: 4px;
+            text-align: justify;
+        }
+
+        /* ===== TABEL ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 20px 0;
+            font-size: 11.5pt;
+        }
+
+        th {
+            background: #0b2a4a;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #dce4ed;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-bordered {
+            border: 1px solid #dce4ed;
+        }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dce4ed;
+        }
+
+        /* ===== KOTAK HIGHLIGHT ===== */
+        .box-highlight {
+            background: #e6f0fa;
+            padding: 16px 22px;
+            border-radius: 12px;
+            border-left: 6px solid #f6b83d;
+            margin: 16px 0;
+        }
+
+        .box-highlight strong {
+            color: #0b2a4a;
+        }
+
+        .box-definisi {
+            background: #f4f8fc;
+            padding: 18px 24px;
+            border-radius: 12px;
+            border: 2px solid #0b2a4a;
+            margin: 16px 0;
+        }
+
+        .box-definisi p {
+            margin-bottom: 0;
+            font-size: 12.5pt;
+        }
+
+        .box-kutipan {
+            background: #f9f5ec;
+            padding: 14px 22px;
+            border-radius: 12px;
+            border-left: 6px solid #f6b83d;
+            margin: 14px 0;
+            font-style: italic;
+        }
+
+        .box-kutipan p {
+            margin-bottom: 0;
+        }
+
+        /* ===== DAFTAR PUSTAKA ===== */
+        .daftar-pustaka {
+            margin-top: 10px;
+        }
+
+        .daftar-pustaka p {
+            margin-bottom: 4px;
+            font-size: 11pt;
+            padding-left: 20px;
+            text-indent: -20px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 40px;
+            padding-top: 16px;
+            border-top: 2px solid #dce4ed;
+            text-align: center;
+            font-size: 10pt;
+            color: #6c7a8a;
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .handout-container {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 40px 50px;
+            }
+            .box-highlight,
+            .box-definisi,
+            .box-kutipan {
+                break-inside: avoid;
+            }
+            table {
+                break-inside: auto;
+            }
+            tr {
+                break-inside: avoid;
+            }
+            h2, h3 {
+                break-after: avoid;
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 700px) {
+            .handout-container {
+                padding: 25px 20px;
+            }
+            h1 {
+                font-size: 20pt;
+            }
+            h2 {
+                font-size: 15pt;
+            }
+            p, li, td {
+                font-size: 11pt;
+            }
+            table {
+                font-size: 10pt;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="handout-container">
+
+    <!-- ===== HEADER ===== -->
+    <h1>HANDOUT PESERTA PELATIHAN</h1>
+    <div class="subtitle">Harmonisasi Asesmen Berbasis Bukti <em>(Evidence-Based Assessment)</em></div>
+    <div class="subtitle" style="font-size:13pt; margin-bottom:4px;">dalam Kurikulum Praktik Reguler Pendidikan Vokasi / SMK</div>
+    <div class="author"><span>Disusun oleh: Sri Hardono, S.T., M.Sc.</span></div>
+
+    <!-- ============================================================ -->
+    <!-- A. PENGERTIAN EBA                                             -->
+    <!-- ============================================================ -->
+
+    <h2>A. Pengertian Evidence-Based Assessment (EBA)</h2>
+
+    <div class="box-definisi">
+        <p><strong>Definisi:</strong> Evidence-Based Assessment (EBA) adalah pendekatan asesmen yang menggunakan <strong>teori ilmiah dan temuan penelitian</strong> untuk memandu keputusan tentang apa yang akan diukur, bagaimana dan kapan mengukurnya, serta bagaimana menginterpretasikan hasil dan mengambil keputusan.</p>
+    </div>
+
+    <h3>Landasan Teori</h3>
+    <p>EBA dikembangkan oleh <strong>John Hunsley</strong> dan <strong>Eric J. Mash</strong> (2007, 2018) sebagai respons terhadap kebutuhan akan praktik asesmen yang lebih ilmiah dan terukur. Menurut mereka, <em>"A truly evidence-based approach to assessment would involve an evaluation of the accuracy and usefulness of this complex decision-making task in light of potential errors in data synthesis and interpretation"</em> (Hunsley &amp; Mash, 2007, hlm. 30).</p>
+
+    <p>Hunsley dan Mash (2007) menekankan bahwa EBA mencakup tiga dimensi utama:</p>
+    <ul>
+        <li><strong>Prediksi</strong> — sejauh mana data asesmen berhubungan dengan kriteria target (misalnya: diagnosis, prediksi kinerja di industri).</li>
+        <li><strong>Preskripsi</strong> — sejauh mana informasi asesmen menginformasikan keputusan penanganan atau intervensi.</li>
+        <li><strong>Proses</strong> — sejauh mana data asesmen berguna untuk memantau kemajuan dan mengevaluasi outcome.</li>
+    </ul>
+
+    <p>Youngstrom dan kolega (2017) menambahkan prinsip <strong><em>satisficing</em></strong> dan <strong><em>vital few</em></strong>, yaitu EBA menekankan pengukuran pada area-area yang benar-benar kritis (<em>vital few</em>) dan cukup baik (<em>satisficing</em>), bukan mengukur segala hal secara berlebihan.</p>
+
+    <!-- ============================================================ -->
+    <!-- B. MENGAPA EBA DIPERLUKAN                                    -->
+    <!-- ============================================================ -->
+
+    <h2>B. Mengapa Evidence-Based Assessment Diperlukan?</h2>
+
+    <p>Menurut Hunsley &amp; Mash (2005), EBA menjadi penting karena:</p>
+    <ol>
+        <li>Adanya kelalaian dalam mempertimbangkan aspek asesmen dalam upaya mempromosikan pengobatan berbasis bukti;</li>
+        <li>Terjadinya perubahan signifikan dalam sifat asesmen klinis dan pendidikan;</li>
+        <li>Perlunya pedoman yang jelas untuk mengintegrasikan data asesmen dari berbagai sumber;</li>
+        <li>Adanya kebutuhan untuk mengevaluasi akurasi diagnostik dan utilitas klinis dari alat ukur yang digunakan.</li>
+    </ol>
+
+    <div class="box-highlight">
+        <p><strong>Manfaat EBA (Youngstrom et al., 2017):</strong></p>
+        <ul style="margin-bottom:0;">
+            <li>Efisiensi yang lebih besar dalam proses asesmen</li>
+            <li>Keputusan yang lebih akurat dan dapat dipertanggungjawabkan</li>
+            <li>Perbaikan outcome secara bertahap</li>
+            <li>Peningkatan aksesibilitas layanan asesmen</li>
+            <li>Pengurangan bias dalam penilaian</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- C. EMPAT PILAR ASESMEN WORLDSKILLS / LKS                      -->
+    <!-- ============================================================ -->
+
+    <h2>C. Empat Pilar Asesmen WorldSkills / LKS</h2>
+
+    <p>Standar <strong>WorldSkills / Lomba Keterampilan Siswa (LKS)</strong> digunakan sebagai acuan global dalam asesmen kompetensi vokasi. Keempat pilar berikut harus menjadi perhatian dalam setiap penilaian praktik:</p>
+
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th style="width:20%;">Pilar</th>
+                <th style="width:35%;">Deskripsi</th>
+                <th style="width:45%;">Contoh Indikator Terukur</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>1. Prosedur &amp; Keselamatan</strong></td>
+                <td>Penggunaan alat pelindung diri, urutan kerja yang benar, dan kepatuhan terhadap SOP</td>
+                <td>APD lengkap; langkah kerja sesuai urutan; tidak ada pelanggaran keselamatan</td>
+            </tr>
+            <tr>
+                <td><strong>2. Hasil Kerja</strong></td>
+                <td>Produk atau output yang dihasilkan memenuhi spesifikasi yang ditetapkan</td>
+                <td>Ukuran tepat (toleransi ±0,1 mm); bahan sesuai spesifikasi; fungsi berjalan</td>
+            </tr>
+            <tr>
+                <td><strong>3. Ketelitian &amp; Kerapian</strong></td>
+                <td>Kualitas akhir produk dari segi estetika dan presisi</td>
+                <td>Tidak ada goresan/retak; sambungan rapat; permukaan rata</td>
+            </tr>
+            <tr>
+                <td><strong>4. Manajemen Waktu</strong></td>
+                <td>Kemampuan menyelesaikan pekerjaan dalam batas waktu yang ditentukan</td>
+                <td>Selesai ≤ batas waktu; alokasi waktu untuk setiap tahap proporsional</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="box-highlight">
+        <p><strong>Catatan:</strong> Keempat pilar ini selaras dengan pendekatan EBA karena menekankan pengukuran yang <strong>teramati</strong> dan <strong>terukur secara objektif</strong>, bukan penilaian subjektif berdasarkan perasaan atau kesan.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- D. OPERASIONALISASI EBA: OTM                                  -->
+    <!-- ============================================================ -->
+
+    <h2>D. Operasionalisasi EBA: Kerangka OTM</h2>
+
+    <p><strong>Operations Triad Model (OTM)</strong> dikembangkan oleh Talbott dan kolega (2023) sebagai kerangka empiris yang dirancang untuk menginformasikan pengambilan keputusan dalam EBA.</p>
+
+    <h3>Karakteristik Utama OTM</h3>
+    <ul>
+        <li><strong>Falsifiabilitas</strong> — dapat diuji dan dibuktikan kebenarannya melalui penelitian empiris;</li>
+        <li><strong>Fusi dengan Teori</strong> — dapat digabungkan dengan berbagai teori pendidikan dan psikologi;</li>
+        <li><strong>Orientasi Empiris</strong> — berdasarkan data, bukan spekulasi atau asumsi semata.</li>
+    </ul>
+
+    <h3>Empat Fungsi OTM dalam EBA</h3>
+    <ol>
+        <li>Membantu pembentukan dan pengujian hipotesis asesmen;</li>
+        <li>Memandu desain studi dan prosedur asesmen;</li>
+        <li>Membantu seleksi instrumen yang tepat untuk tujuan asesmen;</li>
+        <li>Mendukung validasi pengukuran dan interpretasi hasil.</li>
+    </ol>
+
+    <h3>Penerapan Sederhana di Kelas Vokasi</h3>
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th style="width:20%;">Komponen OTM</th>
+                <th style="width:35%;">Contoh di Kelas Vokasi</th>
+                <th style="width:45%;">Pertanyaan Kunci</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Hipotesis</strong></td>
+                <td>Siswa yang mengikuti prosedur keselamatan dengan benar cenderung menghasilkan produk berkualitas</td>
+                <td>Apakah ada hubungan antara kepatuhan prosedur dan kualitas hasil?</td>
+            </tr>
+            <tr>
+                <td><strong>Desain Studi</strong></td>
+                <td>Uji praktik dengan <em>job sheet</em> yang terstruktur dan seragam</td>
+                <td>Apakah desain asesmen sudah konsisten untuk semua siswa?</td>
+            </tr>
+            <tr>
+                <td><strong>Seleksi Instrumen</strong></td>
+                <td>Rubrik penilaian dengan 4 kriteria terukur (1–4)</td>
+                <td>Apakah rubrik mencakup semua aspek kompetensi yang penting?</td>
+            </tr>
+            <tr>
+                <td><strong>Validasi</strong></td>
+                <td>Bandingkan hasil penilaian dengan capaian di industri atau standar LSP</td>
+                <td>Apakah hasil asesmen mencerminkan kemampuan nyata di dunia kerja?</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ============================================================ -->
+    <!-- E. BIAS PENILAIAN: EFEK HALO                                 -->
+    <!-- ============================================================ -->
+
+    <h2>E. Bias Penilaian: Efek Halo</h2>
+
+    <div class="box-definisi">
+        <p><strong>Definisi:</strong> <em>Halo effect</em> (efek halo) adalah bias kognitif yang terjadi ketika penilaian terhadap satu aspek kinerja seseorang mempengaruhi penilaian terhadap aspek lain yang sebenarnya tidak terkait secara konseptual.</p>
+    </div>
+
+    <h3>Landasan Teori</h3>
+    <p>Istilah <em>halo effect</em> pertama kali diperkenalkan oleh <strong>Edward L. Thorndike</strong> (1920) dalam penelitiannya tentang penilaian kinerja karyawan dan perwira militer. Thorndike menemukan bahwa penilai cenderung memberikan penilaian yang konsisten di seluruh dimensi penilaian, meskipun dimensi-dimensi tersebut secara konseptual tidak berkaitan.</p>
+
+    <div class="box-kutipan">
+        <p>"<em>The halo effect occurs when some aspect of a person or thing overshadows or influences other unrelated attributes being judged or measured.</em>" — Thorndike (1920, hlm. 25)</p>
+    </div>
+
+    <h3>Lima Sumber Efek Halo (Cooper, 1981)</h3>
+    <ol>
+        <li><strong>Undersampling</strong> — penilai kekurangan informasi sehingga mengandalkan kesan global yang sederhana.</li>
+        <li><strong>Engulfing</strong> — kesan umum atau satu ciri yang menonjol mempengaruhi penilaian seluruh aspek lainnya.</li>
+        <li><strong>Insufficient Concreteness</strong> — kriteria penilaian terlalu abstrak sehingga penilai menyamakan berbagai aspek yang berbeda.</li>
+        <li><strong>Insufficient Rater Motivation</strong> — penilai tidak termotivasi untuk membedakan antar aspek secara cermat.</li>
+        <li><strong>Cognitive Distortions</strong> — distorsi memori atau keyakinan pribadi mempengaruhi penilaian.</li>
+    </ol>
+
+    <h3>Efek Halo dalam Konteks Pendidikan</h3>
+    <p>Penelitian Schmidt dan kolega (2023) menunjukkan bahwa:</p>
+    <ul>
+        <li>Guru dapat dipengaruhi oleh efek halo ketika menilai siswa, terutama jika siswa memiliki reputasi baik atau buruk sebelumnya;</li>
+        <li>Penilaian terhadap satu mata pelajaran dapat mempengaruhi penilaian di mata pelajaran lain;</li>
+        <li>Pelatihan guru perlu meningkatkan kesadaran akan bias ini dan memberikan strategi mitigasi yang konkret.</li>
+    </ul>
+
+    <h3>Penerapan di Kelas Vokasi</h3>
+    <div class="box-highlight">
+        <p><strong>Prinsip:</strong> "Guru yang profesional menilai <strong>HASIL KERJA</strong>, bukan <strong>KEPRIBADIAN</strong> siswa."</p>
+    </div>
+
+    <h4>Cara Mitigasi: SUM Process</h4>
+    <ul>
+        <li><strong>S</strong>adari bahwa kita memiliki kecenderungan bias terhadap siswa tertentu.</li>
+        <li><strong>U</strong>pahami bahwa sikap yang baik belum tentu mencerminkan kompetensi teknis yang sesungguhnya.</li>
+        <li><strong>M</strong>itigasi: fokus pada rubrik dan kriteria objektif, bukan pada kepribadian atau kesan pribadi.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <!-- F. KUALITAS ALAT UKUR                                         -->
+    <!-- ============================================================ -->
+
+    <h2>F. Kualitas Alat Ukur: Dimensi Psikometrik</h2>
+
+    <p>Menurut Hunsley &amp; Mash (2008), terdapat empat dimensi kualitas alat ukur yang harus diperhatikan dalam EBA:</p>
+
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th style="width:15%;">Dimensi</th>
+                <th style="width:35%;">Penjelasan</th>
+                <th style="width:50%;">Pertanyaan Kunci untuk Guru Vokasi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Reliabilitas</strong></td>
+                <td>Konsistensi hasil pengukuran dari waktu ke waktu, antar penilai, atau antar item</td>
+                <td>Apakah hasil penilaian akan sama jika dilakukan oleh guru lain atau di waktu yang berbeda?</td>
+            </tr>
+            <tr>
+                <td><strong>Validitas</strong></td>
+                <td>Sejauh mana alat ukur benar-benar mengukur apa yang seharusnya diukur</td>
+                <td>Apakah soal praktik benar-benar mengukur kompetensi yang dibutuhkan di industri?</td>
+            </tr>
+            <tr>
+                <td><strong>Norma</strong></td>
+                <td>Standar pembanding untuk populasi tertentu</td>
+                <td>Apakah ada acuan atau standar (seperti WorldSkills / LKS) yang dapat digunakan sebagai pembanding?</td>
+            </tr>
+            <tr>
+                <td><strong>Utilitas</strong></td>
+                <td>Kepraktisan dan manfaat alat ukur dalam konteks penggunaan</td>
+                <td>Apakah alat ukur praktis digunakan di kelas dengan sumber daya yang tersedia?</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ============================================================ -->
+    <!-- G. PANDUAN PRAKTIS                                            -->
+    <!-- ============================================================ -->
+
+    <h2>G. Panduan Praktis Menyusun Instrumen EBA</h2>
+
+    <p>Berikut adalah langkah-langkah praktis yang dapat diterapkan oleh guru vokasi dalam menyusun instrumen asesmen berbasis bukti:</p>
+
+    <h3>Langkah-langkah (Pendekatan <em>Backward Design</em>)</h3>
+    <ol>
+        <li><strong>Mulailah dengan standar kompetensi</strong> — gunakan acuan dari <em>WorldSkills / LKS</em>, Skema Sertifikasi LSP, atau standar industri yang relevan.</li>
+        <li><strong>Identifikasi bukti</strong> — tentukan apa yang harus ditampilkan siswa sebagai bukti penguasaan kompetensi.</li>
+        <li><strong>Susun soal praktik</strong> — buat soal yang mencerminkan pekerjaan nyata di industri, bukan sekadar pertanyaan teoretis.</li>
+        <li><strong>Kembangkan rubrik</strong> — susun kriteria penilaian yang terukur, objektif, dan mudah digunakan.</li>
+    </ol>
+
+    <h3>Kriteria Rubrik yang Baik</h3>
+    <ul>
+        <li>Menggunakan <strong>angka, ukuran, atau indikator yang teramati secara visual</strong>;</li>
+        <li>Menghindari kata subjektif seperti "bagus", "baik", "rapi", atau "sangat memuaskan";</li>
+        <li>Memiliki <strong>skala yang jelas</strong> (misalnya: 0–3 atau 1–4) dengan deskripsi setiap level;</li>
+        <li>Dapat diujicobakan (<em>pilot test</em>) dan direvisi berdasarkan hasil uji coba.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <!-- H. DAFTAR PUSTAKA                                             -->
+    <!-- ============================================================ -->
+
+    <h2>H. Daftar Pustaka</h2>
+
+    <div class="daftar-pustaka">
+        <p>Cooper, W. H. (1981). Ubiquitous halo. <em>Psychological Bulletin, 90</em>(2), 218–244.</p>
+        <p>Hunsley, J., &amp; Mash, E. J. (2005). Introduction to the special section on developing guidelines for the evidence-based assessment of adult disorders. <em>Psychological Assessment, 17</em>(3), 251–255.</p>
+        <p>Hunsley, J., &amp; Mash, E. J. (2007). Evidence-based assessment. <em>Annual Review of Clinical Psychology, 3</em>, 29–51.</p>
+        <p>Hunsley, J., &amp; Mash, E. J. (Eds.). (2008). <em>A Guide to Assessments That Work</em>. Oxford University Press.</p>
+        <p>Hunsley, J., &amp; Mash, E. J. (2018). Advances in evidence-based assessment: Using assessment to improve clinical interventions and outcomes. In J. Hunsley &amp; E. J. Mash (Eds.), <em>A Guide to Assessments That Work</em> (2nd ed.). Oxford University Press.</p>
+        <p>Mash, E. J., &amp; Hunsley, J. (2005). Evidence-based assessment of child and adolescent disorders: Issues and challenges. <em>Journal of Clinical Child and Adolescent Psychology, 34</em>(3), 362–379.</p>
+        <p>Schmidt, F. T. C., Kaiser, A., &amp; Retelsdorf, J. (2023). Halo effects in grading: An experimental approach. <em>Educational Psychology, 43</em>(2–3), 246–262.</p>
+        <p>Talbott, E., De Los Reyes, A., Kearns, D. M., Mancilla-Martinez, J., &amp; Wang, M. (2023). Evidence-based assessment in special education research: Advancing the use of evidence in assessment tools and empirical processes. <em>Exceptional Children, 89</em>(4), 467–487.</p>
+        <p>Thorndike, E. L. (1920). A constant error in psychological ratings. <em>Journal of Applied Psychology, 4</em>(1), 25–29.</p>
+        <p>Youngstrom, E. A., Van Meter, A., Frazier, T. W., Hunsley, J., Prinstein, M. J., Ong, M. L., &amp; Youngstrom, J. K. (2017). Evidence-based assessment as an integrative model for applying psychological science to guide the voyage of treatment. <em>Clinical Psychology: Science and Practice, 24</em>(4), 331–363.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- I. CATATAN PENGGUNAAN                                         -->
+    <!-- ============================================================ -->
+
+    <div class="box-highlight" style="margin-top:30px;">
+        <p><strong>Catatan Penggunaan:</strong> Handout ini disusun untuk mendukung pelatihan harmonisasi asesmen kompetensi vokasi. Silakan digunakan sebagai pegangan peserta selama pelatihan dan untuk referensi dalam menyusun instrumen asesmen berbasis bukti di satuan pendidikan masing-masing.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER                                                        -->
+    <!-- ============================================================ -->
+
+    <div class="footer">
+        Handout ini disusun oleh <strong>Sri Hardono, S.T., M.Sc.</strong> untuk keperluan pelatihan guru vokasi dan SMK.<br>
+        © 2026 — Dapat disalin dan didistribusikan untuk keperluan pendidikan nonkomersial.
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop Harmonisasi Assessment WorldSkills — 9 Events Gagné</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #020B18;
+    --bg2: #0A1628;
+    --cyan: #00E5FF;
+    --blue: #0057B8;
+    --gold: #FFD600;
+    --slate: #1A2A3A;
+    --text: #C8D8E8;
+    --text-dim: #607080;
+    --glow-cyan: 0 0 20px rgba(0,229,255,0.4), 0 0 60px rgba(0,229,255,0.15);
+    --glow-blue: 0 0 20px rgba(0,87,184,0.5);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,229,255,0.015) 2px, rgba(0,229,255,0.015) 4px);
+    pointer-events: none; z-index: 1000;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    background: linear-gradient(135deg, #020B18 0%, #051530 50%, #020B18 100%);
+    border-bottom: 1px solid rgba(0,229,255,0.3);
+    padding: 50px 40px 40px;
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  header::before {
+    content: '';
+    position: absolute; top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(0,87,184,0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  header::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), var(--gold), var(--cyan), transparent);
+  }
+
+  .header-badge {
+    display: inline-block;
+    font-family: 'Orbitron', monospace;
+    font-size: 10px; letter-spacing: 4px;
+    color: var(--gold);
+    border: 1px solid rgba(255,214,0,0.4);
+    padding: 5px 16px; margin-bottom: 16px;
+    background: rgba(255,214,0,0.05);
+  }
+
+  header h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(16px, 3vw, 28px);
+    font-weight: 800; color: #fff;
+    line-height: 1.3; letter-spacing: 1px;
+    text-shadow: var(--glow-cyan); margin-bottom: 10px;
+  }
+
+  header h1 span { color: var(--cyan); }
+
+  header h3 {
+    font-weight: 300; font-size: clamp(12px, 1.8vw, 15px);
+    color: var(--text); opacity: 0.75;
+    max-width: 680px; margin: 0 auto 14px; line-height: 1.65;
+  }
+
+  .header-author {
+    font-family: 'Orbitron', monospace; font-size: 10px;
+    color: var(--gold); letter-spacing: 2px; opacity: 0.85;
+  }
+
+  /* GAGNE FRAMEWORK BANNER */
+  .gagne-banner {
+    position: relative; z-index: 1;
+    background: rgba(0,229,255,0.04);
+    border-bottom: 1px solid rgba(0,229,255,0.12);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; flex-wrap: wrap;
+  }
+
+  .gagne-label {
+    font-family: 'Orbitron', monospace; font-size: 9px;
+    letter-spacing: 3px; color: var(--cyan); opacity: 0.7;
+    white-space: nowrap;
+  }
+
+  .gagne-steps {
+    display: flex; gap: 4px; flex-wrap: wrap; justify-content: center;
+  }
+
+  .gagne-dot {
+    width: 28px; height: 6px; border-radius: 3px;
+    background: rgba(0,229,255,0.15);
+    border: 1px solid rgba(0,229,255,0.2);
+    transition: all 0.3s; cursor: pointer;
+  }
+
+  .gagne-dot.active {
+    background: var(--cyan);
+    box-shadow: var(--glow-cyan);
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 500;
+    background: rgba(2,11,24,0.93);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,229,255,0.1);
+    padding: 8px 16px;
+    display: flex; gap: 4px; overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  nav::-webkit-scrollbar { display: none; }
+
+  nav a {
+    font-family: 'Orbitron', monospace; font-size: 9px;
+    font-weight: 600; letter-spacing: 0.8px;
+    color: var(--text-dim); text-decoration: none;
+    padding: 7px 11px; border-radius: 2px;
+    border: 1px solid rgba(0,229,255,0.08);
+    background: rgba(0,229,255,0.02);
+    white-space: nowrap; transition: all 0.25s;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+
+  nav a .nav-event {
+    font-size: 8px; color: var(--cyan); opacity: 0.6; letter-spacing: 2px;
+  }
+
+  nav a:hover {
+    color: var(--cyan);
+    border-color: rgba(0,229,255,0.35);
+    background: rgba(0,229,255,0.07);
+    box-shadow: var(--glow-cyan);
+  }
+
+  /* PAGES */
+  .page { display: none; padding: 50px 40px; max-width: 1100px; margin: auto; position: relative; z-index: 1; }
+  .page.active { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* EVENT HEADER */
+  .event-header {
+    display: flex; align-items: flex-start; gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .event-number {
+    flex-shrink: 0;
+    width: 64px; height: 64px;
+    border: 2px solid var(--cyan);
+    border-radius: 4px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    box-shadow: var(--glow-cyan);
+    background: rgba(0,229,255,0.05);
+  }
+
+  .event-number .ev-label {
+    font-family: 'Orbitron', monospace; font-size: 7px;
+    letter-spacing: 2px; color: var(--cyan); opacity: 0.7;
+  }
+
+  .event-number .ev-num {
+    font-family: 'Orbitron', monospace; font-size: 22px;
+    font-weight: 800; color: var(--cyan); line-height: 1;
+  }
+
+  .event-meta { flex: 1; }
+
+  .event-tag {
+    font-family: 'Orbitron', monospace; font-size: 9px;
+    letter-spacing: 4px; color: var(--gold); margin-bottom: 6px;
+    text-transform: uppercase; opacity: 0.85;
+  }
+
+  .event-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: 700; color: #fff; line-height: 1.3;
+  }
+
+  .event-subtitle {
+    font-size: 13px; color: var(--text); opacity: 0.6;
+    margin-top: 5px; font-style: italic;
+  }
+
+  /* CARDS */
+  .card {
+    background: rgba(10,22,40,0.75);
+    border: 1px solid rgba(0,229,255,0.1);
+    border-radius: 4px; padding: 24px 28px; margin: 14px 0;
+    position: relative; overflow: hidden; transition: all 0.3s;
+  }
+
+  .card:hover {
+    border-color: rgba(0,229,255,0.28);
+    background: rgba(10,22,40,0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4), var(--glow-blue);
+  }
+
+  .card h3 {
+    font-family: 'Orbitron', monospace; font-size: 12px;
+    font-weight: 600; color: var(--cyan);
+    letter-spacing: 1.5px; margin-bottom: 12px; text-transform: uppercase;
+  }
+
+  .card p, .card li {
+    font-size: 14px; line-height: 1.75; color: var(--text); opacity: 0.85;
+  }
+
+  .card ul, .card ol { padding-left: 18px; }
+  .card li { margin-bottom: 7px; }
+
+  /* HIGHLIGHT */
+  .highlight {
+    background: rgba(0,229,255,0.05);
+    border: 1px solid rgba(0,229,255,0.22);
+    border-left: 3px solid var(--cyan);
+    padding: 18px 24px; margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 14px; line-height: 1.75;
+    color: rgba(200,216,232,0.9);
+    position: relative;
+  }
+
+  .highlight::after {
+    content: '//';
+    font-family: 'Orbitron', monospace; font-size: 18px;
+    color: var(--cyan); opacity: 0.2;
+    position: absolute; top: 12px; right: 16px;
+  }
+
+  /* GRID */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 14px; margin: 14px 0; }
+
+  /* OBJECTIVE LIST */
+  .obj-list { list-style: none; padding: 0; }
+  .obj-list li {
+    padding: 13px 0; border-bottom: 1px solid rgba(0,229,255,0.07);
+    display: flex; align-items: flex-start; gap: 14px; font-size: 14px;
+  }
+  .obj-list li:last-child { border-bottom: none; }
+  .obj-num {
+    font-family: 'Orbitron', monospace; font-size: 10px;
+    color: var(--cyan); opacity: 0.7; min-width: 26px; padding-top: 2px;
+  }
+
+  /* RECALL COMPARE */
+  .recall-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+  @media(max-width:600px){ .recall-grid { grid-template-columns: 1fr; } }
+
+  .recall-card {
+    border-radius: 4px; padding: 20px;
+    border: 1px solid rgba(0,229,255,0.1);
+    background: rgba(10,22,40,0.7);
+  }
+
+  .recall-card.gap {
+    border-color: rgba(255,100,100,0.2);
+    background: rgba(255,50,50,0.04);
+  }
+
+  .recall-card h4 {
+    font-family: 'Orbitron', monospace; font-size: 10px;
+    letter-spacing: 2px; margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .recall-card.gap h4 { color: rgba(255,130,130,0.8); }
+  .recall-card:not(.gap) h4 { color: var(--cyan); }
+
+  .tag-list { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag {
+    font-family: 'Orbitron', monospace; font-size: 9px;
+    padding: 5px 10px; border-radius: 2px; letter-spacing: 1px;
+  }
+
+  .tag.known {
+    background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.25); color: var(--cyan);
+  }
+
+  .tag.gap {
+    background: rgba(255,100,100,0.08); border: 1px solid rgba(255,100,100,0.25); color: rgba(255,130,130,0.9);
+  }
+
+  /* VALUE CARDS */
+  .val-card {
+    background: rgba(10,22,40,0.7); border: 1px solid rgba(0,229,255,0.1);
+    border-radius: 4px; padding: 20px 16px; text-align: center;
+    transition: all 0.3s; cursor: default;
+    position: relative; overflow: hidden;
+  }
+
+  .val-card:hover {
+    border-color: var(--cyan);
+    background: rgba(0,229,255,0.06);
+    box-shadow: var(--glow-cyan);
+    transform: translateY(-3px);
+  }
+
+  .val-num {
+    font-family: 'Orbitron', monospace; font-size: 26px; font-weight: 800;
+    color: rgba(0,229,255,0.12); position: absolute; top: 8px; right: 10px; line-height: 1;
+  }
+
+  .val-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); margin: 0 auto 10px; box-shadow: var(--glow-cyan); }
+  .val-card h3 { font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 2px; }
+
+  /* GUIDANCE CARDS */
+  .guide-card {
+    border: 1px solid rgba(0,229,255,0.1); border-radius: 4px;
+    padding: 22px; background: rgba(10,22,40,0.8); transition: all 0.3s;
+  }
+
+  .guide-card:hover { border-color: rgba(0,229,255,0.35); box-shadow: var(--glow-cyan); transform: translateY(-2px); }
+  .guide-tag { font-family: 'Orbitron', monospace; font-size: 8px; letter-spacing: 3px; color: var(--cyan); opacity: 0.65; margin-bottom: 8px; display: block; }
+  .guide-card h3 { font-family: 'Orbitron', monospace; font-size: 13px; color: #fff; margin-bottom: 8px; letter-spacing: 1px; }
+  .guide-card p { font-size: 13px; color: var(--text); opacity: 0.75; line-height: 1.65; }
+
+  /* PARADIGM */
+  .paradigm-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media(max-width:640px){ .paradigm-wrap { grid-template-columns: 1fr; } .page { padding: 40px 20px; } }
+
+  .flow-arrow { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+  .flow-step {
+    font-family: 'Orbitron', monospace; font-size: 9px;
+    padding: 5px 9px; border-radius: 2px; letter-spacing: 1px; white-space: nowrap;
+  }
+  .flow-step.old { background: rgba(255,100,100,0.1); border: 1px solid rgba(255,100,100,0.3); color: rgba(255,150,150,0.9); }
+  .flow-step.new-step { background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.3); color: var(--cyan); }
+  .flow-arrow-icon { color: var(--text-dim); font-size: 13px; }
+  .card.old-card { border-color: rgba(255,100,100,0.2); background: rgba(255,50,50,0.04); }
+  .card.old-card h3 { color: rgba(255,130,130,0.85); }
+
+  /* FEEDBACK SCENARIO */
+  .feedback-item {
+    display: flex; gap: 16px; padding: 16px 0;
+    border-bottom: 1px solid rgba(0,229,255,0.06);
+    align-items: flex-start;
+  }
+  .feedback-item:last-child { border-bottom: none; }
+  .fb-icon {
+    font-family: 'Orbitron', monospace; font-size: 11px;
+    padding: 6px 10px; border-radius: 2px; flex-shrink: 0; margin-top: 2px;
+  }
+  .fb-icon.good { background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.3); color: var(--cyan); }
+  .fb-icon.bad { background: rgba(255,100,100,0.08); border: 1px solid rgba(255,100,100,0.25); color: rgba(255,130,130,0.9); }
+  .fb-text { font-size: 13px; color: var(--text); opacity: 0.82; line-height: 1.7; }
+  .fb-text strong { color: #fff; }
+
+  /* ASSESS PERFORMANCE */
+  .reflect-item { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(0,229,255,0.07); align-items: flex-start; }
+  .reflect-item:last-child { border-bottom: none; }
+  .reflect-num { font-family: 'Orbitron', monospace; font-size: 22px; font-weight: 800; color: rgba(0,229,255,0.2); line-height: 1; min-width: 36px; padding-top: 2px; }
+  .reflect-text { font-size: 14px; line-height: 1.75; color: var(--text); opacity: 0.85; }
+
+  /* TRANSFER / ACTION */
+  .action-card {
+    border: 1px solid rgba(255,214,0,0.15);
+    background: rgba(255,214,0,0.03);
+    border-radius: 4px; padding: 22px 24px; margin: 12px 0; transition: all 0.3s;
+  }
+  .action-card:hover { border-color: rgba(255,214,0,0.35); box-shadow: 0 0 20px rgba(255,214,0,0.1); }
+  .action-card h4 { font-family: 'Orbitron', monospace; font-size: 10px; letter-spacing: 2px; color: var(--gold); margin-bottom: 10px; }
+  .action-card ul { padding-left: 16px; }
+  .action-card li { font-size: 13px; line-height: 1.7; color: var(--text); opacity: 0.82; margin-bottom: 6px; }
+
+  /* FINAL MSG */
+  .final-msg {
+    background: linear-gradient(135deg, rgba(0,87,184,0.15), rgba(0,229,255,0.08));
+    border: 1px solid rgba(0,229,255,0.25); border-radius: 4px;
+    padding: 32px; margin-top: 20px; text-align: center; position: relative; overflow: hidden;
+  }
+  .final-msg::before {
+    content: '';
+    position: absolute; top: 0; left: -100%;
+    width: 300%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), var(--gold), var(--cyan), transparent);
+    animation: sweep 3s linear infinite;
+  }
+  @keyframes sweep { from { transform: translateX(-33%); } to { transform: translateX(0%); } }
+  .final-msg p { font-family: 'Orbitron', monospace; font-size: clamp(11px, 1.8vw, 14px); color: #fff; line-height: 1.9; letter-spacing: 0.5px; }
+  .final-msg p span { color: var(--cyan); }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    position: fixed; bottom: 0; left: 0;
+    height: 3px; background: linear-gradient(90deg, var(--blue), var(--cyan));
+    box-shadow: var(--glow-cyan); transition: width 0.4s ease;
+    z-index: 999;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center; padding: 28px 20px;
+    font-family: 'Orbitron', monospace; font-size: 9px;
+    letter-spacing: 2px; color: var(--text-dim);
+    border-top: 1px solid rgba(0,229,255,0.08);
+    position: relative; z-index: 1;
+  }
+
+  /* VISI CARDS */
+  .visi-card {
+    border-radius: 4px; padding: 20px 24px; margin: 10px 0;
+    border: 1px solid rgba(255,214,0,0.15); background: rgba(255,214,0,0.03);
+  }
+  .visi-card.misi { border-color: rgba(0,229,255,0.15); background: rgba(0,229,255,0.03); }
+  .visi-card.posisi { border-color: rgba(0,87,184,0.25); background: rgba(0,87,184,0.05); }
+  .visi-label { font-family: 'Orbitron', monospace; font-size: 9px; letter-spacing: 4px; color: var(--gold); margin-bottom: 8px; display: block; }
+  .visi-card.misi .visi-label { color: var(--cyan); }
+  .visi-card.posisi .visi-label { color: #7ab8ff; }
+  .visi-card h3 { font-size: 15px; font-weight: 600; color: #fff; line-height: 1.5; }
+  .visi-card p { font-size: 13px; color: var(--text); opacity: 0.8; line-height: 1.7; }
+</style>
+<script>
+const TOTAL = 9;
+let current = 1;
+
+function showPage(id, num) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+  current = num;
+  // update dots
+  document.querySelectorAll('.gagne-dot').forEach((d,i) => {
+    d.classList.toggle('active', i < num);
+  });
+  // update progress bar
+  const pct = (num / TOTAL) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width:11.1%"></div>
+
+<header>
+  <div class="header-badge">MODEL PEMBELAJARAN · ROBERT M. GAGNÉ</div>
+  <h1>WORKSHOP <span>WORLDSKILLS</span> ASSESSMENT<br>9 EVENTS OF INSTRUCTION</h1>
+  <h3>Harmonisasi Sistem Assessment WorldSkills pada Kurikulum Praktik Reguler Pendidikan Vokasi / SMK</h3>
+  <div class="header-author">DISUSUN OLEH: SRI HARDONO, S.T., M.Sc.</div>
+</header>
+
+<!-- GAGNÉ PROGRESS DOTS -->
+<div class="gagne-banner">
+  <span class="gagne-label">9 EVENTS OF INSTRUCTION</span>
+  <div class="gagne-steps" id="gagneDots">
+    <div class="gagne-dot active" onclick="showPage('p1',1)" title="Event 1"></div>
+    <div class="gagne-dot" onclick="showPage('p2',2)" title="Event 2"></div>
+    <div class="gagne-dot" onclick="showPage('p3',3)" title="Event 3"></div>
+    <div class="gagne-dot" onclick="showPage('p4',4)" title="Event 4"></div>
+    <div class="gagne-dot" onclick="showPage('p5',5)" title="Event 5"></div>
+    <div class="gagne-dot" onclick="showPage('p6',6)" title="Event 6"></div>
+    <div class="gagne-dot" onclick="showPage('p7',7)" title="Event 7"></div>
+    <div class="gagne-dot" onclick="showPage('p8',8)" title="Event 8"></div>
+    <div class="gagne-dot" onclick="showPage('p9',9)" title="Event 9"></div>
+  </div>
+</div>
+
+<nav>
+  <a href="#" onclick="showPage('p1',1)"><span class="nav-event">EVENT 1</span></a>
+  <a href="#" onclick="showPage('p2',2)"><span class="nav-event">EVENT 2</span></a>
+  <a href="#" onclick="showPage('p3',3)"><span class="nav-event">EVENT 3</span> </a>
+  <a href="#" onclick="showPage('p4',4)"><span class="nav-event">EVENT 4</span></a>
+  <a href="#" onclick="showPage('p5',5)"><span class="nav-event">EVENT 5</span></a>
+  <a href="#" onclick="showPage('p6',6)"><span class="nav-event">EVENT 6</span></a>
+  <a href="#" onclick="showPage('p7',7)"><span class="nav-event">EVENT 7</span> </a>
+  <a href="#" onclick="showPage('p8',8)"><span class="nav-event">EVENT 8</span></a>
+  <a href="#" onclick="showPage('p9',9)"><span class="nav-event">EVENT 9</span></a>
+</nav>
+
+<!-- ─── EVENT 1: GAIN ATTENTION ─── -->
+<section id="p1" class="page active">
+  <div class="event-header">
+    <div class="event-number"><span class="ev-label">EVENT</span><span class="ev-num">01</span></div>
+    <div class="event-meta">
+      <div class="event-tag">GAIN ATTENTION</div>
+      <h2 class="event-title">Mengubah cara pandang terhadap LKS/WorldSkills</h2>
+      <p class="event-subtitle">Mengubah cara pandang terhadap LKS/WorldSkills</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Setiap tahun ribuan guru mempersiapkan siswa mengikuti lomba — namun berapa banyak yang benar-benar mengubah kualitas pembelajaran di kelas?
+  </div>
+
+  <div class="card">
+    <h3>Fakta Mengejutkan</h3>
+    <ul>
+      <li>Negara-negara juara WorldSkills seperti Korea Selatan, Swiss, dan Jepang <strong style="color:#fff">tidak hanya melatih atlet lomba</strong> — mereka mengintegrasikan standar WorldSkills ke dalam kurikulum nasional mereka.</li>
+      <li>Medali bukan indikator utama keberhasilan. Yang diukur adalah <strong style="color:#fff">pergeseran standar pembelajaran vokasi</strong> secara menyeluruh.</li>
+      <li>WorldSkills berdiri sejak <strong style="color:var(--cyan)">1950</strong> dan kini mencakup lebih dari 85 negara — bukan sekadar olimpiade keterampilan.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Pertanyaan Pemantik</h3>
+    <ul>
+      <li>Apakah tujuan utama lomba adalah <em>medali</em>, atau <em>mutu pembelajaran</em>?</li>
+      <li>Mengapa negara maju berinvestasi besar pada WorldSkills?</li>
+      <li>Apa hubungan nyata antara lomba dan kualitas praktik di kelas SMK Anda?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─── EVENT 2: INFORM OBJECTIVES ─── -->
+<section id="p2" class="page">
+  <div class="event-header">
+    <div class="event-number"><span class="ev-label">EVENT</span><span class="ev-num">02</span></div>
+    <div class="event-meta">
+      <div class="event-tag">INFORM LEARNERS OF OBJECTIVES</div>
+      <h2 class="event-title">Tujuan Workshop Ini</h2>
+      <p class="event-subtitle">Apa yang akan Anda kuasai di akhir sesi?</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Setelah mengikuti workshop ini, peserta mampu mengintegrasikan prinsip assessment WorldSkills ke dalam praktik pembelajaran reguler di SMK.
+  </div>
+
+  <div class="card">
+    <h3>Tujuan Pembelajaran</h3>
+    <ul class="obj-list">
+      <li><span class="obj-num">T·01</span>Menjelaskan filosofi dan tujuan WorldSkills melampaui konteks kompetisi.</li>
+      <li><span class="obj-num">T·02</span>Mengidentifikasi 7 nilai utama WorldSkills dan relevansinya dengan praktik di kelas.</li>
+      <li><span class="obj-num">T·03</span>Menganalisis perbedaan paradigma assessment konvensional dengan standar WorldSkills.</li>
+      <li><span class="obj-num">T·04</span>Merancang langkah konkret harmonisasi assessment WorldSkills ke kurikulum praktik SMK.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Visi &amp; Misi WorldSkills</h3>
+    <div class="visi-card" style="margin-top:12px">
+      <span class="visi-label">VISI</span>
+      <h3>Improving our world with the power of skills.</h3>
+    </div>
+    <div class="visi-card misi">
+      <span class="visi-label">MISI</span>
+      <p>Meningkatkan profil dan pengakuan keterampilan individu serta menunjukkan pentingnya keterampilan bagi pertumbuhan ekonomi dan kesuksesan individu.</p>
+    </div>
+    <div class="visi-card posisi">
+      <span class="visi-label">POSISI</span>
+      <p>Global Hub for Skills Excellence and Development</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EVENT 3: STIMULATE RECALL ─── -->
+<section id="p3" class="page">
+  <div class="event-header">
+    <div class="event-number"><span class="ev-label">EVENT</span><span class="ev-num">03</span></div>
+    <div class="event-meta">
+      <div class="event-tag">STIMULATE RECALL OF PRIOR LEARNING</div>
+      <h2 class="event-title">Apa yang Sudah Anda Ketahui?</h2>
+      <p class="event-subtitle">Menghubungkan pengalaman nyata dengan konsep baru</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Sebagai guru SMK, Anda sudah memiliki pengalaman menilai praktik siswa. Mari identifikasi apa yang sudah berjalan baik — dan di mana celah yang perlu diperkuat.
+  </div>
+
+  <div class="recall-grid">
+    <div class="recall-card">
+      <h4>Yang Sudah Anda Lakukan</h4>
+      <div class="tag-list">
+        <span class="tag known">Rubrik Penilaian</span>
+        <span class="tag known">Ujian Praktik</span>
+        <span class="tag known">Observasi Kerja</span>
+        <span class="tag known">Nilai Proses</span>
+        <span class="tag known">Checklist Kompetensi</span>
+        <span class="tag known">Portfolio Siswa</span>
+      </div>
+    </div>
+    <div class="recall-card gap">
+      <h4>Yang Belum Tersentuh</h4>
+      <div class="tag-list">
+        <span class="tag gap">Standar Industri Global</span>
+        <span class="tag gap">Marking Scheme</span>
+        <span class="tag gap">Judgment Scoring</span>
+        <span class="tag gap">Measurement Scoring</span>
+        <span class="tag gap">Benchmarking Internasional</span>
+        <span class="tag gap">Feedback Terstruktur</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Refleksi Awal</h3>
+    <p>Selama ini, darimana sumber standar penilaian praktik Anda berasal? Kurikulum nasional? Buku teks? Pengalaman pribadi? Atau standar industri yang terbarukan? Jawaban Anda akan menjadi titik tolak transformasi.</p>
+  </div>
+</section>
+
+<!-- ─── EVENT 4: PRESENT CONTENT ─── -->
+<section id="p4" class="page">
+  <div class="event-header">
+    <div class="event-number"><span class="ev-label">EVENT</span><span class="ev-num">04</span></div>
+    <div class="event-meta">
+      <div class="event-tag">PRESENT THE CONTENT</div>
+      <h2 class="event-title">Fondasi: Filosofi &amp; Nilai WorldSkills</h2>
+      <p class="event-subtitle">Materi inti yang menjadi landasan harmonisasi</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Mengapa WorldSkills Ada?</h3>
+    <p>WorldSkills berdiri sejak <strong style="color:var(--cyan)">1950</strong> sebagai respons atas kebutuhan dunia akan standar keterampilan vokasi yang diakui secara global. Kini berkembang menjadi gerakan yang mencakup lebih dari 85 negara, menjadi tolok ukur mutu pendidikan vokasi dunia.</p>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>7 Nilai Utama WorldSkills</h3>
+    <div class="grid" style="margin-top:14px">
+      <div class="val-card"><span class="val-num">01</span><div class="val-dot"></div><h3>Excellence</h3></div>
+      <div class="val-card"><span class="val-num">02</span><div class="val-dot"></div><h3>Fairness</h3></div>
+      <div class="val-card"><span class="val-num">03</span><div class="val-dot"></div><h3>Diversity</h3></div>
+      <div class="val-card"><span class="val-num">04</span><div class="val-dot"></div><h3>Innovation</h3></div>
+      <div class="val-card"><span class="val-num">05</span><div class="val-dot"></div><h3>Integrity</h3></div>
+      <div class="val-card"><span class="val-num">06</span><div class="val-dot"></div><h3>Transparency</h3></div>
+      <div class="val-card"><span class="val-num">07</span><div class="val-dot"></div><h3>Partnership</h3></div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Kompetisi WorldSkills adalah <strong style="color:#fff">Showcase of Excellence</strong>, <strong style="color:#fff">Testbed of Standards</strong>, <strong style="color:#fff">Future Skills Insight</strong>, dan <strong style="color:#fff">Davos of Skills</strong> — bukan sekadar ajang meraih medali.
+  </div>
+</section>
+
+<!-- ─── EVENT 5: PROVIDE GUIDANCE ─── -->
+<section id="p5" class="page">
+  <div class="event-header">
+    <div class="event-number"><span class="ev-label">EVENT</span><span class="ev-num">05</span></div>
+    <div class="event-meta">
+      <div class="event-tag">PROVIDE LEARNING GUIDANCE</div>
+      <h2 class="event-title">Assessment sebagai Kunci Mutu</h2>
+      <p class="event-subtitle">Panduan memahami sistem penilaian WorldSkills</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Kualitas kompetisi sangat ditentukan oleh kualitas assessment. Assessment yang dirancang dengan baik bukan sekadar alat ukur — ia adalah cermin dari standar pendidikan vokasi itu sendiri.
+  </div>
+
+  <div class="grid">
+    <div class="guide-card">
+      <span class="guide-tag">KRITERIA · 01</span>
+      <h3>Valid</h3>
+      <p>Mengukur kompetensi yang benar dan relevan dengan standar industri, bukan hanya hafalan prosedur.</p>
+    </div>
+    <div class="guide-card">
+      <span class="guide-tag">KRITERIA · 02</span>
+      <h3>Reliabel</h3>
+      <p>Hasil penilaian konsisten antar penilai dan antar waktu. Marking scheme yang jelas adalah kuncinya.</p>
+    </div>
+    <div class="guide-card">
+      <span class="guide-tag">KRITERIA · 03</span>
+      <h3>Transparan</h3>
+      <p>Kriteria diketahui sejak awal oleh peserta. Tidak ada kejutan dalam penilaian — siswa tahu apa yang diharapkan.</p>
+    </div>
+    <div class="guide-card">
+      <span class="guide-tag">KRITERIA · 04</span>
+      <h3>Objektif</h3>
+      <p>Berbasis bukti nyata: ukuran, hasil kerja, observasi terstruktur — bukan opini atau preferensi penilai.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Dua Jenis Penilaian WorldSkills</h3>
+    <ul>
+      <li><strong style="color:var(--cyan)">Measurement Scoring</strong> — Penilaian terhadap hasil kerja yang dapat diukur secara kuantitatif (dimensi, toleransi, akurasi).</li>
+      <li><strong style="color:var(--cyan)">Judgment Scoring</strong> — Penilaian terhadap kualitas yang membutuhkan pertimbangan ahli (estetika, teknik, finishing).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─── EVENT 6: ELICIT PERFORMANCE ─── -->
+<section id="p6" class="page">
+  <div class="event-header">
+    <div class="event-number"><span class="ev-label">EVENT</span><span class="ev-num">06</span></div>
+    <div class="event-meta">
+      <div class="event-tag">ELICIT PERFORMANCE</div>
+      <h2 class="event-title">Terapkan: Paradigma Baru di Kelas Anda</h2>
+      <p class="event-subtitle">Dari pemahaman menuju tindakan nyata</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Saatnya bergeser dari paradigma lama. Bukan mengganti kurikulum — melainkan <strong style="color:#fff">mengubah cara berpikir</strong> tentang urutan dan tujuan setiap langkah pembelajaran.
+  </div>
+
+  <div class="paradigm-wrap">
+    <div class="card old-card">
+      <h3>Paradigma Lama</h3>
+      <p style="font-size:12px; margin-bottom:10px; opacity:0.6">Nilai adalah akhir dari proses</p>
+      <div class="flow-arrow">
+        <span class="flow-step old">Mengajar</span>
+        <span class="flow-arrow-icon">→</span>
+        <span class="flow-step old">Praktik</span>
+        <span class="flow-arrow-icon">→</span>
+        <span class="flow-step old">Nilai</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Paradigma WorldSkills</h3>
+      <p style="font-size:12px; margin-bottom:10px; opacity:0.6">Standar memandu seluruh proses</p>
+      <div class="flow-arrow">
+        <span class="flow-step new-step">Standar</span>
+        <span class="flow-arrow-icon">→</span>
+        <span class="flow-step new-step">Assessment Design</span>
+        <span class="flow-arrow-icon">→</span>
+        <span class="flow-step new-step">Pembelajaran</span>
+        <span class="flow-arrow-icon">→</span>
+        <span class="flow-step new-step">Umpan Balik</span>
+        <span class="flow-arrow-icon">→</span>
+        <span class="flow-step new-step">Peningkatan</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Latihan: Analisis Kasus</h3>
+    <p>Ambil satu unit kompetensi yang Anda ajarkan saat ini. Identifikasi: <strong style="color:#fff">(1)</strong> Apa standar industri yang berlaku? <strong style="color:#fff">(2)</strong> Bagaimana Anda merancang assessment-nya dari awal? <strong style="color:#fff">(3)</strong> Apakah siswa tahu kriteria penilaian sebelum praktik dimulai?</p>
+  </div>
+</section>
+
+<!-- ─── EVENT 7: PROVIDE FEEDBACK ─── -->
+<section id="p7" class="page">
+  <div class="event-header">
+    <div class="event-number"><span class="ev-label">EVENT</span><span class="ev-num">07</span></div>
+    <div class="event-meta">
+      <div class="event-tag">PROVIDE FEEDBACK</div>
+      <h2 class="event-title">Umpan Balik yang Bermakna</h2>
+      <p class="event-subtitle">Feedback bukan formalitas — ia adalah mesin pembelajaran</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Guru bukan hanya pengajar — ia adalah <strong style="color:var(--cyan)">desainer pengalaman belajar</strong> dan <strong style="color:var(--cyan)">assessor kompetensi</strong>. Feedback yang diberikan menentukan arah pertumbuhan siswa.
+  </div>
+
+  <div class="card">
+    <h3>Prinsip Feedback WorldSkills</h3>
+    <div class="feedback-item">
+      <span class="fb-icon good">BAIK</span>
+      <span class="fb-text"><strong>"Sudut potonganmu 2° melebihi toleransi yang ditetapkan. Coba periksa posisi benda kerja sebelum pemotongan berikutnya."</strong> — Spesifik, berbasis standar, mengarahkan perbaikan.</span>
+    </div>
+    <div class="feedback-item">
+      <span class="fb-icon bad">BURUK</span>
+      <span class="fb-text"><strong>"Kurang rapi, ulangi lagi."</strong> — Tidak memberi informasi tentang apa yang salah dan bagaimana memperbaikinya.</span>
+    </div>
+    <div class="feedback-item">
+      <span class="fb-icon good">BAIK</span>
+      <span class="fb-text"><strong>"Finishing-mu sangat baik di bagian A, tapi bagian B belum mencapai standar visual grade 1. Perhatikan tekanan dan arah gerakan amplas."</strong> — Mengakui kekuatan dan menunjukkan area spesifik yang perlu ditingkatkan.</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>7 Nilai dalam Feedback</h3>
+    <p>Apakah umpan balik yang Anda berikan sudah mencerminkan <strong style="color:var(--cyan)">Excellence</strong> (mendorong standar tertinggi), <strong style="color:var(--cyan)">Fairness</strong> (konsisten untuk semua siswa), dan <strong style="color:var(--cyan)">Transparency</strong> (berbasis kriteria yang jelas)?</p>
+  </div>
+</section>
+
+<!-- ─── EVENT 8: ASSESS PERFORMANCE ─── -->
+<section id="p8" class="page">
+  <div class="event-header">
+    <div class="event-number"><span class="ev-label">EVENT</span><span class="ev-num">08</span></div>
+    <div class="event-meta">
+      <div class="event-tag">ASSESS PERFORMANCE</div>
+      <h2 class="event-title">Uji Pemahaman: Refleksi Kritis</h2>
+      <p class="event-subtitle">Mengukur sejauh mana Anda telah memahami dan siap menerapkan</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Tiga Pertanyaan Kritis</h3>
+    <div class="reflect-item">
+      <span class="reflect-num">01</span>
+      <span class="reflect-text">Apakah assessment praktik di sekolah Anda saat ini sudah mengukur <strong style="color:#fff">performa kerja nyata</strong> yang sesuai dengan standar dunia kerja — bukan sekadar mengikuti prosedur buku teks?</span>
+    </div>
+    <div class="reflect-item">
+      <span class="reflect-num">02</span>
+      <span class="reflect-text">Apa <strong style="color:#fff">kesenjangan terbesar</strong> antara sistem penilaian praktik SMK Anda saat ini dengan standar assessment WorldSkills yang telah dijelaskan?</span>
+    </div>
+    <div class="reflect-item">
+      <span class="reflect-num">03</span>
+      <span class="reflect-text">Dalam konteks 7 nilai WorldSkills, nilai mana yang <strong style="color:#fff">paling sulit diimplementasikan</strong> dalam penilaian praktik Anda, dan mengapa?</span>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Diskusikan jawaban Anda bersama rekan peserta. Perbedaan perspektif adalah sumber belajar terkaya dalam workshop ini.
+  </div>
+</section>
+
+<!-- ─── EVENT 9: ENHANCE RETENTION & TRANSFER ─── -->
+<section id="p9" class="page">
+  <div class="event-header">
+    <div class="event-number"><span class="ev-label">EVENT</span><span class="ev-num">09</span></div>
+    <div class="event-meta">
+      <div class="event-tag">ENHANCE RETENTION &amp; TRANSFER</div>
+      <h2 class="event-title">Aksi Nyata: Langkah Pertama Anda</h2>
+      <p class="event-subtitle">Membawa transformasi dari workshop ke ruang kelas</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Pengetahuan yang tidak ditransfer ke tindakan nyata akan memudar dalam 72 jam. Tentukan komitmen Anda sebelum meninggalkan ruangan ini.
+  </div>
+
+  <div class="action-card">
+    <h4>MINGGU PERTAMA — Quick Wins</h4>
+    <ul>
+      <li>Pilih satu unit praktik dan buat <em>marking scheme</em> sederhana berbasis standar industri.</li>
+      <li>Bagikan kriteria penilaian kepada siswa <em>sebelum</em> praktik dimulai.</li>
+      <li>Gunakan feedback berbasis bukti (spesifik, terukur) minimal dalam satu sesi.</li>
+    </ul>
+  </div>
+
+  <div class="action-card">
+    <h4>BULAN PERTAMA — Implementasi Bertahap</h4>
+    <ul>
+      <li>Benchmark satu kompetensi inti terhadap standar WorldSkills yang tersedia secara publik.</li>
+      <li>Lakukan <em>peer assessment</em> antar siswa menggunakan rubrik yang telah disempurnakan.</li>
+      <li>Dokumentasikan perbedaan hasil belajar sebelum dan sesudah penerapan.</li>
+    </ul>
+  </div>
+
+  <div class="action-card">
+    <h4>SEMESTER DEPAN — Transformasi Sistemik</h4>
+    <ul>
+      <li>Integrasikan pendekatan "Standar → Assessment → Pembelajaran" ke seluruh silabus praktik.</li>
+      <li>Libatkan industri dalam validasi standar dan penilaian akhir.</li>
+      <li>Jadikan data assessment sebagai bahan refleksi dan peningkatan kurikulum secara berkala.</li>
+    </ul>
+  </div>
+
+  <div class="final-msg">
+    <p>
+      <span>WorldSkills bukan tentang medali.</span><br><br>
+      WorldSkills adalah strategi peningkatan mutu pendidikan vokasi<br>
+      melalui standar, assessment, dan budaya keunggulan —<br>
+      yang dimulai dari satu keputusan Anda hari ini.
+    </p>
+  </div>
+</section>
+
+<div class="footer">WORKSHOP HARMONISASI SISTEM ASSESSMENT WORLDSKILLS &nbsp;·&nbsp; SRI HARDONO, S.T., M.SC. &nbsp;·&nbsp; 9 EVENTS OF INSTRUCTION — ROBERT M. GAGNÉ</div>
+
+</body>
+</html>

@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EBA - Harmonisasi Asesmen Vokasi</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ----- RESET & GLOBAL ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        :root {
+            --navy: #0b2a4a;
+            --navy-light: #16385e;
+            --gold: #f6b83d;
+            --gold-soft: #fce3ad;
+            --ink: #1e2e41;
+            --bg: #eef2f8;
+        }
+
+        body {
+            background: radial-gradient(circle at 10% 0%, #1c4070 0%, #0b2a4a 45%, #081d34 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 30px 70px rgba(0, 10, 30, 0.45);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        /* ----- HEADER / NAVIGASI ----- */
+        .top-bar {
+            background: linear-gradient(120deg, var(--navy) 0%, var(--navy-light) 100%);
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: relative;
+        }
+
+        .top-bar::after {
+            content: "";
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 4px;
+            background: var(--gold);
+        }
+
+        .top-bar .logo {
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.2px;
+        }
+
+        .top-bar .logo i {
+            color: var(--gold);
+            font-size: 1.7rem;
+        }
+
+        .top-bar .narsum {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.78rem;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .top-bar .narsum strong {
+            color: var(--gold-soft);
+            font-weight: 600;
+        }
+
+        .page-indicator {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ddd;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            letter-spacing: 0.4px;
+        }
+
+        .page-indicator span {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* ----- PROGRESS BAR ----- */
+        .progress-track {
+            height: 5px;
+            width: 100%;
+            background: #e3e9f2;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 4.16%;
+            background: linear-gradient(90deg, var(--gold), #ffd479);
+            transition: width 0.35s ease;
+        }
+
+        /* ----- SLIDE WRAPPER ----- */
+        .slide-wrapper {
+            padding: 32px 38px 22px 38px;
+            min-height: 480px;
+            background: white;
+        }
+
+        /* ----- SLIDE KONTEN ----- */
+        .slide {
+            display: none;
+        }
+
+        .slide.active {
+            display: block;
+            animation: fadeSlide 0.4s ease;
+        }
+
+        @keyframes fadeSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            letter-spacing: -0.3px;
+        }
+
+        .slide h2 i {
+            color: var(--gold);
+            font-size: 2rem;
+            background: var(--gold-soft);
+            padding: 10px;
+            border-radius: 16px;
+        }
+
+        .slide .subhead {
+            font-size: 1.05rem;
+            color: var(--navy);
+            background: #eef3f8;
+            padding: 9px 20px;
+            border-radius: 60px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .slide p,
+        .slide li {
+            font-size: 1.04rem;
+            line-height: 1.7;
+            color: var(--ink);
+        }
+
+        .slide ul,
+        .slide ol {
+            padding-left: 25px;
+            margin: 12px 0;
+        }
+
+        .slide li {
+            margin-bottom: 10px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin: 20px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: #f8faff;
+            padding: 18px 18px 20px 18px;
+            border-radius: 18px;
+            box-shadow: 0 4px 14px rgba(11, 42, 74, 0.06);
+            border-left: 5px solid var(--gold);
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 22px rgba(11, 42, 74, 0.12);
+        }
+
+        .card i {
+            font-size: 1.7rem;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .card h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05rem;
+            margin: 6px 0 4px;
+            color: var(--navy);
+        }
+
+        .highlight-box {
+            background: #e6f0fa;
+            padding: 20px 24px;
+            border-radius: 18px;
+            border-left: 6px solid var(--gold);
+            margin: 20px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--navy);
+        }
+
+        .badge-icon {
+            background: var(--navy);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.78rem;
+            display: inline-block;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.93rem;
+            background: #fbfdff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(11,42,74,0.05);
+            margin: 15px 0;
+        }
+
+        th {
+            background: var(--navy);
+            color: white;
+            padding: 12px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 12px;
+            border-bottom: 1px solid #e9edf2;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #f5f9ff;
+        }
+
+        /* ----- FOOTER NAVIGASI ----- */
+        .nav-footer {
+            background: #f0f4fa;
+            padding: 14px 30px 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-top: 1px solid #dce4ed;
+        }
+
+        .nav-footer .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-footer .speaker-credit {
+            font-size: 0.78rem;
+            color: #5b6b80;
+            font-weight: 500;
+        }
+
+        .nav-footer .speaker-credit strong {
+            color: var(--navy);
+        }
+
+        .nav-footer .dots {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-footer .dot {
+            width: 32px;
+            height: 6px;
+            background: #cbd5e1;
+            border-radius: 12px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-footer .dot.active {
+            background: var(--gold);
+            width: 46px;
+        }
+
+        .nav-footer .nav-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-footer button {
+            background: var(--navy);
+            border: none;
+            color: white;
+            padding: 10px 26px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(11, 42, 74, 0.18);
+        }
+
+        .nav-footer button i {
+            font-size: 1rem;
+        }
+
+        .nav-footer button:hover {
+            background: var(--navy-light);
+            transform: scale(1.03);
+        }
+
+        .nav-footer button:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* ----- RESPONSIVE ----- */
+        @media (max-width: 780px) {
+            .slide-wrapper {
+                padding: 20px 18px;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .slide h2 {
+                font-size: 1.5rem;
+            }
+            .top-bar .logo {
+                font-size: 1rem;
+            }
+            .nav-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .nav-footer .dots {
+                justify-content: center;
+            }
+            .nav-footer button {
+                justify-content: center;
+            }
+            .nav-footer .footer-left {
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        .flex-icon-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 26px;
+            align-items: center;
+            margin: 18px 0;
+        }
+
+        .flex-icon-row i {
+            font-size: 2.3rem;
+            color: var(--navy);
+            background: #eef3f8;
+            padding: 12px;
+            border-radius: 18px;
+        }
+
+        hr {
+            margin: 24px 0 16px 0;
+            border: 1px dashed #d0dbe8;
+        }
+
+        .tag {
+            background: var(--gold);
+            color: var(--navy);
+            padding: 3px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        .ws-highlight {
+            background: #f6b83d20;
+            border: 2px solid var(--gold);
+            padding: 5px 16px;
+            border-radius: 60px;
+            display: inline-block;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .jawaban-benar {
+            background: #e6f7e6;
+            padding: 3px 12px;
+            border-radius: 30px;
+            display: inline-block;
+            font-weight: 700;
+            color: #1a7a1a;
+        }
+
+        .jawaban-benar i {
+            color: #1a7a1a;
+            margin-right: 6px;
+        }
+
+        /* ----- SPEAKER STRIP (Slide 1 & penutup) ----- */
+        .speaker-strip {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--navy);
+            color: white;
+            border-radius: 16px;
+            padding: 14px 20px;
+            margin-top: 18px;
+        }
+
+        .speaker-strip .avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .speaker-strip .meta {
+            line-height: 1.4;
+        }
+
+        .speaker-strip .meta .name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .speaker-strip .meta .role {
+            font-size: 0.82rem;
+            color: var(--gold-soft);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <div>
+                <div class="logo">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    EBA · Vokasi
+                </div>
+                <div class="narsum">Narasumber: <strong>Sri Hardono, S.T., M.Sc.</strong></div>
+            </div>
+            <div class="page-indicator">
+                <i class="fas fa-arrow-right" style="margin-right:8px;color:#f6b83d;"></i>
+                Halaman <span id="pageNumDisplay">1</span> / <span id="totalPages">24</span>
+            </div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+        <!-- SLIDE WRAPPER -->
+        <div class="slide-wrapper" id="slideWrapper">
+
+            <!-- ===== SLIDE 1 ===== -->
+            <div class="slide active" data-index="0">
+                <h2><i class="fas fa-tools"></i> Harmonisasi Asesmen Berbasis Bukti</h2>
+                <div class="subhead"><i class="fas fa-users"></i> Untuk Guru Vokasi dan SMK</div>
+                <div class="highlight-box" style="border-left-color:#0b2a4a;">
+                    <p style="font-size:1.25rem; font-weight:500;"><i class="fas fa-quote-left" style="color:#f6b83d;"></i> 
+                    Menilai Apa yang Terlihat, Bukan Apa yang Dirasa
+                    </p>
+                </div>
+                <div class="flex-icon-row">
+                    <div><i class="fas fa-graduation-cap"></i> Guru Praktik</div>
+                    <div><i class="fas fa-cogs"></i> <span class="ws-highlight">WorldSkills / LKS</span></div>
+                    <div><i class="fas fa-check-circle" style="color:#f6b83d;"></i> Berbasis Bukti, Bukan Tebakan</div>
+                </div>
+                <p style="margin-top:16px;"><i class="fas fa-arrow-right" style="color:#f6b83d;"></i> 
+                <strong>24 slide</strong> interaktif untuk menyusun asesmen praktik yang adil dan terstandar.</p>
+                <p><span class="badge-icon">#EBA</span> <span class="badge-icon">#Vokasi</span> <span class="badge-icon">#Harmonisasi</span></p>
+
+                <div class="speaker-strip">
+                    <div class="avatar"><i class="fas fa-user-tie"></i></div>
+                    <div class="meta">
+                        <div class="name">Sri Hardono, S.T., M.Sc.</div>
+                        <div class="role">Narasumber Pelatihan Harmonisasi Asesmen Vokasi</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SLIDE 2 ===== -->
+            <div class="slide" data-index="1">
+                <h2><i class="fas fa-exclamation-triangle"></i> Pernahkah Mengalami Hal Ini?</h2>
+                <div class="grid-2">
+                    <div class="card"><i class="fas fa-user-graduate"></i><h4>Nilai Tinggi, tetapi Kinerja Rendah</h4><p>Nilai teori sangat baik, tetapi ketika praktik magang, siswa gagal melakukan tugas dasar.</p></div>
+                    <div class="card"><i class="fas fa-balance-scale"></i><h4>Standar Penilaian yang Berbeda</h4><p>Guru A memberikan nilai 90, sedangkan Guru B memberikan nilai 70 untuk hasil karya yang sama.</p></div>
+                    <div class="card"><i class="fas fa-question-circle"></i><h4>Kebingungan dalam Menentukan Kriteria</h4><p>Kerapian dinilai, padahal aspek yang sesungguhnya penting adalah ketepatan ukuran.</p></div>
+                    <div class="card"><i class="fas fa-trophy"></i><h4>Persiapan Menghadapi WorldSkills / LKS</h4><p>Terasa seperti menebak-nebak soal, padahal standar penilaian telah tersedia.</p></div>
+                </div>
+                <div class="highlight-box"><i class="fas fa-lightbulb" style="color:#f6b83d;"></i> <strong>Solusi:</strong> Menerapkan asesmen berbasis bukti (<em>Evidence-Based Assessment</em>) yang diselaraskan dengan standar <span class="ws-highlight">WorldSkills / Lomba Keterampilan Siswa (LKS)</span>.</div>
+            </div>
+
+            <!-- ===== SLIDE 3 ===== -->
+            <div class="slide" data-index="2">
+                <h2><i class="fas fa-bullseye"></i> Tujuan Pelatihan</h2>
+                <p style="font-size:1.1rem;">Setelah mengikuti pelatihan selama 2 jam, peserta diharapkan mampu:</p>
+                <ul>
+                    <li><i class="fas fa-check-circle" style="color:#f6b83d;"></i> <strong>Membedakan</strong> asesmen subjektif dengan asesmen berbasis bukti.</li>
+                    <li><i class="fas fa-check-circle" style="color:#f6b83d;"></i> <strong>Menjelaskan</strong> urgensi standar <span class="ws-highlight">WorldSkills / LKS</span> dalam asesmen.</li>
+                    <li><i class="fas fa-check-circle" style="color:#f6b83d;"></i> <strong>Menyusun</strong> kisi-kisi soal praktik (<em>Test Blueprint</em>).</li>
+                    <li><i class="fas fa-check-circle" style="color:#f6b83d;"></i> <strong>Menerapkan</strong> 4 pilar asesmen <span class="ws-highlight">WorldSkills / LKS</span>.</li>
+                    <li><i class="fas fa-check-circle" style="color:#f6b83d;"></i> <strong>Mengembangkan</strong> rubrik penilaian yang objektif.</li>
+                </ul>
+                <div style="background:#eef3f8; padding:18px; border-radius:18px; margin-top:12px;">
+                    <i class="fas fa-route" style="color:#0b2a4a;"></i> 
+                    Alur: <strong>Standar → Bukti → Alat Ukur → Penilaian</strong>
+                </div>
+            </div>
+
+            <!-- ===== SLIDE 4 ===== -->
+            <div class="slide" data-index="3">
+                <h2><i class="fas fa-clipboard-check"></i> Uji Pemahaman Awal</h2>
+                <p>Jawablah dengan jujur untuk diri sendiri:</p>
+                <table>
+                    <tr><th>Pernyataan</th><th>Ya / Tidak</th></tr>
+                    <tr><td>Saya mengetahui secara pasti aspek yang dinilai pada akhir praktik.</td><td>☐</td></tr>
+                    <tr><td>Saya memiliki daftar periksa yang sama untuk semua siswa.</td><td>☐</td></tr>
+                    <tr><td>Saya yakin nilai yang saya berikan adil dan dapat dipertanggungjawabkan.</td><td>☐</td></tr>
+                    <tr><td>Saya memahami kriteria penilaian <span class="ws-highlight">WorldSkills / LKS</span>.</td><td>☐</td></tr>
+                </table>
+                <div class="highlight-box"><i class="fas fa-comment-dots"></i> Diskusikan: Siapakah yang menjawab "Ya" untuk semua pernyataan? Pelatihan ini akan membantu mengubah jawaban "Tidak" menjadi "Ya".</div>
+            </div>
+
+            <!-- ===== SLIDE 5 ===== -->
+            <div class="slide" data-index="4">
+                <h2><i class="fas fa-history"></i> Kebiasaan Lama versus EBA</h2>
+                <div class="grid-2">
+                    <div class="card" style="border-left-color:#b33;"><i class="fas fa-times-circle" style="color:#b33;"></i><h4>Asesmen Subjektif</h4><p>"Saya menilai siswa ini baik karena ia rajin." <br> <span style="color:#b33;">✖</span> Sikap tidak selalu mencerminkan kompetensi teknis.</p></div>
+                    <div class="card" style="border-left-color:#f6b83d;"><i class="fas fa-check-circle" style="color:#f6b83d;"></i><h4>Asesmen Berbasis Bukti</h4><p>"Nilai 80 diberikan karena 8 dari 10 langkah kerja benar sesuai standar." <br> <span style="color:#0b2a4a;">✔</span> Terukur dan objektif.</p></div>
+                </div>
+                <p><i class="fas fa-arrow-right"></i> Akibat asesmen subjektif: lulusan ditolak oleh industri, dan sertifikat kompetensi kehilangan maknanya.</p>
+                <p><span class="tag">EBA</span> <span class="tag">Pasti</span> <span class="tag">Bukan Tebakan</span></p>
+            </div>
+
+            <!-- ===== SLIDE 6 ===== -->
+            <div class="slide" data-index="5">
+                <h2><i class="fas fa-gavel"></i> Apa Itu EBA? (Penjelasan Sederhana)</h2>
+                <div class="highlight-box"><strong>Evidence-Based Assessment (EBA)</strong> adalah pendekatan penilaian yang dilakukan secara <strong>PASTI</strong>, bukan <strong>TEBAKAN</strong>.</div>
+                <ul>
+                    <li><i class="fas fa-ruler"></i> <strong>Memiliki Standar</strong> — acuan penilaian yang jelas.</li>
+                    <li><i class="fas fa-camera"></i> <strong>Memiliki Bukti</strong> — hasil kerja siswa yang dapat diamati.</li>
+                    <li><i class="fas fa-clipboard-list"></i> <strong>Memiliki Alat Ukur</strong> — soal dan rubrik yang terstruktur.</li>
+                    <li><i class="fas fa-users"></i> <strong>Penilaian Objektif</strong> — siapa pun yang menilai, hasilnya tetap sama.</li>
+                </ul>
+                <p><i class="fas fa-quote-left" style="color:#f6b83d;"></i> "Di dunia kerja, yang dinilai adalah hasil kerja, bukan perasaan."</p>
+            </div>
+
+            <!-- ===== SLIDE 7 ===== -->
+            <div class="slide" data-index="6">
+                <h2><i class="fas fa-industry"></i> EBA sebagai Penyelaras dengan Dunia Kerja</h2>
+                <p><strong>Pertanyaan kunci:</strong> <em>"Apakah siswa ini mampu bekerja sesuai dengan tuntutan industri?"</em></p>
+                <ul>
+                    <li><i class="fas fa-file-alt"></i> Merujuk pada <strong>Standar Kompetensi</strong> (<span class="ws-highlight">WorldSkills / LKS</span> atau LSP).</li>
+                    <li><i class="fas fa-search"></i> Menemukan <strong>Bukti</strong> dari standar tersebut (misalnya: gambar teknik, SOP).</li>
+                    <li><i class="fas fa-pencil-alt"></i> Menyusun <strong>Alat Ukur</strong> yang dapat menggali bukti dari siswa.</li>
+                </ul>
+                <div style="background:#f6b83d20; padding:14px 20px; border-radius:18px;"><i class="fas fa-wrench"></i> Analogi: Seorang calon tukang las tidak cukup hanya diuji teorinya; ia harus <strong>mendemonstrasikan</strong> kemampuan mengelas dengan kekuatan tarik tertentu.</div>
+            </div>
+
+            <!-- ===== SLIDE 8 ===== -->
+            <div class="slide" data-index="7">
+                <h2><i class="fas fa-globe-asia"></i> Mengenal WorldSkills / LKS</h2>
+                <p><span class="ws-highlight">WorldSkills / Lomba Keterampilan Siswa (LKS)</span> merupakan <strong>olimpiade kejuruan</strong> tingkat nasional dan internasional. Standar yang digunakan menjadi acuan global.</p>
+                <div class="grid-3">
+                    <div class="card"><i class="fas fa-check-circle" style="color:#f6b83d;"></i><h4>Teruji Secara Global</h4><p>Digunakan di lebih dari 80 negara.</p></div>
+                    <div class="card"><i class="fas fa-handshake"></i><h4>Berbasis Industri</h4><p>Disusun bersama dengan pelaku industri.</p></div>
+                    <div class="card"><i class="fas fa-microscope"></i><h4>Jelas dan Terukur</h4><p>Mengandung angka, ukuran, dan toleransi.</p></div>
+                </div>
+                <p><i class="fas fa-flag-checkered"></i> <strong>Mengapa harus mengacu pada WorldSkills / LKS?</strong> Karena standar ini telah teruji di dunia kerja nyata dan digunakan dalam ajang lomba keterampilan.</p>
+            </div>
+
+            <!-- ===== SLIDE 9 ===== -->
+            <div class="slide" data-index="8">
+                <h2><i class="fas fa-layer-group"></i> Empat Pilar Asesmen WorldSkills / LKS</h2>
+                <div class="grid-2">
+                    <div class="card"><i class="fas fa-hard-hat"></i><h4>1. Prosedur dan Keselamatan</h4><p>Penggunaan APD lengkap, urutan kerja yang benar.</p></div>
+                    <div class="card"><i class="fas fa-cube"></i><h4>2. Hasil Kerja</h4><p>Ukuran tepat, bahan sesuai, fungsi berjalan.</p></div>
+                    <div class="card"><i class="fas fa-ruler-combined"></i><h4>3. Ketelitian dan Kerapian</h4><p>Tidak ada goresan, sambungan rapat.</p></div>
+                    <div class="card"><i class="fas fa-stopwatch"></i><h4>4. Manajemen Waktu</h4><p>Penyelesaian tepat waktu, efisien.</p></div>
+                </div>
+                <div class="highlight-box"><i class="fas fa-bullhorn"></i> "Di dunia kerja dan kompetisi <span class="ws-highlight">WorldSkills / LKS</span>, keselamatan dan ketepatan lebih diutamakan daripada kecepatan yang asal-asalan."</div>
+            </div>
+
+            <!-- ===== SLIDE 10 ===== -->
+            <div class="slide" data-index="9">
+                <h2><i class="fas fa-map-signs"></i> Langkah 1: Memetakan Kompetensi</h2>
+                <p>Identifikasi <strong>Bukti</strong> yang harus ditampilkan oleh siswa.</p>
+                <ul>
+                    <li><i class="fas fa-tools"></i> <strong>Kondisi kerja</strong> seperti apa? (alat, bahan, batas waktu).</li>
+                    <li><i class="fas fa-check-double"></i> <strong>Kriteria keberhasilan</strong> apa yang ditetapkan? (ukuran, toleransi).</li>
+                    <li><i class="fas fa-list-ol"></i> <strong>Langkah-langkah wajib</strong> apa yang harus dilaksanakan dengan benar?</li>
+                </ul>
+                <table>
+                    <tr><th>Komponen</th><th>Target</th></tr>
+                    <tr><td>Keselamatan</td><td>Menggunakan APD lengkap</td></tr>
+                    <tr><td>Penggunaan Alat</td><td>Membaca micrometer dengan benar</td></tr>
+                    <tr><td>Hasil Produk</td><td>Diameter 20 mm ± 0,1</td></tr>
+                    <tr><td>Waktu</td><td>≤ 60 menit</td></tr>
+                </table>
+            </div>
+
+            <!-- ===== SLIDE 11 ===== -->
+            <div class="slide" data-index="10">
+                <h2><i class="fas fa-pen-fancy"></i> Langkah 2: Menyusun Soal Praktik yang Sahih</h2>
+                <p><strong>Sahih (valid):</strong> Soal yang diberikan kepada siswa harus mencerminkan pekerjaan nyata di industri.</p>
+                <p><span class="badge-icon">✔ Contoh Sahih</span> "Buatlah panel listrik 1 fase sesuai dengan gambar kerja yang terlampir."</p>
+                <p><span class="badge-icon" style="background:#b33;">✖ Tidak Sahih</span> "Tuliskan langkah-langkah membuat panel listrik." (bersifat teoretis, bukan praktik)</p>
+                <p><strong>Konsisten (reliabel):</strong> Jika dikerjakan oleh siswa A, B, dan C dengan kompetensi setara, hasilnya akan relatif sama.</p>
+                <div class="highlight-box"><i class="fas fa-file-pdf"></i> <strong>Peralatan:</strong> Buatlah <em>Job Sheet</em> yang terperinci: gambar, spesifikasi, toleransi, dan batas waktu.</div>
+            </div>
+
+            <!-- ===== SLIDE 12 ===== -->
+            <div class="slide" data-index="11">
+                <h2><i class="fas fa-table"></i> Langkah 3: Menyusun Rubrik Penilaian</h2>
+                <p>Rubrik berfungsi sebagai <strong>"kunci jawaban"</strong> untuk penilaian praktik. Hindari penilaian berdasarkan perasaan.</p>
+                <table>
+                    <tr><th>Kriteria</th><th>0 (Gagal)</th><th>1 (Cukup)</th><th>2 (Baik)</th><th>3 (Sempurna)</th></tr>
+                    <tr><td>Keselamatan</td><td>Tanpa APD</td><td>APD tidak lengkap</td><td>APD lengkap</td><td>APD + pemeriksaan alat</td></tr>
+                    <tr><td>Hasil Pengelasan</td><td>Retak</td><td>Berpori</td><td>Rapi</td><td>Rapi dan ukuran pas</td></tr>
+                    <tr><td>Waktu</td><td>&gt;90'</td><td>75-90'</td><td>60-75'</td><td>&lt;60'</td></tr>
+                </table>
+                <p><i class="fas fa-check-circle" style="color:#f6b83d;"></i> Rubrik menjadikan penilaian <strong>adil dan efisien</strong>.</p>
+            </div>
+
+            <!-- ===== SLIDE 13 ===== -->
+            <div class="slide" data-index="12">
+                <h2><i class="fas fa-utensils"></i> Studi Kasus: Tata Boga</h2>
+                <p><strong>Soal:</strong> "Buatlah 2 porsi Chicken Cordon Bleu dengan berat 150 gram per porsi, tingkat kematangan <em>well-done</em>, saus creamy, dalam waktu 45 menit."</p>
+                <table>
+                    <tr><th>Aspek</th><th>Kriteria "Kompeten"</th></tr>
+                    <tr><td><em>Mise en Place</em></td><td>Bahan lengkap, alat siap pakai</td></tr>
+                    <tr><td>Teknik Memotong</td><td>Ukuran fillet seragam</td></tr>
+                    <tr><td>Rasa dan Tekstur</td><td>Daging juicy, saus creamy</td></tr>
+                    <tr><td>Penyajian</td><td>Piring bersih, saus tertata rapi</td></tr>
+                    <tr><td>Waktu</td><td>≤ 45 menit</td></tr>
+                </table>
+                <div class="highlight-box"><i class="fas fa-star" style="color:#f6b83d;"></i> Dengan standar yang jelas, penilaian menjadi adil dan konsisten antarguru.</div>
+            </div>
+
+            <!-- ===== SLIDE 14 ===== -->
+            <div class="slide" data-index="13">
+                <h2><i class="fas fa-lightbulb"></i> Tips Menyusun Instrumen Penilaian</h2>
+                <ul>
+                    <li><i class="fas fa-undo-alt"></i> <strong>Mulailah dari akhir (<em>Backward Design</em>):</strong> bayangkan lulusan bekerja di industri, susun soal berdasarkan gambaran tersebut.</li>
+                    <li><i class="fas fa-handshake"></i> <strong>Libatkan industri:</strong> tanyakan kepada mereka aspek pekerjaan apa yang paling sering menjadi kendala.</li>
+                    <li><i class="fas fa-check-square"></i> <strong>Gunakan daftar periksa (<em>checklist</em>),</strong> bukan uraian panjang.</li>
+                    <li><i class="fas fa-flask"></i> <strong>Lakukan uji coba</strong> kepada 2–3 siswa dengan tingkat kemampuan berbeda, lalu sesuaikan tingkat kesulitannya.</li>
+                </ul>
+            </div>
+
+            <!-- ===== SLIDE 15 ===== -->
+            <div class="slide" data-index="14">
+                <h2><i class="fas fa-eye"></i> Menghindari Bias: Efek Halo</h2>
+                <div class="card" style="border-left-color:#b33;"><i class="fas fa-user-graduate"></i><h4>Efek Halo</h4><p>"Siswa A ramah, maka nilai praktiknya saya anggap bagus." <br> <span style="color:#b33;">✖</span> Padahal hasil praktiknya biasa saja.</p></div>
+                <p><strong>Cara menghindari (SUM sederhana):</strong></p>
+                <ul>
+                    <li><i class="fas fa-brain"></i> <strong>S</strong>adari bahwa kita memiliki kecenderungan menyukai siswa tertentu.</li>
+                    <li><i class="fas fa-search"></i> <strong>U</strong>pahami bahwa sikap baik belum tentu mencerminkan kompetensi teknis.</li>
+                    <li><i class="fas fa-eraser"></i> <strong>M</strong>itigasi: fokus pada rubrik, bukan pada kepribadian siswa.</li>
+                </ul>
+                <div class="highlight-box">"Guru yang profesional menilai HASIL KERJA, bukan KEPRIBADIAN siswa."</div>
+            </div>
+
+            <!-- ===== SLIDE 16 ===== -->
+            <div class="slide" data-index="15">
+                <h2><i class="fas fa-car"></i> Studi Kasus: Otomotif</h2>
+                <p><strong>Soal:</strong> "Lakukan prosedur bongkar pasang roda sesuai SOP bengkel resmi, dengan batas waktu 30 menit."</p>
+                <p><strong>Tugas (5 menit):</strong> Buatlah 1 kriteria penilaian EBA untuk kasus tersebut.</p>
+                <div style="background:#f0f7ff; padding:16px; border-radius:18px;">
+                    <p><i class="fas fa-arrow-right"></i> Contoh jawaban: <strong>"Penggunaan <em>Impact Wrench</em>"</strong></p>
+                    <ul>
+                        <li>0: Arah putaran salah (mengencang/melonggar terbalik)</li>
+                        <li>1: Arah putaran benar, tetapi tidak menggunakan <em>torque stick</em></li>
+                        <li>2: Arah putaran benar dan menggunakan <em>torque stick</em> sesuai standar Nm</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ===== SLIDE 17 ===== -->
+            <div class="slide" data-index="16">
+                <h2><i class="fas fa-paint-brush"></i> Studi Kasus: Desain Grafis</h2>
+                <p><strong>Soal:</strong> "Buatlah poster promosi untuk kegiatan karnaval sekolah."</p>
+                <p><strong>Tugas (5 menit):</strong> Tuliskan 2 kriteria EBA untuk poster tersebut.</p>
+                <div style="background:#f0f7ff; padding:16px; border-radius:18px;">
+                    <p><i class="fas fa-arrow-right"></i> Contoh jawaban:</p>
+                    <ul>
+                        <li><strong>Tipografi:</strong> Judul terbaca dari jarak 3 meter (ukuran minimal 72 pt).</li>
+                        <li><strong>Resolusi:</strong> Seluruh gambar memiliki resolusi 300 DPI, dengan <em>bleed</em> 3 mm untuk keperluan cetak.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ===== SLIDE 18 ===== -->
+            <div class="slide" data-index="17">
+                <h2><i class="fas fa-check-double"></i> Telaah Kasus Otomotif</h2>
+                <table>
+                    <tr><th>Kriteria Siswa</th><th>Analisis</th><th>Revisi EBA</th></tr>
+                    <tr><td>"Rapi"</td><td>❌ Subjektif</td><td>"Roda tidak mengalami goresan (pemeriksaan visual)"</td></tr>
+                    <tr><td>"Kencang"</td><td>❌ Tidak terukur</td><td>"Mengencangkan mur dengan <em>torque wrench</em> 100–110 Nm"</td></tr>
+                    <tr><td>"Prosedur"</td><td>✅ Dapat diamati</td><td>"Menggunakan dongkrak pada titik yang benar"</td></tr>
+                </table>
+                <div class="highlight-box"><i class="fas fa-ruler"></i> Semakin TERUKUR kriteria, semakin SAHIH penilaian yang dihasilkan.</div>
+            </div>
+
+            <!-- ===== SLIDE 19 ===== -->
+            <div class="slide" data-index="18">
+                <h2><i class="fas fa-check-double"></i> Telaah Kasus Desain Grafis</h2>
+                <table>
+                    <tr><th>Kriteria Siswa</th><th>Analisis</th><th>Revisi EBA</th></tr>
+                    <tr><td>"Posternya bagus"</td><td>❌ Selera</td><td>"Menggunakan 3 warna yang sesuai dengan <em>brief</em>"</td></tr>
+                    <tr><td>"Tulisan besar"</td><td>❌ Kurang spesifik</td><td>"Judul minimal 48 pt, subjudul 24 pt"</td></tr>
+                    <tr><td>"Gambar HD"</td><td>✅ Mulai terukur</td><td>"Semua gambar memiliki resolusi 300 DPI"</td></tr>
+                </table>
+                <div class="highlight-box"><i class="fas fa-ban"></i> Hindari kata "bagus", "baik", "rapi". Gunakan angka, warna, ukuran, atau indikator ada/tidaknya elemen tertentu.</div>
+            </div>
+
+            <!-- ===== SLIDE 20 ===== -->
+            <!-- KUIS PILIHAN GANDA (TANPA JAWABAN) -->
+            <div class="slide" data-index="19">
+                <h2><i class="fas fa-question-circle"></i> Kuis Pilihan Ganda</h2>
+                <p><em>Pilihlah jawaban yang paling tepat!</em></p>
+                <ol style="list-style-type:upper-alpha; padding-left:20px;">
+                    <li style="margin-bottom:12px;">
+                        <strong>Definisi EBA yang paling tepat adalah:</strong><br>
+                        <span style="display:block; padding:4px 0;">A. Menilai berdasarkan keaktifan siswa di kelas</span>
+                        <span style="display:block; padding:4px 0;">B. Menilai berdasarkan kesesuaian hasil kerja dengan standar yang ditetapkan</span>
+                        <span style="display:block; padding:4px 0;">C. Menilai berdasarkan kedekatan siswa dengan guru</span>
+                    </li>
+                    <li style="margin-bottom:12px;">
+                        <strong>Standar WorldSkills / LKS penting digunakan karena:</strong><br>
+                        <span style="display:block; padding:4px 0;">A. Memiliki nama yang dikenal luas</span>
+                        <span style="display:block; padding:4px 0;">B. Berbasis pada kebutuhan global dan industri</span>
+                        <span style="display:block; padding:4px 0;">C. Memungkinkan siswa untuk pergi ke luar negeri</span>
+                    </li>
+                    <li style="margin-bottom:12px;">
+                        <strong>Fungsi rubrik dalam penilaian praktik adalah:</strong><br>
+                        <span style="display:block; padding:4px 0;">A. Memperumit proses penilaian</span>
+                        <span style="display:block; padding:4px 0;">B. Menjadi pedoman objektif agar penilaian adil</span>
+                        <span style="display:block; padding:4px 0;">C. Sebagai pelengkap administratif semata</span>
+                    </li>
+                    <li style="margin-bottom:12px;">
+                        <strong>Efek Halo berbahaya dalam asesmen karena:</strong><br>
+                        <span style="display:block; padding:4px 0;">A. Membuat siswa menjadi bingung</span>
+                        <span style="display:block; padding:4px 0;">B. Penilaian didasarkan pada kesan pribadi, bukan kompetensi</span>
+                        <span style="display:block; padding:4px 0;">C. Semua siswa mendapatkan nilai tinggi</span>
+                    </li>
+                </ol>
+                <div style="background:#eef3f8; padding:12px 18px; border-radius:18px; margin-top:10px;">
+                    <i class="fas fa-lightbulb" style="color:#f6b83d;"></i> 
+                    <strong>Diskusikan jawaban Anda dengan rekan di samping!</strong>
+                </div>
+            </div>
+
+            <!-- ===== SLIDE 21 ===== -->
+            <!-- TUGAS AKHIR + KUNCI JAWABAN KUIS -->
+            <div class="slide" data-index="20">
+                <h2><i class="fas fa-pencil-ruler"></i> Tugas : Rencana Tindak Lanjut</h2>
+                <p>Susunlah <strong>kisi-kisi soal praktik</strong> untuk 1 kompetensi yang Bapak/Ibu ajarkan.</p>
+                <div style="background:#f4faff; padding:18px; border-radius:18px;">
+                    <p><strong>Format penulisan:</strong></p>
+                    <ul>
+                        <li><i class="fas fa-arrow-right"></i> Kompetensi yang dinilai: ...</li>
+                        <li><i class="fas fa-arrow-right"></i> Standar / referensi yang digunakan: ...</li>
+                        <li><i class="fas fa-arrow-right"></i> Soal praktik (<em>Job Brief</em>): ...</li>
+                        <li><i class="fas fa-arrow-right"></i> Kriteria 1 (terukur): ...</li>
+                        <li><i class="fas fa-arrow-right"></i> Kriteria 2 (terukur): ...</li>
+                    </ul>
+                </div>
+                <p><span class="badge-icon">⏰ 10 menit</span></p>
+
+                <hr style="margin:20px 0;">
+
+                <!-- KUNCI JAWABAN KUIS (DARI SLIDE 20) -->
+                <h4 style="color:#0b2a4a; margin-bottom:8px; font-family:'Poppins',sans-serif;"><i class="fas fa-check-circle" style="color:#1a7a1a;"></i> Kunci Jawaban Kuis</h4>
+                <div style="background:#f0faf0; padding:14px 20px; border-radius:18px; border-left:6px solid #1a7a1a;">
+                    <ol style="list-style-type:upper-alpha; padding-left:20px; margin:0;">
+                        <li style="margin-bottom:6px;"><span class="jawaban-benar"><i class="fas fa-check"></i> B. Menilai berdasarkan kesesuaian hasil kerja dengan standar yang ditetapkan</span></li>
+                        <li style="margin-bottom:6px;"><span class="jawaban-benar"><i class="fas fa-check"></i> B. Berbasis pada kebutuhan global dan industri</span></li>
+                        <li style="margin-bottom:6px;"><span class="jawaban-benar"><i class="fas fa-check"></i> B. Menjadi pedoman objektif agar penilaian adil</span></li>
+                        <li style="margin-bottom:6px;"><span class="jawaban-benar"><i class="fas fa-check"></i> B. Penilaian didasarkan pada kesan pribadi, bukan kompetensi</span></li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- ===== SLIDE 22 ===== -->
+            <div class="slide" data-index="21">
+                <h2><i class="fas fa-brain"></i> Ringkasan Tiga Hal Penting</h2>
+                <div class="grid-3">
+                    <div class="card"><i class="fas fa-eye"></i><h4>1. Ukur yang Terlihat</h4><p>Jangan menilai "kerajinan", tetapi nilailah "jumlah produk yang dihasilkan".</p></div>
+                    <div class="card"><i class="fas fa-flag"></i><h4>2. Standar WorldSkills / LKS</h4><p>Acuan global yang dapat diadaptasikan ke lingkungan sekolah.</p></div>
+                    <div class="card"><i class="fas fa-clipboard"></i><h4>3. Rubrik sebagai Sahabat Guru</h4><p>Membuat penilaian cepat, adil, dan dapat dipertanggungjawabkan.</p></div>
+                </div>
+                <div class="highlight-box" style="border-left-color:#f6b83d;"><i class="fas fa-quote-right"></i> "Mengajar bukan sekadar memberikan ilmu, tetapi memastikan bahwa ilmu tersebut TERUKUR dan TERBUKTI hasilnya."</div>
+            </div>
+
+            <!-- ===== SLIDE 23 ===== -->
+            <div class="slide" data-index="22">
+                <h2><i class="fas fa-rocket"></i> Langkah Awal untuk Memulai</h2>
+                <ul>
+                    <li><i class="fas fa-1"></i> <strong>Pilih 1 materi</strong> praktik yang paling sering diajarkan.</li>
+                    <li><i class="fas fa-2"></i> <strong>Konsultasikan dengan industri</strong> mengenai parameter output yang dianggap baik.</li>
+                    <li><i class="fas fa-3"></i> <strong>Buat daftar periksa</strong> penilaian berdasarkan parameter tersebut.</li>
+                    <li><i class="fas fa-4"></i> <strong>Uji coba dan evaluasi</strong> di salah satu kelas.</li>
+                </ul>
+                <p style="font-size:1.3rem; font-weight:600; margin-top:16px;">Selamat mencoba! <i class="fas fa-smile"></i></p>
+            </div>
+
+            <!-- ===== SLIDE 24 ===== -->
+            <div class="slide" data-index="23">
+                <h2><i class="fas fa-heart" style="color:#f6b83d;"></i> Penutup dan Motivasi</h2>
+                <div style="text-align:center; padding:10px 0;">
+                    <i class="fas fa-chalkboard-teacher" style="font-size:4rem; color:#0b2a4a;"></i>
+                    <p style="font-size:1.3rem; margin:16px 0;">Terima kasih, Bapak dan Ibu Guru Hebat!</p>
+                    <p style="max-width:600px; margin:0 auto;">Dengan asesmen yang jelas dan terstandar, kita tidak sekadar memberikan nilai, tetapi <strong>mempersiapkan siswa untuk dunia kerja dan ajang kompetisi <span class="ws-highlight">WorldSkills / LKS</span>.</strong></p>
+                    <div style="background:#f6b83d; color:#0b2a4a; padding:14px; border-radius:60px; margin:20px auto; max-width:400px; font-weight:700;">
+                        <i class="fas fa-quote-left"></i> Salam Vokasi! <i class="fas fa-quote-right"></i>
+                    </div>
+                    <div class="speaker-strip" style="display:inline-flex; margin-top:22px;">
+                        <div class="avatar"><i class="fas fa-user-tie"></i></div>
+                        <div class="meta" style="text-align:left;">
+                            <div class="name">Sri Hardono, S.T., M.Sc.</div>
+                            <div class="role">Narasumber Pelatihan Harmonisasi Asesmen Vokasi</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end slide-wrapper -->
+
+        <!-- NAVIGASI BAWAH -->
+        <div class="nav-footer">
+            <div class="footer-left">
+                <div class="dots" id="dotsContainer"></div>
+                <div class="speaker-credit">Disampaikan oleh <strong>Sri Hardono, S.T., M.Sc.</strong></div>
+            </div>
+            <div class="nav-buttons">
+                <button id="prevBtn"><i class="fas fa-chevron-left"></i> Sebelum</button>
+                <button id="nextBtn">Berikut <i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+    </div><!-- end container -->
+
+    <script>
+        (function() {
+            const slides = document.querySelectorAll('.slide');
+            const total = slides.length;
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dotsContainer = document.getElementById('dotsContainer');
+            const pageNumDisplay = document.getElementById('pageNumDisplay');
+            const totalPagesSpan = document.getElementById('totalPages');
+            const progressFill = document.getElementById('progressFill');
+
+            let current = 0;
+
+            totalPagesSpan.textContent = total;
+
+            for (let i = 0; i < total; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.dataset.index = i;
+                dot.addEventListener('click', () => goTo(i));
+                dotsContainer.appendChild(dot);
+            }
+
+            function goTo(index) {
+                if (index < 0) index = 0;
+                if (index >= total) index = total - 1;
+                slides.forEach(s => s.classList.remove('active'));
+                slides[index].classList.add('active');
+                document.querySelectorAll('.dot').forEach((d, i) => {
+                    d.classList.toggle('active', i === index);
+                });
+                current = index;
+                pageNumDisplay.textContent = index + 1;
+                progressFill.style.width = (((index + 1) / total) * 100) + '%';
+                prevBtn.disabled = (index === 0);
+                nextBtn.disabled = (index === total - 1);
+                document.querySelector('.presentation-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            prevBtn.addEventListener('click', () => goTo(current - 1));
+            nextBtn.addEventListener('click', () => goTo(current + 1));
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') goTo(current - 1);
+                if (e.key === 'ArrowRight') goTo(current + 1);
+            });
+
+            goTo(0);
+        })();
+    </script>
+
+</body>
+</html>
