@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memahami Parameter Sub-Kriteria WorldSkills - EBA Vokasi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: #f0f4fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 40px 40px 30px 30px;
+            box-shadow: 0 20px 50px rgba(0, 20, 40, 0.2);
+            overflow: hidden;
+        }
+
+        .top-bar {
+            background: #0b2a4a;
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 4px solid #f6b83d;
+        }
+
+        .top-bar .logo {
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .top-bar .logo i {
+            color: #f6b83d;
+            font-size: 1.6rem;
+        }
+
+        .page-indicator {
+            background: rgba(255,255,255,0.1);
+            color: #ddd;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+
+        .page-indicator span {
+            color: #f6b83d;
+            font-weight: 700;
+        }
+
+        .slide-wrapper {
+            padding: 30px 35px 20px 35px;
+            min-height: 460px;
+            background: white;
+        }
+
+        .slide {
+            display: none;
+            animation: fadeSlide 0.4s ease;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            0% { opacity: 0.3; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b2a4a;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+
+        .slide h2 i {
+            color: #f6b83d;
+            font-size: 2.2rem;
+        }
+
+        .slide .subhead {
+            font-size: 1.05rem;
+            color: #2c3e50;
+            background: #eef3f8;
+            padding: 8px 20px;
+            border-radius: 60px;
+            display: inline-block;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+
+        .slide p, .slide li {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #1e2e41;
+        }
+
+        .slide ul, .slide ol {
+            padding-left: 25px;
+            margin: 10px 0;
+        }
+
+        .slide li {
+            margin-bottom: 8px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 18px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 18px 0;
+        }
+
+        .card {
+            background: #f8faff;
+            padding: 18px 18px 20px 18px;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            border-left: 6px solid #f6b83d;
+            transition: 0.2s;
+        }
+
+        .card i {
+            font-size: 1.8rem;
+            color: #0b2a4a;
+            margin-bottom: 6px;
+        }
+
+        .card h4 {
+            font-size: 1.1rem;
+            margin: 4px 0 4px;
+            color: #0b2a4a;
+        }
+
+        .highlight-box {
+            background: #e6f0fa;
+            padding: 18px 24px;
+            border-radius: 30px;
+            border-left: 8px solid #f6b83d;
+            margin: 16px 0;
+        }
+
+        .highlight-box strong {
+            color: #0b2a4a;
+        }
+
+        .box-tantangan {
+            background: #fef9e7;
+            border: 2px dashed #f6b83d;
+            padding: 18px 24px;
+            border-radius: 24px;
+            margin: 16px 0;
+        }
+
+        .box-tantangan i {
+            color: #f6b83d;
+            font-size: 1.4rem;
+            margin-right: 10px;
+        }
+
+        .box-definisi {
+            background: #f4f8fc;
+            padding: 18px 24px;
+            border-radius: 16px;
+            border: 2px solid #0b2a4a;
+            margin: 12px 0;
+        }
+
+        .box-definisi p {
+            margin-bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            background: #fbfdff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            margin: 14px 0;
+        }
+
+        th {
+            background: #0b2a4a;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e9edf2;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            background: #0b2a4a;
+            color: white;
+            padding: 3px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .badge-blue { background: #2980b9; }
+        .badge-green { background: #27ae60; }
+        .badge-orange { background: #e67e22; }
+        .badge-red { background: #c0392b; }
+        .badge-purple { background: #8e44ad; }
+
+        .ws-highlight {
+            background: #f6b83d20;
+            border: 2px solid #f6b83d;
+            padding: 4px 14px;
+            border-radius: 60px;
+            display: inline-block;
+            font-weight: 700;
+            color: #0b2a4a;
+            font-size: 0.9rem;
+        }
+
+        .kolom-abu {
+            background: #e8ecf1;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .nav-footer {
+            background: #f0f4fa;
+            padding: 14px 30px 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-top: 1px solid #dce4ed;
+        }
+
+        .nav-footer .dots {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-footer .dot {
+            width: 40px;
+            height: 6px;
+            background: #cbd5e1;
+            border-radius: 12px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-footer .dot.active {
+            background: #f6b83d;
+            width: 55px;
+        }
+
+        .nav-footer button {
+            background: #0b2a4a;
+            border: none;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .nav-footer button:hover {
+            background: #1b3d62;
+            transform: scale(1.02);
+        }
+
+        .nav-footer button:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        @media (max-width: 780px) {
+            .slide-wrapper { padding: 20px 18px; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .slide h2 { font-size: 1.5rem; }
+            .top-bar .logo { font-size: 1rem; }
+            .nav-footer { flex-direction: column; align-items: stretch; }
+            .nav-footer .dots { justify-content: center; }
+            .nav-footer button { justify-content: center; }
+            table { font-size: 0.7rem; }
+            th, td { padding: 6px 8px; }
+        }
+
+        .flex-icon-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            align-items: center;
+            margin: 12px 0;
+        }
+
+        .flex-icon-row i {
+            font-size: 2.2rem;
+            color: #0b2a4a;
+            background: #eef3f8;
+            padding: 10px;
+            border-radius: 30px;
+        }
+
+        .tag {
+            background: #f6b83d;
+            color: #0b2a4a;
+            padding: 2px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            display: inline-block;
+        }
+
+        .kotak-kerja {
+            background: #f4faff;
+            padding: 18px 22px;
+            border-radius: 20px;
+            border: 2px solid #dce4ed;
+            margin: 14px 0;
+        }
+
+        hr {
+            margin: 22px 0 16px 0;
+            border: 1px dashed #d0dbe8;
+        }
+
+        .legend-color {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .btn-aktivitas {
+            background: #0b2a4a;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 14px rgba(11,42,74,0.2);
+            margin: 8px 0;
+        }
+
+        .btn-aktivitas:hover {
+            background: #1b3d62;
+            transform: scale(1.02);
+        }
+
+        .btn-aktivitas i {
+            font-size: 1.1rem;
+        }
+
+        .icon-keterangan {
+            background: #f6b83d;
+            color: #0b2a4a;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-container">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="logo">
+            <i class="fas fa-list-ul"></i>
+            Parameter Sub-Kriteria · WSOS
+        </div>
+        <div class="page-indicator">
+            <i class="fas fa-arrow-right" style="margin-right:8px;color:#f6b83d;"></i>
+            Halaman <span id="pageNumDisplay">1</span> / <span id="totalPages">20</span>
+        </div>
+    </div>
+
+    <!-- SLIDE WRAPPER -->
+    <div class="slide-wrapper" id="slideWrapper">
+
+        <!-- ===== SLIDE 1 ===== -->
+        <div class="slide active" data-index="0">
+            <h2><i class="fas fa-list-ul"></i> Memahami Parameter Sub-Kriteria</h2>
+            <div class="subhead"><i class="fas fa-trophy"></i> WorldSkills Occupational Standards (WSOS)</div>
+            <div class="flex-icon-row">
+                <div><i class="fas fa-file-alt"></i> Sub-Kriteria</div>
+                <div><i class="fas fa-ruler"></i> <span class="ws-highlight">Measurement</span></div>
+                <div><i class="fas fa-balance-scale"></i> <span class="ws-highlight">Judgement</span></div>
+                <div><i class="fas fa-link"></i> Koneksi EBA</div>
+            </div>
+            <div class="highlight-box" style="border-left-color:#0b2a4a;">
+                <p style="font-size:1.2rem; font-weight:500;">
+                    <i class="fas fa-quote-left" style="color:#f6b83d;"></i> 
+                    "Setiap parameter dalam Sub-Kriteria adalah <strong>bagian dari rubrik</strong> yang akan kita gunakan di kelas."
+                </p>
+            </div>
+            <p><i class="fas fa-arrow-right" style="color:#f6b83d;"></i> 
+            <strong>20 slide</strong> · 10 Parameter · Contoh Nyata · Koneksi ke Rubrik</p>
+            <p>
+                <span class="badge">#WSOS</span>
+                <span class="badge badge-blue">#Measurement</span>
+                <span class="badge badge-orange">#Judgement</span>
+                <span class="badge badge-green">#EBA</span>
+            </p>
+        </div>
+
+        <!-- ===== SLIDE 2 ===== -->
+        <div class="slide" data-index="1">
+            <h2><i class="fas fa-sitemap"></i> Hierarki Dokumen WSOS</h2>
+            <div style="background:#f4faff; padding:20px 24px; border-radius:20px; margin:12px 0; text-align:center;">
+                <div style="display:flex; flex-direction:column; align-items:center; gap:8px; font-size:1.1rem;">
+                    <div style="background:#0b2a4a; color:white; padding:10px 30px; border-radius:60px; width:fit-content;">
+                        <i class="fas fa-file-alt"></i> WSOS (WorldSkills Occupational Standards)
+                    </div>
+                    <div><i class="fas fa-arrow-down" style="color:#f6b83d;"></i></div>
+                    <div style="background:#2980b9; color:white; padding:8px 25px; border-radius:60px; width:fit-content;">
+                        <i class="fas fa-layer-group"></i> Section (6-8 bidang kompetensi)
+                    </div>
+                    <div><i class="fas fa-arrow-down" style="color:#f6b83d;"></i></div>
+                    <div style="background:#e67e22; color:white; padding:8px 25px; border-radius:60px; width:fit-content;">
+                        <i class="fas fa-clipboard-list"></i> Kriteria (A, B, C, ...)
+                    </div>
+                    <div><i class="fas fa-arrow-down" style="color:#f6b83d;"></i></div>
+                    <div style="background:#27ae60; color:white; padding:8px 25px; border-radius:60px; width:fit-content;">
+                        <i class="fas fa-list-ul"></i> <strong>Sub-Kriteria</strong> (A1, A2, B1, ...)
+                    </div>
+                    <div><i class="fas fa-arrow-down" style="color:#f6b83d;"></i></div>
+                    <div style="background:#8e44ad; color:white; padding:8px 25px; border-radius:60px; width:fit-content;">
+                        <i class="fas fa-check-square"></i> Aspek Penilaian (M / J)
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p><i class="fas fa-lightbulb" style="color:#f6b83d;"></i> <strong>Fokus kita hari ini:</strong> Memahami <strong>Sub-Kriteria</strong> dan seluruh parameternya!</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 3 ===== -->
+        <div class="slide" data-index="2">
+            <h2><i class="fas fa-table"></i> Contoh Sub-Kriteria (Dari Gambar)</h2>
+            <p>Berikut adalah contoh <strong>Sub-Kriteria A1</strong> yang akan kita bedah bersama:</p>
+            <table style="font-size:0.82rem;">
+                <thead>
+                    <tr>
+                        <th style="width:8%;">Sub ID</th>
+                        <th style="width:20%;">Sub Criterion</th>
+                        <th style="width:10%;">Day of Marking</th>
+                        <th style="width:8%;">Aspect Type</th>
+                        <th style="width:20%;">Aspect Description</th>
+                        <th style="width:8%;">Judge Score</th>
+                        <th style="width:12%;">Extra Aspect Description / Judgement Score</th>
+                        <th style="width:12%;">Requirement / Nominal Size</th>
+                        <th style="width:6%;">WSOS Section</th>
+                        <th style="width:8%;">Max Mark</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>A1</strong></td>
+                        <td>Electrical Komponen dan Pre-Instal</td>
+                        <td>Any</td>
+                        <td><span class="badge badge-blue">M</span></td>
+                        <td>Electrical control board R.0010 (3)</td>
+                        <td></td>
+                        <td>3 PERSYARATAN YANG HARUS TERPENUHI: 1. Letak electrical board di permukaan benchmark vehicle 2. Seluruh baut dudukan electrical board terpasang 3. Posisi electrical board kokoh tidak mudah goyang</td>
+                        <td>4</td>
+                        <td>1</td>
+                        <td><strong>0.40</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="background:#f4faff; padding:10px 18px; border-radius:16px; margin:8px 0;">
+                <p style="font-size:0.9rem;"><i class="fas fa-info-circle" style="color:#2980b9;"></i> Ada <strong>10 parameter</strong> dalam tabel ini. Mari kita bahas satu per satu!</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 4: SUB CRITERIA ID ===== -->
+        <div class="slide" data-index="3">
+            <h2><i class="fas fa-tag"></i> 1. Sub Criteria ID</h2>
+            <div class="box-definisi">
+                <p><strong>Definisi:</strong> Kode unik yang mengidentifikasi setiap sub-kriteria dalam suatu bidang keahlian.</p>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-left-color:#0b2a4a;">
+                    <i class="fas fa-code"></i>
+                    <h4>Format Penamaan</h4>
+                    <ul>
+                        <li><strong>Huruf</strong> = Kriteria utama (A, B, C, ...)</li>
+                        <li><strong>Angka</strong> = Nomor urut sub-kriteria</li>
+                        <li>Contoh: <span class="kolom-abu">A1</span> = Kriteria A, sub-kriteria ke-1</li>
+                        <li>Contoh: <span class="kolom-abu">C3</span> = Kriteria C, sub-kriteria ke-3</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left-color:#f6b83d;">
+                    <i class="fas fa-link"></i>
+                    <h4>Koneksi ke EBA &amp; Rubrik</h4>
+                    <ul>
+                        <li>Sub Criteria ID menjadi <strong>nomor item</strong> dalam rubrik</li>
+                        <li>Memudahkan <strong>pelacakan</strong> penilaian</li>
+                        <li>Contoh di rubrik: "A1: Electrical Board"</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p><i class="fas fa-check-circle" style="color:#27ae60;"></i> <strong>Contoh:</strong> A1, B2, C3, D1 — setiap kode merujuk pada satu aspek penilaian spesifik.</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 5: SUB CRITERION NAME ===== -->
+        <div class="slide" data-index="4">
+            <h2><i class="fas fa-heading"></i> 2. Sub Criterion Name</h2>
+            <div class="box-definisi">
+                <p><strong>Definisi:</strong> Nama atau judul yang menjelaskan secara singkat <strong>apa yang dinilai</strong> dalam sub-kriteria tersebut.</p>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-left-color:#2980b9;">
+                    <i class="fas fa-pen"></i>
+                    <h4>Ciri-ciri Nama yang Baik</h4>
+                    <ul>
+                        <li>Singkat dan <strong>jelas</strong></li>
+                        <li>Menggambarkan <strong>kompetensi</strong> yang diukur</li>
+                        <li>Menggunakan <strong>istilah teknis</strong> yang tepat</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left-color:#e67e22;">
+                    <i class="fas fa-arrow-right"></i>
+                    <h4>Contoh</h4>
+                    <ul>
+                        <li><span class="kolom-abu">"Electrical Komponen dan Pre-Instal"</span></li>
+                        <li>Jelas: menilai komponen kelistrikan dan instalasi awal</li>
+                        <li>Spesifik: tidak campur aduk dengan aspek lain</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p><i class="fas fa-lightbulb" style="color:#f6b83d;"></i> <strong>Koneksi ke Rubrik:</strong> Nama ini menjadi <strong>judul kriteria</strong> dalam rubrik penilaian kita.</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 6: DAY OF MARKING ===== -->
+        <div class="slide" data-index="5">
+            <h2><i class="fas fa-calendar-day"></i> 3. Day of Marking</h2>
+            <div class="box-definisi">
+                <p><strong>Definisi:</strong> Menentukan <strong>kapan</strong> penilaian dilakukan — apakah pada hari tertentu atau kapan saja (<em>Any</em>).</p>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-left-color:#2980b9;">
+                    <i class="fas fa-calendar-check"></i>
+                    <h4>Jenis Day of Marking</h4>
+                    <ul>
+                        <li><span class="kolom-abu">Day 1, Day 2, Day 3</span> — dinilai pada hari tertentu</li>
+                        <li><span class="kolom-abu">Any</span> — dapat dinilai kapan saja</li>
+                        <li>Biasanya untuk aspek yang <strong>berkelanjutan</strong></li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left-color:#e67e22;">
+                    <i class="fas fa-clock"></i>
+                    <h4>Contoh &amp; Implikasi</h4>
+                    <ul>
+                        <li>A1: <span class="kolom-abu">Any</span> → electrical board diperiksa kapan saja</li>
+                        <li>Jika Day 1 → harus selesai di hari pertama</li>
+                        <li>Mempengaruhi <strong>jadwal penilaian</strong></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p><i class="fas fa-check-circle" style="color:#27ae60;"></i> <strong>Koneksi ke Rubrik:</strong> Menentukan <strong>kapan</strong> kita melakukan observasi/pengecekan.</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 7: ASPECT TYPE (M/J) ===== -->
+        <div class="slide" data-index="6">
+            <h2><i class="fas fa-balance-scale"></i> 4. Aspect Type</h2>
+            <div class="box-definisi">
+                <p><strong>Definisi:</strong> Menentukan <strong>jenis penilaian</strong> — apakah <span class="badge badge-blue">M</span> <em>Measurement</em> (terukur) atau <span class="badge badge-orange">J</span> <em>Judgement</em> (penilaian ahli).</p>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-left-color:#2980b9;">
+                    <i class="fas fa-ruler" style="color:#2980b9;"></i>
+                    <h4><span class="badge badge-blue">M</span> Measurement</h4>
+                    <p><strong>Terukur secara objektif</strong> dengan alat.</p>
+                    <ul>
+                        <li>Menggunakan <strong>angka</strong>, ukuran, waktu</li>
+                        <li>Tidak perlu <strong>interpretasi</strong></li>
+                        <li>Contoh: tekanan 150 psi, waktu 30 menit</li>
+                    </ul>
+                    <p style="color:#2980b9; font-weight:600;">✔ Hasilnya <strong>pasti</strong> dan <strong>konsisten</strong></p>
+                </div>
+                <div class="card" style="border-left-color:#e67e22;">
+                    <i class="fas fa-user-check" style="color:#e67e22;"></i>
+                    <h4><span class="badge badge-orange">J</span> Judgement</h4>
+                    <p><strong>Penilaian berdasarkan kriteria</strong> oleh juri ahli.</p>
+                    <ul>
+                        <li>Membutuhkan <strong>rubrik</strong> yang jelas</li>
+                        <li>Contoh: kerapian, kebersihan, kualitas</li>
+                    </ul>
+                    <p style="color:#e67e22; font-weight:600;">⚠ Membutuhkan <strong>kalibrasi</strong> antar juri</p>
+                </div>
+            </div>
+            <div class="box-tantangan">
+                <i class="fas fa-lightbulb"></i>
+                <strong>Koneksi ke EBA:</strong> Aspek <span class="badge badge-orange">J</span> membutuhkan <strong>rubrik yang lebih detail</strong> agar tetap objektif dan terhindar dari bias (efek halo)!
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 8: ASPECT DESCRIPTION ===== -->
+        <div class="slide" data-index="7">
+            <h2><i class="fas fa-align-left"></i> 5. Aspect Description</h2>
+            <div class="box-definisi">
+                <p><strong>Definisi:</strong> Deskripsi singkat tentang <strong>apa yang dinilai</strong> dari aspek tersebut.</p>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-left-color:#2980b9;">
+                    <i class="fas fa-pen-fancy"></i>
+                    <h4>Ciri-ciri</h4>
+                    <ul>
+                        <li>Deskripsi <strong>ringkas</strong> (1-2 kalimat)</li>
+                        <li>Menjelaskan <strong>objek</strong> yang dinilai</li>
+                        <li>Bisa menyebutkan <strong>jumlah</strong> persyaratan</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left-color:#e67e22;">
+                    <i class="fas fa-arrow-right"></i>
+                    <h4>Contoh</h4>
+                    <ul>
+                        <li><span class="kolom-abu">"Electrical control board R.0010 (3)"</span></li>
+                        <li>Artinya: menilai electrical board dengan kode R.0010</li>
+                        <li>Ada <strong>3 persyaratan</strong> yang harus dipenuhi</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p><i class="fas fa-check-circle" style="color:#27ae60;"></i> <strong>Koneksi ke Rubrik:</strong> Aspect Description menjadi <strong>nama item</strong> dalam checklist rubrik kita.</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 9: JUDGE SCORE ===== -->
+        <div class="slide" data-index="8">
+            <h2><i class="fas fa-pen"></i> 6. Judge Score</h2>
+            <div class="box-definisi">
+                <p><strong>Definisi:</strong> Kolom untuk <strong>mengisi nilai</strong> yang diberikan oleh juri/penilai berdasarkan hasil pengamatan.</p>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-left-color:#2980b9;">
+                    <i class="fas fa-edit"></i>
+                    <h4>Fungsi</h4>
+                    <ul>
+                        <li>Tempat mencatat <strong>skor aktual</strong></li>
+                        <li>Diisi oleh <strong>juri/penilai</strong> saat penilaian</li>
+                        <li>Bisa berupa angka (0, 1, 2, 3, ...)</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left-color:#e67e22;">
+                    <i class="fas fa-arrow-right"></i>
+                    <h4>Contoh Pengisian</h4>
+                    <ul>
+                        <li>Jika 3 persyaratan terpenuhi semua → skor <strong>3</strong></li>
+                        <li>Jika hanya 2 yang terpenuhi → skor <strong>2</strong></li>
+                        <li>Jika tidak ada yang terpenuhi → skor <strong>0</strong></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="box-tantangan">
+                <i class="fas fa-comment-dots"></i>
+                <strong>DISKUSI:</strong> Menurut Anda, bagaimana cara memastikan Judge Score <strong>konsisten</strong> antar juri yang berbeda?
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 10: EXTRA ASPECT DESCRIPTION ===== -->
+        <div class="slide" data-index="9">
+            <h2><i class="fas fa-align-justify"></i> 7. Extra Aspect Description</h2>
+            <div class="box-definisi">
+                <p><strong>Definisi:</strong> Penjelasan <strong>lebih rinci</strong> tentang apa yang dinilai, termasuk persyaratan spesifik yang harus dipenuhi.</p>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-left-color:#2980b9;">
+                    <i class="fas fa-list-check"></i>
+                    <h4>Untuk Aspek <span class="badge badge-blue">M</span> (Measurement)</h4>
+                    <p>Berisi <strong>persyaratan teknis</strong> yang harus diukur:</p>
+                    <ul>
+                        <li>Ukuran, dimensi, toleransi</li>
+                        <li>Tekanan, suhu, waktu</li>
+                        <li>Jumlah, kuantitas</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left-color:#e67e22;">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h4>Untuk Aspek <span class="badge badge-orange">J</span> (Judgement)</h4>
+                    <p>Berisi <strong>kriteria penilaian</strong> yang harus dinilai:</p>
+                    <ul>
+                        <li>Deskripsi level kinerja (1-4)</li>
+                        <li>Kriteria "baik", "cukup", "kurang"</li>
+                        <li>Indikator visual yang diamati</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p><i class="fas fa-lightbulb" style="color:#f6b83d;"></i> <strong>Koneksi ke Rubrik:</strong> Extra Aspect Description adalah <strong>isi rubrik</strong> kita — deskripsi setiap level penilaian!</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 11: EXTRA ASPECT DESCRIPTION - M ===== -->
+        <div class="slide" data-index="10">
+            <h2><i class="fas fa-ruler"></i> Extra Description: Measurement</h2>
+            <p><strong>Untuk Aspek <span class="badge badge-blue">M</span></strong> — berisi <strong>persyaratan terukur</strong> (<em>Requirement</em>):</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:20%;">Komponen</th>
+                        <th style="width:50%;">Penjelasan</th>
+                        <th style="width:30%;">Contoh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Requirement</strong></td>
+                        <td>Persyaratan spesifik yang harus dipenuhi</td>
+                        <td>"Letak board di permukaan benchmark"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nominal Size</strong></td>
+                        <td>Ukuran standar yang ditargetkan</td>
+                        <td>"Diameter 20 mm"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Toleransi</strong></td>
+                        <td>Batas penyimpangan yang diizinkan</td>
+                        <td>"± 0.1 mm"</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="background:#f4faff; padding:12px 18px; border-radius:16px; margin:8px 0;">
+                <p style="font-size:0.95rem;"><i class="fas fa-arrow-right" style="color:#f6b83d;"></i> <strong>Contoh dari tabel:</strong> "3 PERSYARATAN YANG HARUS TERPENUHI" — ini adalah <strong>checklist</strong> yang harus diperiksa!</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 12: EXTRA ASPECT DESCRIPTION - J ===== -->
+        <div class="slide" data-index="11">
+            <h2><i class="fas fa-user-check"></i> Extra Description: Judgement</h2>
+            <p><strong>Untuk Aspek <span class="badge badge-orange">J</span></strong> — berisi <strong>kriteria penilaian</strong> (<em>Judgement Score Description</em>):</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:15%;">Level</th>
+                        <th style="width:55%;">Deskripsi</th>
+                        <th style="width:30%;">Contoh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>4 (Sempurna)</strong></td>
+                        <td>Memenuhi semua kriteria dengan sangat baik</td>
+                        <td>"Sambungan rapat, tanpa cacat, ukuran presisi"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3 (Baik)</strong></td>
+                        <td>Memenuhi kriteria dengan baik</td>
+                        <td>"Sambungan rapat, tanpa cacat"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2 (Cukup)</strong></td>
+                        <td>Memenuhi sebagian kriteria</td>
+                        <td>"Sambungan rapat, ada sedikit cacat"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>1 (Kurang)</strong></td>
+                        <td>Tidak memenuhi kriteria</td>
+                        <td>"Sambungan renggang, banyak cacat"</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="highlight-box">
+                <p><i class="fas fa-check-circle" style="color:#27ae60;"></i> <strong>Koneksi ke Rubrik:</strong> Ini adalah <strong>rubrik itu sendiri</strong> — deskripsi setiap level!</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 13: REQUIREMENT (MEASUREMENT ONLY) ===== -->
+        <div class="slide" data-index="12">
+            <h2><i class="fas fa-check-double"></i> 8. Requirement (Khusus Measurement)</h2>
+            <div class="box-definisi">
+                <p><strong>Definisi:</strong> Persyaratan teknis <strong>terukur</strong> yang harus dipenuhi oleh peserta. Hanya untuk aspek <span class="badge badge-blue">M</span>.</p>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-left-color:#2980b9;">
+                    <i class="fas fa-list-check"></i>
+                    <h4>Karakteristik</h4>
+                    <ul>
+                        <li>Harus <strong>terukur</strong> dengan alat</li>
+                        <li>Mengandung <strong>angka</strong> atau satuan</li>
+                        <li>Tidak membutuhkan <strong>interpretasi</strong></li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left-color:#27ae60;">
+                    <i class="fas fa-arrow-right"></i>
+                    <h4>Contoh dari Tabel</h4>
+                    <ul>
+                        <li><span class="kolom-abu">"3 PERSYARATAN YANG HARUS TERPENUHI"</span></li>
+                        <li>1. Letak electrical board di permukaan benchmark</li>
+                        <li>2. Seluruh baut dudukan terpasang</li>
+                        <li>3. Posisi electrical board kokoh</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p><i class="fas fa-lightbulb" style="color:#f6b83d;"></i> <strong>Koneksi ke Rubrik:</strong> Requirement menjadi <strong>item checklist</strong> yang dicentang (√) jika terpenuhi.</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 14: WSOS SECTION ===== -->
+        <div class="slide" data-index="13">
+            <h2><i class="fas fa-layer-group"></i> 9. WSOS Section</h2>
+            <div class="box-definisi">
+                <p><strong>Definisi:</strong> Menunjukkan <strong>bagian (section)</strong> dari WSOS yang menjadi acuan sub-kriteria ini.</p>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-left-color:#0b2a4a;">
+                    <i class="fas fa-sitemap"></i>
+                    <h4>Fungsi</h4>
+                    <ul>
+                        <li>Menghubungkan sub-kriteria ke <strong>standar yang lebih tinggi</strong></li>
+                        <li>Memudahkan <strong>pelacakan</strong> kompetensi</li>
+                        <li>Menjamin <strong>keselarasan</strong> penilaian</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left-color:#f6b83d;">
+                    <i class="fas fa-arrow-right"></i>
+                    <h4>Contoh</h4>
+                    <ul>
+                        <li>A1 → <span class="kolom-abu">Section 1</span> (Work Organization and Management)</li>
+                        <li>Artinya: A1 mengacu pada kompetensi manajemen kerja</li>
+                        <li>Ini adalah <strong>bukti</strong> dari standar yang digunakan</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p><i class="fas fa-check-circle" style="color:#27ae60;"></i> <strong>Koneksi ke EBA:</strong> WSOS Section adalah <strong>sumber standar</strong> yang menjadi acuan dalam EBA!</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 15: MAX MARK ===== -->
+        <div class="slide" data-index="14">
+            <h2><i class="fas fa-percent"></i> 10. Max Mark</h2>
+            <div class="box-definisi">
+                <p><strong>Definisi:</strong> Nilai <strong>maksimum</strong> yang dapat diperoleh untuk sub-kriteria ini (dari total 100).</p>
+            </div>
+            <div class="grid-2">
+                <div class="card" style="border-left-color:#27ae60;">
+                    <i class="fas fa-arrow-up" style="color:#27ae60;"></i>
+                    <h4>Makna Bobot</h4>
+                    <ul>
+                        <li>Bobot besar = <strong>prioritas tinggi</strong></li>
+                        <li>Bobot kecil = <strong>pendukung</strong></li>
+                        <li>Menunjukkan <strong>tingkat kepentingan</strong></li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left-color:#e67e22;">
+                    <i class="fas fa-calculator"></i>
+                    <h4>Contoh &amp; Perhitungan</h4>
+                    <ul>
+                        <li>A1: <span class="kolom-abu">0.40</span> dari 100 = 0.4%</li>
+                        <li>Jika 3 persyaratan terpenuhi → 0.40</li>
+                        <li>Jika 2 terpenuhi → 0.27</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="box-tantangan">
+                <i class="fas fa-calculator"></i>
+                <strong>Latihan:</strong> Jika sub-kriteria bernilai 0.40 dan ada 3 requirement, berapa nilai per requirement?
+                <p style="margin-top:6px; background:#f4faff; padding:8px 16px; border-radius:12px;">Jawaban: 0.40 ÷ 3 = <strong>0.133</strong> per requirement</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 16: RINGKASAN 10 PARAMETER ===== -->
+        <div class="slide" data-index="15">
+            <h2><i class="fas fa-list-ul"></i> Ringkasan 10 Parameter</h2>
+            <table style="font-size:0.82rem;">
+                <thead>
+                    <tr>
+                        <th style="width:5%;">No</th>
+                        <th style="width:20%;">Parameter</th>
+                        <th style="width:55%;">Penjelasan Singkat</th>
+                        <th style="width:20%;">Contoh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td><span class="kolom-abu">Sub Criteria ID</span></td><td>Kode unik sub-kriteria</td><td>A1, B2, C3</td></tr>
+                    <tr><td>2</td><td><span class="kolom-abu">Sub Criterion Name</span></td><td>Nama/judul sub-kriteria</td><td>Electrical Komponen</td></tr>
+                    <tr><td>3</td><td><span class="kolom-abu">Day of Marking</span></td><td>Kapan dinilai</td><td>Any, Day 1, Day 2</td></tr>
+                    <tr><td>4</td><td><span class="kolom-abu">Aspect Type</span></td><td>Jenis penilaian</td><td>M (Measurement) / J (Judgement)</td></tr>
+                    <tr><td>5</td><td><span class="kolom-abu">Aspect Description</span></td><td>Deskripsi singkat</td><td>Electrical board R.0010 (3)</td></tr>
+                    <tr><td>6</td><td><span class="kolom-abu">Judge Score</span></td><td>Tempat mengisi nilai</td><td>0, 1, 2, 3</td></tr>
+                    <tr><td>7</td><td><span class="kolom-abu">Extra Aspect Description</span></td><td>Deskripsi rinci / kriteria</td><td>3 persyaratan yang harus dipenuhi</td></tr>
+                    <tr><td>8</td><td><span class="kolom-abu">Requirement / Nominal Size</span></td><td>Persyaratan terukur (khusus M)</td><td>Tekanan 150 psi</td></tr>
+                    <tr><td>9</td><td><span class="kolom-abu">WSOS Section</span></td><td>Acuan section dalam WSOS</td><td>Section 1, 2, 3, ...</td></tr>
+                    <tr><td>10</td><td><span class="kolom-abu">Max Mark</span></td><td>Nilai maksimum</td><td>0.40, 1.20, 2.50</td></tr>
+                </tbody>
+            </table>
+            <div class="highlight-box">
+                <p><i class="fas fa-check-circle" style="color:#27ae60;"></i> <strong>Semua parameter ini adalah "bahan baku" untuk membuat rubrik penilaian!</strong></p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 17: KONEKSI KE RUBRIK ===== -->
+        <div class="slide" data-index="16">
+            <h2><i class="fas fa-link"></i> Koneksi: Parameter → Rubrik</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:25%;">Parameter WSOS</th>
+                        <th style="width:35%;">Elemen Rubrik</th>
+                        <th style="width:40%;">Contoh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="kolom-abu">Sub Criteria ID</span></td>
+                        <td>Nomor item rubrik</td>
+                        <td>A1, B2, C3</td>
+                    </tr>
+                    <tr>
+                        <td><span class="kolom-abu">Sub Criterion Name</span></td>
+                        <td>Nama kriteria</td>
+                        <td>"Electrical Komponen"</td>
+                    </tr>
+                    <tr>
+                        <td><span class="kolom-abu">Aspect Type</span></td>
+                        <td>Jenis kriteria</td>
+                        <td>M = ukur dengan alat, J = nilai dengan rubrik</td>
+                    </tr>
+                    <tr>
+                        <td><span class="kolom-abu">Extra Description</span></td>
+                        <td>Deskripsi level (1-4)</td>
+                        <td>"Semua baut terpasang" / "Rapi"</td>
+                    </tr>
+                    <tr>
+                        <td><span class="kolom-abu">Requirement</span></td>
+                        <td>Item checklist</td>
+                        <td>☐ Board di permukaan benchmark</td>
+                    </tr>
+                    <tr>
+                        <td><span class="kolom-abu">Max Mark</span></td>
+                        <td>Bobot nilai</td>
+                        <td>0.40</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="box-tantangan">
+                <i class="fas fa-lightbulb"></i>
+                <strong>Pesan Utama:</strong> Rubrik adalah <strong>operasionalisasi</strong> dari parameter WSOS ke dalam bentuk yang siap pakai di kelas!
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 18: CONTOH RUBRIK LENGKAP ===== -->
+        <div class="slide" data-index="17">
+            <h2><i class="fas fa-clipboard"></i> Contoh Rubrik dari Parameter</h2>
+            <p><strong>Dari Sub-Kriteria A1, kita buat rubrik:</strong></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:5%;">No</th>
+                        <th style="width:40%;">Kriteria</th>
+                        <th style="width:15%;">Ya / Tidak</th>
+                        <th style="width:20%;">Catatan</th>
+                        <th style="width:10%;">Skor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Letak electrical board di permukaan benchmark vehicle</td>
+                        <td>☐</td>
+                        <td>__________</td>
+                        <td>/0.133</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Seluruh baut dudukan electrical board terpasang</td>
+                        <td>☐</td>
+                        <td>__________</td>
+                        <td>/0.133</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Posisi electrical board kokoh (tidak mudah goyang)</td>
+                        <td>☐</td>
+                        <td>__________</td>
+                        <td>/0.133</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr style="background:#eef3f8; font-weight:700;">
+                        <td colspan="4" style="text-align:right;">Total Skor:</td>
+                        <td>/0.40</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="highlight-box">
+                <p><i class="fas fa-check-circle" style="color:#27ae60;"></i> <strong>Ini adalah rubrik EBA!</strong> Setiap item <strong>terukur</strong> dan <strong>objektif</strong>.</p>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 19: TANTANGAN ===== -->
+        <div class="slide" data-index="18">
+            <h2><i class="fas fa-pencil-ruler"></i> Tantangan: Buat Rubrik!</h2>
+            <div class="box-tantangan">
+                <i class="fas fa-pencil-ruler"></i>
+                <strong>TANTANGAN — 10 MENIT</strong>
+                <p style="margin-top:8px;">Pilih <strong>1 Sub-Kriteria</strong> dari tabel (selain A1) dan buatlah <strong>rubrik/checklist</strong> sederhana!</p>
+            </div>
+            <p><strong>Pilih salah satu:</strong></p>
+            <ul>
+                <li><strong>C1:</strong> Pipework — "Sambungan pipa tembaga diameter 1/2 inch, sudut 90°"</li>
+                <li><strong>D1:</strong> Pressure Test — "Tekanan uji 300 psi, tahan 15 menit"</li>
+                <li><strong>G1:</strong> Komisioning — "Suhu ruang mencapai 22°C ± 2°C"</li>
+            </ul>
+            <div class="kotak-kerja" style="margin-top:10px;">
+                <h4><i class="fas fa-file-alt"></i> Format Rubrik:</h4>
+                <table>
+                    <tr>
+                        <th>Kriteria</th>
+                        <th>1 (Kurang)</th>
+                        <th>2 (Cukup)</th>
+                        <th>3 (Baik)</th>
+                        <th>4 (Sempurna)</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="Kriteria" style="width:100%; padding:4px; border:1px solid #dce4ed; border-radius:6px;"></td>
+                        <td><input type="text" placeholder="Deskripsi 1" style="width:100%; padding:4px; border:1px solid #dce4ed; border-radius:6px;"></td>
+                        <td><input type="text" placeholder="Deskripsi 2" style="width:100%; padding:4px; border:1px solid #dce4ed; border-radius:6px;"></td>
+                        <td><input type="text" placeholder="Deskripsi 3" style="width:100%; padding:4px; border:1px solid #dce4ed; border-radius:6px;"></td>
+                        <td><input type="text" placeholder="Deskripsi 4" style="width:100%; padding:4px; border:1px solid #dce4ed; border-radius:6px;"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- ===== SLIDE 20: PENUTUP ===== -->
+        <div class="slide" data-index="19">
+            <h2><i class="fas fa-heart" style="color:#f6b83d;"></i> Penutup</h2>
+            <div style="text-align:center; padding:10px 0;">
+                <i class="fas fa-list-ul" style="font-size:4rem; color:#0b2a4a;"></i>
+                <p style="font-size:1.3rem; margin:16px 0; font-weight:600;">Pahami Parameter, Kuasai Rubrik, Wujudkan Kompetensi!</p>
+                <p style="max-width:600px; margin:0 auto;">Dengan memahami <strong>10 parameter</strong> dalam Sub-Kriteria WSOS, kita dapat menyusun rubrik yang <strong>berbasis bukti</strong>, <strong>objektif</strong>, dan <strong>selaras dengan standar industri</strong>.</p>
+                <div style="background:#f6b83d; color:#0b2a4a; padding:14px; border-radius:60px; margin:20px auto; max-width:400px; font-weight:700;">
+                    <i class="fas fa-quote-left"></i> Dari WSOS ke Rubrik, dari Rubrik ke Kompetensi! <i class="fas fa-quote-right"></i>
+                </div>
+                <p style="font-size:0.9rem; color:#6c7a8a; margin-top:10px;">
+                    Disusun oleh: <strong>Sri Hardono, S.T., M.Sc.</strong>
+                </p>
+                <p style="font-size:0.85rem; color:#6c7a8a;">
+                    Berbasis WSOS · Hunsley &amp; Mash (2007) · Thorndike (1920)
+                </p>
+            </div>
+        </div>
+
+    </div><!-- end slide-wrapper -->
+
+    <!-- NAVIGASI BAWAH -->
+    <div class="nav-footer">
+        <div class="dots" id="dotsContainer"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="prevBtn"><i class="fas fa-chevron-left"></i> Sebelum</button>
+            <button id="nextBtn">Berikut <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+</div><!-- end container -->
+
+<script>
+    (function() {
+        const slides = document.querySelectorAll('.slide');
+        const total = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const pageNumDisplay = document.getElementById('pageNumDisplay');
+        const totalPagesSpan = document.getElementById('totalPages');
+
+        let current = 0;
+
+        totalPagesSpan.textContent = total;
+
+        for (let i = 0; i < total; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.dataset.index = i;
+            dot.addEventListener('click', () => goTo(i));
+            dotsContainer.appendChild(dot);
+        }
+
+        function goTo(index) {
+            if (index < 0) index = 0;
+            if (index >= total) index = total - 1;
+            slides.forEach(s => s.classList.remove('active'));
+            slides[index].classList.add('active');
+            document.querySelectorAll('.dot').forEach((d, i) => {
+                d.classList.toggle('active', i === index);
+            });
+            current = index;
+            pageNumDisplay.textContent = index + 1;
+            prevBtn.disabled = (index === 0);
+            nextBtn.disabled = (index === total - 1);
+            document.querySelector('.presentation-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        prevBtn.addEventListener('click', () => goTo(current - 1));
+        nextBtn.addEventListener('click', () => goTo(current + 1));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') goTo(current - 1);
+            if (e.key === 'ArrowRight') goTo(current + 1);
+        });
+
+        goTo(0);
+    })();
+</script>
+
+</body>
+</html>
