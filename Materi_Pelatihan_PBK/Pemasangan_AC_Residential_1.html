@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AC Residensial — Sri Hardono, S.T., M.Sc.</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#07090F;
+  --surface:#0D1120;
+  --card:#111827;
+  --border:rgba(99,144,210,0.18);
+  --border2:rgba(99,144,210,0.32);
+  --blue:#3B82F6;
+  --blue2:#60A5FA;
+  --blue3:#93C5FD;
+  --orange:#F97316;
+  --orange2:#FB923C;
+  --muted:#64748B;
+  --sub:#94A3B8;
+  --text:#E2E8F0;
+  --white:#F8FAFC;
+  --green:#22C55E;
+  --red:#EF4444;
+  --yellow:#EAB308;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:999;height:52px;
+  background:rgba(7,9,15,0.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:12px}
+.nav-brand{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.nav-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--blue),#1D4ED8);
+  border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.nav-brand-text{font-size:12px;font-weight:700;color:var(--white);line-height:1.2}
+.nav-brand-text span{display:block;font-size:10px;font-weight:400;color:var(--sub)}
+.nav-pills{display:flex;gap:3px;flex-shrink:0}
+.nav-pill{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border2);
+  background:transparent;color:var(--muted);font-size:10px;font-weight:700;
+  cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;
+  font-family:'Plus Jakarta Sans',sans-serif}
+.nav-pill:hover,.nav-pill.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.nav-yt{display:flex;align-items:center;gap:6px;text-decoration:none;flex-shrink:0}
+.yt-btn{display:flex;align-items:center;gap:5px;background:#FF0000;
+  border-radius:5px;padding:4px 8px;font-size:10px;font-weight:700;color:#fff}
+.yt-btn::before{content:'▶';font-size:8px}
+
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 52px);padding-top:52px}
+.page.on{display:block}
+
+/* ── HERO ── */
+.hero{
+  min-height:calc(100vh - 52px);
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;gap:0;
+  background:
+    radial-gradient(ellipse 600px 500px at 10% 60%,rgba(59,130,246,0.12) 0%,transparent 70%),
+    radial-gradient(ellipse 400px 400px at 90% 20%,rgba(249,115,22,0.08) 0%,transparent 65%),
+    var(--bg);
+}
+.hero-left{padding:60px 48px 60px 60px;display:flex;flex-direction:column;justify-content:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;
+  background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);
+  border-radius:100px;padding:4px 12px;font-size:10px;font-weight:700;
+  color:var(--blue2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px}
+.hero-eyebrow::before{content:'❄';font-size:12px}
+.hero-h1{font-family:'DM Serif Display',serif;font-size:clamp(36px,4.5vw,58px);
+  line-height:1.08;letter-spacing:-.01em;color:var(--white);margin-bottom:14px}
+.hero-h1 em{font-style:italic;color:var(--blue2)}
+.hero-h1 .accent{color:var(--orange2)}
+.hero-sub{font-size:14px;color:var(--sub);line-height:1.75;max-width:400px;margin-bottom:28px}
+.instructor-strip{display:flex;align-items:center;gap:10px;margin-bottom:28px;
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:12px;padding:10px 14px}
+.avatar{width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),#1E40AF);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.inst-name{font-size:13px;font-weight:700;color:var(--white)}
+.inst-sub{font-size:11px;color:var(--sub);margin-top:1px}
+.inst-yt{font-size:10px;color:var(--orange2);margin-top:3px;font-weight:600}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-primary{background:var(--blue);color:#fff;border:none;border-radius:10px;
+  padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;
+  font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.01em}
+.btn-primary:hover{background:#2563EB;transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--blue2);
+  border:1.5px solid rgba(59,130,246,0.35);border-radius:10px;
+  padding:12px 22px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;
+  font-family:'Plus Jakarta Sans',sans-serif}
+.btn-ghost:hover{background:rgba(59,130,246,0.1);border-color:var(--blue)}
+
+/* RIGHT PANEL */
+.hero-right{padding:60px 60px 60px 24px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+.gagne-header{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:4px}
+.gagne-row{display:flex;gap:8px}
+.gagne-card{flex:1;background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:10px 12px;transition:border-color .2s;cursor:pointer;min-width:0}
+.gagne-card:hover{border-color:var(--border2)}
+.gc-num{font-size:10px;font-weight:700;color:var(--blue);margin-bottom:3px}
+.gc-title{font-size:11px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gc-desc{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:12px;text-align:center}
+.stat-val{font-size:20px;font-weight:800;color:var(--blue2)}
+.stat-lbl{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* ── CONTENT PAGES ── */
+.wrap{max-width:920px;margin:0 auto;padding:40px 28px 56px}
+.step-tag{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;
+  background:rgba(59,130,246,0.09);border:1px solid rgba(59,130,246,0.22);
+  border-radius:100px;padding:4px 14px}
+.step-tag .n{width:20px;height:20px;background:var(--blue);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0}
+.step-tag span{font-size:10px;font-weight:700;color:var(--blue2);letter-spacing:.08em;text-transform:uppercase}
+.page-h1{font-family:'DM Serif Display',serif;font-size:clamp(26px,4vw,44px);
+  line-height:1.12;color:var(--white);margin-bottom:10px}
+.page-h1 strong{color:var(--blue2)}
+.page-lead{font-size:14px;color:var(--sub);line-height:1.7;max-width:580px;margin-bottom:32px}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:16px}
+.card-h{font-size:14px;font-weight:700;color:var(--blue3);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px}
+.card-h .ic{font-size:18px}
+.card p{font-size:13px;color:var(--sub);line-height:1.7;margin-bottom:7px}
+.card p:last-child{margin-bottom:0}
+
+/* THEORY GRID */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:20px 0}
+.tc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;
+  position:relative;overflow:hidden;transition:border-color .2s}
+.tc:hover{border-color:var(--border2)}
+.tc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--orange))}
+.tc h4{font-size:12px;font-weight:700;color:var(--white);margin-bottom:6px}
+.tc p{font-size:11px;color:var(--muted);line-height:1.6}
+
+/* PRESSURE */
+.prow{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}
+.pbox{flex:1;min-width:150px;border-radius:12px;padding:16px;text-align:center}
+.pbox.abs{background:rgba(59,130,246,0.09);border:1px solid rgba(59,130,246,0.28)}
+.pbox.pos{background:rgba(249,115,22,0.09);border:1px solid rgba(249,115,22,0.28)}
+.pbox.neg{background:rgba(30,64,175,0.15);border:1px solid rgba(96,165,250,0.28)}
+.pbox .pval{font-size:26px;font-weight:800;margin-bottom:3px}
+.pbox.abs .pval{color:var(--blue2)}
+.pbox.pos .pval{color:var(--orange2)}
+.pbox.neg .pval{color:var(--blue3)}
+.pbox .plbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.pbox p{font-size:10px;color:var(--muted);margin-top:6px;line-height:1.5}
+
+/* AC CYCLE */
+.cycle-wrap{background:rgba(255,255,255,0.02);border:1px solid var(--border);
+  border-radius:14px;padding:24px;margin:20px 0}
+.cycle-lbl{font-size:10px;color:var(--muted);text-align:center;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:18px}
+.cycle{display:flex;align-items:center;justify-content:center;gap:0;overflow-x:auto;padding:4px 0}
+.cbox{background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.22);
+  border-radius:10px;padding:12px 16px;text-align:center;flex-shrink:0;min-width:100px}
+.cbox.hot{background:rgba(249,115,22,0.07);border-color:rgba(249,115,22,0.25)}
+.cbox .ci{font-size:20px;margin-bottom:4px}
+.cbox .cn{font-size:11px;font-weight:700;color:var(--blue3)}
+.cbox.hot .cn{color:var(--orange2)}
+.cbox .cs{font-size:9px;color:var(--muted);margin-top:2px}
+.arr{font-size:18px;color:var(--blue);padding:0 6px;flex-shrink:0}
+.arr.ha{color:var(--orange)}
+
+/* SIM */
+.sim{background:rgba(255,255,255,0.02);border:1px solid var(--border);
+  border-radius:14px;padding:20px;margin:20px 0}
+.sim-h{font-size:11px;font-weight:700;color:var(--blue2);text-transform:uppercase;
+  letter-spacing:.09em;margin-bottom:16px;display:flex;align-items:center;gap:6px}
+.sim-h::before{content:'⚡'}
+.sim-ctrl{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end}
+.ctrl-grp label{display:block;font-size:10px;color:var(--muted);margin-bottom:5px;font-weight:600}
+.ctrl-grp input[type=range]{width:150px;accent-color:var(--blue);cursor:pointer}
+.ctrl-grp select{background:rgba(255,255,255,0.05);border:1px solid var(--border2);
+  color:var(--text);padding:6px 10px;border-radius:8px;font-size:12px;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif}
+.ctrl-val{font-size:12px;font-weight:700;color:var(--blue2);margin-top:3px}
+.sim-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.sm{background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:9px;padding:12px;text-align:center}
+.sm .sv{font-size:20px;font-weight:800;color:var(--blue2);
+  font-family:'JetBrains Mono',monospace}
+.sm .su{font-size:9px;color:var(--muted)}
+.sm .sn{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* ICE BREAK */
+.ice{background:linear-gradient(135deg,rgba(30,64,175,0.15),rgba(59,130,246,0.08));
+  border:1px solid rgba(59,130,246,0.3);border-radius:14px;padding:22px;margin:28px 0;
+  position:relative;overflow:hidden}
+.ice::after{content:'🧊';position:absolute;right:16px;top:12px;font-size:36px;opacity:.2}
+.ice-tag{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--blue);margin-bottom:10px}
+.ice-q{font-family:'DM Serif Display',serif;font-size:18px;color:var(--white);
+  margin-bottom:14px;line-height:1.4}
+.ice-opts{display:flex;flex-wrap:wrap;gap:8px}
+.iopt{background:rgba(255,255,255,0.04);border:1px solid rgba(99,144,210,0.2);
+  border-radius:8px;padding:8px 14px;font-size:12px;color:var(--sub);
+  cursor:pointer;transition:all .18s}
+.iopt:hover{background:rgba(59,130,246,0.15);border-color:var(--blue);color:var(--white)}
+.iopt.ok{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.4);color:#86EFAC;pointer-events:none}
+.iopt.no{background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.25);color:#FCA5A5;pointer-events:none}
+.ifb{margin-top:12px;font-size:12px;line-height:1.6;padding:10px 14px;border-radius:8px;display:none}
+.ifb.show{display:block}
+.ifb.ok{background:rgba(34,197,94,0.1);color:#86EFAC}
+.ifb.no{background:rgba(239,68,68,0.07);color:#FCA5A5}
+
+/* QUIZ */
+.quiz{background:rgba(255,255,255,0.02);border:1px solid rgba(249,115,22,0.18);
+  border-radius:14px;padding:22px;margin:24px 0}
+.quiz-tag{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--orange);margin-bottom:10px}
+.quiz-q{font-size:14px;color:var(--white);margin-bottom:14px;line-height:1.6}
+.qopts{display:flex;flex-direction:column;gap:7px}
+.qopt{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);
+  border-radius:9px;padding:10px 14px;font-size:12px;color:var(--sub);
+  cursor:pointer;transition:all .18s;text-align:left}
+.qopt:hover{background:rgba(249,115,22,0.1);border-color:rgba(249,115,22,0.3);color:var(--white)}
+.qopt.yes{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.35);color:#86EFAC;pointer-events:none}
+.qopt.nope{background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.2);color:#FCA5A5;pointer-events:none}
+.qexp{margin-top:14px;font-size:12px;color:var(--sub);line-height:1.7;
+  padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:8px;display:none}
+.qexp.show{display:block}
+
+/* FORMULA */
+.fml{background:#0A0F1E;border:1px solid rgba(59,130,246,0.2);border-radius:10px;
+  padding:14px 18px;margin:12px 0;font-family:'JetBrains Mono',monospace;
+  font-size:12px;color:var(--blue3);overflow-x:auto;line-height:1.8}
+
+/* HIGHLIGHT */
+.hl{background:rgba(59,130,246,0.07);border-left:2px solid var(--blue);
+  border-radius:0 9px 9px 0;padding:12px 16px;margin:14px 0;
+  font-size:13px;color:var(--sub);line-height:1.7}
+.hl strong{color:var(--blue3)}
+.hl.warn{background:rgba(234,179,8,0.06);border-color:var(--yellow)}
+.hl.warn strong{color:#FDE68A}
+.hl.danger{background:rgba(239,68,68,0.06);border-color:var(--red)}
+.hl.danger strong{color:#FCA5A5}
+
+/* LIST */
+.sl{list-style:none;margin:12px 0}
+.sl li{padding:7px 0 7px 20px;position:relative;font-size:12px;color:var(--sub);
+  border-bottom:1px solid rgba(255,255,255,0.04);line-height:1.6}
+.sl li::before{content:'→';position:absolute;left:0;color:var(--blue)}
+
+/* PERF TABLE */
+.ptbl{width:100%;border-collapse:collapse;margin-top:14px}
+.ptbl th{background:rgba(59,130,246,0.12);color:var(--blue3);
+  padding:10px 14px;font-size:11px;letter-spacing:.04em;text-align:left;font-weight:700}
+.ptbl td{padding:9px 14px;font-size:11px;color:var(--sub);
+  border-bottom:1px solid rgba(255,255,255,0.04)}
+.ptbl tr:hover td{background:rgba(59,130,246,0.04)}
+.bg{background:rgba(34,197,94,0.12);color:#86EFAC;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700}
+.bw{background:rgba(234,179,8,0.12);color:#FDE68A;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700}
+.br{background:rgba(239,68,68,0.1);color:#FCA5A5;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700}
+
+/* CALC */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:16px}
+.cf label{display:block;font-size:10px;color:var(--muted);margin-bottom:5px;font-weight:600}
+.cf input,.cf select{width:100%;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(99,144,210,0.22);border-radius:8px;
+  color:var(--white);padding:8px 10px;font-size:13px;
+  font-family:'Plus Jakarta Sans',sans-serif}
+.cf input:focus,.cf select:focus{outline:none;border-color:var(--blue)}
+.btn-calc{background:linear-gradient(135deg,var(--orange),#EA580C);color:#fff;
+  border:none;border-radius:9px;padding:10px 24px;font-size:13px;font-weight:700;
+  cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif}
+.btn-calc:hover{transform:translateY(-1px);opacity:.92}
+.cres{background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.22);
+  border-radius:12px;padding:18px;margin-top:14px;display:none}
+.cres.show{display:block}
+.cres-val{font-size:30px;font-weight:800;color:var(--blue2);
+  font-family:'JetBrains Mono',monospace}
+.cres-sub{font-size:12px;color:var(--sub);margin-top:6px;line-height:1.7}
+
+/* PAGE NAV */
+.pnav{display:flex;justify-content:space-between;align-items:center;
+  margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.05)}
+.bn{background:rgba(255,255,255,0.04);border:1px solid var(--border2);
+  color:var(--sub);padding:10px 20px;border-radius:9px;
+  font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;
+  font-family:'Plus Jakarta Sans',sans-serif}
+.bn:hover{background:rgba(59,130,246,0.1);color:var(--white);border-color:var(--blue)}
+.bn.p{background:var(--blue);color:#fff;border-color:var(--blue)}
+.bn.p:hover{background:#2563EB}
+
+/* SCORE */
+.score-box{background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.2);
+  border-radius:12px;padding:18px;margin:20px 0;text-align:center}
+.score-val{font-size:32px;font-weight:800;color:#86EFAC;
+  font-family:'JetBrains Mono',monospace}
+
+/* CERT */
+.cert-wrap{min-height:calc(100vh - 52px);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:60px 24px;text-align:center}
+.cert-card{background:var(--card);border:1px solid rgba(234,179,8,0.35);
+  border-radius:20px;padding:32px 40px;max-width:440px;width:100%;margin:20px auto}
+.cert-title{font-family:'DM Serif Display',serif;font-size:26px;color:#FDE68A;margin-bottom:6px}
+.cert-name{font-size:17px;font-weight:800;color:var(--white);margin:12px 0}
+
+@media(max-width:768px){
+  .hero{grid-template-columns:1fr}
+  .hero-right{display:none}
+  .hero-left{padding:40px 24px 40px}
+  .nav-pills{display:none}
+}
+@media(max-width:520px){
+  .cgrid{grid-template-columns:1fr}
+  .prow{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-icon">❄</div>
+    <div class="nav-brand-text">AC Residensial<span>Sri Hardono, S.T., M.Sc.</span></div>
+  </div>
+  <div class="nav-pills" id="navPills"></div>
+  <a href="https://www.youtube.com/@eSHa_PSL" target="_blank" class="nav-yt">
+    <div class="yt-btn">esha public skills learning</div>
+  </a>
+</nav>
+
+<!-- ══════ PAGE 0: HERO ══════ -->
+<div class="page on" id="page-0">
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Materi Pembelajaran Komprehensif</div>
+      <h1 class="hero-h1">
+        Kuasai <em>Instalasi</em><br>
+        AC <span class="accent">Residensial</span><br>
+        dari Akar
+      </h1>
+      <p class="hero-sub">
+        Teori refrigerasi, prinsip kerja, analisa performa, dan perhitungan beban panas — dikemas dalam 9 langkah mengajar Gagne yang sistematis dan interaktif.
+      </p>
+      <div class="instructor-strip">
+        <div class="avatar">👨‍🏫</div>
+        <div>
+          <div class="inst-name">Sri Hardono, S.T., M.Sc.</div>
+          <div class="inst-sub">Instruktur Sistem Tata Udara & HVAC</div>
+          <div class="inst-yt">▶ esha public skills learning</div>
+        </div>
+      </div>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="goTo(1)">Mulai Belajar →</button>
+        <a href="https://www.youtube.com/@eSHa_PSL" target="_blank">
+          <button class="btn-ghost">Tonton di YouTube</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="gagne-header">9 Langkah Gagne</div>
+      <div class="gagne-row">
+        <div class="gagne-card" onclick="goTo(1)"><div class="gc-num">01</div><div class="gc-title">Gain Attention</div><div class="gc-desc">Ice Breaking & Fenomena</div></div>
+        <div class="gagne-card" onclick="goTo(2)"><div class="gc-num">02</div><div class="gc-title">Inform Objectives</div><div class="gc-desc">Tujuan Pembelajaran</div></div>
+        <div class="gagne-card" onclick="goTo(3)"><div class="gc-num">03</div><div class="gc-title">Recall Prior</div><div class="gc-desc">Aktivasi Pengetahuan</div></div>
+      </div>
+      <div class="gagne-row">
+        <div class="gagne-card" onclick="goTo(4)"><div class="gc-num">04</div><div class="gc-title">Present Content</div><div class="gc-desc">Teori AC & Tekanan</div></div>
+        <div class="gagne-card" onclick="goTo(5)"><div class="gc-num">05</div><div class="gc-title">Provide Guidance</div><div class="gc-desc">Panduan Teknis</div></div>
+        <div class="gagne-card" onclick="goTo(6)"><div class="gc-num">06</div><div class="gc-title">Elicit Performance</div><div class="gc-desc">Analisa Performa</div></div>
+      </div>
+      <div class="gagne-row">
+        <div class="gagne-card" onclick="goTo(7)"><div class="gc-num">07</div><div class="gc-title">Feedback</div><div class="gc-desc">Umpan Balik</div></div>
+        <div class="gagne-card" onclick="goTo(7)"><div class="gc-num">08</div><div class="gc-title">Assess</div><div class="gc-desc">Tugas Interaktif</div></div>
+        <div class="gagne-card" onclick="goTo(8)"><div class="gc-num">09</div><div class="gc-title">Enhance Retention</div><div class="gc-desc">Perhitungan Beban</div></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl">Langkah Gagne</div></div>
+        <div class="stat-box"><div class="stat-val">4</div><div class="stat-lbl">Simulasi Interaktif</div></div>
+        <div class="stat-box"><div class="stat-val">4</div><div class="stat-lbl">Kuis & Ice Break</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 1: GAGNE 1 — GAIN ATTENTION ══════ -->
+<div class="page" id="page-1">
+  <div class="wrap">
+    <div class="step-tag"><div class="n">1</div><span>Langkah Gagne 1 — Gain Attention</span></div>
+    <h1 class="page-h1">Menarik <strong>Perhatian</strong> Peserta</h1>
+    <p class="page-lead">Ice breaking untuk membangkitkan rasa ingin tahu sebelum masuk materi inti.</p>
+
+    <div class="ice">
+      <div class="ice-tag">🧊 Ice Breaking — Tebak Fenomena!</div>
+      <div class="ice-q">Mengapa menyemprot alkohol ke kulit terasa <em>dingin</em> — padahal alkohol tidak didinginkan?</div>
+      <div class="ice-opts">
+        <div class="iopt" onclick="checkIce(this,false,'ib1')">Alkohol mengandung zat pendingin khusus</div>
+        <div class="iopt" onclick="checkIce(this,true,'ib1')">Penguapan alkohol menyerap kalor dari kulit</div>
+        <div class="iopt" onclick="checkIce(this,false,'ib1')">Alkohol bereaksi kimia dengan sel kulit</div>
+      </div>
+      <div class="ifb ok" id="ib1-ok">✅ <strong>Tepat!</strong> Penguapan = penyerapan energi panas dari sekitar. Inilah INTI cara kerja AC — refrigeran menguap di evaporator, menyerap panas ruangan. Prinsip yang sama, skala yang berbeda!</div>
+      <div class="ifb no" id="ib1-no">❌ Belum tepat. Pikirkan apa yang terjadi saat cairan berubah menjadi gas — apa yang dibutuhkan untuk proses itu?</div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><span class="ic">💡</span> Fakta Mengejutkan tentang AC</div>
+      <p>AC bukan <em>"menghasilkan dingin"</em> — ia <strong style="color:var(--blue3)">memindahkan panas</strong> dari dalam ruangan ke luar. AC adalah mesin pemindah kalor (heat transfer machine).</p>
+      <p>AC 1 PK mampu memindahkan ~2.6 kW panas per jam. COP modern 3–5: artinya 1 kW listrik bisa memindahkan 3–5 kW panas. Luar biasa efisien!</p>
+    </div>
+
+    <div class="tgrid">
+      <div class="tc"><h4>🌡️ Panas Bukan "Sesuatu"</h4><p>Panas adalah energi yang mengalir dari benda bersuhu tinggi ke rendah. "Dingin" bukan entitas — itu hanya kondisi kurangnya panas.</p></div>
+      <div class="tc"><h4>💧 Refrigeran: Zat Ajaib</h4><p>Mudah menguap pada suhu rendah, mudah mencair pada tekanan tinggi. Ideal untuk siklus pendinginan berulang-ulang.</p></div>
+      <div class="tc"><h4>⚡ COP: Efisiensi Nyata</h4><p>Coefficient of Performance = kalor dipindah / kerja masuk. AC modern COP 3–5 jauh lebih efisien dari pemanas listrik (COP=1).</p></div>
+    </div>
+
+    <div class="pnav">
+      <button class="bn" onclick="goTo(0)">← Beranda</button>
+      <button class="bn p" onclick="goTo(2)">Langkah 2 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 2: GAGNE 2 — INFORM OBJECTIVES ══════ -->
+<div class="page" id="page-2">
+  <div class="wrap">
+    <div class="step-tag"><div class="n">2</div><span>Langkah Gagne 2 — Inform Objectives</span></div>
+    <h1 class="page-h1">Tujuan <strong>Pembelajaran</strong></h1>
+    <p class="page-lead">Setelah menyelesaikan modul ini, peserta mampu:</p>
+
+    <ul class="sl">
+      <li>Menjelaskan teori dasar panas, dingin, tekanan, dan temperatur dalam sistem refrigerasi</li>
+      <li>Mengidentifikasi 4 komponen pokok AC dan menjelaskan fungsi masing-masing</li>
+      <li>Menggambarkan siklus refrigerasi standar (Standard Vapor Compression Cycle)</li>
+      <li>Menghitung tekanan absolut, positif (gauge), dan negatif (vakum)</li>
+      <li>Menjelaskan cara kerja katup ekspansi dan pipa kapiler sebagai metering device</li>
+      <li>Menganalisa performa sistem AC menggunakan parameter teknis standar industri</li>
+      <li>Menghitung beban panas ruangan secara praktis untuk menentukan kapasitas AC</li>
+      <li>Melakukan pemasangan unit indoor dan outdoor AC split residensial dengan benar</li>
+    </ul>
+
+    <div class="card" style="margin-top:24px">
+      <div class="card-h"><span class="ic">📋</span> Peta Materi</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px">
+        <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.18);border-radius:9px;padding:12px">
+          <div style="font-size:10px;color:var(--blue);font-weight:700;margin-bottom:5px">MODUL 1</div>
+          <div style="font-size:12px;color:var(--white);font-weight:600">Teori Dasar Refrigerasi</div>
+        </div>
+        <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.18);border-radius:9px;padding:12px">
+          <div style="font-size:10px;color:var(--blue);font-weight:700;margin-bottom:5px">MODUL 2</div>
+          <div style="font-size:12px;color:var(--white);font-weight:600">Komponen & Siklus AC</div>
+        </div>
+        <div style="background:rgba(249,115,22,0.07);border:1px solid rgba(249,115,22,0.18);border-radius:9px;padding:12px">
+          <div style="font-size:10px;color:var(--orange);font-weight:700;margin-bottom:5px">MODUL 3</div>
+          <div style="font-size:12px;color:var(--white);font-weight:600">Analisa Performa</div>
+        </div>
+        <div style="background:rgba(249,115,22,0.07);border:1px solid rgba(249,115,22,0.18);border-radius:9px;padding:12px">
+          <div style="font-size:10px;color:var(--orange);font-weight:700;margin-bottom:5px">MODUL 4</div>
+          <div style="font-size:12px;color:var(--white);font-weight:600">Perhitungan Beban Panas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pnav">
+      <button class="bn" onclick="goTo(1)">← Kembali</button>
+      <button class="bn p" onclick="goTo(3)">Langkah 3 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 3: GAGNE 3 — STIMULATE RECALL ══════ -->
+<div class="page" id="page-3">
+  <div class="wrap">
+    <div class="step-tag"><div class="n">3</div><span>Langkah Gagne 3 — Stimulate Recall</span></div>
+    <h1 class="page-h1">Aktivasi <strong>Pengetahuan Awal</strong></h1>
+    <p class="page-lead">Sambungkan pengalaman sehari-hari dengan konsep teknis refrigerasi.</p>
+
+    <div class="ice">
+      <div class="ice-tag">🧊 Ice Breaking — Ingat Kembali!</div>
+      <div class="ice-q">Air mendidih lebih cepat di pegunungan daripada di pantai. Mengapa?</div>
+      <div class="ice-opts">
+        <div class="iopt" onclick="checkIce(this,false,'ib2')">Api di pegunungan lebih panas</div>
+        <div class="iopt" onclick="checkIce(this,false,'ib2')">Air di pegunungan lebih murni</div>
+        <div class="iopt" onclick="checkIce(this,true,'ib2')">Tekanan udara lebih rendah sehingga titik didih air turun</div>
+      </div>
+      <div class="ifb ok" id="ib2-ok">✅ <strong>Brilian!</strong> Tekanan → titik didih. Ini kunci refrigerasi! Refrigeran mendidih di evaporator pada suhu rendah karena tekanannya dikurangi oleh metering device.</div>
+      <div class="ifb no" id="ib2-no">❌ Ingat pelajaran fisika: hubungan tekanan dan titik didih cairan...</div>
+    </div>
+
+    <div class="tgrid">
+      <div class="tc"><h4>🌡️ Suhu vs Panas</h4><p>Suhu = intensitas energi (°C, K). Panas = total energi termal (kJ, BTU). Air 100°C di cangkir ≠ panas yang sama dengan air 100°C di kolam renang.</p></div>
+      <div class="tc"><h4>💨 3 Cara Perpindahan Panas</h4><p>Konduksi (pipa tembaga), Konveksi (aliran udara), Radiasi (panas matahari). Semua berperan dalam sistem AC.</p></div>
+      <div class="tc"><h4>⚗️ Panas Laten vs Sensibel</h4><p>Panas laten: mengubah fase tanpa mengubah suhu. Panas sensibel: mengubah suhu. AC memanfaatkan panas laten refrigeran untuk efisiensi tinggi.</p></div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-tag">📝 Uji Pengetahuan Awal</div>
+      <div class="quiz-q">Berapa suhu mutlak (Kelvin) setara dengan 25°C?</div>
+      <div class="qopts">
+        <div class="qopt" onclick="checkQuiz(this,false,'q3a')">A. 248 K</div>
+        <div class="qopt" onclick="checkQuiz(this,true,'q3a')">B. 298 K</div>
+        <div class="qopt" onclick="checkQuiz(this,false,'q3a')">C. 273 K</div>
+        <div class="qopt" onclick="checkQuiz(this,false,'q3a')">D. 325 K</div>
+      </div>
+      <div class="qexp" id="q3a-exp"><strong>Jawaban: B. 298 K</strong><br>Konversi: K = °C + 273 → 25 + 273 = <strong>298 K</strong>. Skala Kelvin adalah skala suhu absolut dimana 0 K = −273°C (nol mutlak — tidak ada energi termal).</div>
+    </div>
+
+    <div class="pnav">
+      <button class="bn" onclick="goTo(2)">← Kembali</button>
+      <button class="bn p" onclick="goTo(4)">Langkah 4 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 4: GAGNE 4 — PRESENT CONTENT ══════ -->
+<div class="page" id="page-4">
+  <div class="wrap">
+    <div class="step-tag"><div class="n">4</div><span>Langkah Gagne 4 — Present Content</span></div>
+    <h1 class="page-h1">Teori <strong>AC & Refrigerasi</strong></h1>
+    <p class="page-lead">Tekanan, komponen pokok, dan prinsip kerja sistem pendingin udara.</p>
+
+    <div class="card">
+      <div class="card-h"><span class="ic">📊</span> Teori Tekanan dan Temperatur</div>
+      <p>Dalam sistem refrigerasi, memahami tekanan adalah FUNDAMENTAL. Teknisi AC bekerja dengan manifold gauge yang menunjukkan tekanan sistem setiap hari.</p>
+    </div>
+
+    <div class="prow">
+      <div class="pbox abs"><div class="pval">Pabs</div><div class="plbl">Tekanan Absolut</div><p>Diukur dari nol mutlak (vakum sempurna).<br><strong style="color:var(--blue3)">Pabs = Pgauge + 14.7 psi</strong><br>Selalu bernilai positif.</p></div>
+      <div class="pbox pos"><div class="pval">Pgauge</div><div class="plbl">Tekanan Positif (Gauge)</div><p>Di atas tekanan atmosfer. Terbaca pada manifold gauge sisi tinggi (merah). Satuan: psi, bar, kPa.</p></div>
+      <div class="pbox neg"><div class="pval">Pvakum</div><div class="plbl">Tekanan Negatif (Vakum)</div><p>Di bawah atmosfer. Terbaca saat evacuation (inHg). Penting untuk moisture removal.</p></div>
+    </div>
+
+    <div class="fml">
+      Tekanan Absolut  = Tekanan Gauge + Tekanan Atmosfer<br>
+      Pabs [psia]  = Pgauge [psig]  + 14.696 psia<br>
+      Pabs [kPa]   = Pgauge [kPa]   + 101.325 kPa
+    </div>
+
+    <!-- SIMULATOR TEKANAN -->
+    <div class="sim">
+      <div class="sim-h">Kalkulator Konversi Tekanan Interaktif</div>
+      <div class="sim-ctrl">
+        <div class="ctrl-grp">
+          <label>Tekanan Gauge (psig)</label>
+          <input type="range" min="-14" max="400" value="120" id="pGauge" oninput="updP()">
+          <div class="ctrl-val" id="pGV">120 psig</div>
+        </div>
+      </div>
+      <div class="sim-out">
+        <div class="sm"><div class="sv" id="pAbs">134.7</div><div class="su">psia</div><div class="sn">Tekanan Absolut</div></div>
+        <div class="sm"><div class="sv" id="pBar">9.29</div><div class="su">bar</div><div class="sn">Tekanan (bar)</div></div>
+        <div class="sm"><div class="sv" id="pKpa">929</div><div class="su">kPa</div><div class="sn">Tekanan (kPa)</div></div>
+        <div class="sm"><div class="sv" id="pType" style="font-size:14px">POSITIF</div><div class="su"></div><div class="sn">Jenis Tekanan</div></div>
+      </div>
+    </div>
+
+    <!-- 4 KOMPONEN -->
+    <div class="card" style="margin-top:24px">
+      <div class="card-h"><span class="ic">⚙️</span> 4 Komponen Pokok Sistem AC</div>
+    </div>
+
+    <div class="cycle-wrap">
+      <div class="cycle-lbl">Siklus Kompresi Uap Standar (Standard Vapor Compression Cycle)</div>
+      <div class="cycle">
+        <div class="cbox hot"><div class="ci">🔥</div><div class="cn">KOMPRESOR</div><div class="cs">T↑ P↑</div></div>
+        <div class="arr ha">→</div>
+        <div class="cbox hot"><div class="ci">🌀</div><div class="cn">KONDENSOR</div><div class="cs">Buang Panas</div></div>
+        <div class="arr">→</div>
+        <div class="cbox"><div class="ci">🔧</div><div class="cn">METERING</div><div class="cs">P turun</div></div>
+        <div class="arr">→</div>
+        <div class="cbox"><div class="ci">❄️</div><div class="cn">EVAPORATOR</div><div class="cs">Serap Panas</div></div>
+        <div class="arr ha" style="color:var(--blue)">↩</div>
+      </div>
+    </div>
+
+    <div class="tgrid">
+      <div class="tc"><h4>🔥 Kompresor</h4><p>Jantung sistem. Menghisap uap bertekanan rendah dari evaporator, memampatkan menjadi uap bertekanan & suhu tinggi. Tipe: rotary, scroll, reciprocating.</p></div>
+      <div class="tc"><h4>🌀 Kondensor</h4><p>Unit outdoor. Uap panas dikondensasikan menjadi cairan dengan membuang panas ke udara luar melalui fan dan sirip aluminium.</p></div>
+      <div class="tc"><h4>❄️ Evaporator</h4><p>Unit indoor. Refrigeran cair bertekanan rendah menguap, menyerap panas dari udara ruangan. Udara dingin berhembus ke ruangan.</p></div>
+      <div class="tc"><h4>🔧 Metering Device</h4><p>Katup ekspansi atau pipa kapiler. Menurunkan tekanan refrigeran, mengontrol aliran ke evaporator. Batas sisi tekanan tinggi dan rendah.</p></div>
+    </div>
+
+    <div class="hl"><strong>💡 Mengapa AC Bisa Dingin?</strong><br>Refrigeran cair (P tinggi) → metering device → P turun → titik didih turun → menguap di evaporator → menyerap kalor laten dari udara ruangan → udara menjadi dingin → refrigeran (uap, P rendah) → kompresor → siklus berulang.</div>
+
+    <div class="pnav">
+      <button class="bn" onclick="goTo(3)">← Kembali</button>
+      <button class="bn p" onclick="goTo(5)">Langkah 5 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 5: GAGNE 5 — PROVIDE GUIDANCE ══════ -->
+<div class="page" id="page-5">
+  <div class="wrap">
+    <div class="step-tag"><div class="n">5</div><span>Langkah Gagne 5 — Provide Guidance</span></div>
+    <h1 class="page-h1">Panduan <strong>Teknis Mendalam</strong></h1>
+    <p class="page-lead">Metering device, siklus refrigerasi, dan cara membaca manifold gauge.</p>
+
+    <div class="card">
+      <div class="card-h"><span class="ic">🔧</span> Metering Device: Katup Ekspansi vs Pipa Kapiler</div>
+    </div>
+    <div class="tgrid">
+      <div class="tc"><h4>🔩 Pipa Kapiler (Capillary Tube)</h4><p>Pipa tembaga berdiameter 0.5–2mm, panjang 0.5–6m. Fixed restriction — aliran konstan.<br><br><strong>Digunakan:</strong> AC residensial split, kulkas rumah tangga. Murah, sederhana, tak ada bagian bergerak.</p></div>
+      <div class="tc"><h4>⚙️ Katup Ekspansi (TXV)</h4><p>Thermostatic Expansion Valve — menyesuaikan bukaan berdasarkan superheat di outlet evaporator. Adaptif terhadap perubahan beban.<br><br><strong>Digunakan:</strong> Chiller, AC komersial, VRV/VRF.</p></div>
+    </div>
+
+    <!-- SIMULATOR SIKLUS -->
+    <div class="sim">
+      <div class="sim-h">Simulator Siklus Refrigerasi</div>
+      <div class="sim-ctrl">
+        <div class="ctrl-grp">
+          <label>Suhu Ruangan (°C)</label>
+          <input type="range" min="25" max="45" value="32" id="rT" oninput="updCyc()">
+          <div class="ctrl-val" id="rTV">32°C</div>
+        </div>
+        <div class="ctrl-grp">
+          <label>Set Point AC (°C)</label>
+          <input type="range" min="16" max="28" value="24" id="sP" oninput="updCyc()">
+          <div class="ctrl-val" id="sPV">24°C</div>
+        </div>
+        <div class="ctrl-grp">
+          <label>Refrigeran</label>
+          <select id="refT" onchange="updCyc()">
+            <option value="r410">R-410A</option>
+            <option value="r32">R-32</option>
+            <option value="r22">R-22 (Legacy)</option>
+          </select>
+        </div>
+      </div>
+      <div class="sim-out">
+        <div class="sm"><div class="sv" id="eP">--</div><div class="su">psig</div><div class="sn">P Evaporator</div></div>
+        <div class="sm"><div class="sv" id="cP">--</div><div class="su">psig</div><div class="sn">P Kondensor</div></div>
+        <div class="sm"><div class="sv" id="eT">--</div><div class="su">°C</div><div class="sn">T Evaporasi</div></div>
+        <div class="sm"><div class="sv" id="cT">--</div><div class="su">°C</div><div class="sn">T Kondensasi</div></div>
+        <div class="sm"><div class="sv" id="sH">--</div><div class="su">°C</div><div class="sn">Superheat</div></div>
+        <div class="sm"><div class="sv" id="sC">--</div><div class="su">°C</div><div class="sn">Subcooling</div></div>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--sub);line-height:1.6" id="cycStat"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><span class="ic">🔵🔴</span> Cara Membaca Manifold Gauge</div>
+      <ul class="sl">
+        <li><strong style="color:#93C5FD">Sisi Biru (Low Side)</strong>: Dihubungkan ke sisi hisap kompresor. Tekanan evaporator. Normal R-410A: 60–80 psig.</li>
+        <li><strong style="color:#FCA5A5">Sisi Merah (High Side)</strong>: Dihubungkan ke sisi tekan kompresor. Tekanan kondensor. Normal R-410A: 250–320 psig.</li>
+        <li><strong style="color:#FDE68A">Selang Kuning</strong>: Ke refrigeran, vakum pump, atau recovery machine.</li>
+      </ul>
+    </div>
+
+    <div class="pnav">
+      <button class="bn" onclick="goTo(4)">← Kembali</button>
+      <button class="bn p" onclick="goTo(6)">Langkah 6 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 6: GAGNE 6 — ELICIT PERFORMANCE ══════ -->
+<div class="page" id="page-6">
+  <div class="wrap">
+    <div class="step-tag"><div class="n">6</div><span>Langkah Gagne 6 — Elicit Performance</span></div>
+    <h1 class="page-h1">Analisa <strong>Performa Sistem</strong></h1>
+    <p class="page-lead">Praktikkan kemampuan: bagaimana teknisi menganalisa dan menjustifikasi kondisi sistem AC.</p>
+
+    <div class="ice">
+      <div class="ice-tag">🧊 Ice Breaking — Diagnosa Teknisi!</div>
+      <div class="ice-q">Teknisi mengukur R-410A: Low = 40 psig (normal 60–80), High = 280 psig (normal). Apa kemungkinan masalahnya?</div>
+      <div class="ice-opts">
+        <div class="iopt" onclick="checkIce(this,true,'ib3')">Refrigeran kurang (undercharge) atau filter drier tersumbat</div>
+        <div class="iopt" onclick="checkIce(this,false,'ib3')">Kompresor terlalu kuat</div>
+        <div class="iopt" onclick="checkIce(this,false,'ib3')">Kondensor terlalu dingin</div>
+      </div>
+      <div class="ifb ok" id="ib3-ok">✅ <strong>Tepat!</strong> Low side rendah + High side normal → undercharge atau aliran terhambat (filter/kapiler). Periksa subcooling & superheat untuk diagnosis pasti.</div>
+      <div class="ifb no" id="ib3-no">❌ Apa yang menyebabkan tekanan sisi rendah turun jika sisi tinggi masih normal?</div>
+    </div>
+
+    <div style="overflow-x:auto;border-radius:12px;border:1px solid var(--border)">
+      <table class="ptbl">
+        <thead>
+          <tr>
+            <th>Parameter</th><th>Satuan</th><th>Normal (R-410A)</th><th>Alat Ukur</th><th>Masalah Jika Abnormal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Low Side (Suction)</strong></td><td>psig</td><td><span class="bg">60–80 psig</span></td><td>Manifold Gauge</td><td>Rendah = undercharge/tersumbat. Tinggi = overcharge/evap kotor</td></tr>
+          <tr><td><strong>High Side (Discharge)</strong></td><td>psig</td><td><span class="bg">250–320 psig</span></td><td>Manifold Gauge</td><td>Tinggi = overcharge/cond kotor. Rendah = undercharge/kompresor lemah</td></tr>
+          <tr><td><strong>Superheat (SH)</strong></td><td>°C</td><td><span class="bg">5–10°C</span></td><td>Termometer + P-T Chart</td><td>Tinggi = undercharge/tersumbat. Rendah = overcharge/floodback</td></tr>
+          <tr><td><strong>Subcooling (SC)</strong></td><td>°C</td><td><span class="bg">5–10°C</span></td><td>Termometer + P-T Chart</td><td>Tinggi = overcharge. Rendah = undercharge/cond kotor</td></tr>
+          <tr><td><strong>Delta T Evap</strong></td><td>°C</td><td><span class="bg">10–14°C</span></td><td>Termometer digital</td><td>Rendah = airflow kurang/evap kotor. Tinggi = beban rendah</td></tr>
+          <tr><td><strong>Ampere Kompresor</strong></td><td>A</td><td><span class="bw">Sesuai nameplate</span></td><td>Tang Ampere</td><td>Tinggi = kompresor berat. Rendah = kapasitor lemah</td></tr>
+          <tr><td><strong>Suhu Discharge Line</strong></td><td>°C</td><td><span class="bw">80–120°C</span></td><td>Termometer IR</td><td>&gt;135°C = SH tinggi/oli kurang. Rendah = floodback berbahaya!</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SIMULATOR DIAGNOSA -->
+    <div class="sim" style="margin-top:20px">
+      <div class="sim-h">Simulator Diagnosis Performa</div>
+      <div class="sim-ctrl">
+        <div class="ctrl-grp">
+          <label>Low Side (psig)</label>
+          <input type="range" min="20" max="120" value="65" id="dL" oninput="updDiag()">
+          <div class="ctrl-val" id="dLV">65 psig</div>
+        </div>
+        <div class="ctrl-grp">
+          <label>High Side (psig)</label>
+          <input type="range" min="150" max="450" value="280" id="dH" oninput="updDiag()">
+          <div class="ctrl-val" id="dHV">280 psig</div>
+        </div>
+        <div class="ctrl-grp">
+          <label>Superheat (°C)</label>
+          <input type="range" min="2" max="30" value="8" id="dS" oninput="updDiag()">
+          <div class="ctrl-val" id="dSV">8°C</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border-radius:10px;padding:16px;margin-top:10px">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.08em">Diagnosis Sistem</div>
+        <div style="font-size:14px;font-weight:700" id="diagR">Sistem dalam kondisi NORMAL ✅</div>
+        <div style="font-size:12px;color:var(--sub);margin-top:6px;line-height:1.7" id="diagD"></div>
+      </div>
+    </div>
+
+    <div class="pnav">
+      <button class="bn" onclick="goTo(5)">← Kembali</button>
+      <button class="bn p" onclick="goTo(7)">Langkah 7 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 7: GAGNE 7 & 8 — FEEDBACK & ASSESS ══════ -->
+<div class="page" id="page-7">
+  <div class="wrap">
+    <div class="step-tag"><div class="n">7</div><span>Langkah Gagne 7 & 8 — Feedback & Assessment</span></div>
+    <h1 class="page-h1">Tugas <strong>Interaktif</strong> & Penilaian</h1>
+    <p class="page-lead">Uji pemahaman Anda. Setiap jawaban disertai penjelasan mendalam.</p>
+
+    <div class="quiz">
+      <div class="quiz-tag">📝 Soal 1 — Konversi Tekanan</div>
+      <div class="quiz-q">Manifold gauge menunjukkan 150 psig. Berapa tekanan absolutnya?</div>
+      <div class="qopts">
+        <div class="qopt" onclick="checkQuiz(this,false,'q7a')">A. 135.3 psia</div>
+        <div class="qopt" onclick="checkQuiz(this,true,'q7a')">B. 164.7 psia</div>
+        <div class="qopt" onclick="checkQuiz(this,false,'q7a')">C. 150.0 psia</div>
+        <div class="qopt" onclick="checkQuiz(this,false,'q7a')">D. 172.5 psia</div>
+      </div>
+      <div class="qexp" id="q7a-exp"><strong>B. 164.7 psia</strong> — Pabs = 150 + 14.7 = <strong>164.7 psia</strong>. Tekanan atmosfer standar = 14.696 psia = 101.325 kPa.</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-tag">📝 Soal 2 — Diagnosa Sistem</div>
+      <div class="quiz-q">AC R-410A: Low = 90 psig, High = 400 psig, SH = 4°C, SC = 18°C. Kondisi paling mungkin?</div>
+      <div class="qopts">
+        <div class="qopt" onclick="checkQuiz(this,false,'q7b')">A. Kekurangan refrigeran (undercharge)</div>
+        <div class="qopt" onclick="checkQuiz(this,true,'q7b')">B. Kelebihan refrigeran (overcharge)</div>
+        <div class="qopt" onclick="checkQuiz(this,false,'q7b')">C. Kondensor tersumbat kotoran</div>
+        <div class="qopt" onclick="checkQuiz(this,false,'q7b')">D. Kapiler tersumbat (restriction)</div>
+      </div>
+      <div class="qexp" id="q7b-exp"><strong>B. Overcharge</strong> — Low tinggi + High sangat tinggi + SH rendah (hampir floodback) + SC sangat tinggi (18°C, normal 5–10°C) = pola klasik kelebihan refrigeran. Solusi: recovery sebagian refrigeran.</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-tag">📝 Soal 3 — Prinsip Kerja</div>
+      <div class="quiz-q">Mengapa pipa suction terasa dingin berembun sedangkan pipa discharge sangat panas?</div>
+      <div class="qopts">
+        <div class="qopt" onclick="checkQuiz(this,false,'q7c')">A. Pipa suction lebih tipis sehingga mudah dingin</div>
+        <div class="qopt" onclick="checkQuiz(this,false,'q7c')">B. Kompresor membuang panas ke pipa discharge</div>
+        <div class="qopt" onclick="checkQuiz(this,true,'q7c')">C. Suction membawa uap dingin P rendah dari evaporator; discharge membawa uap panas P tinggi hasil kompresi</div>
+        <div class="qopt" onclick="checkQuiz(this,false,'q7c')">D. Pipa suction dilapisi insulasi yang menyebabkan kedinginan</div>
+      </div>
+      <div class="qexp" id="q7c-exp"><strong>C</strong> — Suction line: uap refrigeran setelah menyerap panas di evaporator → suhu rendah, P rendah → di bawah titik embun → berembun. Discharge line: baru dikompres → suhu 80–120°C akibat kerja kompresi → sangat panas. Normal dan tanda kompresor bekerja.</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-tag">📝 Soal 4 — Metering Device</div>
+      <div class="quiz-q">Perbedaan utama pipa kapiler vs TXV (Thermostatic Expansion Valve)?</div>
+      <div class="qopts">
+        <div class="qopt" onclick="checkQuiz(this,false,'q7d')">A. Pipa kapiler untuk R-410A; TXV untuk R-22</div>
+        <div class="qopt" onclick="checkQuiz(this,true,'q7d')">B. Pipa kapiler fixed orifice; TXV mengatur bukaan berdasarkan superheat</div>
+        <div class="qopt" onclick="checkQuiz(this,false,'q7d')">C. TXV lebih murah dan lebih mudah dipasang</div>
+        <div class="qopt" onclick="checkQuiz(this,false,'q7d')">D. Keduanya sama, hanya nama berbeda</div>
+      </div>
+      <div class="qexp" id="q7d-exp"><strong>B</strong> — Pipa kapiler: fixed restriction, aliran konstan → cocok beban tetap (AC residensial). TXV: modulating — jika beban naik → SH naik → TXV membuka lebih lebar → lebih banyak refrigeran → efisiensi lebih tinggi. Ideal untuk beban bervariasi.</div>
+    </div>
+
+    <div class="score-box">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.08em">Skor Anda</div>
+      <div class="score-val" id="scoreD">0 / 0</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">Jawab semua soal untuk melihat skor final</div>
+    </div>
+
+    <div class="pnav">
+      <button class="bn" onclick="goTo(6)">← Kembali</button>
+      <button class="bn p" onclick="goTo(8)">Langkah 9 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 8: GAGNE 9 — ENHANCE RETENTION ══════ -->
+<div class="page" id="page-8">
+  <div class="wrap">
+    <div class="step-tag"><div class="n">9</div><span>Langkah Gagne 9 — Enhance Retention & Transfer</span></div>
+    <h1 class="page-h1">Perhitungan <strong>Beban Panas AC</strong></h1>
+    <p class="page-lead">Terapkan ilmu: hitung kapasitas AC yang tepat untuk kondisi ruangan nyata.</p>
+
+    <div class="hl"><strong>Metode Rule-of-Thumb (Indonesia, Iklim Tropis):</strong><br>~600 BTU/jam per m² luas lantai (plafon 3m, insulasi standar, 2–4 orang) | 1 PK ≈ 9.000 BTU/jam untuk ±15 m²</div>
+
+    <div class="fml">
+      Q_total = Q_ruangan + Q_orang + Q_peralatan + Q_infiltrasi + Q_transmisi<br><br>
+      Q_ruangan   = Panjang × Lebar × Faktor_iklim  [BTU/jam]<br>
+      Q_orang     = Jumlah_orang × 500              [BTU/jam]<br>
+      Q_peralatan = Daya_peralatan [W] × 3.412      [BTU/W]<br>
+      Total [PK]  = Q_total / 9.000
+    </div>
+
+    <div class="sim">
+      <div class="sim-h">Kalkulator Beban Panas Interaktif</div>
+      <div class="cgrid">
+        <div class="cf"><label>Panjang Ruangan (m)</label><input type="number" id="rL" value="5" min="1" max="50" step="0.5"></div>
+        <div class="cf"><label>Lebar Ruangan (m)</label><input type="number" id="rW" value="4" min="1" max="50" step="0.5"></div>
+        <div class="cf"><label>Tinggi Plafon (m)</label><input type="number" id="rH" value="3" min="2" max="5" step="0.5"></div>
+        <div class="cf"><label>Jumlah Orang</label><input type="number" id="nP" value="3" min="1" max="30"></div>
+        <div class="cf"><label>Total Daya Peralatan (W)</label><input type="number" id="eW" value="500" min="0" max="10000" step="50"></div>
+        <div class="cf">
+          <label>Orientasi & Paparan Matahari</label>
+          <select id="sF">
+            <option value="1.0">Tidak terkena matahari langsung</option>
+            <option value="1.15" selected>Sebagian terkena matahari</option>
+            <option value="1.3">Terkena matahari langsung (barat/timur)</option>
+            <option value="1.4">Atap tidak berinsulasi + matahari penuh</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-calc" onclick="calcHL()">⚡ Hitung Beban Panas</button>
+      <div class="cres" id="cRes">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.08em">Kapasitas AC Dibutuhkan</div>
+        <div class="cres-val" id="rBTU">— BTU/jam</div>
+        <div style="font-size:22px;font-weight:800;color:var(--orange2);margin:6px 0" id="rPK">— PK</div>
+        <div class="cres-sub" id="rDetail"></div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05)">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:5px;font-weight:700;text-transform:uppercase">Rekomendasi Unit AC</div>
+          <div style="font-size:13px;color:var(--blue3);font-weight:600" id="rRec"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <div class="card-h"><span class="ic">🔨</span> Tips Pemasangan AC Residensial</div>
+      <ul class="sl">
+        <li>Pasang unit indoor minimal 2.1m dari lantai, jauh dari sumber panas langsung</li>
+        <li>Kemiringan unit indoor 3–5° ke arah selang drain untuk pembuangan kondensat</li>
+        <li>Panjang pipa refrigeran ideal &lt;7.5m; gunakan pipa tembaga ACR grade L atau M</li>
+        <li>Vacuuming minimal 30 menit hingga 500 micron sebelum mengisi refrigeran</li>
+        <li>Unit outdoor di lokasi berventilasi baik, clearance minimal 30cm dari dinding/benda</li>
+        <li>Kabel AC 1 PK min. 1.5mm², AC 2 PK min. 2.5mm²; pasang MCB dedicated 125% ampere</li>
+        <li>Insul semua pipa refrigeran dengan foam insulasi min. 10mm (cegah kondensasi)</li>
+      </ul>
+    </div>
+
+    <div class="hl danger"><strong>⚠️ Keselamatan Kerja:</strong> Matikan MCB sebelum instalasi listrik. Gunakan APD (sarung tangan isolasi, kacamata safety). Jangan lepas selang manifold saat sistem bertekanan.</div>
+
+    <div class="pnav">
+      <button class="bn" onclick="goTo(7)">← Kembali</button>
+      <button class="bn p" onclick="goTo(9)">Selesai 🎓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PAGE 9: COMPLETION ══════ -->
+<div class="page" id="page-9">
+  <div class="cert-wrap">
+    <div style="font-size:72px;margin-bottom:16px">🏆</div>
+    <h1 class="page-h1" style="text-align:center">Selamat! Modul <strong>Selesai</strong></h1>
+    <div class="cert-card">
+      <div class="cert-title">Sertifikat Kompetensi</div>
+      <div style="font-size:12px;color:var(--sub)">Telah menyelesaikan modul pembelajaran</div>
+      <div class="cert-name">Pemasangan AC Residensial</div>
+      <div style="font-size:12px;color:var(--sub);margin:8px 0">Instruktur:</div>
+      <div style="font-size:15px;font-weight:800;color:var(--blue3)">Sri Hardono, S.T., M.Sc.</div>
+      <div style="font-size:11px;color:var(--sub);margin-top:3px">esha public skills learning</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:16px;line-height:1.7">Teori dasar refrigerasi · Tekanan & temperatur · 4 komponen pokok · Siklus kompresi uap · Analisa performa · Perhitungan beban panas</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:20px">
+      <a href="https://youtube.com/@eshapublicskillslearning" target="_blank" style="background:#FF0000;color:#fff;padding:11px 22px;border-radius:9px;text-decoration:none;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px">▶ Tonton di YouTube</a>
+      <button onclick="goTo(0)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border2);color:var(--blue3);padding:11px 22px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">← Ulangi Materi</button>
+    </div>
+    <div style="margin-top:32px;max-width:480px;text-align:center;font-size:12px;color:var(--muted);line-height:1.8">
+      Kunjungi channel <strong style="color:var(--blue3)">esha public skills learning</strong> untuk video hands-on pemasangan AC, troubleshooting lapangan, dan materi HVAC lanjutan.
+    </div>
+  </div>
+</div>
+
+<footer style="background:rgba(255,255,255,0.02);border-top:1px solid var(--border);padding:20px;text-align:center;font-size:11px;color:var(--muted)">
+  © 2026 Sri Hardono, S.T., M.Sc. &nbsp;|&nbsp;
+  <a href="https://www.youtube.com/@eSHa_PSL" target="_blank" style="color:var(--orange)">▶ esha public skills learning</a>
+  &nbsp;|&nbsp; Materi Pembelajaran AC Residensial
+</footer>
+
+<script>
+let cur=0,correct=0,answered={};
+
+function buildNav(){
+  const c=document.getElementById('navPills');
+  c.innerHTML='';
+  for(let i=1;i<=9;i++){
+    const b=document.createElement('button');
+    b.className='nav-pill'+(i===cur?' on':'');
+    b.textContent=i;b.onclick=()=>goTo(i);
+    c.appendChild(b);
+  }
+}
+
+function goTo(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById('page-'+n).classList.add('on');
+  cur=n;buildNav();
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(n===5)updCyc();
+  if(n===6)updDiag();
+}
+buildNav();
+
+function checkIce(el,ok,id){
+  el.parentElement.querySelectorAll('.iopt').forEach(o=>o.style.pointerEvents='none');
+  el.classList.add(ok?'ok':'no');
+  const f=document.getElementById(id+(ok?'-ok':'-no'));
+  f.classList.add('show');
+}
+
+function checkQuiz(el,ok,qid){
+  if(answered[qid])return;
+  answered[qid]=true;
+  el.parentElement.querySelectorAll('.qopt').forEach(o=>o.style.pointerEvents='none');
+  el.classList.add(ok?'yes':'nope');
+  if(ok)correct++;
+  document.getElementById(qid+'-exp').classList.add('show');
+  document.getElementById('scoreD').textContent=correct+' / '+Object.keys(answered).length;
+}
+
+function updP(){
+  const g=parseFloat(document.getElementById('pGauge').value);
+  document.getElementById('pGV').textContent=g+' psig';
+  const a=g+14.696;
+  document.getElementById('pAbs').textContent=a.toFixed(1);
+  document.getElementById('pBar').textContent=(a*0.0689476).toFixed(2);
+  document.getElementById('pKpa').textContent=Math.round(a*6.89476);
+  const t=g>0?'POSITIF':g<0?'VAKUM':'ATMOSFER';
+  const el=document.getElementById('pType');
+  el.textContent=t;
+  el.style.color=g>0?'var(--orange2)':g<0?'var(--blue3)':'var(--green)';
+}
+updP();
+
+const refD={r410:{lo:68,hi:290},r32:{lo:78,hi:320},r22:{lo:40,hi:180}};
+function updCyc(){
+  const room=parseInt(document.getElementById('rT').value);
+  const sp=parseInt(document.getElementById('sP').value);
+  const ref=document.getElementById('refT').value;
+  document.getElementById('rTV').textContent=room+'°C';
+  document.getElementById('sPV').textContent=sp+'°C';
+  const d=refD[ref],diff=room-sp,lf=1+diff*0.015;
+  const eP=Math.round(d.lo*(0.9+diff*0.005));
+  const cP=Math.round(d.hi*lf);
+  const eT=sp-8,cT=room+15,sh=Math.round(5+diff*0.3);
+  document.getElementById('eP').textContent=eP;
+  document.getElementById('cP').textContent=cP;
+  document.getElementById('eT').textContent=eT;
+  document.getElementById('cT').textContent=cT;
+  document.getElementById('sH').textContent=sh;
+  document.getElementById('sC').textContent=7;
+  const st=diff>12?'⚠️ Beban tinggi — kompresor bekerja keras. Cek kondensor & airflow outdoor.':
+            diff<5?'✅ Beban ringan — efisien. AC mungkin oversized.':
+            '✅ Beban normal — parameter dalam rentang baik.';
+  document.getElementById('cycStat').textContent=st;
+}
+updCyc();
+
+function updDiag(){
+  const lo=parseInt(document.getElementById('dL').value);
+  const hi=parseInt(document.getElementById('dH').value);
+  const sh=parseInt(document.getElementById('dS').value);
+  document.getElementById('dLV').textContent=lo+' psig';
+  document.getElementById('dHV').textContent=hi+' psig';
+  document.getElementById('dSV').textContent=sh+'°C';
+  let issues=[],col='var(--green)';
+  if(lo<50)issues.push('⬇️ Low side RENDAH: undercharge atau aliran terhambat');
+  if(lo>90)issues.push('⬆️ Low side TINGGI: overcharge atau evap kotor/airflow kurang');
+  if(hi>350)issues.push('⬆️ High side TINGGI: overcharge, cond kotor, atau airflow outdoor terhalang');
+  if(hi<220)issues.push('⬇️ High side RENDAH: undercharge atau kompresor lemah');
+  if(sh>15){issues.push('🌡️ Superheat TINGGI: undercharge atau aliran terhambat');col='var(--orange)';}
+  if(sh<4){issues.push('⚠️ Superheat RENDAH: risiko floodback — overcharge!');col='var(--red)';}
+  const r=document.getElementById('diagR'),det=document.getElementById('diagD');
+  if(!issues.length){r.textContent='Sistem NORMAL ✅';r.style.color='var(--green)';det.textContent='Semua parameter normal untuk R-410A.';}
+  else{r.textContent='Terdeteksi '+issues.length+' Masalah ⚠️';r.style.color=col;det.innerHTML=issues.join('<br>');}
+}
+updDiag();
+
+function calcHL(){
+  const L=parseFloat(document.getElementById('rL').value)||5;
+  const W=parseFloat(document.getElementById('rW').value)||4;
+  const H=parseFloat(document.getElementById('rH').value)||3;
+  const ppl=parseInt(document.getElementById('nP').value)||2;
+  const eq=parseFloat(document.getElementById('eW').value)||0;
+  const sun=parseFloat(document.getElementById('sF').value);
+  const area=L*W;
+  const qRoom=area*600*sun*(H>3?1+(H-3)*0.1:1);
+  const qPpl=ppl*500,qEq=eq*3.412;
+  const qT=qRoom+qPpl+qEq;
+  const pk=qT/9000;
+  const r=document.getElementById('cRes');r.classList.add('show');
+  document.getElementById('rBTU').textContent=Math.round(qT).toLocaleString()+' BTU/jam';
+  document.getElementById('rPK').textContent=pk.toFixed(2)+' PK';
+  const rec=pk<=0.75?'✅ AC 0.5 PK (4.500 BTU/jam)':
+             pk<=1.1?'✅ AC 1 PK (9.000 BTU/jam)':
+             pk<=1.6?'✅ AC 1.5 PK (12.000 BTU/jam)':
+             pk<=2.1?'✅ AC 2 PK (18.000 BTU/jam)':
+             '✅ AC 2.5 PK+ atau 2 unit terpisah';
+  document.getElementById('rRec').textContent=rec;
+  document.getElementById('rDetail').innerHTML=
+    'Luas: '+area+' m² | Q ruangan: '+Math.round(qRoom)+' BTU/jam<br>'+
+    'Q orang ('+ppl+'): '+qPpl+' BTU/jam | Q peralatan: '+Math.round(qEq)+' BTU/jam<br>'+
+    '<strong>Total: '+Math.round(qT).toLocaleString()+' BTU/jam = '+pk.toFixed(2)+' PK</strong>';
+}
+</script>
+</body>
+</html>
