@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografis Pemasangan AC Residensial</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:#0c2330;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  font-family:'Segoe UI',Arial,sans-serif;
+  padding:20px;
+}
+.infografis{
+  width:900px;
+  background:linear-gradient(145deg, #0f2a3a, #0c2330);
+  border-radius:20px;
+  padding:40px;
+  border:1px solid rgba(43,217,201,0.15);
+  box-shadow:0 20px 60px rgba(0,0,0,0.6), inset 0 0 80px rgba(43,217,201,0.03);
+  position:relative;
+  overflow:hidden;
+}
+.infografis::before{
+  content:'';
+  position:absolute;
+  top:-30%;
+  right:-20%;
+  width:400px;
+  height:400px;
+  background:radial-gradient(circle,rgba(43,217,201,0.04),transparent);
+  border-radius:50%;
+}
+.infografis::after{
+  content:'';
+  position:absolute;
+  bottom:-20%;
+  left:-10%;
+  width:300px;
+  height:300px;
+  background:radial-gradient(circle,rgba(211,135,63,0.04),transparent);
+  border-radius:50%;
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  margin-bottom:30px;
+  position:relative;
+  z-index:1;
+}
+.header .logo{
+  font-size:12px;
+  color:#d3873f;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  font-weight:600;
+  margin-bottom:4px;
+}
+.header h1{
+  font-size:28px;
+  color:#f3efe4;
+  font-weight:700;
+  letter-spacing:-0.5px;
+  margin-bottom:4px;
+}
+.header h1 span{color:#2bd9c9;}
+.header .sub{
+  font-size:13px;
+  color:#c9d6da;
+  opacity:0.7;
+}
+.header .badge-top{
+  display:inline-block;
+  background:rgba(43,217,201,0.12);
+  color:#2bd9c9;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:11px;
+  letter-spacing:1px;
+  margin-top:6px;
+  font-weight:600;
+}
+
+/* 5 TAHAP */
+.tahap-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+  margin:24px 0 28px;
+  position:relative;
+  z-index:1;
+}
+.tahap-item{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:12px;
+  padding:16px 10px;
+  text-align:center;
+  transition:.3s;
+}
+.tahap-item:hover{
+  background:rgba(43,217,201,0.06);
+  border-color:rgba(43,217,201,0.2);
+  transform:translateY(-3px);
+}
+.tahap-item .num{
+  display:inline-block;
+  font-size:11px;
+  font-weight:700;
+  color:#2bd9c9;
+  background:rgba(43,217,201,0.12);
+  padding:2px 10px;
+  border-radius:12px;
+  margin-bottom:6px;
+}
+.tahap-item .icon{font-size:28px;display:block;margin:4px 0;}
+.tahap-item .name{
+  font-size:13px;
+  font-weight:600;
+  color:#f3efe4;
+  margin-bottom:3px;
+}
+.tahap-item .desc{
+  font-size:10px;
+  color:#c9d6da;
+  opacity:0.6;
+  line-height:1.3;
+}
+.tahap-item .badge{
+  display:inline-block;
+  font-size:9px;
+  padding:2px 10px;
+  border-radius:10px;
+  margin-top:6px;
+  font-weight:600;
+}
+.badge.siap{background:rgba(95,208,137,0.15);color:#5fd089;}
+.badge.proses{background:rgba(43,217,201,0.12);color:#2bd9c9;}
+.badge.kritis{background:rgba(211,135,63,0.15);color:#d3873f;}
+.badge.normal{background:rgba(95,208,137,0.15);color:#5fd089;}
+.badge.selesai{background:rgba(43,217,201,0.12);color:#2bd9c9;}
+
+.arrow-connector{display:flex;align-items:center;justify-content:center;color:#2bd9c9;opacity:0.2;font-size:18px;}
+
+/* TIMELINE */
+.timeline-section{
+  margin:24px 0 28px;
+  position:relative;
+  z-index:1;
+}
+.timeline-section h2{
+  color:#2bd9c9;
+  font-size:16px;
+  margin-bottom:14px;
+  letter-spacing:1px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.timeline{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px 20px;
+}
+@media(max-width:700px){.timeline{grid-template-columns:1fr;}}
+.timeline-step{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:8px 12px;
+  background:rgba(255,255,255,0.02);
+  border-radius:8px;
+  border-left:2px solid rgba(43,217,201,0.2);
+}
+.timeline-step .step-icon{font-size:18px;flex:0 0 30px;}
+.timeline-step .step-content h4{
+  font-size:13px;
+  color:#f3efe4;
+  margin-bottom:2px;
+}
+.timeline-step .step-content p{
+  font-size:11px;
+  color:#c9d6da;
+  opacity:0.7;
+  line-height:1.4;
+}
+.timeline-step .step-content .highlight{
+  color:#2bd9c9;
+  font-weight:600;
+}
+
+/* PARAMETER */
+.param-section{
+  margin:24px 0 28px;
+  position:relative;
+  z-index:1;
+}
+.param-section h2{
+  color:#d3873f;
+  font-size:16px;
+  margin-bottom:14px;
+  letter-spacing:1px;
+}
+.param-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+@media(max-width:600px){.param-grid{grid-template-columns:1fr 1fr;}}
+.param-card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:8px;
+  padding:10px 12px;
+  text-align:center;
+}
+.param-card .value{
+  font-size:18px;
+  font-weight:700;
+  color:#2bd9c9;
+  display:block;
+  font-family:'Courier New',monospace;
+}
+.param-card .label{
+  font-size:11px;
+  color:#c9d6da;
+  font-weight:600;
+}
+.param-card .method{
+  font-size:9px;
+  color:#c9d6da;
+  opacity:0.4;
+}
+
+/* CHECKLIST */
+.checklist-section{
+  margin:24px 0 28px;
+  position:relative;
+  z-index:1;
+}
+.checklist-section h2{
+  color:#f3efe4;
+  font-size:16px;
+  margin-bottom:14px;
+  letter-spacing:1px;
+}
+.checklist-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+}
+@media(max-width:600px){.checklist-grid{grid-template-columns:1fr 1fr;}}
+.check-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  color:#c9d6da;
+  padding:4px 8px;
+  border-radius:4px;
+  background:rgba(255,255,255,0.02);
+}
+.check-item .ck{color:#2bd9c9;font-weight:700;}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  padding-top:20px;
+  border-top:1px solid rgba(255,255,255,0.05);
+  position:relative;
+  z-index:1;
+}
+.footer p{
+  font-size:11px;
+  color:#c9d6da;
+  opacity:0.4;
+  letter-spacing:1px;
+}
+.footer .brand{
+  color:#d3873f;
+  font-weight:600;
+  letter-spacing:2px;
+}
+
+/* SOUND INDICATOR */
+.sound-section{
+  margin:20px 0;
+  position:relative;
+  z-index:1;
+}
+.sound-section h2{
+  color:#f3efe4;
+  font-size:14px;
+  margin-bottom:10px;
+  letter-spacing:1px;
+}
+.sound-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+@media(max-width:600px){.sound-grid{grid-template-columns:1fr;}}
+.sound-card{
+  background:rgba(255,255,255,0.02);
+  border-radius:8px;
+  padding:10px 12px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,0.04);
+}
+.sound-card .s-icon{font-size:22px;display:block;margin-bottom:4px;}
+.sound-card .s-name{font-size:12px;font-weight:600;color:#f3efe4;}
+.sound-card .s-normal{font-size:10px;color:#5fd089;}
+.sound-card .s-bad{font-size:10px;color:#e0654f;}
+
+/* RESPONSIVE */
+@media print{
+  .infografis{box-shadow:none;border:1px solid #333;}
+}
+</style>
+</head>
+<body>
+
+<div class="infografis" id="infografis">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">eSHa Public Skills Learning</div>
+    <h1>PANDUAN PASANG <span>AC RESIDENSIAL</span></h1>
+    <div class="sub">Standar Kompetensi Kerja Nasional Indonesia — F.43RAC01.021.1</div>
+    <span class="badge-top">✅ 5 LANGKAH PROFESIONAL</span>
+  </div>
+
+  <!-- 5 TAHAP -->
+  <div class="tahap-grid">
+    <div class="tahap-item">
+      <span class="num">TAHAP 1</span>
+      <span class="icon">📋</span>
+      <div class="name">Persiapan</div>
+      <div class="desc">Identifikasi ruangan, hitung kapasitas, siapkan alat</div>
+      <span class="badge siap">🟢 Siap</span>
+    </div>
+    <div style="display:flex;align-items:center;color:#2bd9c9;opacity:0.2;font-size:24px;justify-content:center;">→</div>
+    <div class="tahap-item">
+      <span class="num">TAHAP 2</span>
+      <span class="icon">🔧</span>
+      <div class="name">Pemasangan Unit</div>
+      <div class="desc">Bracket, indoor, outdoor, jalur pipa, drainase</div>
+      <span class="badge proses">🔄 Proses</span>
+    </div>
+    <div style="display:flex;align-items:center;color:#2bd9c9;opacity:0.2;font-size:24px;justify-content:center;">→</div>
+    <div class="tahap-item">
+      <span class="num">TAHAP 3</span>
+      <span class="icon">🔌</span>
+      <div class="name">Pemipaan & Listrik</div>
+      <div class="desc">Flaring, sambung pipa, kabel, evakuasi</div>
+      <span class="badge kritis">🔴 Kritis</span>
+    </div>
+    <div style="display:flex;align-items:center;color:#2bd9c9;opacity:0.2;font-size:24px;justify-content:center;">→</div>
+    <div class="tahap-item">
+      <span class="num">TAHAP 4</span>
+      <span class="icon">✅</span>
+      <div class="name">Tes & Commissioning</div>
+      <div class="desc">Uji drainase, isi refrigeran, cek kinerja</div>
+      <span class="badge normal">🟢 Normal</span>
+    </div>
+    <div style="display:flex;align-items:center;color:#2bd9c9;opacity:0.2;font-size:24px;justify-content:center;">→</div>
+    <div class="tahap-item">
+      <span class="num">TAHAP 5</span>
+      <span class="icon">📄</span>
+      <div class="name">Dokumentasi</div>
+      <div class="desc">Catatan pengetesan, laporan, foto</div>
+      <span class="badge selesai">🔵 Selesai</span>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline-section">
+    <h2>⏳ ALUR KERJA DETAIL</h2>
+    <div class="timeline">
+      <div class="timeline-step">
+        <span class="step-icon">📏</span>
+        <div class="step-content">
+          <h4>1. Identifikasi Ruangan</h4>
+          <p>Ukur P×L×T, hitung <span class="highlight">BTU</span> (Rumus: Luas × 500 BTU), tambah 10-20% untuk ruang panas</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <span class="step-icon">🧰</span>
+        <div class="step-content">
+          <h4>2. Siapkan Peralatan</h4>
+          <p>Manifold, pompa vakum, tang ampere, <span class="highlight">waterpass</span>, flaring tools, nitrogen</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <span class="step-icon">🔩</span>
+        <div class="step-content">
+          <h4>3. Pemasangan Bracket & Unit</h4>
+          <p>Waterpass lurus horizontal/vertikal, outdoor dengan <span class="highlight">sirkulasi udara</span> baik</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <span class="step-icon">🔧</span>
+        <div class="step-content">
+          <h4>4. Instalasi Pemipaan</h4>
+          <p>Cutter + reamer + <span class="highlight">flaring presisi</span>, kunci torsi (18-60 Nm)</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <span class="step-icon">⚡</span>
+        <div class="step-content">
+          <h4>5. Instalasi Kelistrikan</h4>
+          <p>Kabel <span class="highlight">1,5 mm²</span> (indoor) / <span class="highlight">2,5 mm²</span> (outdoor), cek polaritas</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <span class="step-icon">💨</span>
+        <div class="step-content">
+          <h4>6. Pressure Test & Evakuasi</h4>
+          <p>Nitrogen <span class="highlight">150-300 PSI</span>, cek bocor, vakum <span class="highlight">500 micron</span> 30 menit</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <span class="step-icon">❄️</span>
+        <div class="step-content">
+          <h4>7. Pengisian Refrigeran</h4>
+          <p>Buka valve liquid → gas, tunggu <span class="highlight">5-10 menit</span> stabil</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <span class="step-icon">📊</span>
+        <div class="step-content">
+          <h4>8. Cek Parameter Kinerja</h4>
+          <p>Arus (NP), tekanan, superheat, subcool, <span class="highlight">delta T</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARAMETER KINERJA -->
+  <div class="param-section">
+    <h2>📊 PARAMETER KINERJA AC NORMAL (R32/R410A)</h2>
+    <div class="param-grid">
+      <div class="param-card">
+        <span class="value">Sesuai NP</span>
+        <span class="label">Arus Listrik</span>
+        <div class="method">Clamp meter</div>
+      </div>
+      <div class="param-card">
+        <span class="value">110-140 PSI</span>
+        <span class="label">Tekanan Rendah</span>
+        <div class="method">Manifold gauge</div>
+      </div>
+      <div class="param-card">
+        <span class="value">380-450 PSI</span>
+        <span class="label">Tekanan Tinggi</span>
+        <div class="method">Manifold gauge</div>
+      </div>
+      <div class="param-card">
+        <span class="value">4-8 K</span>
+        <span class="label">Superheat (SH)</span>
+        <div class="method">PT Chart + Thermometer</div>
+      </div>
+      <div class="param-card">
+        <span class="value">4-9 K</span>
+        <span class="label">Subcool (SC)</span>
+        <div class="method">PT Chart + Thermometer</div>
+      </div>
+      <div class="param-card">
+        <span class="value">8-10 K</span>
+        <span class="label">Delta T Indoor</span>
+        <div class="method">Thermometer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INDIKASI SUARA -->
+  <div class="sound-section">
+    <h2>🔊 INDIKASI SUARA NORMAL</h2>
+    <div class="sound-grid">
+      <div class="sound-card">
+        <span class="s-icon">🌀</span>
+        <div class="s-name">Fan Indoor</div>
+        <div class="s-normal">✓ Hembusan halus & stabil</div>
+        <div class="s-bad">✗ Berisik / berdecit</div>
+      </div>
+      <div class="sound-card">
+        <span class="s-icon">🌀</span>
+        <div class="s-name">Fan Outdoor</div>
+        <div class="s-normal">✓ Berputar stabil & mulus</div>
+        <div class="s-bad">✗ Berisik / benturan</div>
+      </div>
+      <div class="sound-card">
+        <span class="s-icon">⚙️</span>
+        <div class="s-name">Kompresor</div>
+        <div class="s-normal">✓ Menderu halus</div>
+        <div class="s-bad">✗ Berdecit / berdentum</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="checklist-section">
+    <h2>☑️ CHECKLIST CEPAT PEMASANGAN</h2>
+    <div class="checklist-grid">
+      <div class="check-item"><span class="ck">✓</span> Alat & bahan lengkap</div>
+      <div class="check-item"><span class="ck">✓</span> Bracket lurus (waterpass)</div>
+      <div class="check-item"><span class="ck">✓</span> Flaring presisi & rapi</div>
+      <div class="check-item"><span class="ck">✓</span> Pressure test nitrogen</div>
+      <div class="check-item"><span class="ck">✓</span> Evakuasi vakum 500 micron</div>
+      <div class="check-item"><span class="ck">✓</span> Arus sesuai nameplate</div>
+      <div class="check-item"><span class="ck">✓</span> Tekanan normal (110-450 PSI)</div>
+      <div class="check-item"><span class="ck">✓</span> Superheat & Subcool normal</div>
+      <div class="check-item"><span class="ck">✓</span> Delta T indoor (8-10 K)</div>
+      <div class="check-item"><span class="ck">✓</span> Suara fan & kompresor normal</div>
+      <div class="check-item"><span class="ck">✓</span> Drainase lancar</div>
+      <div class="check-item"><span class="ck">✓</span> Dokumentasi lengkap</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>📌 Panduan ini berdasarkan SKKNI Unit F.43RAC01.021.1 — Pemasangan Unit Tata Udara Rumah Tangga/Residensial</p>
+    <p><span class="brand">eSHa Public Skills Learning</span> — © 2026</p>
+  </div>
+
+</div>
+
+<script>
+// Auto screenshot hint
+console.log('📸 Untuk screenshot: Buka dev tools (F12) → Klik "..." → Run command → Screenshot');
+</script>
+</body>
+</html>
