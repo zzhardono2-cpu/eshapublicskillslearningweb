@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teknik Pemasangan AC Residensial — eSHa Public Skills Learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-deep:#0c2330;
+  --navy:#123347;
+  --slate-card:#16415a;
+  --slate-card-2:#1a4d68;
+  --teal:#2bd9c9;
+  --teal-dim:#1d9c91;
+  --copper:#d3873f;
+  --copper-dim:#a8682f;
+  --cream:#f3efe4;
+  --cream-dim:#c9d6da;
+  --danger:#e0654f;
+  --good:#5fd089;
+  --border:rgba(243,239,228,0.12);
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--navy-deep);
+  background-image:
+    radial-gradient(circle at 85% -10%, rgba(43,217,201,0.10), transparent 45%),
+    radial-gradient(circle at -5% 110%, rgba(211,135,63,0.08), transparent 40%);
+  color:var(--cream);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  line-height:1.6;
+}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;margin:0 0 .4em 0;letter-spacing:-0.01em;}
+.mono{font-family:'JetBrains Mono',monospace;}
+a{color:var(--teal);text-decoration:none;}
+::selection{background:var(--teal);color:var(--navy-deep);}
+
+/* ---- Layout shell ---- */
+.app{display:flex;min-height:100vh;}
+.sidebar{
+  width:268px;flex:0 0 268px;
+  background:linear-gradient(180deg,var(--navy),var(--navy-deep));
+  border-right:1px solid var(--border);
+  padding:24px 18px;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  display:flex;flex-direction:column;gap:18px;
+}
+.brand{display:flex;flex-direction:column;gap:4px;padding-bottom:10px;border-bottom:1px solid var(--border);margin-bottom:4px;}
+.brand .tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--copper);font-family:'JetBrains Mono',monospace;}
+.brand .title{font-size:18px;font-weight:700;color:var(--cream);}
+
+/* gauge */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px;background:rgba(0,0,0,0.18);border-radius:var(--radius);border:1px solid var(--border);}
+.gauge-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--cream-dim);font-family:'JetBrains Mono',monospace;}
+#gaugeNeedle{transition:transform .6s cubic-bezier(.4,1.4,.4,1);}
+.gauge-pct{font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--teal);font-weight:600;}
+
+.navlist{display:flex;flex-direction:column;gap:3px;flex:1;}
+.navgroup-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--copper);margin:12px 4px 4px;font-family:'JetBrains Mono',monospace;}
+.navitem{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:9px;cursor:pointer;
+  color:var(--cream-dim);font-size:13.5px;font-weight:500;
+  border:1px solid transparent;
+}
+.navitem:hover{background:rgba(243,239,228,0.06);color:var(--cream);}
+.navitem.active{background:rgba(43,217,201,0.12);color:var(--teal);border-color:rgba(43,217,201,0.3);}
+.navitem .dot{width:7px;height:7px;border-radius:50%;background:var(--border);flex:0 0 7px;}
+.navitem.done .dot{background:var(--good);}
+.navitem.active .dot{background:var(--teal);}
+
+.yt-card{
+  margin-top:auto;padding:14px;border-radius:var(--radius);
+  background:linear-gradient(135deg,rgba(211,135,63,0.16),rgba(211,135,63,0.04));
+  border:1px solid rgba(211,135,63,0.35);
+}
+.yt-card .label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--copper);font-family:'JetBrains Mono',monospace;margin-bottom:6px;}
+.yt-card a.ytbtn{
+  display:flex;align-items:center;gap:8px;
+  background:var(--copper);color:var(--navy-deep);font-weight:700;font-size:13px;
+  padding:9px 12px;border-radius:9px;margin-top:6px;justify-content:center;
+}
+.yt-card a.ytbtn:hover{background:#e69a55;}
+
+.main{flex:1;min-width:0;padding:38px 52px 90px;max-width:980px;}
+.page{display:none;}
+.page.active{display:block;animation:fade .4s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:10px;display:block;}
+.lead{font-size:17px;color:var(--cream-dim);max-width:640px;}
+hr.rule{border:none;border-top:1px solid var(--border);margin:30px 0;}
+
+.card{
+  background:linear-gradient(165deg,var(--slate-card),var(--navy));
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px 24px;margin:18px 0;
+}
+.card h3{color:var(--cream);font-size:17px;}
+.card.tip{border-left:3px solid var(--teal);background:linear-gradient(165deg,rgba(43,217,201,0.08),var(--navy));}
+.card.warn{border-left:3px solid var(--copper);background:linear-gradient(165deg,rgba(211,135,63,0.10),var(--navy));}
+.card.note{border-left:3px solid var(--cream-dim);background:rgba(0,0,0,0.2);}
+.card.gradient{
+  background:linear-gradient(135deg, rgba(43,217,201,0.12), rgba(43,217,201,0.02));
+  border:1px solid rgba(43,217,201,0.2);
+}
+.card.glow{
+  box-shadow: 0 0 30px rgba(43,217,201,0.05);
+}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:760px){.grid2{grid-template-columns:1fr;}.sidebar{display:none;}.main{padding:26px 18px 80px;}}
+
+.steps{list-style:none;padding:0;margin:0;counter-reset:step;}
+.steps li{
+  position:relative;padding:14px 0 14px 44px;border-bottom:1px solid var(--border);counter-increment:step;
+}
+.steps li:last-child{border-bottom:none;}
+.steps li::before{
+  content:counter(step);position:absolute;left:0;top:12px;
+  width:28px;height:28px;border-radius:50%;background:var(--navy-deep);
+  border:1px solid var(--teal);color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:13px;
+  display:flex;align-items:center;justify-content:center;font-weight:600;
+}
+.steps b{color:var(--cream);}
+
+.btn{
+  display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  background:var(--teal);color:var(--navy-deep);font-weight:700;font-size:14px;
+  padding:11px 20px;border-radius:9px;border:none;font-family:'Inter',sans-serif;
+}
+.btn:hover{background:#4ee8da;}
+.btn.secondary{background:transparent;border:1px solid var(--cream-dim);color:var(--cream);}
+.btn.secondary:hover{border-color:var(--teal);color:var(--teal);}
+.btn.copper{background:var(--copper);}
+.btn.copper:hover{background:#e69a55;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+
+.navfoot{display:flex;justify-content:space-between;margin-top:36px;}
+
+/* quiz */
+.quiz{background:rgba(0,0,0,0.18);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin:16px 0;}
+.qtext{font-weight:600;color:var(--cream);margin-bottom:12px;}
+.opt{
+  display:block;width:100%;text-align:left;background:var(--navy);
+  border:1px solid var(--border);color:var(--cream-dim);
+  padding:11px 14px;border-radius:9px;margin-bottom:8px;cursor:pointer;font-size:14px;font-family:'Inter',sans-serif;
+}
+.opt:hover{border-color:var(--teal);}
+.opt.correct{background:rgba(95,208,137,0.16);border-color:var(--good);color:var(--good);}
+.opt.wrong{background:rgba(224,101,79,0.16);border-color:var(--danger);color:var(--danger);}
+.opt:disabled{cursor:default;}
+.feedback{margin-top:10px;font-size:13.5px;padding:10px 12px;border-radius:8px;display:none;}
+.feedback.show{display:block;}
+.feedback.good{background:rgba(95,208,137,0.12);color:var(--good);}
+.feedback.bad{background:rgba(224,101,79,0.12);color:var(--danger);}
+
+.badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:6px;background:rgba(211,135,63,0.18);color:var(--copper);margin-bottom:8px;}
+.badge.alt{background:rgba(43,217,201,0.16);color:var(--teal);}
+.badge.good{background:rgba(95,208,137,0.16);color:var(--good);}
+.badge.warn{background:rgba(211,135,63,0.2);color:var(--copper);}
+
+/* icebreaker drag-match */
+.matchgrid{display:flex;gap:30px;flex-wrap:wrap;}
+.matchcol{flex:1;min-width:200px;display:flex;flex-direction:column;gap:8px;}
+.matchitem{padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--navy);font-size:13.5px;cursor:pointer;}
+.matchitem.selected{border-color:var(--teal);color:var(--teal);}
+.matchitem.linked-correct{border-color:var(--good);background:rgba(95,208,137,0.12);}
+.matchitem.linked-wrong{border-color:var(--danger);background:rgba(224,101,79,0.12);}
+
+/* simulation diagram */
+.diagram-box{background:rgba(0,0,0,0.22);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;justify-content:center;}
+.hotspot{cursor:pointer;}
+.hotspot circle{fill:rgba(43,217,201,0.18);stroke:var(--teal);stroke-width:1.5;transition:.2s;}
+.hotspot:hover circle{fill:rgba(43,217,201,0.4);}
+.tooltip-pop{position:fixed;max-width:260px;background:var(--slate-card-2);border:1px solid var(--teal);border-radius:10px;padding:12px 14px;font-size:13px;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.4);display:none;}
+
+table.spec{width:100%;border-collapse:collapse;font-size:13.5px;}
+table.spec th,table.spec td{border:1px solid var(--border);padding:9px 12px;text-align:left;}
+table.spec th{background:rgba(43,217,201,0.08);color:var(--teal);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em;}
+
+/* Infografis Styles */
+.infografis-container{
+  background:linear-gradient(145deg, rgba(43,217,201,0.05), rgba(211,135,63,0.05));
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:30px;
+  margin:20px 0;
+  position:relative;
+  overflow:hidden;
+}
+.infografis-container::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  right:-30%;
+  width:300px;
+  height:300px;
+  background:radial-gradient(circle, rgba(43,217,201,0.05), transparent);
+  border-radius:50%;
+}
+.infografis-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+  gap:12px;
+  position:relative;
+  z-index:1;
+}
+@media(max-width:960px){
+  .infografis-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:600px){
+  .infografis-grid{grid-template-columns:1fr;}
+}
+
+.infografis-item{
+  background:rgba(0,0,0,0.25);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px 14px;
+  text-align:center;
+  transition:all .3s ease;
+  position:relative;
+}
+.infografis-item:hover{
+  transform:translateY(-4px);
+  border-color:var(--teal);
+  box-shadow:0 8px 25px rgba(0,0,0,0.3);
+}
+.infografis-item .icon{
+  font-size:32px;
+  margin-bottom:8px;
+  display:block;
+}
+.infografis-item .step-num{
+  display:inline-block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  color:var(--teal);
+  background:rgba(43,217,201,0.12);
+  padding:2px 10px;
+  border-radius:12px;
+  margin-bottom:8px;
+}
+.infografis-item h4{
+  font-size:14px;
+  margin-bottom:6px;
+  color:var(--cream);
+}
+.infografis-item p{
+  font-size:12px;
+  color:var(--cream-dim);
+  margin:0;
+  line-height:1.5;
+}
+.infografis-item .badge-mini{
+  display:inline-block;
+  font-size:10px;
+  padding:2px 8px;
+  border-radius:4px;
+  margin-top:6px;
+  font-family:'JetBrains Mono',monospace;
+}
+.badge-mini.good{background:rgba(95,208,137,0.15);color:var(--good);}
+.badge-mini.warn{background:rgba(211,135,63,0.15);color:var(--copper);}
+.badge-mini.info{background:rgba(43,217,201,0.15);color:var(--teal);}
+
+.connector-line{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--teal-dim);
+  font-size:20px;
+  opacity:0.3;
+}
+@media(max-width:960px){
+  .connector-line{display:none;}
+}
+
+/* Timeline infografis */
+.timeline-infografis{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  position:relative;
+  padding-left:30px;
+}
+.timeline-infografis::before{
+  content:'';
+  position:absolute;
+  left:8px;
+  top:0;
+  bottom:0;
+  width:2px;
+  background:linear-gradient(to bottom, var(--teal), var(--copper));
+  opacity:0.3;
+}
+.timeline-step{
+  position:relative;
+  padding:14px 0 14px 28px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.timeline-step:last-child{border-bottom:none;}
+.timeline-step::before{
+  content:'';
+  position:absolute;
+  left:-22px;
+  top:18px;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:var(--teal);
+  border:2px solid var(--navy-deep);
+  box-shadow:0 0 15px rgba(43,217,201,0.2);
+}
+.timeline-step .time-icon{font-size:20px;margin-right:10px;}
+.timeline-step h4{font-size:15px;color:var(--cream);margin-bottom:4px;}
+.timeline-step p{font-size:13px;color:var(--cream-dim);margin:0;}
+
+/* Parameter Cards */
+.param-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+}
+@media(max-width:760px){.param-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.param-grid{grid-template-columns:1fr;}}
+.param-card{
+  background:rgba(0,0,0,0.2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 14px;
+  text-align:center;
+}
+.param-card .param-value{
+  font-family:'JetBrains Mono',monospace;
+  font-size:18px;
+  font-weight:600;
+  color:var(--teal);
+  display:block;
+}
+.param-card .param-label{
+  font-size:11px;
+  color:var(--cream-dim);
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.param-card .param-method{
+  font-size:10px;
+  color:var(--cream-dim);
+  opacity:0.6;
+  margin-top:4px;
+}
+
+/* checklist */
+.checklist-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+@media(max-width:600px){.checklist-grid{grid-template-columns:1fr;}}
+.checklist-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 12px;
+  background:rgba(0,0,0,0.15);
+  border-radius:6px;
+  font-size:13px;
+  color:var(--cream-dim);
+}
+.checklist-item .ck{color:var(--good);font-weight:700;}
+
+/* tool cards */
+.tool-cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
+  gap:10px;
+}
+.tool-card{
+  background:rgba(0,0,0,0.2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px;
+  text-align:center;
+  transition:.2s;
+}
+.tool-card:hover{border-color:var(--teal);}
+.tool-card .tool-icon{font-size:24px;display:block;margin-bottom:4px;}
+.tool-card .tool-name{font-size:12px;color:var(--cream);display:block;}
+.tool-card .tool-cat{font-size:10px;color:var(--cream-dim);opacity:0.5;}
+
+.score-ring{display:flex;align-items:center;gap:18px;}
+.toast{
+  position:fixed;bottom:24px;right:24px;background:var(--slate-card-2);border:1px solid var(--teal);
+  border-radius:10px;padding:14px 18px;max-width:320px;font-size:13.5px;box-shadow:0 8px 30px rgba(0,0,0,.45);
+  transform:translateY(20px);opacity:0;transition:.35s;z-index:60;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+
+footer.site{margin-top:50px;padding-top:24px;border-top:1px solid var(--border);font-size:12.5px;color:var(--cream-dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="tag">SKKNI · F.43RAC01.021.1</span>
+      <span class="title">Pemasangan AC Residensial</span>
+    </div>
+
+    <div class="gauge-wrap">
+      <span class="gauge-label">Tekanan Belajar Anda</span>
+      <svg width="130" height="80" viewBox="0 0 130 80">
+        <path d="M10,75 A55,55 0 0 1 120,75" stroke="#1a3a4d" stroke-width="10" fill="none"/>
+        <path id="gaugeArc" d="M10,75 A55,55 0 0 1 120,75" stroke="#2bd9c9" stroke-width="10" fill="none" stroke-dasharray="0 173" stroke-linecap="round"/>
+        <line id="gaugeNeedle" x1="65" y1="75" x2="65" y2="28" stroke="#d3873f" stroke-width="3" stroke-linecap="round" transform="rotate(-90 65 75)"/>
+        <circle cx="65" cy="75" r="5" fill="#f3efe4"/>
+      </svg>
+      <span class="gauge-pct mono" id="gaugePct">0%</span>
+    </div>
+
+    <div class="navlist" id="navlist"></div>
+
+    <div class="yt-card">
+      <div class="label">▶ Belajar Lebih Lanjut</div>
+      <div style="font-size:13px;color:var(--cream-dim);">Tutorial praktik lapangan ada di kanal kami.</div>
+      <a class="ytbtn" href="https://www.youtube.com/@eSHa_PSL" target="_blank" rel="noopener">eSHa Public Skills Learning ↗</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="mainContent"></main>
+</div>
+
+<div class="tooltip-pop" id="tooltipPop"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============== DATA MODEL ============== */
+const pages = [
+  {id:'beranda', label:'Mulai & Pemanasan'},
+  {id:'tujuan', label:'Tujuan Pembelajaran'},
+  {id:'modul1', label:'1. Persiapan Pemasangan'},
+  {id:'modul2', label:'2. Pemasangan Unit'},
+  {id:'modul3', label:'3. Pemipaan & Kelistrikan'},
+  {id:'modul4', label:'4. Tes & Commissioning'},
+  {id:'modul5', label:'5. Dokumentasi'},
+  {id:'infografis', label:'📊 Infografis'},
+  {id:'kuisakhir', label:'Uji Kompetensi Akhir'},
+  {id:'penutup', label:'Penutup & Sertifikat'},
+];
+let current = 0;
+let progress = {};
+let summativeScore = {correct:0,total:0,answered:{}};
+
+function markDone(id){ progress[id]=true; renderNav(); updateGauge(); }
+function updateGauge(){
+  const total = pages.length;
+  const done = Object.keys(progress).filter(k=>progress[k]).length;
+  const pct = Math.round((done/total)*100);
+  document.getElementById('gaugePct').textContent = pct+'%';
+  const arcLen = 173;
+  document.getElementById('gaugeArc').setAttribute('stroke-dasharray', (arcLen*pct/100)+' '+arcLen);
+  const angle = -90 + (pct/100)*180;
+  document.getElementById('gaugeNeedle').setAttribute('transform', 'rotate('+angle+' 65 75)');
+}
+
+function renderNav(){
+  const nav = document.getElementById('navlist');
+  nav.innerHTML = '';
+  pages.forEach((p,i)=>{
+    const div = document.createElement('div');
+    div.className = 'navitem'+(i===current?' active':'')+(progress[p.id]?' done':'');
+    div.innerHTML = '<span class="dot"></span>'+p.label;
+    div.onclick = ()=>goTo(i);
+    nav.appendChild(div);
+  });
+}
+function goTo(i){
+  current = i;
+  renderNav();
+  renderPage();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function next(){ if(current<pages.length-1) goTo(current+1); }
+function prev(){ if(current>0) goTo(current-1); }
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+/* ============== QUIZ ENGINE ============== */
+function buildQuiz(containerId, qid, qtext, options, correctIdx){
+  return `
+  <div class="quiz" id="${qid}">
+    <div class="qtext">${qtext}</div>
+    ${options.map((o,i)=>`<button class="opt" onclick="answerQuiz('${qid}',${i},${correctIdx})">${o}</button>`).join('')}
+    <div class="feedback" id="${qid}-fb"></div>
+  </div>`;
+}
+function answerQuiz(qid, picked, correctIdx){
+  const box = document.getElementById(qid);
+  const btns = box.querySelectorAll('.opt');
+  btns.forEach((b,i)=>{
+    b.disabled = true;
+    if(i===correctIdx) b.classList.add('correct');
+    if(i===picked && picked!==correctIdx) b.classList.add('wrong');
+  });
+  const fb = document.getElementById(qid+'-fb');
+  fb.classList.add('show');
+  if(picked===correctIdx){
+    fb.classList.add('good');
+    fb.textContent = '✓ Tepat! Anda sudah memahami tahap ini dengan baik.';
+    showToast('Mantap! Jawaban benar 👏');
+  } else {
+    fb.classList.add('bad');
+    fb.textContent = '✗ Belum tepat, tapi ini bagian dari proses belajar. Tinjau kembali materi di atas, lalu lanjutkan.';
+  }
+}
+
+const summativeQuestions = [
+  {q:'Sebelum memasang bracket indoor unit, hal pertama yang harus diidentifikasi adalah...', o:['Warna casing unit','Luasan, fungsi, kondisi ruangan, dan kapasitas unit yang dibutuhkan','Merk remote control','Jumlah orang di rumah'], c:1},
+  {q:'Unit tata udara residensial pada SKKNI ini terbatas pada sistem dengan koneksi apa?', o:['Brazing penuh','Flaring (non brazing) dan self contained/factory pre-charged','Las argon','Solder timah'], c:1},
+  {q:'Lubang/jalur pemipaan dibuat pada sisi mana dari bracket unit?', o:['Sisi atas','Sisi samping kiri saja','Sisi bawah','Tidak perlu lubang'], c:2},
+  {q:'Apa tujuan evakuasi sistem sebelum pengisian refrigeran?', o:['Mempercantik tampilan pipa','Membuang udara dan uap air dari sistem','Menambah tekanan oli kompresor','Mengganti warna pipa'], c:1},
+  {q:'Indikasi unit bekerja normal dapat dilihat dari...', o:['Hanya suara unit','Fungsi remote, operasi kompresor, kipas, efek pendinginan, dan parameter teknis','Warna outdoor unit','Berat unit'], c:1},
+  {q:'Aspek kritis dalam unit kompetensi ini yang berkaitan dengan kebocoran adalah...', o:['Ketepatan memilih warna kabel','Ketepatan menyambung pipa ke unit indoor dan outdoor','Ketepatan memasang remote','Ketepatan memilih merk freon'], c:1},
+  {q:'Alat yang digunakan untuk memastikan bracket terpasang lurus sejajar adalah...', o:['Tang ampere','Waterpass','Digital thermometer','Kunci torsi'], c:1},
+  {q:'Setelah pengetesan, dokumen apa yang wajib dibuat sesuai elemen kompetensi ke-5?', o:['Hanya foto unit','Catatan pelaksanaan pengetesan dan laporan hasil pemasangan','Sertifikat garansi toko','Brosur produk'], c:1},
+];
+
+function buildSummative(){
+  let html = '';
+  summativeQuestions.forEach((item,idx)=>{
+    html += `<div class="quiz" id="sq${idx}">
+      <div class="qtext">${idx+1}. ${item.q}</div>
+      ${item.o.map((o,i)=>`<button class="opt" onclick="answerSummative(${idx},${i},${item.c})">${o}</button>`).join('')}
+      <div class="feedback" id="sq${idx}-fb"></div>
+    </div>`;
+  });
+  return html;
+}
+function answerSummative(qidx, picked, correctIdx){
+  if(summativeScore.answered[qidx]!==undefined) return;
+  summativeScore.answered[qidx] = picked;
+  summativeScore.total++;
+  const box = document.getElementById('sq'+qidx);
+  const btns = box.querySelectorAll('.opt');
+  btns.forEach((b,i)=>{
+    b.disabled = true;
+    if(i===correctIdx) b.classList.add('correct');
+    if(i===picked && picked!==correctIdx) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('sq'+qidx+'-fb');
+  fb.classList.add('show');
+  if(picked===correctIdx){
+    summativeScore.correct++;
+    fb.classList.add('good'); fb.textContent='✓ Benar.';
+  } else {
+    fb.classList.add('bad'); fb.textContent='✗ Kurang tepat.';
+  }
+  if(Object.keys(summativeScore.answered).length === summativeQuestions.length){
+    setTimeout(showFinalResult, 300);
+  }
+}
+function showFinalResult(){
+  const pct = Math.round((summativeScore.correct/summativeQuestions.length)*100);
+  const box = document.getElementById('finalResultBox');
+  box.style.display='block';
+  let title, msg, cls;
+  if(pct>=80){
+    title = '🏆 Kompeten — Hasil Sangat Baik!';
+    msg = 'Skor Anda '+pct+'%. Anda menunjukkan pemahaman yang kuat terhadap seluruh unit kompetensi. Siap melangkah ke praktik lapangan dengan percaya diri.';
+    cls='good';
+  } else if(pct>=60){
+    title = '👍 Cukup Baik, Hampir Kompeten';
+    msg = 'Skor Anda '+pct+'%. Beberapa konsep masih perlu diperdalam — tinjau ulang modul yang berkaitan, lalu coba lagi.';
+    cls='good';
+  } else {
+    title = '💪 Tetap Semangat, Ini Baru Permulaan';
+    msg = 'Skor Anda '+pct+'%. Jangan berkecil hati — kompetensi teknis butuh pengulangan. Baca ulang Modul 1–5, perhatikan Catatan Teknis, lalu coba lagi.';
+    cls='bad';
+  }
+  box.innerHTML = `<div class="card ${cls==='good'?'tip':'warn'}">
+    <span class="badge ${cls==='good'?'alt':''}">Hasil Uji Kompetensi</span>
+    <h3>${title}</h3>
+    <p class="lead">${msg}</p>
+    <div class="score-ring"><div class="mono" style="font-size:32px;color:var(--teal);">${pct}%</div>
+    <div style="color:var(--cream-dim);font-size:13.5px;">${summativeScore.correct} dari ${summativeQuestions.length} jawaban benar</div></div>
+    <div style="margin-top:14px;display:flex;gap:10px;">
+      <button class="btn secondary" onclick="retrySummative()">↻ Ulangi Uji Kompetensi</button>
+      <button class="btn copper" onclick="goTo(9)">Lanjut ke Penutup →</button>
+    </div>
+  </div>`;
+  if(pct>=60) markDone('kuisakhir');
+}
+function retrySummative(){
+  summativeScore = {correct:0,total:0,answered:{}};
+  renderPage();
+}
+
+/* ============== ICEBREAKER MATCH GAME ============== */
+const matchPairs = [
+  {term:'Flaring Tools', def:'Membentuk ujung pipa agar dapat disambung tanpa brazing'},
+  {term:'Manifold Gauge', def:'Mengukur tekanan refrigeran pada sisi tekanan tinggi & rendah'},
+  {term:'Waterpass', def:'Memastikan bracket terpasang lurus sejajar'},
+  {term:'Pompa Vakum', def:'Mengeluarkan udara & uap air dari sistem sebelum pengisian'},
+];
+let matchSelectedTerm = null;
+function initMatchGame(){
+  return `<div class="matchgrid">
+    <div class="matchcol" id="matchTerms">
+      ${matchPairs.map((p,i)=>`<div class="matchitem" data-idx="${i}" onclick="selectTerm(${i})">${p.term}</div>`).join('')}
+    </div>
+    <div class="matchcol" id="matchDefs">
+      ${shuffleDefs().map((d)=>`<div class="matchitem" data-idx="${d.idx}" onclick="selectDef(${d.idx})">${d.def}</div>`).join('')}
+    </div>
+  </div>
+  <div class="feedback show" id="matchStatus" style="background:rgba(43,217,201,0.08);color:var(--cream-dim);">Klik istilah di kiri, lalu pasangkan dengan definisi di kanan.</div>`;
+}
+let shuffledDefsCache = null;
+function shuffleDefs(){
+  if(shuffledDefsCache) return shuffledDefsCache;
+  const arr = matchPairs.map((p,i)=>({idx:i, def:p.def}));
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  shuffledDefsCache = arr;
+  return arr;
+}
+let matchedCount = 0;
+function selectTerm(i){
+  document.querySelectorAll('#matchTerms .matchitem').forEach(el=>el.classList.remove('selected'));
+  const el = document.querySelector('#matchTerms .matchitem[data-idx="'+i+'"]');
+  if(el.classList.contains('linked-correct')) return;
+  el.classList.add('selected');
+  matchSelectedTerm = i;
+}
+function selectDef(i){
+  if(matchSelectedTerm===null) return;
+  const termEl = document.querySelector('#matchTerms .matchitem[data-idx="'+matchSelectedTerm+'"]');
+  const defEl = document.querySelector('#matchDefs .matchitem[data-idx="'+i+'"]');
+  if(defEl.classList.contains('linked-correct')) return;
+  const status = document.getElementById('matchStatus');
+  if(matchSelectedTerm === i){
+    termEl.classList.remove('selected'); termEl.classList.add('linked-correct');
+    defEl.classList.add('linked-correct');
+    matchedCount++;
+    status.textContent = '✓ Cocok! ('+matchedCount+'/'+matchPairs.length+')';
+    if(matchedCount===matchPairs.length){
+      status.textContent = '🎉 Semua pasangan cocok! Anda sudah familiar dengan peralatan dasar.';
+      showToast('Pemanasan selesai — saatnya masuk materi!');
+    }
+  } else {
+    termEl.classList.add('selected');
+    defEl.classList.add('linked-wrong');
+    status.textContent = '✗ Belum pas, coba lagi.';
+    setTimeout(()=>defEl.classList.remove('linked-wrong'), 500);
+  }
+  matchSelectedTerm = null;
+  setTimeout(()=>document.querySelectorAll('.matchitem.selected').forEach(e=>e.classList.remove('selected')), 500);
+}
+
+/* ============== REFRIGERATION CYCLE DIAGRAM ============== */
+function refrigCycleSVG(){
+  return `<div class="diagram-box">
+  <svg width="560" height="300" viewBox="0 0 560 300">
+    <path d="M120,60 H440" stroke="#a8682f" stroke-width="6" fill="none"/>
+    <path d="M440,60 V230" stroke="#1d9c91" stroke-width="6" fill="none"/>
+    <path d="M440,230 H120" stroke="#1d9c91" stroke-width="6" fill="none"/>
+    <path d="M120,230 V60" stroke="#a8682f" stroke-width="6" fill="none"/>
+    <path id="flowtop" d="M120,60 H440" stroke="#2bd9c9" stroke-width="3" fill="none" stroke-dasharray="6 10"/>
+    <path id="flowright" d="M440,60 V230" stroke="#2bd9c9" stroke-width="3" fill="none" stroke-dasharray="6 10"/>
+    <path id="flowbot" d="M440,230 H120" stroke="#2bd9c9" stroke-width="3" fill="none" stroke-dasharray="6 10"/>
+    <path id="flowleft" d="M120,230 V60" stroke="#2bd9c9" stroke-width="3" fill="none" stroke-dasharray="6 10"/>
+
+    <rect x="95" y="200" width="60" height="60" rx="8" fill="#16415a" stroke="#d3873f" stroke-width="2"/>
+    <text x="125" y="234" text-anchor="middle" fill="#f3efe4" font-size="11" font-family="JetBrains Mono">Kompresor</text>
+    <rect x="395" y="30" width="90" height="60" rx="8" fill="#16415a" stroke="#a8682f" stroke-width="2"/>
+    <text x="440" y="64" text-anchor="middle" fill="#f3efe4" font-size="11" font-family="JetBrains Mono">Kondensor</text>
+    <text x="440" y="78" text-anchor="middle" fill="#c9d6da" font-size="9">(Outdoor)</text>
+    <polygon points="430,230 450,215 450,245" fill="#d3873f"/>
+    <text x="440" y="270" text-anchor="middle" fill="#f3efe4" font-size="11" font-family="JetBrains Mono">Pipa Kapiler</text>
+    <rect x="95" y="30" width="90" height="60" rx="8" fill="#16415a" stroke="#1d9c91" stroke-width="2"/>
+    <text x="140" y="64" text-anchor="middle" fill="#f3efe4" font-size="11" font-family="JetBrains Mono">Evaporator</text>
+    <text x="140" y="78" text-anchor="middle" fill="#c9d6da" font-size="9">(Indoor)</text>
+
+    <g class="hotspot" onmousemove="showTip(event,'Kompresor: memompa refrigeran gas bertekanan rendah menjadi bertekanan tinggi, menuju kondensor.')" onmouseleave="hideTip()">
+      <circle cx="125" cy="230" r="14"/>
+    </g>
+    <g class="hotspot" onmousemove="showTip(event,'Kondensor (outdoor unit): melepas kalor ke udara luar, refrigeran gas berubah menjadi cair bertekanan tinggi.')" onmouseleave="hideTip()">
+      <circle cx="440" cy="60" r="14"/>
+    </g>
+    <g class="hotspot" onmousemove="showTip(event,'Pipa kapiler/katup ekspansi: menurunkan tekanan refrigeran cair secara drastis sebelum masuk evaporator.')" onmouseleave="hideTip()">
+      <circle cx="440" cy="230" r="14"/>
+    </g>
+    <g class="hotspot" onmousemove="showTip(event,'Evaporator (indoor unit): menyerap kalor dari ruangan, refrigeran berubah dari cair menjadi gas — inilah efek pendinginan yang dirasakan.')" onmouseleave="hideTip()">
+      <circle cx="140" cy="60" r="14"/>
+    </g>
+  </svg>
+  </div>
+  <style>
+  #flowtop,#flowright,#flowbot,#flowleft{animation:flowmove 1s linear infinite;}
+  @keyframes flowmove{to{stroke-dashoffset:-16;}}
+  </style>`;
+}
+function showTip(e,text){
+  const tip = document.getElementById('tooltipPop');
+  tip.innerHTML = text;
+  tip.style.left = (e.clientX+16)+'px';
+  tip.style.top = (e.clientY+8)+'px';
+  tip.style.display='block';
+}
+function hideTip(){ document.getElementById('tooltipPop').style.display='none'; }
+
+/* ============== PAGE CONTENT ============== */
+function pageBeranda(){
+  return `
+  <span class="eyebrow">Modul Pembelajaran Interaktif · F.43RAC01.021.1</span>
+  <h1 style="font-size:36px;">Memasang Unit Tata Udara Rumah Tangga / Residensial</h1>
+  <p class="lead">Anda akan belajar menyiapkan, memasang, memipa, mengevakuasi, menguji, dan mendokumentasikan pemasangan AC split wall, ceiling cassette, ceiling expose, dan ceiling concealed — sesuai Standar Kompetensi Kerja Nasional Indonesia (SKKNI).</p>
+
+  <div class="card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
+    <div>
+      <div class="badge">Disusun oleh</div>
+      <h3 style="margin-bottom:2px;">Sri Hardono, S.T., M.Sc.</h3>
+      <div style="color:var(--cream-dim);font-size:13px;">Kanal Edukasi: <a href="https://www.youtube.com/@eSHa_PSL" target="_blank">eSHa Public Skills Learning ↗</a></div>
+    </div>
+    <button class="btn" onclick="next()">Mulai Belajar →</button>
+  </div>
+
+  <hr class="rule">
+  <span class="badge alt">🧊 Pemanasan Sebelum Mulai</span>
+  <h2>Kenali Dulu "Senjata" Anda</h2>
+  <p class="lead">Sebelum masuk ke materi inti, cocokkan dulu peralatan kerja teknisi AC dengan fungsinya.</p>
+  <div class="card">${initMatchGame()}</div>
+
+  <div class="navfoot">
+    <span></span>
+    <button class="btn" onclick="markDone('beranda');next()">Lanjut ke Tujuan Pembelajaran →</button>
+  </div>
+  `;
+}
+
+function pageTujuan(){
+  return `
+  <span class="eyebrow">Sebelum Anda Mulai</span>
+  <h1>Apa yang Akan Anda Kuasai?</h1>
+  <p class="lead">Setelah menyelesaikan modul ini, Anda diharapkan mampu:</p>
+  <ul class="steps">
+    <li><b>Menyiapkan</b> pemasangan unit tata udara berdasarkan luasan, fungsi ruangan, dan kapasitas yang tepat.</li>
+    <li><b>Memasang</b> bracket, indoor unit, dan outdoor unit dengan posisi lurus dan sesuai prosedur.</li>
+    <li><b>Menginstalasi</b> pemipaan (termasuk flaring) dan kelistrikan tanpa kebocoran maupun kesalahan sambungan.</li>
+    <li><b>Melakukan evakuasi, pengetesan, dan commissioning</b> hingga unit bekerja normal sesuai spesifikasi.</li>
+    <li><b>Mendokumentasikan</b> hasil pengetesan dan pemasangan secara profesional.</li>
+  </ul>
+  <div class="card tip">
+    <h3>📌 Ruang Lingkup</h3>
+    <p style="color:var(--cream-dim);margin:0;">Unit kompetensi ini berlaku untuk AC <b>split wall, ceiling cassette, ceiling expose, dan ceiling concealed</b>, khusus yang menggunakan sambungan <b>flaring (non brazing)</b> dan bertipe <b>self contained/factory pre-charged</b>.</p>
+  </div>
+  <div class="navfoot">
+    <button class="btn secondary" onclick="prev()">← Kembali</button>
+    <button class="btn" onclick="markDone('tujuan');next()">Lanjut ke Modul 1 →</button>
+  </div>
+  `;
+}
+
+function pageModul1(){
+  return `
+  <span class="eyebrow">Modul 1</span>
+  <h1>Menyiapkan Pemasangan Unit Tata Udara</h1>
+  <p class="lead">Tahap ini menentukan apakah unit bisa bekerja optimal — kesalahan di sini akan terbawa sampai akhir pemasangan.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>1.1 Identifikasi Ruangan & Kapasitas</h3>
+      <p style="color:var(--cream-dim);">Luasan, fungsi, dan kondisi ruangan harus diidentifikasi untuk menentukan kapasitas (PK/BTU) unit yang sesuai. Ruang kerja berbeda dengan kamar tidur, dapur lebih panas dari ruang baca.</p>
+      <p style="color:var(--cream-dim);font-size:14px;"><b>Faktor yang perlu diukur:</b> ukuran ruangan (panjang x lebar x tinggi), jumlah jendela, arah hadap ruangan, dan jumlah perangkat elektronik yang menghasilkan panas.</p>
+    </div>
+    <div class="card">
+      <h3>1.2 Siapkan Peralatan & Perlengkapan</h3>
+      <p style="color:var(--cream-dim);">Pastikan semua alat tersedia sebelum memulai pekerjaan — bongkar pasang alat di tengah jalan membuang waktu dan berisiko.</p>
+    </div>
+  </div>
+
+  <h3>Daftar Peralatan Wajib</h3>
+  <table class="spec">
+    <tr><th>Kategori</th><th>Item</th></tr>
+    <tr><td>Keselamatan</td><td>Helm, Sarung Tangan, Sepatu Safety, Pakaian Kerja, Kacamata Pengaman</td></tr>
+    <tr><td>Pengukuran & Diagnostik</td><td>Manifold Gauge, Tang Ampere (Clamp Meter), Digital Thermometer, Waterpass, Alat Deteksi Kebocoran (Elektronik atau Larutan Sabun), Pressure-Temperature Chart</td></tr>
+    <tr><td>Pemipaan</td><td>Flaring Tools, Cutter Pipa, Reamer, Kunci Torsi</td></tr>
+    <tr><td>Peralatan Power</td><td>Bor Tangan / Cordless Screw Driver, Mata Bor Beton</td></tr>
+    <tr><td>Perkakas Tangan</td><td>Obeng (+) dan (-), Kunci Pas / Ring, Tang, Palu, Palu Bobok / Pahat</td></tr>
+    <tr><td>Peralatan Khusus</td><td>Pompa Vakum (2 Tahap), Tabung Nitrogen + Regulator, Teflon Tape / Seal Tape, Duct Tape / Lakban</td></tr>
+    <tr><td>Material Habis Pakai</td><td>Pipa Tembaga, Kabel Instalasi Listrik, Isolasi Pipa (Armaflex), Kabel Ties</td></tr>
+  </table>
+
+  <div class="card note">
+    <h3>📝 Catatan Teknis</h3>
+    <ul style="color:var(--cream-dim);margin:0;padding-left:20px;">
+      <li>Selalu baca <b>manual pabrikan</b> sebelum menentukan kapasitas — jangan hanya mengandalkan perkiraan kasar.</li>
+      <li>Periksa <b>ketersediaan stop kontak khusus</b> untuk AC (MCB terpisah) sebelum memulai pemasangan.</li>
+      <li>Gunakan <b>waterpass</b> untuk memastikan permukaan pemasangan rata, karena kemiringan kecil pun bisa menyebabkan kebocoran air kondensasi.</li>
+      <li><b>Pressure Test dengan Nitrogen:</b> Lakukan uji tekanan dengan nitrogen kering pada tekanan <b>150-300 PSI</b> (atau sesuai rekomendasi pabrikan) selama minimal 30-60 menit. Tidak boleh ada penurunan tekanan yang signifikan. Gunakan larutan sabun atau detektor elektronik untuk menemukan titik kebocoran.</li>
+    </ul>
+  </div>
+
+  <h3>🎯 Cek Pemahaman</h3>
+  ${buildQuiz('m1q1', 'q1', 'Apa yang harus diidentifikasi sebelum memasang unit tata udara?', ['Hanya warna dinding ruangan','Luasan, fungsi, kondisi ruangan, dan kapasitas unit yang dibutuhkan','Jumlah lampu di ruangan','Jenis lantai ruangan'], 1)}
+
+  <div class="navfoot">
+    <button class="btn secondary" onclick="prev()">← Kembali</button>
+    <button class="btn" onclick="markDone('modul1');next()">Lanjut ke Modul 2 →</button>
+  </div>
+  `;
+}
+
+function pageModul2(){
+  return `
+  <span class="eyebrow">Modul 2</span>
+  <h1>Pemasangan Unit Indoor dan Outdoor</h1>
+  <p class="lead">Bracket yang lurus adalah fondasi dari seluruh instalasi — unit akan bocor air, bergetar, atau bahkan jatuh jika bracket miring.</p>
+
+  <ul class="steps">
+    <li><b>Pasang dudukan/gantungan (bracket)</b> pada tempat/area yang telah ditentukan atau sesuai dengan gambar yang tersedia, dengan posisi lurus dan sejajar — gunakan waterpass untuk memverifikasi di dua arah (horizontal dan vertikal).</li>
+    <li><b>Pasang unit tata udara</b> (indoor & outdoor) sesuai prosedur dari manual pabrikan — pastikan baut terpasang dengan kencang namun tidak berlebihan.</li>
+    <li><b>Buat lubang/jalur pemipaan</b> dengan ukuran sesuai standar, tepat di sisi bawah dudukan/gantungan unit.</li>
+    <li><b>Pasang saluran drainase</b> dengan kemiringan minimal 1% (1 cm per meter) untuk memastikan air kondensasi mengalir lancar.</li>
+  </ul>
+
+  <div class="card tip">
+    <h3>💡 Mengapa Lubang Pipa Harus di Sisi Bawah Bracket?</h3>
+    <p style="color:var(--cream-dim);margin:0;">Posisi ini memastikan pipa drainase memiliki kemiringan alami untuk membuang air kondensasi, serta memudahkan perawatan tanpa membongkar unit kembali. Selain itu, melindungi pipa dari sengatan sinar matahari langsung yang bisa mempercepat kerusakan isolasi.</p>
+  </div>
+
+  <div class="card note">
+    <h3>📝 Catatan Teknis</h3>
+    <ul style="color:var(--cream-dim);margin:0;padding-left:20px;">
+      <li>Pastikan <b>outdoor unit</b> dipasang di area dengan sirkulasi udara baik, minimal 30 cm dari dinding di sisi belakang dan 20 cm di sisi samping.</li>
+      <li>Gunakan <b>baut dinamis</b> (anchor bolt) untuk pemasangan di dinding beton, bukan hanya paku biasa.</li>
+      <li>Periksa <b>kekuatan dinding</b> — jika dinding terbuat dari gypsum atau panel ringan, gunakan bracket tambahan atau pasang di rangka utama.</li>
+    </ul>
+  </div>
+
+  <h3>🎯 Latihan Cepat</h3>
+  ${buildQuiz('m2q1', 'q2', 'Lubang/jalur pemipaan dibuat pada sisi mana dari bracket?', ['Sisi atas bracket','Sisi bawah dudukan/gantungan unit (bracket)','Sisi luar dinding','Tidak ada aturan khusus'], 1)}
+  ${buildQuiz('m2q2', 'q2b', 'Alat apa yang digunakan untuk memastikan bracket terpasang lurus sejajar?', ['Tang ampere','Digital thermometer','Waterpass','Pompa vakum'], 2)}
+
+  <div class="navfoot">
+    <button class="btn secondary" onclick="prev()">← Kembali</button>
+    <button class="btn" onclick="markDone('modul2');next()">Lanjut ke Modul 3 →</button>
+  </div>
+  `;
+}
+
+function pageModul3(){
+  return `
+  <span class="eyebrow">Modul 3</span>
+  <h1>Instalasi Pemipaan dan Kelistrikan</h1>
+  <p class="lead">Inilah jantung dari sistem refrigerasi. Lihat bagaimana refrigeran mengalir dalam siklusnya — arahkan kursor ke titik-titik bercahaya untuk mempelajari setiap komponen.</p>
+
+  ${refrigCycleSVG()}
+
+  <ul class="steps" style="margin-top:24px;">
+    <li><b>Instalasi kelistrikan</b> dipasang sesuai standar dan prosedur — perhatikan ukuran kabel (minimum 1,5 mm² untuk indoor, 2,5 mm² untuk outdoor) dan polaritas terminal.</li>
+    <li><b>Flaring ujung pipa</b> yang telah dipotong dan dibentuk sesuai ketentuan agar permukaan sambungan rata dan tidak retak — gunakan reamer untuk membersihkan gerigi potongan.</li>
+    <li><b>Sambungkan ujung pipa</b> ke unit indoor dan outdoor, pastikan tidak ada kebocoran — gunakan kunci torsi sesuai spesifikasi untuk menghindari over-tightening yang bisa merusak flare.</li>
+    <li><b>Evakuasi sistem</b> menggunakan pompa vakum sesuai standar (minimal 30 menit, hingga tekanan mencapai 500 micron) untuk membuang udara dan uap air sebelum refrigeran dialirkan.</li>
+  </ul>
+
+  <div class="card warn">
+    <h3>⚠️ Aspek Kritis</h3>
+    <p style="color:var(--cream-dim);margin:0;">Ketepatan instalasi kelistrikan dan ketepatan menyambung pipa (bebas kebocoran) adalah dua aspek yang paling sering dinilai kritis dalam uji kompetensi. Selalu cek ulang dengan alat deteksi kebocoran sebelum melanjutkan ke tahap pengetesan.</p>
+  </div>
+
+  <div class="card note">
+    <h3>📝 Catatan Teknis</h3>
+    <ul style="color:var(--cream-dim);margin:0;padding-left:20px;">
+      <li><b>Flaring:</b> Pastikan ujung pipa menonjol keluar dari alat flaring sekitar 1-1,5 mm sebelum diklem. Jika terlalu pendek, sambungan akan bocor; jika terlalu panjang, akan terjadi penyempitan aliran.</li>
+      <li><b>Kunci torsi:</b> Gunakan nilai torsi yang direkomendasikan pabrikan — umumnya 18-20 Nm untuk pipa 1/4", 42-45 Nm untuk pipa 3/8", dan 55-60 Nm untuk pipa 1/2".</li>
+      <li><b>Evakuasi:</b> Jangan pernah mengisi refrigeran tanpa evakuasi terlebih dahulu — kelembaban yang tersisa akan bereaksi dengan oli kompresor dan merusak sistem.</li>
+    </ul>
+  </div>
+
+  <h3>🎯 Cek Pemahaman</h3>
+  ${buildQuiz('m3q1', 'q3', 'Apa tujuan utama proses flaring pada ujung pipa?', ['Mempercepat pemotongan pipa','Membentuk ujung pipa agar dapat tersambung rapat tanpa brazing','Mengganti warna pipa','Menghemat panjang pipa'], 1)}
+  ${buildQuiz('m3q2', 'q3b', 'Mengapa evakuasi sistem perlu dilakukan sebelum refrigeran dialirkan?', ['Agar pipa terlihat bersih','Untuk membuang udara dan uap air yang dapat mengganggu kinerja sistem','Untuk mendinginkan kompresor','Tidak ada tujuan khusus'], 1)}
+
+  <div class="navfoot">
+    <button class="btn secondary" onclick="prev()">← Kembali</button>
+    <button class="btn" onclick="markDone('modul3');next()">Lanjut ke Modul 4 →</button>
+  </div>
+  `;
+}
+
+function pageModul4(){
+  return `
+  <span class="eyebrow">Modul 4</span>
+  <h1>Tes dan Commissioning</h1>
+  <p class="lead">Tahap pembuktian — unit dinyatakan layak hanya jika lolos seluruh poin pengetesan berikut.</p>
+
+  <ul class="steps">
+    <li><b>Pastikan sistem pembuangan air</b> (drainase) pada indoor unit terpasang sesuai standar — uji dengan menuang air pada nampan drainase, pastikan air mengalir lancar tanpa genangan.</li>
+    <li><b>Alirkan refrigeran</b> dari outdoor unit ke indoor unit melalui pembukaan valve secara bertahap — buka valve cair (liquid) terlebih dahulu, kemudian valve gas.</li>
+    <li><b>Pastikan unit bekerja normal</b> sesuai standar spesifikasi pabrikan — periksa tekanan kerja, suhu keluar, dan arus listrik.</li>
+  </ul>
+
+  <div class="card tip">
+    <h3>✅ Parameter Kinerja AC Normal</h3>
+    <p style="color:var(--cream-dim);margin-bottom:10px;">Berikut adalah parameter teknis yang harus diperiksa dan nilai standarnya untuk sistem residensial dengan refrigeran R32 atau R410A:</p>
+    <table class="spec" style="margin-top:10px;">
+      <tr><th>Parameter</th><th>Nilai Standar</th><th>Metode Pengukuran</th></tr>
+      <tr><td><b>Arus (Ampere)</b></td>
+          <td>Sesuai <b>nameplate</b> unit outdoor</td>
+          <td>Clamp meter pada kabel power saat beban penuh</td></tr>
+      <tr><td><b>Tekanan Sisi Rendah</b></td>
+          <td>110-140 PSI (R32/R410A)</td>
+          <td>Manifold gauge pada port hisap</td></tr>
+      <tr><td><b>Tekanan Sisi Tinggi</b></td>
+          <td>380-450 PSI (R32), 400-450 PSI (R410A)</td>
+          <td>Manifold gauge pada port cair</td></tr>
+      <tr><td><b>Superheat (SH)</b></td>
+          <td>8–14°R (4–8K)</td>
+          <td>Ukur suhu pipa hisap, konversi tekanan ke suhu saturasi</td></tr>
+      <tr><td><b>Subcool (SC)</b></td>
+          <td>8–16°R (4–9°K)</td>
+          <td>Ukur suhu pipa cair, konversi tekanan ke suhu saturasi</td></tr>
+      <tr><td><b>Delta T Indoor</b></td>
+          <td>8–10°K (14–18°R)</td>
+          <td>Selisih suhu udara masuk dan keluar indoor unit</td></tr>
+      <tr><td><b>Delta T Outdoor</b></td>
+          <td>10–15K (18–27°R)</td>
+          <td>Selisih suhu udara sekitar dan keluar dari kondensor</td></tr>
+    </table>
+    <p style="color:var(--cream-dim);font-size:13px;margin-top:10px;"><b>Catatan:</b> Nilai-nilai di atas adalah acuan umum. Selalu prioritaskan spesifikasi dari pabrikan unit yang dipasang. Variasi dapat terjadi tergantung suhu lingkungan, panjang pipa, dan kondisi beban.</p>
+  </div>
+
+  <div class="card warn">
+    <h3>🔊 Indikasi Suara Normal</h3>
+    <ul style="color:var(--cream-dim);margin:0;padding-left:20px;">
+      <li><b>Fan Indoor:</b> Suara hembusan angin yang halus dan stabil. Tidak ada suara berisik, berdecit, atau getaran abnormal.</li>
+      <li><b>Fan Outdoor:</b> Suara kipas berputar stabil. Tidak ada suara berisik atau benturan.</li>
+      <li><b>Kompresor:</b> Suara menderu halus adalah normal. Suara berdecit, berdentum, atau mendengung keras menandakan masalah serius.</li>
+    </ul>
+  </div>
+
+  <div class="card note">
+    <h3>📝 Catatan Teknis</h3>
+    <ul style="color:var(--cream-dim);margin:0;padding-left:20px;">
+      <li><b>Waktu tunggu:</b> Setelah menyalakan unit, tunggu minimal 5-10 menit untuk mencapai kondisi stabil sebelum mengukur tekanan dan suhu.</li>
+      <li><b>Periksa kebocoran lagi:</b> Setelah pengisian refrigeran, lakukan deteksi kebocoran ulang dengan alat deteksi elektronik atau larutan sabun pada semua sambungan.</li>
+      <li><b>Catat parameter:</b> Tulis semua hasil pengukuran sebagai bagian dari dokumentasi — ini penting untuk referensi perawatan berikutnya.</li>
+      <li><b>Jika arus melebihi nameplate:</b> Kemungkinan terjadi overcharge refrigeran, kompresor bermasalah, atau tegangan listrik tidak stabil.</li>
+      <li><b>Jika arus di bawah nameplate:</b> Kemungkinan terjadi undercharge atau kompresor tidak bekerja optimal.</li>
+    </ul>
+  </div>
+
+  <h3>🎯 Simulasi Singkat</h3>
+  ${buildQuiz('m4q1', 'q4', 'Indikasi unit AC bekerja normal dapat dinilai dari mana saja?', ['Hanya dari warna lampu indikator','Fungsi remote, operasi kompresor, kipas, efek pendinginan, dan parameter teknis','Hanya dari suara kompresor','Hanya dari berat unit outdoor'], 1)}
+
+  <div class="navfoot">
+    <button class="btn secondary" onclick="prev()">← Kembali</button>
+    <button class="btn" onclick="markDone('modul4');next()">Lanjut ke Modul 5 →</button>
+  </div>
+  `;
+}
+
+function pageModul5(){
+  return `
+  <span class="eyebrow">Modul 5</span>
+  <h1>Mendokumentasikan Hasil Kegiatan</h1>
+  <p class="lead">Pekerjaan teknis yang baik tidak lengkap tanpa dokumentasi yang baik — ini melindungi Anda secara profesional dan menjadi rujukan perawatan di masa depan.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>5.1 Catatan Pengetesan</h3>
+      <p style="color:var(--cream-dim);">Dibuat menggunakan format dan prosedur yang sesuai — mencatat semua parameter kinerja: tekanan kerja (low side & high side), superheat, subcool, suhu keluar indoor, arus listrik, dan hasil uji kebocoran. Sertakan juga waktu pengetesan dan kondisi lingkungan.</p>
+    </div>
+    <div class="card">
+      <h3>5.2 Laporan Hasil Pemasangan</h3>
+      <p style="color:var(--cream-dim);">Dilaporkan kepada pemberi kerja/klien sebagai bukti pekerjaan selesai sesuai standar. Lampirkan foto unit terpasang dan hasil pengukuran.</p>
+    </div>
+  </div>
+
+  <div class="card warn">
+    <h3>📋 Template Minimum Laporan</h3>
+    <table class="spec">
+      <tr><th>Item</th><th>Contoh Isi</th></tr>
+      <tr><td>Identitas unit</td><td>Merk, kapasitas (PK), tipe (split wall/cassette/dll), nomor seri</td></tr>
+      <tr><td>Parameter Kelistrikan</td><td>Arus (sesuai nameplate / terukur)</td></tr>
+      <tr><td>Parameter Refrigerasi</td><td>Tekanan low/high side, Superheat, Subcool</td></tr>
+      <tr><td>Parameter Termal</td><td>Suhu keluar indoor, Delta T indoor/outdoor</td></tr>
+      <tr><td>Hasil uji kebocoran</td><td>Lokasi sambungan, status (aman/perlu tindak lanjut)</td></tr>
+      <tr><td>Lama evakuasi</td><td>Durasi pemvakuman dan tekanan akhir</td></tr>
+      <tr><td>Tanda tangan</td><td>Teknisi & pelanggan (atau atasan)</td></tr>
+    </table>
+  </div>
+
+  <div class="card note">
+    <h3>📝 Catatan Teknis</h3>
+    <ul style="color:var(--cream-dim);margin:0;padding-left:20px;">
+      <li><b>Foto dokumentasi:</b> Ambil foto dari 3 sudut: indoor unit, outdoor unit, dan sambungan pipa di kedua unit. Ini bisa menjadi bukti visual jika terjadi klaim di kemudian hari.</li>
+      <li><b>Simpan salinan:</b> Berikan satu salinan laporan kepada klien dan simpan satu salinan untuk arsip Anda sendiri.</li>
+      <li><b>Periksa kelengkapan:</b> Pastikan semua parameter yang diwajibkan oleh pabrikan tercantum dalam laporan.</li>
+    </ul>
+  </div>
+
+  <h3>🎯 Cek Pemahaman</h3>
+  ${buildQuiz('m5q1', 'q5', 'Mengapa dokumentasi hasil pemasangan tetap diperlukan walau unit sudah bekerja normal?', ['Agar pelanggan terkesan saja','Sebagai bukti pekerjaan, rujukan perawatan, dan pemenuhan prosedur standar','Tidak ada manfaat praktis','Hanya formalitas administrasi semata'], 1)}
+
+  <div class="navfoot">
+    <button class="btn secondary" onclick="prev()">← Kembali</button>
+    <button class="btn copper" onclick="markDone('modul5');next()">Lanjut ke Infografis →</button>
+  </div>
+  `;
+}
+
+/* ============== INFOGRAPHIS PAGE ============== */
+function pageInfografis(){
+  return `
+  <span class="eyebrow">📊 Infografis Pembelajaran</span>
+  <h1>Panduan Visual Pemasangan AC Residensial</h1>
+  <p class="lead">Infografis ini merangkum seluruh proses pemasangan AC dari awal hingga akhir — cocok untuk panduan cepat di lapangan.</p>
+
+  <!-- 5 Tahap Utama -->
+  <div class="infografis-container">
+    <h3 style="text-align:center;color:var(--teal);margin-bottom:16px;">🚀 5 Tahap Pemasangan AC</h3>
+    <div class="infografis-grid">
+      <div class="infografis-item">
+        <span class="step-num">Tahap 1</span>
+        <span class="icon">📋</span>
+        <h4>Persiapan</h4>
+        <p>Identifikasi ruangan, hitung kapasitas, siapkan alat dan bahan</p>
+        <span class="badge-mini info">Alat: Lengkap</span>
+      </div>
+      <div class="infografis-item">
+        <span class="step-num">Tahap 2</span>
+        <span class="icon">🔧</span>
+        <h4>Pemasangan Unit</h4>
+        <p>Pasang bracket, indoor & outdoor, buat jalur pipa, pasang drainase</p>
+        <span class="badge-mini info">Waterpass: Penting</span>
+      </div>
+      <div class="infografis-item">
+        <span class="step-num">Tahap 3</span>
+        <span class="icon">🔌</span>
+        <h4>Pemipaan & Kelistrikan</h4>
+        <p>Flaring, sambung pipa, instalasi kabel, evakuasi sistem</p>
+        <span class="badge-mini warn">Kritis: Kebocoran</span>
+      </div>
+      <div class="infografis-item">
+        <span class="step-num">Tahap 4</span>
+        <span class="icon">✅</span>
+        <h4>Tes & Commissioning</h4>
+        <p>Uji drainase, isi refrigeran, periksa semua parameter kinerja</p>
+        <span class="badge-mini good">Normal: Cek Semua</span>
+      </div>
+      <div class="infografis-item">
+        <span class="step-num">Tahap 5</span>
+        <span class="icon">📄</span>
+        <h4>Dokumentasi</h4>
+        <p>Catat hasil pengetesan, buat laporan, foto unit terpasang</p>
+        <span class="badge-mini info">Bukti Profesional</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline Detail -->
+  <h2 style="margin-top:28px;">⏳ Alur Kerja Detail</h2>
+  <div class="card gradient glow">
+    <div class="timeline-infografis">
+      <div class="timeline-step">
+        <span class="time-icon">📏</span>
+        <h4>1. Identifikasi Ruangan</h4>
+        <p>Ukur panjang x lebar x tinggi ruangan. Hitung BTU dengan rumus: (Panjang x Lebar x Tinggi) x 500 BTU untuk ruang standar, tambahkan 10-20% untuk ruang dengan banyak jendela atau perangkat elektronik.</p>
+      </div>
+      <div class="timeline-step">
+        <span class="time-icon">🧰</span>
+        <h4>2. Siapkan Peralatan</h4>
+        <p>Pastikan semua alat tersedia: Manifold gauge, pompa vakum, tang ampere, waterpass, flaring tools, nitrogen untuk pressure test, dan peralatan keselamatan.</p>
+      </div>
+      <div class="timeline-step">
+        <span class="time-icon">🔩</span>
+        <h4>3. Pemasangan Bracket & Unit</h4>
+        <p>Pasang bracket dengan waterpass (lurus horizontal & vertikal). Pasang indoor unit di bracket, outdoor unit di area dengan sirkulasi udara baik. Buat lubang pipa di sisi bawah bracket.</p>
+      </div>
+      <div class="timeline-step">
+        <span class="time-icon">🔧</span>
+        <h4>4. Instalasi Pemipaan</h4>
+        <p>Potong pipa dengan cutter, bersihkan gerigi dengan reamer, lakukan flaring dengan presisi. Sambungkan pipa ke indoor dan outdoor dengan kunci torsi (sesuai spesifikasi).</p>
+      </div>
+      <div class="timeline-step">
+        <span class="time-icon">⚡</span>
+        <h4>5. Instalasi Kelistrikan</h4>
+        <p>Pasang kabel power (sesuai ukuran), sambungkan ke terminal yang benar, pastikan grounding terpasang. Periksa polaritas dan kekencangan sambungan.</p>
+      </div>
+      <div class="timeline-step">
+        <span class="time-icon">💨</span>
+        <h4>6. Pressure Test & Evakuasi</h4>
+        <p>Isi sistem dengan nitrogen 150-300 PSI, cek kebocoran dengan larutan sabun. Evakuasi dengan pompa vakum hingga 500 micron selama minimal 30 menit.</p>
+      </div>
+      <div class="timeline-step">
+        <span class="time-icon">❄️</span>
+        <h4>7. Pengisian Refrigeran</h4>
+        <p>Buka valve liquid terlebih dahulu, kemudian valve gas. Tunggu sistem stabil (5-10 menit), periksa tekanan dan suhu.</p>
+      </div>
+      <div class="timeline-step">
+        <span class="time-icon">📊</span>
+        <h4>8. Cek Parameter Kinerja</h4>
+        <p>Ukur arus (sesuai nameplate), tekanan low/high side (110-140/380-450 PSI), superheat (4-8°C), subcool (4-9°C), delta T indoor (8-10°C).</p>
+      </div>
+      <div class="timeline-step">
+        <span class="time-icon">📄</span>
+        <h4>9. Dokumentasi</h4>
+        <p>Catat semua hasil pengukuran, ambil foto unit terpasang, buat laporan lengkap, tanda tangani dengan pelanggan.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parameter Kinerja -->
+  <h2 style="margin-top:28px;">📊 Parameter Kinerja AC Normal</h2>
+  <div class="card tip">
+    <div class="param-grid">
+      <div class="param-card">
+        <span class="param-value">Sesuai NP</span>
+        <span class="param-label">Arus</span>
+        <div class="param-method">Clamp meter</div>
+      </div>
+      <div class="param-card">
+        <span class="param-value">110-140 PSI</span>
+        <span class="param-label">Tekanan Rendah</span>
+        <div class="param-method">Manifold gauge</div>
+      </div>
+      <div class="param-card">
+        <span class="param-value">380-450 PSI</span>
+        <span class="param-label">Tekanan Tinggi</span>
+        <div class="param-method">Manifold gauge</div>
+      </div>
+      <div class="param-card">
+        <span class="param-value">4-8°C</span>
+        <span class="param-label">Superheat</span>
+        <div class="param-method">Termometer + PT Chart</div>
+      </div>
+      <div class="param-card">
+        <span class="param-value">4-9°C</span>
+        <span class="param-label">Subcool</span>
+        <div class="param-method">Termometer + PT Chart</div>
+      </div>
+      <div class="param-card">
+        <span class="param-value">8-10°C</span>
+        <span class="param-label">Delta T Indoor</span>
+        <div class="param-method">Thermometer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checklist -->
+  <h2 style="margin-top:28px;">☑️ Checklist Pemasangan</h2>
+  <div class="card">
+    <div class="checklist-grid">
+      <div class="checklist-item"><span class="ck">☐</span> Kapasitas AC sesuai ruangan</div>
+      <div class="checklist-item"><span class="ck">☐</span> Alat lengkap dan siap pakai</div>
+      <div class="checklist-item"><span class="ck">☐</span> Bracket terpasang lurus (waterpass)</div>
+      <div class="checklist-item"><span class="ck">☐</span> Lubang pipa di sisi bawah bracket</div>
+      <div class="checklist-item"><span class="ck">☐</span> Flaring ujung pipa rapi & presisi</div>
+      <div class="checklist-item"><span class="ck">☐</span> Sambungan pipa kencang (kunci torsi)</div>
+      <div class="checklist-item"><span class="ck">☐</span> Kabel terpasang dengan benar</div>
+      <div class="checklist-item"><span class="ck">☐</span> Pressure test nitrogen (150-300 PSI)</div>
+      <div class="checklist-item"><span class="ck">☐</span> Evakuasi vakum (500 micron, 30 menit)</div>
+      <div class="checklist-item"><span class="ck">☐</span> Arus sesuai nameplate</div>
+      <div class="checklist-item"><span class="ck">☐</span> Tekanan kerja normal</div>
+      <div class="checklist-item"><span class="ck">☐</span> Delta T indoor (8-10°C)</div>
+      <div class="checklist-item"><span class="ck">☐</span> Superheat & Subcool normal</div>
+      <div class="checklist-item"><span class="ck">☐</span> Dokumentasi lengkap</div>
+    </div>
+  </div>
+
+  <div class="navfoot">
+    <button class="btn secondary" onclick="prev()">← Kembali ke Modul 5</button>
+    <button class="btn copper" onclick="markDone('infografis');next()">Lanjut ke Uji Kompetensi →</button>
+  </div>
+  `;
+}
+
+function pageKuisAkhir(){
+  return `
+  <span class="eyebrow">Evaluasi Sumatif</span>
+  <h1>Uji Kompetensi Akhir</h1>
+  <p class="lead">Jawab ${summativeQuestions.length} soal berikut untuk mengukur penguasaan Anda terhadap seluruh unit kompetensi F.43RAC01.021.1. Skor minimal 60% untuk dinyatakan lulus tahap ini.</p>
+  ${buildSummative()}
+  <div id="finalResultBox" style="display:none;margin-top:20px;"></div>
+  <div class="navfoot">
+    <button class="btn secondary" onclick="prev()">← Kembali</button>
+    <span></span>
+  </div>
+  `;
+}
+
+function pagePenutup(){
+  return `
+  <span class="eyebrow">Selesai</span>
+  <h1>Selamat, Perjalanan Belajar Anda Tuntas! 🎉</h1>
+  <p class="lead">Anda telah menyelesaikan seluruh materi pemasangan unit tata udara rumah tangga/residensial berbasis SKKNI F.43RAC01.021.1 — mulai dari persiapan hingga dokumentasi akhir.</p>
+
+  <div class="card tip">
+    <h3>📋 Rangkuman 5 Elemen Kompetensi</h3>
+    <ol style="color:var(--cream-dim);padding-left:20px;">
+      <li><b>Menyiapkan pemasangan:</b> Identifikasi ruangan, kapasitas, dan siapkan peralatan termasuk nitrogen untuk pressure test.</li>
+      <li><b>Pemasangan unit:</b> Pasang bracket, indoor, dan outdoor dengan presisi.</li>
+      <li><b>Instalasi pemipaan & kelistrikan:</b> Flaring, sambungan, dan evakuasi.</li>
+      <li><b>Tes dan commissioning:</b> Uji drainase, alirkan refrigeran, dan verifikasi kinerja dengan parameter teknis (arus, tekanan, superheat, subcool, delta T).</li>
+      <li><b>Dokumentasi:</b> Buat catatan pengetesan dan laporan akhir lengkap dengan semua parameter yang diukur.</li>
+    </ol>
+  </div>
+
+  <!-- Infografis Preview di Penutup -->
+  <div class="card glow">
+    <h3>📊 Lihat Infografis Lengkap</h3>
+    <p style="color:var(--cream-dim);">Butuh panduan visual cepat? Infografis kami merangkum seluruh proses pemasangan AC dalam satu tampilan.</p>
+    <button class="btn secondary" onclick="goTo(7)">📊 Buka Infografis</button>
+  </div>
+
+  <div class="card warn">
+    <h3>🔗 Langkah Selanjutnya</h3>
+    <p style="color:var(--cream-dim);">Teori adalah fondasi — keterampilan tangan terbentuk melalui jam praktik. Lanjutkan belajar bersama video praktik lapangan di kanal kami.</p>
+    <a class="ytbtn" style="display:inline-flex;width:auto;" href="https://www.youtube.com/@eSHa_PSL" target="_blank" rel="noopener">▶ Tonton di eSHa Public Skills Learning ↗</a>
+  </div>
+
+  <footer class="site">
+    <span>Disusun oleh <b style="color:var(--cream);">Sri Hardono, S.T., M.Sc.</b> — berdasarkan dokumen SKKNI Unit F.43RAC01.021.1</span>
+    <span>© eSHa Public Skills Learning</span>
+  </footer>
+  `;
+}
+
+const pageRenderers = {
+  beranda: pageBeranda, tujuan: pageTujuan, modul1: pageModul1, modul2: pageModul2,
+  modul3: pageModul3, modul4: pageModul4, modul5: pageModul5,
+  infografis: pageInfografis,
+  kuisakhir: pageKuisAkhir, penutup: pagePenutup
+};
+
+function renderPage(){
+  const main = document.getElementById('mainContent');
+  const id = pages[current].id;
+  main.innerHTML = `<div class="page active">${pageRenderers[id]()}</div>`;
+}
+
+renderNav();
+renderPage();
+updateGauge();
+</script>
+</body>
+</html>
