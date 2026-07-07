@@ -706,17 +706,23 @@ nav{position:fixed;top:0;left:0;right:0;z-index:999;height:52px;
       <div class="sim-ctrl">
         <div class="ctrl-grp">
           <label>Low Side (psig)</label>
-          <input type="range" min="20" max="200" value="65" id="dL" oninput="updDiag()">
+          <input type="range" min="80" max="180" value="135" id="dL" oninput="updDiag()">
           <div class="ctrl-val" id="dLV">120 psig</div>
         </div>
         <div class="ctrl-grp">
           <label>High Side (psig)</label>
-          <input type="range" min="200" max="500" value="280" id="dH" oninput="updDiag()">
+          <input type="range" min="250" max="550" value="420" id="dH" oninput="updDiag()">
           <div class="ctrl-val" id="dHV">360 psig</div>
         </div>
         <div class="ctrl-grp">
           <label>Superheat (K)</label>
-          <input type="range" min="5" max="8" value="8" id="dS" oninput="updDiag()">
+          <input
+type="range"
+min="0"
+max="20"
+value="7"
+id="dS"
+oninput="updDiag()">
           <div class="ctrl-val" id="dSV">8K</div>
         </div>
       </div>
@@ -982,22 +988,74 @@ function updCyc(){
 updCyc();
 
 function updDiag(){
-  const lo=parseInt(document.getElementById('dL').value);
-  const hi=parseInt(document.getElementById('dH').value);
-  const sh=parseInt(document.getElementById('dS').value);
-  document.getElementById('dLV').textContent=lo+' psig';
-  document.getElementById('dHV').textContent=hi+' psig';
-  document.getElementById('dSV').textContent=sh+'°C';
-  let issues=[],col='var(--green)';
-  if(lo<50)issues.push('⬇️ Low side RENDAH: undercharge atau aliran terhambat');
-  if(lo>90)issues.push('⬆️ Low side TINGGI: overcharge atau evap kotor/airflow kurang');
-  if(hi>350)issues.push('⬆️ High side TINGGI: overcharge, cond kotor, atau airflow outdoor terhalang');
-  if(hi<220)issues.push('⬇️ High side RENDAH: undercharge atau kompresor lemah');
-  if(sh>15){issues.push('🌡️ Superheat TINGGI: undercharge atau aliran terhambat');col='var(--orange)';}
-  if(sh<4){issues.push('⚠️ Superheat RENDAH: risiko floodback — overcharge!');col='var(--red)';}
-  const r=document.getElementById('diagR'),det=document.getElementById('diagD');
-  if(!issues.length){r.textContent='Sistem NORMAL ✅';r.style.color='var(--green)';det.textContent='Semua parameter normal untuk R-410A.';}
-  else{r.textContent='Terdeteksi '+issues.length+' Masalah ⚠️';r.style.color=col;det.innerHTML=issues.join('<br>');}
+
+    const lo = parseInt(document.getElementById("dL").value);
+    const hi = parseInt(document.getElementById("dH").value);
+    const sh = parseInt(document.getElementById("dS").value);
+
+    document.getElementById("dLV").textContent = lo + " psig";
+    document.getElementById("dHV").textContent = hi + " psig";
+    document.getElementById("dSV").textContent = sh + "°C";
+
+    let issues = [];
+    let color = "var(--green)";
+
+    // LOW SIDE
+    if(lo < 120){
+        issues.push("⬇️ Low Side terlalu rendah → kemungkinan UNDERCHARGE, filter drier tersumbat, pipa kapiler tersumbat, atau evaporator kekurangan refrigeran.");
+        color="var(--orange)";
+    }
+
+    if(lo > 150){
+        issues.push("⬆️ Low Side terlalu tinggi → kemungkinan OVERCHARGE, evaporator kotor, beban pendinginan tinggi, atau aliran udara indoor kurang.");
+        color="var(--orange)";
+    }
+
+    // HIGH SIDE
+    if(hi < 360){
+        issues.push("⬇️ High Side terlalu rendah → kemungkinan UNDERCHARGE atau performa kompresor menurun.");
+        color="var(--orange)";
+    }
+
+    if(hi > 500){
+        issues.push("⬆️ High Side terlalu tinggi → kemungkinan OVERCHARGE, kondensor kotor, kipas outdoor lemah, atau suhu lingkungan tinggi.");
+        color="var(--red)";
+    }
+
+    // SUPERHEAT
+    if(sh < 5){
+        issues.push("⚠️ Superheat terlalu rendah → risiko floodback / liquid refrigerant kembali ke kompresor.");
+        color="var(--red)";
+    }
+
+    if(sh > 10){
+        issues.push("🌡️ Superheat terlalu tinggi → evaporator kekurangan refrigeran atau terjadi restriksi.");
+        color="var(--orange)";
+    }
+
+    const result = document.getElementById("diagR");
+    const detail = document.getElementById("diagD");
+
+    if(issues.length===0){
+
+        result.innerHTML="✅ SISTEM NORMAL";
+        result.style.color="var(--green)";
+
+        detail.innerHTML=
+        "<b>Parameter berada pada kisaran normal R-410A.</b><br>" +
+        "Low Side : 120–150 psig<br>" +
+        "High Side : 360–500 psig<br>" +
+        "Superheat : 5–10°C";
+
+    }else{
+
+        result.innerHTML="⚠ Sistem Memerlukan Analisa";
+        result.style.color=color;
+
+        detail.innerHTML=issues.join("<br><br>");
+
+    }
+
 }
 updDiag();
 
