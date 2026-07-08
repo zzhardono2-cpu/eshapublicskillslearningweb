@@ -815,15 +815,230 @@ oninput="updDiag()">
     <h1 class="page-h1">Perhitungan <strong>Beban Panas AC</strong></h1>
     <p class="page-lead">Terapkan ilmu: hitung kapasitas AC yang tepat untuk kondisi ruangan nyata.</p>
 
-    <div class="hl"><strong>Metode Rule-of-Thumb (Indonesia, Iklim Tropis):</strong><br>~600 BTU/jam per m² luas lantai (plafon 3m, insulasi standar, 2–4 orang) | 1 PK ≈ 9.000 BTU/jam untuk ±15 m²</div>
+    <!-- ================================================= -->
+<!-- TEORI PERHITUNGAN BEBAN PANAS -->
+<!-- ================================================= -->
 
-    <div class="fml">
-      Q_total = Q_ruangan + Q_orang + Q_peralatan + Q_infiltrasi + Q_transmisi<br><br>
-      Q_ruangan   = Panjang × Lebar × Faktor_iklim  [BTU/jam]<br>
-      Q_orang     = Jumlah_orang × 500              [BTU/jam]<br>
-      Q_peralatan = Daya_peralatan [W] × 3.412      [BTU/W]<br>
-      Total [PK]  = Q_total / 9.000
+<div class="card">
+    <div class="card-h">
+        <span class="ic">📘</span>
+        Konsep Dasar Beban Panas (Cooling Load)
     </div>
+
+    <p>
+        Beban panas (Cooling Load) adalah jumlah kalor yang harus dipindahkan
+        oleh sistem AC agar temperatur ruangan dapat dipertahankan sesuai
+        kondisi yang diinginkan.
+    </p>
+
+    <p>
+        Perhitungan beban panas merupakan langkah penting sebelum menentukan
+        kapasitas AC. Kesalahan memilih kapasitas akan menyebabkan AC tidak
+        bekerja optimal.
+    </p>
+</div>
+
+
+<div class="tgrid">
+
+<div class="tc">
+<h4>🏠 Luas Ruangan</h4>
+<p>
+Semakin luas ruangan maka semakin besar panas yang harus dipindahkan sehingga kapasitas AC juga semakin besar.
+</p>
+</div>
+
+<div class="tc">
+<h4>👥 Jumlah Penghuni</h4>
+<p>
+Setiap orang menghasilkan panas tubuh sekitar 100–150 Watt. Semakin banyak penghuni maka cooling load meningkat.
+</p>
+</div>
+
+<div class="tc">
+<h4>☀ Paparan Matahari</h4>
+<p>
+Ruangan yang menghadap barat atau timur menerima radiasi matahari lebih tinggi sehingga membutuhkan kapasitas AC lebih besar.
+</p>
+</div>
+
+<div class="tc">
+<h4>💻 Peralatan Listrik</h4>
+<p>
+Lampu, komputer, televisi, printer dan peralatan elektronik mengubah energi listrik menjadi panas sehingga menambah cooling load.
+</p>
+</div>
+
+</div>
+
+
+<div class="hl">
+
+<strong>Prinsip Dasar Cooling Load</strong>
+
+<br><br>
+
+Cooling Load merupakan penjumlahan seluruh panas yang masuk ke dalam ruangan.
+
+Semakin besar total panas yang masuk,
+maka semakin besar kapasitas AC yang diperlukan.
+
+</div>
+
+
+
+<div class="card">
+
+<div class="card-h">
+<span class="ic">📖</span>
+Contoh Kasus
+</div>
+
+<p>
+
+Sebuah kamar kerja memiliki spesifikasi sebagai berikut:
+
+</p>
+
+<ul class="sl">
+
+<li>Luas ruangan = 4 × 5 m (20 m²)</li>
+
+<li>Tinggi plafon = 3 meter</li>
+
+<li>Jumlah penghuni = 2 orang</li>
+
+<li>Terdapat 1 komputer desktop dan 1 printer</li>
+
+<li>Jendela menghadap barat</li>
+
+<li>Ruangan digunakan pukul 09.00–17.00</li>
+
+</ul>
+
+<div class="hl warn">
+
+<strong>Pertanyaan</strong>
+
+<br><br>
+
+Menurut Anda, apakah AC ½ PK sudah cukup?
+
+Sebelum menggunakan kalkulator di bawah, coba lakukan analisis berdasarkan teori yang telah dipelajari.
+
+</div>
+
+</div>
+
+
+
+<div class="quiz">
+
+<div class="quiz-tag">
+
+Analisis Kasus
+
+</div>
+
+<div class="quiz-q">
+
+Kapasitas AC yang paling sesuai adalah....
+
+</div>
+
+<div class="qopts">
+
+<div class="qopt"
+onclick="checkQuiz(this,false,'caseHL')">
+
+A. ½ PK
+
+</div>
+
+<div class="qopt"
+onclick="checkQuiz(this,true,'caseHL')">
+
+B. Sekitar 1 PK
+
+</div>
+
+<div class="qopt"
+onclick="checkQuiz(this,false,'caseHL')">
+
+C. 2 PK
+
+</div>
+
+</div>
+
+<div class="qexp" id="caseHL-exp">
+
+<strong>Pembahasan</strong>
+
+<br><br>
+
+Luas ruangan 20 m² saja sudah memerlukan sekitar
+12.000 BTU/h menggunakan pendekatan 600 BTU/m².
+
+Setelah ditambah panas dari:
+
+<ul class="sl">
+
+<li>2 orang</li>
+
+<li>Komputer</li>
+
+<li>Printer</li>
+
+<li>Paparan matahari dari arah barat</li>
+
+</ul>
+
+Maka kapasitas mendekati 1 PK menjadi pilihan yang lebih tepat dibandingkan menggunakan AC ½ PK.
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<div class="card-h">
+<span class="ic">🧮</span>
+Pendekatan Perhitungan Praktis
+</div>
+
+<p>
+
+Pada pekerjaan instalasi AC residensial,
+teknisi sering menggunakan pendekatan awal (Rule of Thumb)
+sebelum melakukan perhitungan rinci.
+
+</p>
+
+<div class="fml">
+
+Cooling Load ≈ Luas Ruangan × 600 BTU/h
+
+<br><br>
+
+Qtotal =
+Qruangan +
+Qorang +
+Qperalatan +
+Qmatahari
+
+</div>
+
+<p>
+
+Setelah memahami konsep tersebut,
+gunakan kalkulator berikut untuk memperoleh estimasi kapasitas AC.
+
+</p>
+
+</div>
 
     <div class="sim">
       <div class="sim-h">Kalkulator Beban Panas Interaktif</div>
